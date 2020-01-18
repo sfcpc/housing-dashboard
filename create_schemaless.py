@@ -15,18 +15,16 @@ import sys
 import uuid
 
 
-def just_dump(ppts_file):
+
+def just_dump(ppts_file, outfile):
     if ppts_file.endswith('.xz'):
         o = lzma.open
-        basename = ppts_file[:-3]
     else:
         o = open
-        basename = ppts_file
-    basename = basename[:-4]
     with o(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         today = date.today()
-        with open('%s-schemaless.%s.csv' % (basename, today.isoformat()), 'w') as outf:
+        with open(outfile, 'w') as outf:
             writer = csv.writer(outf)
             writer.writerow(['id', 'fk', 'source', 'last_updated', 'name', 'value'])
             source = 'ppts'
@@ -49,6 +47,7 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
     parser.add_argument('ppts_file', help='PPTS file')
+    parser.add_argument('out_file', help='output file for schemaless csv')
     parser.add_argument(
         'schemaless_file',
         nargs='?',  # Makes this argument optional
@@ -57,6 +56,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not args.schemaless_file:
-        just_dump(args.ppts_file)
+        just_dump(args.ppts_file, args.out_file)
     else:
-        dump_and_diff(args.ppts_file, args.schemaless_file)
+        dump_and_diff(args.ppts_file, args.out_file, args.schemaless_file)
