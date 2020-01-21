@@ -47,14 +47,25 @@ def latest_values(schemaless_file):
     with open(schemaless_file, 'r') as inf:
         reader = DictReader(inf)
         for line in reader:
-            records[line['fk']][line['name']] = line['value']
-            records[line['fk']]['uuid'] = line['id']
+            records[line['id']][line['name']] = line['value']
     return records
 
 
 def dump_and_diff(ppts_file, outfile, schemaless_file):
     records = latest_values(schemaless_file)
     print("Loaded %d records" % len(records))
+    print("%s unique records" % len(records))
+    record_id_to_uuid = {}
+    for uid, record in records.items():
+        rid = record['record_id']
+        if not rid:
+            continue
+        if rid in record_id_to_uuid and record_id_to_uuid[rid] != uid:
+            raise RuntimeError(
+                "record_id %s points to multiple UUIDS: %s and %s" %
+                (riw, uid, record_id_to_uuid[rid]))
+        record_id_to_uuid[rid] = uid
+    print("%s records to uuids" % len(record_id_to_uuid))
 
     if ppts_file.endswith('.xz'):
         o = lzma.open
@@ -69,14 +80,14 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
             source = 'ppts'
             last_updated = today.isoformat()
             for line in reader:
-                fk = line['record_id']
-                if fk not in records:
+                rid = line['record_id']
+                if rid not in record_id_to_uuid:
                     id = uuid.uuid4()
-                else:
-                    id = records['fk']['uuid']
+                    record_id_to_uuid[rid] = id
+                id = record_id_to_uuid[rid]
                 for (key,val) in line.items():
-                    if val and val != records[fk][key]:
-                        writer.writerow([id, fk, source, last_updated, key, val])
+                    if val and val != records[id][key]:
+                        writer.writerow([id, rid, source, last_updated, key, val])
 
 
 if __name__ == "__main__":
