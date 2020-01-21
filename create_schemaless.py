@@ -16,8 +16,8 @@ import shutil
 import sys
 import uuid
 
+blocked_fields = ['acalink', 'aalink']
 csv.field_size_limit(sys.maxsize)
-
 
 def just_dump(ppts_file, outfile):
     if ppts_file.endswith('.xz'):
@@ -35,8 +35,13 @@ def just_dump(ppts_file, outfile):
             for line in reader:
                 id = uuid.uuid4()
                 fk = line['record_id']
+                cat = line['record_type_category']
+                # skip non-PRJs
+                if cat != "PRJ":
+                    continue
+
                 for (key,val) in line.items():
-                    if val:
+                    if val and key not in blocked_fields:
                         writer.writerow([id, fk, source, last_updated, key, val])
 
 
