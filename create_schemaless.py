@@ -51,6 +51,14 @@ def latest_values(schemaless_file):
     return records
 
 
+def _get_parent_id(record_id_to_uuid, records, parent_rid):
+    parent_id = record_id_to_uuid[parent_rid]
+    parent = records[parent_id]
+    if parent['parent']:
+        return get_parent_id(record_id_to_uuid, records, parent['parent'])
+    return parent_id
+
+
 def dump_and_diff(ppts_file, outfile, schemaless_file):
     records = latest_values(schemaless_file)
     print("Loaded %d records" % len(records))
@@ -81,6 +89,10 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
             last_updated = today.isoformat()
             for line in reader:
                 rid = line['record_id']
+                # If this record has a parent, use the parent's UUID
+                if line['parent']:
+                    record_id_to_uuid[rid] = get_parent(record_id_to_uuid, records, line['parent'])
+
                 if rid not in record_id_to_uuid:
                     id = uuid.uuid4()
                     record_id_to_uuid[rid] = id
