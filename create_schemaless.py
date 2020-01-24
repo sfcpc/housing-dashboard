@@ -97,8 +97,8 @@ def just_dump(ppts_file, outfile):
             source = 'ppts'
             last_updated = today.isoformat()
             for line in reader:
-                id = uuid.uuid4()
                 fk = line['record_id']
+                id = record_id_metadata[fk]['uuid']
                 for (key,val) in line.items():
                     if val:
                         writer.writerow([id, fk, source, last_updated, key, val])
