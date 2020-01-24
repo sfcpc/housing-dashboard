@@ -39,7 +39,7 @@ def resolve_parent(record_id_metadata, record_id):
     for idx, pid in enumerate(record['parents']):
         if pid not in record_id_metadata:
             # This implies this record is bad data and cannot be properly
-            # connected to a real parent record. 
+            # connected to a real parent record.
             continue
         all_parents.append(resolve_parent(record_id_metadata, pid))
     # If all_parents is empty, then none of the parents in record['parents']
@@ -65,12 +65,13 @@ def resolve_all_parents(record_id_metadata):
     return record_id_metadata
 
 
-def _map_children_to_parents(ppts_file, record_id_metadata = None):
+def _map_children_to_parents(ppts_file, record_id_metadata=None):
     if record_id_metadata is None:
         record_id_metadata = {}
     # This looks dumb, but the easiest way to ensure the parent->child mapping
     # exists is to read through the file twice.
-    with _open(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+    with _open(
+            ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         for line in reader:
             fk = line['record_id']
@@ -82,7 +83,8 @@ def _map_children_to_parents(ppts_file, record_id_metadata = None):
                 parents = line['parent'].split(',')
             record_id_metadata[fk] = {
                 'uuid': None,
-                'date_opened': datetime.strptime(line['date_opened'].split(" ")[0], '%m/%d/%Y'),
+                'date_opened': datetime.strptime(
+                    line['date_opened'].split(" ")[0], '%m/%d/%Y'),
                 'parents': parents,
             }
             if not parents:
@@ -96,21 +98,23 @@ def _map_children_to_parents(ppts_file, record_id_metadata = None):
 
 def just_dump(ppts_file, outfile):
     record_id_metadata = _map_children_to_parents(ppts_file)
-    with _open(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+    with _open(
+            ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         today = date.today()
         with open(outfile, 'w') as outf:
             writer = csv.writer(outf)
-            writer.writerow(['id', 'fk', 'source', 'last_updated', 'name', 'value'])
+            writer.writerow(
+                ['id', 'fk', 'source', 'last_updated', 'name', 'value'])
             source = 'ppts'
             last_updated = today.isoformat()
             for line in reader:
                 fk = line['record_id']
                 id = record_id_metadata[fk]['uuid']
-                for (key,val) in line.items():
+                for (key, val) in line.items():
                     if val:
-                        writer.writerow([id, fk, source, last_updated, key, val])
-
+                        writer.writerow(
+                            [id, fk, source, last_updated, key, val])
 
 
 def latest_values(schemaless_file):
@@ -131,25 +135,29 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
     # Read existing record_id->uuid mapping from the existing schemaless file
     for uid, record in records.items():
         rid = record['record_id']
-        if rid in record_id_metadata and record_id_metadata[rid]['uuid'] != uid:
+        if (rid in record_id_metadata
+                and record_id_metadata[rid]['uuid'] != uid):
             raise RuntimeError(
                 "record_id %s points to multiple UUIDS: %s and %s" %
-                (riw, uid, record_id_metadata[rid]['uuid']))
+                (rid, uid, record_id_metadata[rid]['uuid']))
         parents = []
         if record['parents']:
             parents = record['parents'].split(",")
         record_id_metadata[rid] = {
             'uuid': uid,
-            'date_opened': datetime.strptime(record['date_opened'].split(" ")[0], '%m/%d/%Y'),
+            'date_opened': datetime.strptime(
+                record['date_opened'].split(" ")[0], '%m/%d/%Y'),
             'parents': parents,
         }
 
     print("%s records to uuids" % len(record_id_metadata))
 
     # Add new child-parent relationships
-    record_id_metadata = _map_children_to_parents(ppts_file, record_id_metadata)
+    record_id_metadata = _map_children_to_parents(
+        ppts_file, record_id_metadata)
 
-    with _open(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+    with _open(
+            ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         today = date.today()
         shutil.copyfile(schemaless_file, outfile)
@@ -161,9 +169,10 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
                 rid = line['record_id']
                 # If this record has a parent, use the parent's UUID
                 id = record_id_metadata[rid]['uuid']
-                for (key,val) in line.items():
+                for (key, val) in line.items():
                     if val and val != records[id][key]:
-                        writer.writerow([id, rid, source, last_updated, key, val])
+                        writer.writerow(
+                            [id, rid, source, last_updated, key, val])
 
 
 if __name__ == "__main__":
