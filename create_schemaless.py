@@ -68,7 +68,7 @@ def map_children_to_parents(ppts_file):
                 'parents': parents,
             }
             if not parents:
-                record_id_metadata[fk]['uuid']: uuid.uuid4()
+                record_id_metadata[fk]['uuid'] = uuid.uuid4()
 
     for fk, val in record_id_metadata.items():
         if val['uuid']:
