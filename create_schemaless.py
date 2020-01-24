@@ -20,6 +20,14 @@ import uuid
 csv.field_size_limit(sys.maxsize)
 
 
+def _open(fname, *args, **kwargs):
+    if fname.endswith('.xz'):
+        o = lzma.open
+    else:
+        o = open
+    return o(fname, *args, **kwargs)
+
+
 def resolve_parent(record_id_metadata, record_id):
     record = record_id_metadata[record_id]
     if record['uuid']:
@@ -58,14 +66,10 @@ def resolve_all_parents(record_id_metadata):
 
 
 def _map_children_to_parents(ppts_file):
-    if ppts_file.endswith('.xz'):
-        o = lzma.open
-    else:
-        o = open
     record_id_metadata = {}
     # This looks dumb, but the easiest way to ensure the parent->child mapping
     # exists is to read through the file twice.
-    with o(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+    with _open(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         for line in reader:
             fk = line['record_id']
@@ -87,12 +91,8 @@ def _map_children_to_parents(ppts_file):
 
 
 def just_dump(ppts_file, outfile):
-    if ppts_file.endswith('.xz'):
-        o = lzma.open
-    else:
-        o = open
     record_id_metadata = _map_children_to_parents(ppts_file)
-    with o(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+    with _open(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         today = date.today()
         with open(outfile, 'w') as outf:
@@ -143,11 +143,7 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
         record_id_to_uuid[rid] = uid
     print("%s records to uuids" % len(record_id_to_uuid))
 
-    if ppts_file.endswith('.xz'):
-        o = lzma.open
-    else:
-        o = open
-    with o(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+    with _open(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         today = date.today()
         shutil.copyfile(schemaless_file, outfile)
