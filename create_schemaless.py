@@ -46,7 +46,18 @@ def resolve_parent(record_id_metadata, record_id):
                   reverse=True)[0]
 
 
-def map_children_to_parents(ppts_file):
+def resolve_all_parents(record_id_metadata):
+    for fk, val in record_id_metadata.items():
+        if val['uuid']:
+            continue
+        puid = resolve_parent(record_id_metadata, fk)['uuid']
+        if not puid:
+            puid = uuid.uuid4()
+        record_id_metadata[fk]['uuid'] = puid
+    return record_id_metadata
+
+
+def _map_children_to_parents(ppts_file):
     if ppts_file.endswith('.xz'):
         o = lzma.open
     else:
@@ -58,10 +69,9 @@ def map_children_to_parents(ppts_file):
         reader = DictReader(inf)
         for line in reader:
             fk = line['record_id']
+            parents = []
             if line['parent']:
                 parents = line['parent'].split(',')
-            else:
-                parents = []
             record_id_metadata[fk] = {
                 'uuid': None,
                 'date_opened': datetime.strptime(line['date_opened'].split(" ")[0], '%m/%d/%Y'),
@@ -70,13 +80,7 @@ def map_children_to_parents(ppts_file):
             if not parents:
                 record_id_metadata[fk]['uuid'] = uuid.uuid4()
 
-    for fk, val in record_id_metadata.items():
-        if val['uuid']:
-            continue
-        puid = resolve_parent(record_id_metadata, fk)['uuid']
-        if not puid:
-            puid = uuid.uuid4()
-        record_id_metadata[fk]['uuid'] = puid
+    record_id_metadata = resolve_all_parents(record_id_metadata)
     # At this point, all records have been associated with their parents and
     # have a unique ID linking them together.
     return record_id_metadata
@@ -87,7 +91,7 @@ def just_dump(ppts_file, outfile):
         o = lzma.open
     else:
         o = open
-    record_id_metadata = map_children_to_parents(ppts_file)
+    record_id_metadata = _map_children_to_parents(ppts_file)
     with o(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         today = date.today()
