@@ -16,7 +16,7 @@ import sys
 
 csv.field_size_limit(sys.maxsize)
 
-Field = namedtuple('Field', ['name', 'value', 'treat_as_empty'], defaults=['', '', False])
+Field = namedtuple('Field', ['name', 'value', 'always_treat_as_empty'], defaults=['', '', False])
 
 def gen_id(id, data): return [Field('id', id, True)]
 
@@ -36,7 +36,6 @@ def gen_facts(id, data):
         result[3] = Field('permit_authority', values['ppts'])
         result[4] = Field('permit_authority_id', fk)
         break
-
     return result
 
 def gen_geom(id, data):
@@ -56,7 +55,6 @@ def gen_geom(id, data):
     return result
 
 
-
 # Mapping of tables to a set of data generators.  All data generators must
 # accept two arguments: project id, and a dict[source][fk][name] = value.
 # They return a list of sequential columns of data to output.
@@ -72,14 +70,15 @@ config = {
     'project_geo': [
             gen_id,
             gen_geom,
+            # TODO blocklot
     ],
     'project_details': [
             # gen_id,
     ],
-    'data_freshness_info': [
-            # TODO
-    ]
 }
+
+# TODO data freshness table, which is not on a per-project basis
+
 
 def build_projects(schemaless_file):
     """Consumes all data in the schemaless file to get the latest values.
@@ -90,6 +89,8 @@ def build_projects(schemaless_file):
     # TODO: for large schemaless files, this will fail with OOM.  We should
     # probably ensure a uuid sort order in the schemaless so we can batch
     # projects.
+    # TODO: don't use so many nested dicts and have a bit more structure,
+    # would make handling data from multiple sources and fks easier
 
     if schemaless_file.endswith('.xz'):
         o = lzma.open
@@ -137,12 +138,12 @@ def output_projects(projects, config):
                     for result in results:
                         if not headers_printed:
                             headers.append(result.name)
-                        if not result.treat_as_empty and result.value != "":
+                        if not result.always_treat_as_empty and result.value != "":
                             atleast_one = True
                         output.append(result.value)
 
                 if atleast_one:
-                    if not headers_printed:
+                    if not headers_printed and len(headers) > 0:
                         writer.writerow(headers)
                         headers_printed = True
 
@@ -183,7 +184,6 @@ if __name__ == '__main__':
     print("\ttotal records rolled up: %s" % fk_count)
     print("\ttotal fields: %s" % nv_count)
     print("\test bytes for values: %s" % est_bytes)
-
 
     output_projects(projects, config)
 
