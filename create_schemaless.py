@@ -46,7 +46,7 @@ def resolve_parent(record_id_metadata, record_id):
                   reverse=True)[0]
 
 
-def just_dump(ppts_file, outfile):
+def map_children_to_parents(ppts_file):
     if ppts_file.endswith('.xz'):
         o = lzma.open
     else:
@@ -77,9 +77,17 @@ def just_dump(ppts_file, outfile):
         if not puid:
             puid = uuid.uuid4()
         record_id_metadata[fk]['uuid'] = puid
-    # At this point, all records have been associated with their parents
+    # At this point, all records have been associated with their parents and
+    # have a unique ID linking them together.
+    return record_id_metadata
 
 
+def just_dump(ppts_file, outfile):
+    if ppts_file.endswith('.xz'):
+        o = lzma.open
+    else:
+        o = open
+    record_id_metadata = map_children_to_parents(ppts_file)
     with o(ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         today = date.today()
