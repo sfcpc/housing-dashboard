@@ -1,10 +1,5 @@
 # Lint as: python3
-"""Convert a schemaless csv into relational tables.
-
-If you run this with a single arg, it will just dump the PPTS file to a
-schemaless csv. If you provide two args, it will diff against an existing
-schemaless csv.
-"""
+"""Convert a schemaless csv into relational tables (a set of csvs)."""
 
 import argparse
 from collections import defaultdict
