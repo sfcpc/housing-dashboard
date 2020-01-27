@@ -185,18 +185,23 @@ def _map_children_to_parents(ppts_file, record_id_metadata=None):
     return record_id_metadata
 
 
-def just_dump(ppts_file, outfile):
-    record_id_metadata = _map_children_to_parents(ppts_file)
-    with _open(
-            ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
-        reader = DictReader(inf)
-        today = date.today()
-        with open(outfile, 'w') as outf:
-            writer = csv.writer(outf)
-            writer.writerow(
+def just_dump(ppts_file, pts_file, outfile):
+    with open(outfile, 'w') as outf:
+        writer = csv.writer(outf)
+        writer.writerow(
                 ['id', 'fk', 'source', 'last_updated', 'name', 'value'])
+        last_updated = date.today().isoformat()
+
+        # Dump PPTS. 
+        record_id_metadata = _map_children_to_parents(ppts_file)
+        with _open(
+                 ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+            reader = DictReader(inf)
             source = 'ppts'
-            last_updated = today.isoformat()
+
+            # Maintain a map from building permits referenced from PPTS to their
+            # corresponding unique project ID.
+            building_permit_to_id = {}
             for line in reader:
                 fk = line['record_id']
                 id = record_id_metadata[fk]['uuid']
@@ -207,6 +212,23 @@ def just_dump(ppts_file, outfile):
                         writer.writerow(
                             [id, fk, source, last_updated,
                              fields[source][key], val])
+                    if key == 'RELATED_BUILDING_PERMIT':
+                        building_permit_to_id[val] = id
+
+        # Dump PTS. 
+        with _open(pts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+            reader = DictReader(inf)
+            source = 'pts'
+
+            for line in reader:
+                fk = line['Permit Number']
+                # TODO: Note that this currently skips any permits that are not referenced
+                # from PPTS, which is not desirable for the end product. 
+                if fk in building_permit_to_id: 
+                    # TODO: Fix formatting of PTS fields?
+                    for (key,val) in line.items():
+                        if val:
+                            writer.writerow([building_permit_to_id[fk], fk, source, last_updated, key, val])
 
 
 def latest_values(schemaless_file):
@@ -273,6 +295,7 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('ppts_file', help='PPTS file')
+    parser.add_argument('pts_file', help='PTS file')
     parser.add_argument('out_file', help='output file for schemaless csv')
     parser.add_argument(
         '--diff',
@@ -281,6 +304,6 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not args.diff:
-        just_dump(args.ppts_file, args.out_file)
+        just_dump(args.ppts_file, args.pts_file, args.out_file)
     else:
-        dump_and_diff(args.ppts_file, args.out_file, args.diff)
+        dump_and_diff(args.ppts_file, args.pts_file, args.out_file, args.diff)
