@@ -28,7 +28,7 @@ def _open(fname, *args, **kwargs):
     return o(fname, *args, **kwargs)
 
 
-def resolve_parent(record_id_metadata, record_id):
+def _resolve_parent(record_id_metadata, record_id):
     record = record_id_metadata[record_id]
     if record['uuid']:
         # Either implies this is a root or we have already resolved the parent
@@ -41,7 +41,7 @@ def resolve_parent(record_id_metadata, record_id):
             # This implies this record is bad data and cannot be properly
             # connected to a real parent record.
             continue
-        all_parents.append(resolve_parent(record_id_metadata, pid))
+        all_parents.append(_resolve_parent(record_id_metadata, pid))
     # If all_parents is empty, then none of the parents in record['parents']
     # actually exist as valid records. So we can't link this to an exisitng
     # uuid, so just return itself.
@@ -54,11 +54,11 @@ def resolve_parent(record_id_metadata, record_id):
                   reverse=True)[0]
 
 
-def resolve_all_parents(record_id_metadata):
+def _resolve_all_parents(record_id_metadata):
     for fk, val in record_id_metadata.items():
         if val['uuid']:
             continue
-        puid = resolve_parent(record_id_metadata, fk)['uuid']
+        puid = _resolve_parent(record_id_metadata, fk)['uuid']
         if not puid:
             puid = uuid.uuid4()
         record_id_metadata[fk]['uuid'] = puid
@@ -90,7 +90,7 @@ def _map_children_to_parents(ppts_file, record_id_metadata=None):
             if not parents:
                 record_id_metadata[fk]['uuid'] = uuid.uuid4()
 
-    record_id_metadata = resolve_all_parents(record_id_metadata)
+    record_id_metadata = _resolve_all_parents(record_id_metadata)
     # At this point, all records have been associated with their parents and
     # have a unique ID linking them together.
     return record_id_metadata
