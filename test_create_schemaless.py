@@ -9,7 +9,6 @@ from create_schemaless import _resolve_parent
 from create_schemaless import _resolve_all_parents
 
 
-
 @pytest.fixture
 def metadata_no_parents():
     return {
@@ -222,7 +221,9 @@ def test_resolve_all_parents_missing_parent(metadata_missing_parent):
 def metadata_one_missing_parent():
     return {
         '1': RecordMetadata(
-            uuid=None, date_opened=date(2020, 1, 1), parents=['2', '12', '13']),
+            uuid=None,
+            date_opened=date(2020, 1, 1),
+            parents=['2', '12', '13']),
         '2': RecordMetadata(
             uuid=None, date_opened=date(2020, 1, 1), parents=[]),
         '3': RecordMetadata(

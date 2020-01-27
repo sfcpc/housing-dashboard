@@ -84,7 +84,7 @@ fields = {
         'RESIDENTIAL_3BR_EXIST': 'residential_units_3br_existing',
         'RESIDENTIAL_3BR_PROP': 'residential_units_3br_proposed',
         'RESIDENTIAL_3BR_NET': 'residential_units_3br_net',
-        'RESIDENTIAL_ADU_STUDIO_EXIST': 'residential_units_adu_studio_existing',
+        'RESIDENTIAL_ADU_STUDIO_EXIST': 'residential_units_adu_studio_existing',  # NOQA
         'RESIDENTIAL_ADU_STUDIO_PROP': 'residential_units_adu_studio_proposed',
         'RESIDENTIAL_ADU_STUDIO_NET': 'residential_units_adu_studio_net',
         'RESIDENTIAL_ADU_STUDIO_AREA': 'residential_sq_ft_adu_studio',
@@ -108,6 +108,7 @@ fields = {
         'RESIDENTIAL_MICRO_NET': 'residential_units_micro_net',
     }
 }
+
 
 def _open(fname, *args, **kwargs):
     if fname.endswith('.xz'):
