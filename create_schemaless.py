@@ -8,6 +8,7 @@ schemaless csv.
 
 import argparse
 from collections import defaultdict
+from collections import namedtuple
 import csv
 from csv import DictReader
 from datetime import date
@@ -117,15 +118,17 @@ def _open(fname, *args, **kwargs):
     return o(fname, *args, **kwargs)
 
 
+RecordMetadata = namedtuple("RecordMetadata", ["uuid", "date_opened", "parents"])
+
 def _resolve_parent(record_id_metadata, record_id):
     record = record_id_metadata[record_id]
-    if record['uuid']:
+    if record.uuid:
         # Either implies this is a root or we have already resolved the parent
         return record
-    if not record['parents']:
+    if not record.parents:
         return record
     all_parents = []
-    for idx, pid in enumerate(record['parents']):
+    for idx, pid in enumerate(record.parents):
         if pid not in record_id_metadata:
             # This implies this record is bad data and cannot be properly
             # connected to a real parent record.
@@ -139,18 +142,18 @@ def _resolve_parent(record_id_metadata, record_id):
     if not all_parents:
         return record
     return sorted(all_parents,
-                  key=lambda x: x['date_opened'],
+                  key=lambda x: x.date_opened,
                   reverse=True)[0]
 
 
 def _resolve_all_parents(record_id_metadata):
-    for fk, val in record_id_metadata.items():
-        if val['uuid']:
+    for fk, record in record_id_metadata.items():
+        if record.uuid:
             continue
-        puid = _resolve_parent(record_id_metadata, fk)['uuid']
+        puid = _resolve_parent(record_id_metadata, fk).uuid
         if not puid:
             puid = uuid.uuid4()
-        record_id_metadata[fk]['uuid'] = puid
+        record_id_metadata[fk].uuid = puid
     return record_id_metadata
 
 
@@ -170,14 +173,14 @@ def _map_children_to_parents(ppts_file, record_id_metadata=None):
             parents = []
             if line['parent']:
                 parents = line['parent'].split(',')
-            record_id_metadata[fk] = {
-                'uuid': None,
-                'date_opened': datetime.strptime(
+            record_id_metadata[fk] = RecordMetadata(
+                uuid=None,
+                date_opened=datetime.strptime(
                     line['date_opened'].split(" ")[0], '%m/%d/%Y'),
-                'parents': parents,
-            }
+                parents=parents,
+            )
             if not parents:
-                record_id_metadata[fk]['uuid'] = uuid.uuid4()
+                record_id_metadata[fk].uuid = uuid.uuid4()
 
     record_id_metadata = _resolve_all_parents(record_id_metadata)
     # At this point, all records have been associated with their parents and
@@ -199,7 +202,7 @@ def just_dump(ppts_file, outfile):
             last_updated = today.isoformat()
             for line in reader:
                 fk = line['record_id']
-                id = record_id_metadata[fk]['uuid']
+                id = record_id_metadata[fk].uuid
                 for (key, val) in line.items():
                     if key not in fields[source]:
                         continue
@@ -235,12 +238,12 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
         parents = []
         if record['parents']:
             parents = record['parents'].split(",")
-        record_id_metadata[rid] = {
-            'uuid': uid,
-            'date_opened': datetime.strptime(
+        record_id_metadata[rid] = RecordMetadata(
+            uuid=uid,
+            date_opened=datetime.strptime(
                 record['date_opened'].split(" ")[0], '%m/%d/%Y'),
-            'parents': parents,
-        }
+            parents=parents,
+        )
 
     print("%s records to uuids" % len(record_id_metadata))
 
@@ -260,7 +263,7 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
             for line in reader:
                 rid = line['record_id']
                 # If this record has a parent, use the parent's UUID
-                id = record_id_metadata[rid]['uuid']
+                id = record_id_metadata[rid].uuid
                 for (key, val) in line.items():
                     if key not in fields[source]:
                         continue
