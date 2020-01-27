@@ -8,7 +8,6 @@ schemaless csv.
 
 import argparse
 from collections import defaultdict
-from collections import namedtuple
 import csv
 from csv import DictReader
 from datetime import date
@@ -118,7 +117,15 @@ def _open(fname, *args, **kwargs):
     return o(fname, *args, **kwargs)
 
 
-RecordMetadata = namedtuple("RecordMetadata", ["uuid", "date_opened", "parents"])
+class RecordMetadata:
+    def __init__(self, date_opened, parents=None, uuid=None):
+        self.date_opened = date_opened
+        if parents is None:
+            self.parents = []
+        else:
+            self.parents = parents
+        self.uuid = uuid
+
 
 def _resolve_parent(record_id_metadata, record_id):
     record = record_id_metadata[record_id]
@@ -174,7 +181,6 @@ def _map_children_to_parents(ppts_file, record_id_metadata=None):
             if line['parent']:
                 parents = line['parent'].split(',')
             record_id_metadata[fk] = RecordMetadata(
-                uuid=None,
                 date_opened=datetime.strptime(
                     line['date_opened'].split(" ")[0], '%m/%d/%Y'),
                 parents=parents,
