@@ -157,10 +157,11 @@ def _resolve_all_parents(record_id_metadata):
     for fk, record in record_id_metadata.items():
         if record.uuid:
             continue
-        puid = _resolve_parent(record_id_metadata, fk).uuid
-        if not puid:
-            puid = uuid.uuid4()
-        record_id_metadata[fk].uuid = puid
+        # 'parent' is a bit of a misnomer -- it may be itself!
+        parent = _resolve_parent(record_id_metadata, fk)
+        if not parent.uuid:
+            parent.uuid = uuid.uuid4()
+        record_id_metadata[fk].uuid = parent.uuid
     return record_id_metadata
 
 
