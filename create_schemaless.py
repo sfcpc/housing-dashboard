@@ -242,9 +242,6 @@ def _map_children_to_parents(ppts_file, record_graph=None):
         reader = DictReader(inf)
         for line in reader:
             fk = line['record_id']
-            if fk in record_graph:
-                continue
-
             parents = []
             children = []
             if line['parent']:
