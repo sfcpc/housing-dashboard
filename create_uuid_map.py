@@ -34,8 +34,8 @@ class RecordGraph:
                 uuid=None,
             ))
 
-        # Read existing record_id->uuid mapping from the existing schemaless map
-        # and update nodes with exisitng UUIDs.
+        # Read existing record_id->uuid mapping from the existing schemaless
+        # map and update nodes with exisitng UUIDs.
         with open_file(uuid_map_file, 'r') as f:
             reader = DictReader(f)
             for line in reader:
@@ -104,9 +104,9 @@ class RecordGraph:
                 # connected to a real parent record.
                 continue
             all_parents.append(self._resolve_parent(pid))
-        # If all_parents is empty, then none of the parents in record['parents']
-        # actually exist as valid records. So we can't link this to an exisitng
-        # uuid, so just return itself.
+        # If all_parents is empty, then none of the parents in
+        # record['parents'] actually exist as valid records. So we can't link
+        # this to an exisitng uuid, so just return itself.
         # # TODO: Come back to this when we are reading in DBI. At least a few
         # of these records have related building permits.
         if not all_parents:

@@ -114,7 +114,7 @@ def graph_one_parent_one_child():
     return rg
 
 
-def test_resolve_parent_one_child(graph_one_parent_one_child):
+def test_resolve_parent_one_parent_one_child(graph_one_parent_one_child):
     """No records have parents, always return self."""
     graph = graph_one_parent_one_child
     for (rid, record) in graph.items():
