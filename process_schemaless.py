@@ -2,6 +2,7 @@
 """Convert a schemaless csv into relational tables (a set of csvs)."""
 
 import argparse
+from datetime import datetime
 from collections import defaultdict
 from collections import namedtuple
 import csv
@@ -13,39 +14,47 @@ csv.field_size_limit(sys.maxsize)
 
 Field = namedtuple('Field', ['name', 'value', 'always_treat_as_empty'], defaults=['', '', False])
 
-def gen_id(id, data): return [Field('id', id, True)]
+def gen_id(proj): return [Field('id', proj.id, True)]
 
-def gen_facts(id, data):
+def gen_facts(proj):
     result = [Field()] * 5
 
-    if len(data['ppts']) == 0:
-        return result
-
-    for (fk, values) in data['ppts'].items():
-        if values['address'] == '':
-            continue
-
-        result[0] = Field('address', values['address'])
+    if proj.field('address') != '':
+        result[0] = Field('address', proj.field('address'))
         result[1] = Field('applicant', '')
         result[2] = Field('supervisor_district', '')
-        result[3] = Field('permit_authority', values['ppts'])
-        result[4] = Field('permit_authority_id', fk)
-        break
+        result[3] = Field('permit_authority', 'planning')
+        result[4] = Field('permit_authority_id', proj.field('fk'))
+
     return result
 
-def gen_geom(id, data):
+
+def gen_units(proj):
+    result = [Field()] * 6
+
+    # TODO: how to handle cases where better numbers exist from dbi
+    # TODO: how to handle cases where prop - existing != net ?
+    result[0] = Field('num_units', proj.field('market_rate_units_net'))
+    if result[0].value != '':
+        result[1] = Field('num_units_data', 'planning', True)
+
+    result[2] = Field('num_units_bmr', proj.field('affordable_units_net'))
+    if result[2].value != '':
+        result[3] = Field('num_units_bmr_data', 'planning', True)
+
+    result[4] = Field('num_square_feet', proj.field('residential_sq_ft_net'))
+    if result[4].value != '':
+        result[5] = Field('num_square_feet_data', 'planning', True)
+
+    return result
+
+
+def gen_geom(proj):
     result = [Field()] * 2 # TODO datafreshness
 
-    if len(data['ppts']) == 0:
-        return result
-
-    for (fk, values) in data['ppts'].items():
-        if values['the_geom'] == '':
-            continue
-
+    if proj.field('the_geom') != '':
         result[0] = Field('name', 'geom')
-        result[1] = Field('value', values['the_geom'])
-        break
+        result[1] = Field('value', proj.field('the_geom'))
 
     return result
 
@@ -57,10 +66,11 @@ config = {
     'project_facts': [
             gen_id,
             gen_facts,
+            gen_units,
     ],
     'project_status_history': [
-            # TODO
             # gen_id,
+            # TODO
     ],
     'project_geo': [
             gen_id,
@@ -79,7 +89,10 @@ def build_projects(schemaless_file):
     """Consumes all data in the schemaless file to get the latest values.
 
     Returns: a nested dict keyed as:
-        dict[id][source][name] = value
+        dict[id][source][name] = {
+            value: '',
+            last_updated: datetime,
+        }
     """
     # TODO: for large schemaless files, this will fail with OOM.  We should
     # probably ensure a uuid sort order in the schemaless so we can batch
@@ -96,17 +109,99 @@ def build_projects(schemaless_file):
     with o(schemaless_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = csv.DictReader(inf)
 
-        # four levels of dict
-        projects = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(str))))
+        # five levels of dict
+        projects = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(str)))))
 
         for line in reader:
+            date = datetime.fromisoformat(line['last_updated'])
+            value = line['value']
+
+            existing = projects[line['id']][line['source']][line['fk']][line['name']]
+
             # TODO: data-integrity validation
-            projects[line['id']][line['source']][line['fk']][line['name']] = line['value']
+            if existing['value'] == '' or date > existing['last_updated']:
+                existing['value'] = value
+                existing['last_updated'] = date
+
             processed += 1
-            if processed % 50000 == 0:
+            if processed % 75000 == 0:
                 print("Processed %s lines" % processed)
 
     return projects
+
+Record = namedtuple('Record', ['key', 'values'], defaults=[None, None])
+
+class Project:
+    """A way to abstract some of the details of handling multiple records for a
+    project, from multiple sources."""
+
+    def __init__(self, id, data):
+        self.id = id
+        if len(data['ppts']) == 0:
+            raise Exception('No implementation to handle non-ppts data yet')
+
+        main = None
+        children = []
+        main_date = datetime.min
+        for (fk, values) in data['ppts'].items():
+            if values['parent']['value'] is None or values['parent']['value'] == '':
+                if main is None or (
+                        main is not None and
+                        values['parent']['last_updated'] > main_date):
+                    main =  Record(fk, values)
+                    main_date = values['parent']['last_updated']
+            else:
+                if id == 'e23d90d3-fa75-40f6-957d-bf8e6626a37f':
+                    print('Appending as child %s' % fk)
+                children.append(Record(fk, values))
+
+        if main is None:
+            # upgrade the oldest child
+            oldest_child_and_date = None
+            for child in children:
+                oldest_date = datetime.max
+                for (name, data) in child.values.items():
+                    if data['last_updated'] < oldest_date:
+                        oldest_date = data['last_updated']
+
+                if oldest_child_and_date is None or oldest_date < oldest_child_and_date[1]:
+                    oldest_child_and_date = (child, oldest_date)
+
+            if oldest_child_and_date is not None:
+                main = oldest_child_and_date[0]
+                children.remove(main)
+            else:
+                raise Exception('No main record found for a project %s' % id)
+
+        self.__ppts_main = main
+        self.__ppts_children = children
+
+    @property
+    def main(self):
+        return self.__ppts_main
+
+    @property
+    def children(self):
+        return self.__ppts_children
+
+    def field(self, name):
+        # for ppts, prefer parent record, only moving to children if none found,
+        # at which point we choose the value with the latest last_updated
+        # TODO: I'm not even sure this is the correct logic to use for dealing
+        # with ambiguities.
+        val = ''
+        if name in self.__ppts_main.values:
+            val = self.__ppts_main.values[name]['value']
+
+        update_date = datetime.min
+        if val == '':
+            for child in self.__ppts_children:
+                if name in child.values:
+                    if child.values[name]['last_updated'] > update_date:
+                        update_date = child.values[name]['last_updated']
+                        val = child.values[name]['value']
+
+        return val
 
 
 def output_projects(projects, config):
@@ -125,11 +220,12 @@ def output_projects(projects, config):
             headers_printed = False
             for (projectid, sources) in projects.items():
                 writer = csv.writer(outf)
+                proj = Project(projectid, sources)
                 output = []
 
                 atleast_one = False
                 for generator in generators:
-                    results = generator(projectid, sources)
+                    results = generator(proj)
                     for result in results:
                         if not headers_printed:
                             headers.append(result.name)
