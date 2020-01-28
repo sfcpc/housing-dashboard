@@ -1,4 +1,5 @@
 import argparse
+import csv
 from csv import DictReader
 from datetime import datetime
 import uuid
@@ -46,6 +47,16 @@ class RecordGraph:
         # Resolve all parent UUIDs and generate new UUIDs
         rg._assign_uuids()
         return rg
+
+    def to_file(self, outfile):
+        """Dump the uuid->fk map."""
+        with open_file(outfile, 'w') as f:
+            # We use an OrderedDict for self._nodes, so ensure a consistent
+            # ordering across runs.
+            writer = csv.writer(f)
+            writer.writerow(['uuid', 'fk'])
+            for fk, record in self._nodes.items():
+                writer.writerow([record.uuid, record.record_id])
 
     def add(self, record):
         rid = record.record_id
