@@ -1,4 +1,5 @@
 import argparse
+from collections import OrderedDict
 import csv
 from csv import DictReader
 from datetime import datetime
@@ -10,7 +11,7 @@ from create_schemaless import latest_values
 
 class RecordGraph:
     def __init__(self):
-        self._nodes = {}
+        self._nodes = OrderedDict()
 
     @classmethod
     def _from_files(cls, schemaless_file, uuid_map_file):
