@@ -174,36 +174,6 @@ class Node:
         self.parents.add(parent_record_id)
 
 
-def _map_children_to_parents(ppts_file, record_graph=None):
-    if record_graph is None:
-        record_graph = RecordGraph()
-    # This looks dumb, but the easiest way to ensure the parent->child mapping
-    # exists is to read through the file twice.
-    with _open(
-            ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
-        reader = DictReader(inf)
-        for line in reader:
-            fk = line['record_id']
-            parents = []
-            children = []
-            if line['parent']:
-                parents = line['parent'].split(',')
-            if line['children']:
-                children = line['children'].split(",")
-            record_graph.add(Node(
-                record_id=fk,
-                date_opened=datetime.strptime(
-                    line['date_opened'].split(" ")[0], '%m/%d/%Y'),
-                parents=parents,
-                children=children,
-            ))
-
-    record_graph._resolve_all_parents()
-    # At this point, all records have been associated with their parents and
-    # have a unique ID linking them together.
-    return record_graph
-
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('schemaless_file', help='Schemaless csv file')
