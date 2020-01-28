@@ -14,7 +14,7 @@ class RecordGraph:
         self._nodes = OrderedDict()
 
     @classmethod
-    def _from_files(cls, schemaless_file, uuid_map_file):
+    def from_files(cls, schemaless_file, uuid_map_file):
         """Build a RecordGraph from schemaless & uuid_map files."""
         rg = cls()
         # Read the latest values from the schemaless file to build the graph.
@@ -25,7 +25,7 @@ class RecordGraph:
                 parents = record['parents'].split(",")
             if record['children']:
                 children = record['children'].split(",")
-            rg.add(RecordMetadata(
+            rg.add(Node(
                 record_id=fk,
                 date_opened=datetime.strptime(
                     record['date_opened'].split(" ")[0], '%m/%d/%Y'),
@@ -41,7 +41,7 @@ class RecordGraph:
             for line in reader:
                 fk = line['fk']
                 if fk in rg:
-                    rg._nodes[fk]['uuid'] = line['uuid']
+                    rg._nodes[fk].uuid = line['uuid']
                 else:
                     print("Error: unknown id %s" % fk)
 
