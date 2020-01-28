@@ -184,9 +184,11 @@ class RecordGraph:
                 continue
             # 'parent' is a bit of a misnomer -- it may be itself!
             parent = self.resolve_parent(fk)
-            if not parent.uuid:
-                parent.uuid = uuid.uuid4()
-            self.get(fk).uuid = parent.uuid
+            puid = parent.uuid
+            if not puid:
+                puid = uuid.uuid4()
+                self.get(parent.record_id).uuid = puid
+            self.get(fk).uuid = puid
 
     def __contains__(self, obj):
         return obj in self._nodes
