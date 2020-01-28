@@ -7,11 +7,39 @@ from collections import defaultdict
 from process_schemaless import Project
 from process_schemaless import Record
 
+# TODO: possible code smell, need a better structure
 def _four_default_dict():
     return defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(str))))
 
-@pytest.fixture
-def project_basic_ppts():
+def test_project_no_main_record():
+    old = datetime.fromisoformat('2019-01-01')
+    lessold = datetime.fromisoformat('2020-01-01')
+
+    data = _four_default_dict()
+    data['ppts']['CUA1']['parent']['value'] = 'PRJ'
+    data['ppts']['CUA1']['parent']['last_updated'] = old
+    data['ppts']['CUA1']['num_units_bmr']['value'] = '22'
+    data['ppts']['CUA1']['num_units_bmr']['last_updated'] = old
+
+    data['ppts']['CUA2']['parent']['value'] = 'PRJ'
+    data['ppts']['CUA2']['parent']['last_updated'] = lessold
+    data['ppts']['CUA2']['num_units_bmr']['value'] = '32'
+    data['ppts']['CUA2']['num_units_bmr']['last_updated'] = lessold
+    data['ppts']['CUA2']['num_square_feet']['value'] = '2300'
+    data['ppts']['CUA2']['num_square_feet']['last_updated'] = lessold
+
+    proj = Project('uuid-0001', data)
+
+    # oldest one got upgraded
+    assert proj.main is not None
+    assert proj.main.key == 'CUA1'
+    assert len(proj.children) == 1
+    assert proj.children[0].key == 'CUA2'
+    assert proj.field('num_units_bmr') == '22'
+
+
+def test_project_field():
+    """Test tie-breaking rules for fields"""
     old = datetime.fromisoformat('2019-01-01')
     lessold = datetime.fromisoformat('2020-01-01')
 
@@ -41,39 +69,7 @@ def project_basic_ppts():
     data['ppts']['CUA2']['num_square_feet']['value'] = '2300'
     data['ppts']['CUA2']['num_square_feet']['last_updated'] = lessold
 
-    return Project(id, data)
-
-
-def test_project_no_main_record():
-    old = datetime.fromisoformat('2019-01-01')
-    lessold = datetime.fromisoformat('2020-01-01')
-
-    data = _four_default_dict()
-    data['ppts']['CUA1']['parent']['value'] = 'PRJ'
-    data['ppts']['CUA1']['parent']['last_updated'] = old
-    data['ppts']['CUA1']['num_units_bmr']['value'] = '22'
-    data['ppts']['CUA1']['num_units_bmr']['last_updated'] = old
-
-    data['ppts']['CUA2']['parent']['value'] = 'PRJ'
-    data['ppts']['CUA2']['parent']['last_updated'] = lessold
-    data['ppts']['CUA2']['num_units_bmr']['value'] = '32'
-    data['ppts']['CUA2']['num_units_bmr']['last_updated'] = lessold
-    data['ppts']['CUA2']['num_square_feet']['value'] = '2300'
-    data['ppts']['CUA2']['num_square_feet']['last_updated'] = lessold
-
-    proj = Project('uuid-0001', data)
-
-    # oldest one got upgraded
-    assert proj.main is not None
-    assert proj.main.key == 'CUA1'
-    assert len(proj.children) == 1
-    assert proj.children[0].key == 'CUA2'
-    assert proj.field('num_units_bmr') == '22'
-
-
-def test_project_field(project_basic_ppts):
-    """Test tie-breaking rules for fields"""
-    proj = project_basic_ppts
+    proj = Project(id, data)
     assert proj.field('address') == '123 goog st' # ignored child value
     assert proj.field('num_units') == '144'
     assert proj.field('num_units_bmr') == '22' # ignored more recent one from child
