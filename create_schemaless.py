@@ -305,6 +305,7 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
     for uid, record in records.items():
         rid = record['record_id']
         if (rid in record_graph
+                and record_graph.get(rid).uuid is not None
                 and record_graph.get(rid).uuid != uid):
             raise RuntimeError(
                 "record_id %s points to multiple UUIDS: %s and %s" %
