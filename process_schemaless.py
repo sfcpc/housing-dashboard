@@ -17,6 +17,7 @@ from process.generators import gen_facts
 from process.generators import gen_units
 from process.generators import nv_geom
 from process.generators import nv_all_units
+from process.generators import nv_bedroom_info
 from process.generators import nv_square_feet
 from process.generators import atleast_one_measure
 from process.types import four_level_dict
@@ -94,6 +95,7 @@ config = OrderedDict([
         ],
         name_value_generators=[
             nv_square_feet,
+            nv_bedroom_info,
         ],
         addl_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
     )),

@@ -2,6 +2,8 @@
 """Contains data and name-value generators for processing schema-less CSV.
 """
 
+import re
+
 from process.types import Field
 from process.types import NameValue
 
@@ -59,6 +61,46 @@ def nv_all_units(proj):
         result.append(NameValue('net_num_units_bmr',
                                 proj.field('affordable_units_net'),
                                 'planning'))
+    return result
+
+
+def nv_bedroom_info(proj):
+    is_adu = False
+
+    def _crunch_number(prefix):
+        nonlocal is_adu
+        net = 0
+        ok = False
+        try:
+            net = str(int(proj.field(prefix + '_net')))
+            ok = True
+
+            if re.search('_adu_', prefix):
+                is_adu = True
+        except ValueError:
+            pass
+
+        return (net, ok)
+
+    result = []
+    for field in ['residential_units_adu_studio',
+                  'residential_units_adu_1br',
+                  'residential_units_adu_2br',
+                  'residential_units_adu_3br',
+                  'residential_units_studio',
+                  'residential_units_1br',
+                  'residential_units_2br',
+                  'residential_units_3br',
+                  'residential_units_micro',
+                  'residential_units_sro']:
+        (net, ok) = _crunch_number(field)
+        if ok:
+            result.append(NameValue(field, net, 'planning'))
+
+    result.append(NameValue('is_adu',
+                            'TRUE' if is_adu else 'FALSE',
+                            'planning'))
+
     return result
 
 
