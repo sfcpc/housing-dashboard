@@ -110,11 +110,13 @@ fields = {
 }
 
 
-def just_dump(ppts_file, outfile):
+def just_dump(ppts_file, outfile, the_date=None):
     with open_file(
             ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         today = date.today()
+        if the_date:
+            today = the_date
         with open(outfile, 'w', newline='\n', encoding='utf-8') as outf:
             writer = csv.writer(outf, lineterminator='\n')
             writer.writerow(
@@ -142,7 +144,7 @@ def latest_values(schemaless_file):
     return records
 
 
-def dump_and_diff(ppts_file, outfile, schemaless_file):
+def dump_and_diff(ppts_file, outfile, schemaless_file, the_date=None):
     records = latest_values(schemaless_file)
     print("Loaded %d records" % len(records))
 
@@ -150,6 +152,8 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
             ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         today = date.today()
+        if the_date:
+            today = the_date
         shutil.copyfile(schemaless_file, outfile)
         with open(outfile, 'a', newline='\n', encoding='utf-8') as outf:
             writer = csv.writer(outf, lineterminator='\n')
