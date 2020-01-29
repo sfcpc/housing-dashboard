@@ -1,19 +1,22 @@
 # Lint as: python3
 """Convert a schemaless csv into relational tables (a set of csvs)."""
-
 import argparse
 from collections import defaultdict
 from collections import namedtuple
 import csv
-import functools
 import lzma
 import sys
 
 csv.field_size_limit(sys.maxsize)
 
-Field = namedtuple('Field', ['name', 'value', 'always_treat_as_empty'], defaults=['', '', False])
+Field = namedtuple('Field',
+                   ['name', 'value', 'always_treat_as_empty'],
+                   defaults=['', '', False])
 
-def gen_id(id, data): return [Field('id', id, True)]
+
+def gen_id(id, data):
+    return [Field('id', id, True)]
+
 
 def gen_facts(id, data):
     result = [Field()] * 5
@@ -33,8 +36,9 @@ def gen_facts(id, data):
         break
     return result
 
+
 def gen_geom(id, data):
-    result = [Field()] * 2 # TODO datafreshness
+    result = [Field()] * 2  # TODO datafreshness
 
     if len(data['ppts']) == 0:
         return result
@@ -72,6 +76,7 @@ config = {
     ],
 }
 
+
 # TODO data freshness table, which is not on a per-project basis
 
 
@@ -93,15 +98,22 @@ def build_projects(schemaless_file):
         o = open
 
     processed = 0
-    with o(schemaless_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+    with o(schemaless_file,
+           mode='rt',
+           encoding='utf-8',
+           errors='replace') as inf:
         reader = csv.DictReader(inf)
 
         # four levels of dict
-        projects = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(str))))
+        projects = defaultdict(
+            lambda: defaultdict(
+                lambda: defaultdict(
+                    lambda: defaultdict(str))))
 
         for line in reader:
             # TODO: data-integrity validation
-            projects[line['id']][line['source']][line['fk']][line['name']] = line['value']
+            record = projects[line['id']][line['source']]
+            record[line['fk']][line['name']] = line['value']
             processed += 1
             if processed % 50000 == 0:
                 print("Processed %s lines" % processed)
@@ -133,7 +145,8 @@ def output_projects(projects, config):
                     for result in results:
                         if not headers_printed:
                             headers.append(result.name)
-                        if not result.always_treat_as_empty and result.value != "":
+                        if (not result.always_treat_as_empty and
+                                result.value != ""):
                             atleast_one = True
                         output.append(result.value)
 
@@ -181,4 +194,3 @@ if __name__ == '__main__':
     print("\test bytes for values: %s" % est_bytes)
 
     output_projects(projects, config)
-
