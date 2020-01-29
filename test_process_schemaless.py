@@ -6,6 +6,7 @@ from collections import namedtuple
 from process_schemaless import Project
 from process_schemaless import atleast_one_measure
 from process_schemaless import four_level_dict
+from process_schemaless import is_seen_id
 
 
 def test_atleast_one_measure():
@@ -20,6 +21,20 @@ def test_atleast_one_measure():
     ]
     for test in tests:
         assert atleast_one_measure(test.input, test.header) == test.want
+
+
+def test_is_seen_id():
+    seen_set = set('123')
+
+    header = ['id']
+    RowTest = namedtuple('RowTest', ['input', 'want', 'header'], defaults=[header])
+    tests = [
+        RowTest(['1'], True),
+        RowTest(['4'], False),
+        RowTest(['1'], False, ['idx']),
+    ]
+    for test in tests:
+        assert is_seen_id(test.input, test.header, seen_set) == test.want
 
 
 def test_project_no_main_record():

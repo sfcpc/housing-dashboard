@@ -2,6 +2,7 @@
 """Convert a schemaless csv into relational tables (a set of csvs)."""
 import argparse
 from datetime import datetime
+from collections import OrderedDict
 from collections import defaultdict
 from collections import namedtuple
 import csv
@@ -78,34 +79,57 @@ def atleast_one_measure(row, header):
                 break
     return not seen_measure or atleast_one
 
+
+# TODO: ugly global state
+__seen_ids = set()
+
+
+def is_seen_id(row, header, seen_set):
+    try:
+        id_index = header.index('id')
+        return row[id_index] in seen_set
+    except ValueError:
+        return False
+
+
+def store_seen_id(row, header, seen_set):
+    try:
+        id_index = header.index('id')
+        seen_set.add(row[id_index])
+    except:
+        pass
+
+
 TableDefinition = namedtuple('TableDefinition',
-                             ['data_generators', 'additional_output_predicate'],
-                             defaults=[[], None])
+                             ['data_generators', 'additional_output_predicate', 'post_process'],
+                             defaults=[[], None, None])
 
 # Mapping of tables to a set of data generators.  All data generators must
 # accept a Project.
-config = {
-    'project_facts': TableDefinition(
+config = OrderedDict([
+    ('project_facts', TableDefinition(
         data_generators=[
             gen_id,
             gen_facts,
             gen_units,
         ],
-        additional_output_predicate=atleast_one_measure
-    ),
-    'project_status_history': TableDefinition(
+        additional_output_predicate=atleast_one_measure,
+        post_process=lambda r, h: store_seen_id(r, h, __seen_ids),
+    )),
+    ('project_status_history', TableDefinition(
         # TODO
-    ),
-    'project_geo': TableDefinition(
+    )),
+    ('project_geo', TableDefinition(
         data_generators=[
             gen_id,
             gen_geom,
-        ]
-    ),
-    'project_details': TableDefinition(
+        ],
+        additional_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
+    )),
+    ('project_details', TableDefinition(
         # TODO
-    ),
-}
+    )),
+])
 
 
 # TODO data freshness table, which is not on a per-project basis
@@ -157,7 +181,7 @@ def build_projects(schemaless_file, uuid_mapping):
             src, fk, name = (
                 line['source'], line['fk'], line['name'])
             id = uuid_mapping[fk]
-            if id is None:
+            if not id:
                 raise KeyError("Entry %s does not have a uuid" % fk)
 
             existing = projects[id][src][fk][name]
@@ -189,8 +213,7 @@ class Project:
         children = []
         main_date = datetime.min
         for (fk, values) in data['ppts'].items():
-            if (values['parent']['value'] is None or
-                    values['parent']['value'] == ''):
+            if not values['parent']['value']:
                 if main is None or (
                         main is not None and
                         values['parent']['last_updated'] > main_date):
@@ -199,7 +222,7 @@ class Project:
             else:
                 children.append(Record(fk, values))
 
-        if main is None:
+        if not main:
             # upgrade the oldest child
             oldest_child_and_date = None
             for child in children:
@@ -208,11 +231,11 @@ class Project:
                     if data['last_updated'] < oldest_date:
                         oldest_date = data['last_updated']
 
-                if (oldest_child_and_date is None or
+                if (not oldest_child_and_date or
                         oldest_date < oldest_child_and_date[1]):
                     oldest_child_and_date = (child, oldest_date)
 
-            if oldest_child_and_date is not None:
+            if oldest_child_and_date:
                 main = oldest_child_and_date[0]
                 children.remove(main)
             else:
@@ -282,7 +305,7 @@ def output_projects(projects, config):
                         output.append(result.value)
                 headers_done = True
 
-                if atleast_one and (table_def.additional_output_predicate is None or
+                if atleast_one and (not table_def.additional_output_predicate or
                                     table_def.additional_output_predicate(output, headers)):
                     if not headers_printed and len(headers) > 0:
                         writer.writerow(headers)
@@ -293,6 +316,9 @@ def output_projects(projects, config):
                         print("%s entries to %s" % (lines_out, finalfile))
 
                     writer.writerow(output)
+
+                    if table_def.post_process:
+                        table_def.post_process(output, headers)
 
 
 def build_uuid_mapping(uuid_map_file):
