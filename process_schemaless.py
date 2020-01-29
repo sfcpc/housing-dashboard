@@ -102,6 +102,11 @@ config = OrderedDict([
 ])
 
 
+_FIELDS_TO_CHECK = set()
+_FIELDS_TO_CHECK.add('date_opened')
+_FIELDS_TO_CHECK.add('date_closed')
+
+
 def extract_freshness(projects):
     """Extracts the last time a data source has been fetched
 
@@ -114,9 +119,11 @@ def extract_freshness(projects):
 
             for (fk, nvs) in records.items():
                 for (name, value) in nvs.items():
-                    nvdate = value['last_updated']
-                    if nvdate > latest_date:
-                        latest_date = nvdate
+                    if name in _FIELDS_TO_CHECK:
+                        nvdate = datetime.fromisoformat(value['value'])
+
+                        if nvdate and nvdate > latest_date:
+                            latest_date = nvdate
 
             if latest_date > datetime.min:
                 data_freshness[source] = latest_date
@@ -128,7 +135,7 @@ def build_projects(schemaless_file, uuid_mapping):
 
     Returns: a nested dict keyed as:
          dict[id][source][fk][name] = {
-            value: '',
+            value: str,
             last_updated: datetime,
         }
     """
@@ -163,11 +170,10 @@ def build_projects(schemaless_file, uuid_mapping):
             if not id:
                 raise KeyError("Entry %s does not have a uuid" % fk)
 
-            existing = projects[id][src][fk][name]
-
-            if existing['value'] == '' or date > existing['last_updated']:
-                existing['value'] = value
-                existing['last_updated'] = date
+            if (projects[id][src][fk][name]['value'] == '' or
+                    date > projects[id][src][fk][name]['last_updated']):
+                projects[id][src][fk][name]['value'] = value
+                projects[id][src][fk][name]['last_updated'] = date
 
             processed += 1
             if processed % 500000 == 0:
