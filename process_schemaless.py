@@ -17,6 +17,7 @@ Field = namedtuple('Field',
                    ['name', 'value', 'always_treat_as_empty'],
                    defaults=['', '', False])
 
+
 def gen_id(proj):
     return [Field('id', proj.id, True)]
 
@@ -66,13 +67,14 @@ def gen_geom(proj):
 
     return result
 
+
 def atleast_one_measure(row, header):
     atleast_one = False
     seen_measure = False
     for (value, name) in zip(row, header):
         if (name == 'num_units' or
-            name == 'num_units_bmr' or
-            name == 'num_square_feet'):
+                name == 'num_units_bmr' or
+                name == 'num_square_feet'):
             seen_measure = True
             if value != '':
                 atleast_one = True
@@ -96,12 +98,14 @@ def store_seen_id(row, header, seen_set):
     try:
         id_index = header.index('id')
         seen_set.add(row[id_index])
-    except:
+    except ValueError:
         pass
 
 
 TableDefinition = namedtuple('TableDefinition',
-                             ['data_generators', 'additional_output_predicate', 'post_process'],
+                             ['data_generators',
+                              'additional_output_predicate',
+                              'post_process'],
                              defaults=[[], None, None])
 
 # Mapping of tables to a set of data generators.  All data generators must
@@ -141,7 +145,6 @@ def four_level_dict():
         lambda: defaultdict(
             lambda: defaultdict(
                 lambda: defaultdict(str))))
-
 
 
 def build_projects(schemaless_file, uuid_mapping):
@@ -305,8 +308,10 @@ def output_projects(projects, config):
                         output.append(result.value)
                 headers_done = True
 
-                if atleast_one and (not table_def.additional_output_predicate or
-                                    table_def.additional_output_predicate(output, headers)):
+                if atleast_one and (
+                    not table_def.additional_output_predicate or
+                        table_def.additional_output_predicate(output,
+                                                              headers)):
                     if not headers_printed and len(headers) > 0:
                         writer.writerow(headers)
                         headers_printed = True
@@ -326,8 +331,6 @@ def build_uuid_mapping(uuid_map_file):
     with open_file(uuid_map_file, 'r') as f:
         reader = csv.DictReader(f)
         for line in reader:
-            fk = line['fk']
-            id = line['uuid']
             mapping[line['fk']] = line['uuid']
     return mapping
 
@@ -335,7 +338,8 @@ def build_uuid_mapping(uuid_map_file):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('schemaless_file', help='Schema-less CSV to use')
-    parser.add_argument('uuid_map_file', help='CSV that maps uuids to all seen fks in the schema-less CSV')
+    parser.add_argument('uuid_map_file',
+                        help='CSV that maps uuids to all seen fks')
     parser.add_argument(
             '--out_prefix',
             help='Prefix for output files',
