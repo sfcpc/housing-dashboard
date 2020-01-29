@@ -128,7 +128,7 @@ def build_projects(schemaless_file):
             value = line['value']
 
             id, src, fk, name = (
-                line['id'], line['source', line['fk'], line['name'])
+                line['id'], line['source'], line['fk'], line['name'])
             existing = projects[id][src][fk][name]
 
             if existing['value'] == '' or date > existing['last_updated']:
