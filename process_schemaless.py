@@ -67,7 +67,7 @@ config = OrderedDict([
         addl_output_predicate=atleast_one_measure,
         post_process=lambda r, h: store_seen_id(r, h, __seen_ids),
     )),
-    ('project_unit_details', TableDefinition(
+    ('project_unit_counts_full', TableDefinition(
         data_generators=[
             gen_id,
         ],
