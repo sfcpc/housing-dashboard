@@ -158,11 +158,12 @@ class Project:
         children = []
         main_date = datetime.min
         for (fk, values) in data['ppts'].items():
-            if values['parent']['value'] is None or values['parent']['value'] == '':
+            if (values['parent']['value'] is None or
+                    values['parent']['value'] == ''):
                 if main is None or (
                         main is not None and
                         values['parent']['last_updated'] > main_date):
-                    main =  Record(fk, values)
+                    main = Record(fk, values)
                     main_date = values['parent']['last_updated']
             else:
                 if id == 'e23d90d3-fa75-40f6-957d-bf8e6626a37f':
@@ -178,7 +179,8 @@ class Project:
                     if data['last_updated'] < oldest_date:
                         oldest_date = data['last_updated']
 
-                if oldest_child_and_date is None or oldest_date < oldest_child_and_date[1]:
+                if (oldest_child_and_date is None or
+                        oldest_date < oldest_child_and_date[1]):
                     oldest_child_and_date = (child, oldest_date)
 
             if oldest_child_and_date is not None:
@@ -199,8 +201,9 @@ class Project:
         return self.__ppts_children
 
     def field(self, name):
-        # for ppts, prefer parent record, only moving to children if none found,
-        # at which point we choose the value with the latest last_updated
+        # for ppts, prefer parent record, only moving to children if none
+        # found, at which point we choose the value with the latest
+        # last_updated
         # TODO: I'm not even sure this is the correct logic to use for dealing
         # with ambiguities.
         val = ''

@@ -1,15 +1,18 @@
 # Lint as: python3
-import pytest
-
 from datetime import datetime
 from collections import defaultdict
 
 from process_schemaless import Project
-from process_schemaless import Record
+# from process_schemaless import Record
+
 
 # TODO: possible code smell, need a better structure
 def _four_default_dict():
-    return defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(str))))
+    return defaultdict(
+        lambda: defaultdict(
+            lambda: defaultdict(
+                lambda: defaultdict(str))))
+
 
 def test_project_no_main_record():
     old = datetime.fromisoformat('2019-01-01')
@@ -70,8 +73,8 @@ def test_project_field():
     data['ppts']['CUA2']['num_square_feet']['last_updated'] = lessold
 
     proj = Project(id, data)
-    assert proj.field('address') == '123 goog st' # ignored child value
+    assert proj.field('address') == '123 goog st'  # ignored child value
     assert proj.field('num_units') == '144'
-    assert proj.field('num_units_bmr') == '22' # ignored more recent one from child
+    # ignored more recent one from child:
+    assert proj.field('num_units_bmr') == '22'
     assert proj.field('num_square_feet') == '2300'
-
