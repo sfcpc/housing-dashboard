@@ -115,8 +115,8 @@ def just_dump(ppts_file, outfile):
             ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
         reader = DictReader(inf)
         today = date.today()
-        with open(outfile, 'w') as outf:
-            writer = csv.writer(outf)
+        with open(outfile, 'w', newline='\n', encoding='utf-8') as outf:
+            writer = csv.writer(outf, lineterminator='\n')
             writer.writerow(
                 ['fk', 'source', 'last_updated', 'name', 'value'])
             source = 'ppts'
@@ -129,7 +129,7 @@ def just_dump(ppts_file, outfile):
                     if val:
                         writer.writerow(
                             [fk, source, last_updated,
-                             fields[source][key], val])
+                             fields[source][key], val.strip()])
 
 
 def latest_values(schemaless_file):
@@ -151,8 +151,8 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
         reader = DictReader(inf)
         today = date.today()
         shutil.copyfile(schemaless_file, outfile)
-        with open(outfile, 'a') as outf:
-            writer = csv.writer(outf)
+        with open(outfile, 'a', newline='\n', encoding='utf-8') as outf:
+            writer = csv.writer(outf, lineterminator='\n')
             source = 'ppts'
             last_updated = today.isoformat()
             for line in reader:
@@ -164,7 +164,7 @@ def dump_and_diff(ppts_file, outfile, schemaless_file):
                         records[fk][key] = val
                         writer.writerow(
                             [fk, source, last_updated,
-                             fields[source][key], val])
+                             fields[source][key], val.strip()])
 
 
 if __name__ == "__main__":
