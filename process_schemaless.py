@@ -1,20 +1,23 @@
 # Lint as: python3
 """Convert a schemaless csv into relational tables (a set of csvs)."""
-
 import argparse
 from datetime import datetime
 from collections import defaultdict
 from collections import namedtuple
 import csv
-import functools
 import lzma
 import sys
 
 csv.field_size_limit(sys.maxsize)
 
-Field = namedtuple('Field', ['name', 'value', 'always_treat_as_empty'], defaults=['', '', False])
+Field = namedtuple('Field',
+                   ['name', 'value', 'always_treat_as_empty'],
+                   defaults=['', '', False])
 
-def gen_id(proj): return [Field('id', proj.id, True)]
+
+def gen_id(proj):
+    return [Field('id', proj.id, True)]
+
 
 def gen_facts(proj):
     result = [Field()] * 5
@@ -50,7 +53,7 @@ def gen_units(proj):
 
 
 def gen_geom(proj):
-    result = [Field()] * 2 # TODO datafreshness
+    result = [Field()] * 2  # TODO datafreshness
 
     if proj.field('the_geom') != '':
         result[0] = Field('name', 'geom')
@@ -82,6 +85,7 @@ config = {
     ],
 }
 
+
 # TODO data freshness table, which is not on a per-project basis
 
 
@@ -106,19 +110,27 @@ def build_projects(schemaless_file):
         o = open
 
     processed = 0
-    with o(schemaless_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+    with o(schemaless_file,
+           mode='rt',
+           encoding='utf-8',
+           errors='replace') as inf:
         reader = csv.DictReader(inf)
 
         # five levels of dict
-        projects = defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(lambda: defaultdict(str)))))
+        projects = defaultdict(
+            lambda: defaultdict(
+                lambda: defaultdict(
+                    lambda: defaultdict(
+                        lambda: defaultdict(str)))))
 
         for line in reader:
             date = datetime.fromisoformat(line['last_updated'])
             value = line['value']
 
-            existing = projects[line['id']][line['source']][line['fk']][line['name']]
+            id, src, fk, name = (
+                line['id'], line['source', line['fk'], line['name'])
+            existing = projects[id][src][fk][name]
 
-            # TODO: data-integrity validation
             if existing['value'] == '' or date > existing['last_updated']:
                 existing['value'] = value
                 existing['last_updated'] = date
@@ -129,7 +141,9 @@ def build_projects(schemaless_file):
 
     return projects
 
+
 Record = namedtuple('Record', ['key', 'values'], defaults=[None, None])
+
 
 class Project:
     """A way to abstract some of the details of handling multiple records for a
@@ -229,7 +243,8 @@ def output_projects(projects, config):
                     for result in results:
                         if not headers_printed:
                             headers.append(result.name)
-                        if not result.always_treat_as_empty and result.value != "":
+                        if (not result.always_treat_as_empty and
+                                result.value != ""):
                             atleast_one = True
                         output.append(result.value)
 
@@ -277,4 +292,3 @@ if __name__ == '__main__':
     print("\test bytes for values: %s" % est_bytes)
 
     output_projects(projects, config)
-
