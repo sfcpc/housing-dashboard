@@ -1,8 +1,9 @@
 # Lint as: python3
-"""Convert a PPTS file into a schemaless csv.
+"""Convert departmental data files into a schemaless csv.
 
-If you run this with a single arg, it will just dump the PPTS file to a
-schemaless csv. If you provide two args, it will diff against an existing
+If you run this with a PPTS and PTS file specified, it will
+dump those into a schemaless csv. If you provide the files
+and also set the --diff flag, it will diff against an existing
 schemaless csv.
 """
 
@@ -23,7 +24,7 @@ csv.field_size_limit(sys.maxsize)
 ppts = 'ppts'
 pts = 'pts'
 
-fk_names = {
+foreign_keys = {
     ppts : 'record_id',
     pts : 'Permit Number'
 }
@@ -157,13 +158,13 @@ def just_dump(sources, outfile):
            ['fk', 'source', 'last_updated', 'name', 'value'])
         last_updated = date.today().isoformat()
 
-        for (source_name, source_file) in sources:
+        for source_name, source_file in sources.items():
             with open_file(
                 source_file, mode='rt', encoding='utf-8', errors='replace') as inf:
                 reader = DictReader(inf)
 
                 for line in reader:
-                  fk = line[fk_names[source_name]]
+                    fk = line[foreign_keys[source_name]]
                     for (key, val) in line.items():
                         if key not in fields[source_name]:
                             continue
@@ -192,13 +193,13 @@ def dump_and_diff(sources, outfile, schemaless_file):
         writer = csv.writer(outf)
         last_updated = date.today().isoformat()
 
-        for (source_name, source_file) in sources:
+        for source_name, source_file in sources.items():
             with open_file(
                     source_file, mode='rt', encoding='utf-8', errors='replace') as inf:
                 reader = DictReader(inf)
 
                 for line in reader:
-                  fk = line[fk_names[source_name]]
+                    fk = line[foreign_keys[source_name]]
                     for (key, val) in line.items():
                         if key not in fields[source_name]:
                             continue
