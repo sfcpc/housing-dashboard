@@ -102,14 +102,32 @@ config = OrderedDict([
 ])
 
 
-# TODO data freshness table, which is not on a per-project basis
+def extract_freshness(projects):
+    """Extracts the last time a data source has been fetched
+
+    Returns: a dict with key data source and value a datetime
+    """
+    data_freshness = {}
+    for (projectid, sources) in projects.items():
+        for (source, records) in sources.items():
+            latest_date = datetime.min
+
+            for (fk, nvs) in records.items():
+                for (name, value) in nvs.items():
+                    nvdate = value['last_updated']
+                    if nvdate > latest_date:
+                        latest_date = nvdate
+
+            if latest_date > datetime.min:
+                data_freshness[source] = latest_date
+    return data_freshness
 
 
 def build_projects(schemaless_file, uuid_mapping):
     """Consumes all data in the schemaless file to get the latest values.
 
     Returns: a nested dict keyed as:
-        dict[id][source][name] = {
+         dict[id][source][fk][name] = {
             value: '',
             last_updated: datetime,
         }
@@ -156,6 +174,24 @@ def build_projects(schemaless_file, uuid_mapping):
                 print("Processed %s lines" % processed)
 
     return projects
+
+
+def output_freshness(freshness):
+    """Generates the table for indicating data freshness of sources."""
+    finalfile = args.out_prefix + 'data_freshness.csv'
+    with open(finalfile, 'w') as outf:
+        print('Handling %s' % finalfile)
+        writer = csv.writer(outf)
+        writer.writerow(['source', 'freshness'])
+
+        for (source, freshness) in freshness.items():
+            out_source = source
+
+            # TODO: for multiple sources, have a better way to normalize this
+            if out_source == 'ppts':
+                out_source = 'planning'
+
+            writer.writerow([out_source, freshness.strftime('%Y-%m-%d')])
 
 
 def output_projects(projects, config):
@@ -275,3 +311,5 @@ if __name__ == '__main__':
     print("\test bytes for values: %s" % est_bytes)
 
     output_projects(projects, config)
+    freshness = extract_freshness(projects)
+    output_freshness(freshness)
