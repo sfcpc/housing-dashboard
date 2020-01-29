@@ -11,17 +11,25 @@ from collections import defaultdict
 import csv
 from csv import DictReader
 from datetime import date
-from datetime import datetime
-import lzma
 import shutil
 import sys
-import uuid
+
+from fileutils import open_file
+
 
 csv.field_size_limit(sys.maxsize)
 
+# Names of departmental data sources.
+ppts = 'ppts'
+pts = 'pts'
+
+fk_names = {
+    ppts : 'record_id',
+    pts : 'Permit Number'
+}
 
 fields = {
-    'ppts': {
+    ppts : {
         'record_id': 'record_id',
         'record_type': 'record_type',
         'record_type_category': 'record_type_category',
@@ -107,7 +115,7 @@ fields = {
         'RESIDENTIAL_MICRO_PROP': 'residential_units_micro_proposed',
         'RESIDENTIAL_MICRO_NET': 'residential_units_micro_net',
     },
-    'pts' : {
+    pts : {
         'Permit Number': 'permit_number',
         'Permit Type': 'permit_type',
         'Permit Type Definition': 'permit_type_definition',
@@ -142,207 +150,27 @@ fields = {
 }
 
 
-def _open(fname, *args, **kwargs):
-    if fname.endswith('.xz'):
-        o = lzma.open
-    else:
-        o = open
-    return o(fname, *args, **kwargs)
-
-
-class RecordGraph:
-    def __init__(self):
-        self._nodes = {}
-
-    def add(self, record):
-        rid = record.record_id
-        if rid in self._nodes:
-            # This may either be an update or adding a parent/child for an
-            # existing node.
-            node = self._nodes[rid]
-            node.date_opened = record.date_opened
-            if not node.uuid and record.uuid:
-                node.uuid = record.uuid
-            node.parents.update(record.parents)
-            node.children.update(record.children)
-            record = node
-        else:
-            self._nodes[rid] = record
-
-        for parent in record.parents:
-            self.link(parent, record.record_id)
-        for child in record.children:
-            self.link(record.record_id, child)
-
-    def link(self, parent_record_id, child_record_id):
-        if parent_record_id not in self._nodes:
-            self._nodes[parent_record_id] = RecordMetadata(parent_record_id)
-        if child_record_id not in self._nodes:
-            self._nodes[child_record_id] = RecordMetadata(child_record_id)
-        self._nodes[parent_record_id].add_child(child_record_id)
-        self._nodes[child_record_id].add_parent(parent_record_id)
-
-    def get(self, record_id):
-        return self._nodes.get(record_id, None)
-
-    def resolve_parent(self, record_id):
-        record = self.get(record_id)
-        if record.uuid:
-            # Either implies this is a root or we have already resolved the parent
-            return record
-        if not record.parents:
-            return record
-        all_parents = []
-        for idx, pid in enumerate(record.parents):
-            if pid not in self._nodes or self._nodes[pid].date_opened is None:
-                # This implies this record is bad data and cannot be properly
-                # connected to a real parent record.
-                continue
-            all_parents.append(self.resolve_parent(pid))
-        # If all_parents is empty, then none of the parents in record['parents']
-        # actually exist as valid records. So we can't link this to an exisitng
-        # uuid, so just return itself.
-        # # TODO: Come back to this when we are reading in DBI. At least a few
-        # of these records have related building permits.
-        if not all_parents:
-            return record
-        return sorted(all_parents,
-                      key=lambda x: x.date_opened,
-                      reverse=True)[0]
-
-    def resolve_all_parents(self):
-        for fk, record in self._nodes.items():
-            if record.uuid:
-                continue
-            # 'parent' is a bit of a misnomer -- it may be itself!
-            parent = self.resolve_parent(fk)
-            puid = parent.uuid
-            if not puid:
-                puid = uuid.uuid4()
-                self.get(parent.record_id).uuid = puid
-            self.get(fk).uuid = puid
-
-    def __contains__(self, obj):
-        return obj in self._nodes
-
-    def __len__(self):
-        return len(self._nodes)
-
-    def items(self):
-        return self._nodes.items()
-
-    def keys(self):
-        return self._nodes.keys()
-
-    def values(self):
-        return self._nodes.values()
-
-
-class RecordMetadata:
-    def __init__(self,
-                 record_id,
-                 date_opened=None,
-                 parents=None,
-                 children=None,
-                 uuid=None):
-        self.record_id = record_id
-        self.date_opened = date_opened
-        if parents is None:
-            self.parents = set()
-        else:
-            self.parents = set(parents)
-        if children is None:
-            self.children = set()
-        else:
-            self.children = set(children)
-        self.uuid = uuid
-
-    def add_child(self, child_record_id):
-        self.children.add(child_record_id)
-
-    def add_parent(self, parent_record_id):
-        self.parents.add(parent_record_id)
-
-
-def _map_children_to_parents(ppts_file, record_graph=None):
-    if record_graph is None:
-        record_graph = RecordGraph()
-    # This looks dumb, but the easiest way to ensure the parent->child mapping
-    # exists is to read through the file twice.
-    with _open(
-            ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
-        reader = DictReader(inf)
-        for line in reader:
-            fk = line['record_id']
-            parents = []
-            children = []
-            if line['parent']:
-                parents = line['parent'].split(',')
-            if line['children']:
-                children = line['children'].split(",")
-            record_graph.add(RecordMetadata(
-                record_id=fk,
-                date_opened=datetime.strptime(
-                    line['date_opened'].split(" ")[0], '%m/%d/%Y'),
-                parents=parents,
-                children=children,
-            ))
-
-    record_graph.resolve_all_parents()
-    # At this point, all records have been associated with their parents and
-    # have a unique ID linking them together.
-    return record_graph
-
-
-def just_dump(ppts_file, outfile):
-    record_graph = _map_children_to_parents(ppts_file)
-    with _open(
-            ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
-        reader = DictReader(inf)
-        today = date.today()
-        with open(outfile, 'w') as outf:
-            writer = csv.writer(outf)
-            writer.writerow(
-                ['id', 'fk', 'source', 'last_updated', 'name', 'value'])
+def just_dump(sources, outfile):
+    with open(outfile, 'w') as outf:
+        writer = csv.writer(outf)
+        writer.writerow(
+           ['fk', 'source', 'last_updated', 'name', 'value'])
         last_updated = date.today().isoformat()
 
-        # Dump PPTS. 
-        record_id_metadata = _map_children_to_parents(ppts_file)
-        with _open(
-                 ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
-            reader = DictReader(inf)
-            source = 'ppts'
+        for (source_name, source_file) in sources:
+            with open_file(
+                source_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+                reader = DictReader(inf)
 
-            # Maintain a map from building permits referenced from PPTS to their
-            # corresponding unique project ID.
-            building_permit_to_id = {}
-            for line in reader:
-                fk = line['record_id']
-                id = record_graph.get(fk).uuid
-                for (key, val) in line.items():
-                    if key not in fields[source]:
-                        continue
-                    if val:
-                        writer.writerow(
-                            [id, fk, source, last_updated,
-                             fields[source][key], val])
-                    if key == 'RELATED_BUILDING_PERMIT':
-                        building_permit_to_id[val] = id
-
-        # Dump PTS. 
-        with _open(pts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
-            reader = DictReader(inf)
-            source = 'pts'
-
-            for line in reader:
-                fk = line['Permit Number']
-                # TODO: Note that this currently skips any permits that are not referenced
-                # from PPTS, which is not desirable for the end product. 
-                if fk in building_permit_to_id: 
-                    # TODO: Fix formatting of PTS fields?
-                    for (key,val) in line.items():
+                for line in reader:
+                  fk = line[fk_names[source_name]]
+                    for (key, val) in line.items():
+                        if key not in fields[source_name]:
+                            continue
                         if val:
-                            writer.writerow([building_permit_to_id[fk], fk, source, last_updated, key, val])
+                            writer.writerow(
+                                [fk, source_name, last_updated,
+                                 fields[source_name][key], val])
 
 
 def latest_values(schemaless_file):
@@ -351,64 +179,34 @@ def latest_values(schemaless_file):
     with open(schemaless_file, 'r') as inf:
         reader = DictReader(inf)
         for line in reader:
-            records[line['id']][line['name']] = line['value']
+            records[line['fk']][line['name']] = line['value']
     return records
 
 
-def dump_and_diff(ppts_file, outfile, schemaless_file):
+def dump_and_diff(sources, outfile, schemaless_file):
     records = latest_values(schemaless_file)
     print("Loaded %d records" % len(records))
-    print("%s unique records" % len(records))
-    record_graph = RecordGraph()
-    # Read existing record_id->uuid mapping from the existing schemaless file
-    for uid, record in records.items():
-        rid = record['record_id']
-        if (rid in record_graph
-                and record_graph.get(rid).uuid is not None
-                and record_graph.get(rid).uuid != uid):
-            raise RuntimeError(
-                "record_id %s points to multiple UUIDS: %s and %s" %
-                (rid, uid, record_graph.get(rid).uuid))
-        parents = []
-        children = []
-        if record['parents']:
-            parents = record['parents'].split(",")
-        if record['children']:
-            children = record['children'].split(",")
-        record_graph.add(RecordMetadata(
-            record_id=rid,
-            uuid=uid,
-            date_opened=datetime.strptime(
-                record['date_opened'].split(" ")[0], '%m/%d/%Y'),
-            parents=parents,
-            children=children,
-        ))
 
-    print("%s records to uuids" % len(record_graph))
+    shutil.copyfile(schemaless_file, outfile)
+    with open(outfile, 'a') as outf: 
+        writer = csv.writer(outf)
+        last_updated = date.today().isoformat()
 
-    # Add new child-parent relationships
-    record_graph = _map_children_to_parents(ppts_file, record_graph)
+        for (source_name, source_file) in sources:
+            with open_file(
+                    source_file, mode='rt', encoding='utf-8', errors='replace') as inf:
+                reader = DictReader(inf)
 
-    with _open(
-            ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
-        reader = DictReader(inf)
-        today = date.today()
-        shutil.copyfile(schemaless_file, outfile)
-        with open(outfile, 'a') as outf:
-            writer = csv.writer(outf)
-            source = 'ppts'
-            last_updated = today.isoformat()
-            for line in reader:
-                rid = line['record_id']
-                # If this record has a parent, use the parent's UUID
-                id = record_graph.get(rid).uuid
-                for (key, val) in line.items():
-                    if key not in fields[source]:
-                        continue
-                    if val and val != records[id][key]:
-                        writer.writerow(
-                            [id, rid, source, last_updated,
-                             fields[source][key], val])
+                for line in reader:
+                  fk = line[fk_names[source_name]]
+                    for (key, val) in line.items():
+                        if key not in fields[source_name]:
+                            continue
+                        if val and val != records[fk][key]:
+                            records[fk][key] = val
+                            writer.writerow(
+                                [fk, source_name, last_updated,
+                                 fields[source_name][key], val])
 
 
 if __name__ == "__main__":
@@ -422,7 +220,9 @@ if __name__ == "__main__":
         default='')
     args = parser.parse_args()
 
+    source_map = { ppts : args.ppts_file, pts : args.pts_file }
+
     if not args.diff:
-        just_dump(args.ppts_file, args.pts_file, args.out_file)
+        just_dump(source_map, args.out_file)
     else:
-        dump_and_diff(args.ppts_file, args.pts_file, args.out_file, args.diff)
+        dump_and_diff(source_map, args.out_file, args.diff)
