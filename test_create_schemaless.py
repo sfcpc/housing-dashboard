@@ -3,9 +3,15 @@
 import csv
 from csv import DictReader
 from datetime import date
+import filecmp
 import shutil
 
+from create_schemaless import dump_and_diff
+from create_schemaless import just_dump
 from create_schemaless import latest_values
+
+
+TESTDATA_GEN_DATE = date(2020, 1, 29)
 
 
 def test_latest_values_num_entries():
@@ -59,3 +65,21 @@ def test_latest_values_no_collision():
     latest = latest_values('testdata/schemaless-one.csv')
     assert latest['2016-008581PRJ']['market_rate_units_proposed'] != \
         latest['2017-007883PRJ']['market_rate_units_proposed']
+
+
+def test_just_dump(tmpdir):
+    """Ensure dumping produces the expected result."""
+    outfile = tmpdir.join("schemaless.csv")
+    just_dump('testdata/ppts-one.csv', outfile, the_date=TESTDATA_GEN_DATE)
+    assert filecmp.cmp('testdata/schemaless-one.csv', outfile)
+
+
+def test_dump_and_diff(tmpdir):
+    """Ensure dumping produces the expected result."""
+    outfile = tmpdir.join("schemaless.csv")
+    dump_and_diff(
+        'testdata/ppts-two.csv',
+        outfile,
+        'testdata/schemaless-one.csv',
+        the_date=TESTDATA_GEN_DATE)
+    assert filecmp.cmp('testdata/schemaless-two.csv', outfile)
