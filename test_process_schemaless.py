@@ -1,6 +1,5 @@
 # Lint as: python3
 from datetime import datetime
-from collections import defaultdict
 from collections import namedtuple
 
 from process_schemaless import Project
@@ -10,14 +9,16 @@ from process_schemaless import is_seen_id
 
 
 def test_atleast_one_measure():
-    header = ['num_units', 'num_units_bmr', 'num_square_feet']
+    header = ['net_num_units', 'net_num_units_bmr', 'net_num_square_feet']
 
-    RowTest = namedtuple('RowTest', ['input', 'want', 'header'], defaults=[header])
+    RowTest = namedtuple('RowTest', ['input', 'want', 'header'],
+                         defaults=[header])
     tests = [
-        RowTest(['', '', ''], False), # empty row
-        RowTest(['', '0', ''], True), # zero different from empty
-        RowTest(['1', '2', '3'], True), # normal full row
-        RowTest(['1', '2', '3'], True, ['a', 'b', 'c']), # no relevant measures to filter on
+        RowTest(['', '', ''], False),  # empty row
+        RowTest(['', '0', ''], True),  # zero different from empty
+        RowTest(['1', '2', '3'], True),  # normal full row
+        # no relevant measures to filter on
+        RowTest(['1', '2', '3'], True, ['a', 'b', 'c']),
     ]
     for test in tests:
         assert atleast_one_measure(test.input, test.header) == test.want
@@ -27,7 +28,8 @@ def test_is_seen_id():
     seen_set = set('123')
 
     header = ['id']
-    RowTest = namedtuple('RowTest', ['input', 'want', 'header'], defaults=[header])
+    RowTest = namedtuple('RowTest', ['input', 'want', 'header'],
+                         defaults=[header])
     tests = [
         RowTest(['1'], True),
         RowTest(['4'], False),
