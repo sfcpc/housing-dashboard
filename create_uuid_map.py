@@ -36,14 +36,15 @@ class RecordGraph:
 
         # Read existing record_id->uuid mapping from the existing schemaless
         # map and update nodes with exisitng UUIDs.
-        with open_file(uuid_map_file, 'r') as f:
-            reader = DictReader(f)
-            for line in reader:
-                fk = line['fk']
-                if fk in rg:
-                    rg._nodes[fk].uuid = line['uuid']
-                else:
-                    print("Error: unknown id %s" % fk)
+        if uuid_map_file != '':
+            with open_file(uuid_map_file, 'r') as f:
+                reader = DictReader(f)
+                for line in reader:
+                    fk = line['fk']
+                    if fk in rg:
+                        rg._nodes[fk].uuid = line['uuid']
+                    else:
+                        print("Error: unknown id %s" % fk)
 
         # Resolve all parent UUIDs and generate new UUIDs
         rg._assign_uuids()
@@ -177,7 +178,10 @@ class Node:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('schemaless_file', help='Schemaless csv file')
-    parser.add_argument('uuid_map_file', help='UUID mapping file')
+    parser.add_argument(
+            '--uuid_map_file',
+            help='UUID mapping file',
+            default='')
     parser.add_argument('outfile', help='Output path of uuid mapping')
     args = parser.parse_args()
 
