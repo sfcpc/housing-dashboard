@@ -12,93 +12,16 @@ import sys
 from fileutils import open_file
 
 from process.project import Project
+from process.generators import gen_id
+from process.generators import gen_facts
+from process.generators import gen_units
+from process.generators import nv_geom
+from process.generators import nv_all_units
+from process.generators import nv_square_feet
+from process.generators import atleast_one_measure
+from process.types import four_level_dict
 
 csv.field_size_limit(sys.maxsize)
-
-Field = namedtuple('Field',
-                   ['name', 'value', 'always_treat_as_empty'],
-                   defaults=['', '', False])
-
-NameValue = namedtuple('NameValue', ['name', 'value', 'data_source'],
-                       defaults=['', '', ''])
-
-
-def gen_id(proj):
-    return [Field('id', proj.id, True)]
-
-
-def gen_facts(proj):
-    result = [Field()] * 5
-
-    if proj.field('address') != '':
-        result[0] = Field('address', proj.field('address'))
-        result[1] = Field('applicant', '')
-        result[2] = Field('supervisor_district', '')
-        result[3] = Field('permit_authority', 'planning')
-        result[4] = Field('permit_authority_id', proj.field('fk'))
-
-    return result
-
-
-def gen_units(proj):
-    result = [Field()] * 4
-
-    # TODO: how to handle cases where better numbers exist from dbi
-    # TODO: how to handle cases where prop - existing != net ?
-    result[0] = Field('net_num_units', proj.field('market_rate_units_net'))
-    result[1] = Field('net_num_units_data',
-                      'planning' if result[0].value != '' else '',
-                      True)
-
-    result[2] = Field('net_num_units_bmr', proj.field('affordable_units_net'))
-    result[3] = Field('net_num_units_bmr_data',
-                      'planning' if result[2].value != '' else '',
-                      True)
-
-    return result
-
-
-def nv_geom(proj):
-    if proj.field('the_geom') != '':
-        return [NameValue('geom', proj.field('the_geom'), 'planning')]
-
-    return []
-
-
-def nv_all_units(proj):
-    # TODO: more useful when we have more than just one data source
-    result = []
-    if proj.field('market_rate_units_net'):
-        result.append(NameValue('net_num_units',
-                                proj.field('market_rate_units_net'),
-                                'planning'))
-    if proj.field('affordable_units_net'):
-        result.append(NameValue('net_num_units_bmr',
-                                proj.field('affordable_units_net'),
-                                'planning'))
-    return result
-
-
-def nv_square_feet(proj):
-    if proj.field('residential_sq_ft_net') != '':
-        return [NameValue('net_num_square_feet',
-                          proj.field('residential_sq_ft_net'),
-                          'planning')]
-    return []
-
-
-def atleast_one_measure(row, header):
-    atleast_one = False
-    seen_measure = False
-    for (value, name) in zip(row, header):
-        if (name == 'net_num_units' or
-                name == 'net_num_units_bmr' or
-                name == 'net_num_square_feet'):
-            seen_measure = True
-            if value != '':
-                atleast_one = True
-                break
-    return not seen_measure or atleast_one
 
 
 # TODO: ugly global state
@@ -178,14 +101,6 @@ config = OrderedDict([
 
 
 # TODO data freshness table, which is not on a per-project basis
-
-
-# TODO: possible code smell, need a better structure
-def four_level_dict():
-    return defaultdict(
-        lambda: defaultdict(
-            lambda: defaultdict(
-                lambda: defaultdict(str))))
 
 
 def build_projects(schemaless_file, uuid_mapping):
