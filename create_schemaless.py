@@ -189,7 +189,7 @@ def dump_and_diff(sources, outfile, schemaless_file):
     print("Loaded %d records" % len(records))
 
     shutil.copyfile(schemaless_file, outfile)
-    with open(outfile, 'a') as outf: 
+    with open(outfile, 'a') as outf:
         writer = csv.writer(outf)
         last_updated = date.today().isoformat()
 
