@@ -11,75 +11,17 @@ import sys
 
 from fileutils import open_file
 
+from process.project import Project
+from process.generators import gen_id
+from process.generators import gen_facts
+from process.generators import gen_units
+from process.generators import nv_geom
+from process.generators import nv_all_units
+from process.generators import nv_square_feet
+from process.generators import atleast_one_measure
+from process.types import four_level_dict
+
 csv.field_size_limit(sys.maxsize)
-
-Field = namedtuple('Field',
-                   ['name', 'value', 'always_treat_as_empty'],
-                   defaults=['', '', False])
-
-
-def gen_id(proj):
-    return [Field('id', proj.id, True)]
-
-
-def gen_facts(proj):
-    result = [Field()] * 5
-
-    if proj.field('address') != '':
-        result[0] = Field('address', proj.field('address'))
-        result[1] = Field('applicant', '')
-        result[2] = Field('supervisor_district', '')
-        result[3] = Field('permit_authority', 'planning')
-        result[4] = Field('permit_authority_id', proj.field('fk'))
-
-    return result
-
-
-def gen_units(proj):
-    result = [Field()] * 6
-
-    # TODO: how to handle cases where better numbers exist from dbi
-    # TODO: how to handle cases where prop - existing != net ?
-    result[0] = Field('num_units', proj.field('market_rate_units_net'))
-    result[1] = Field('num_units_data',
-                      'planning' if result[0].value != '' else '',
-                      True)
-
-    result[2] = Field('num_units_bmr', proj.field('affordable_units_net'))
-    result[3] = Field('num_units_bmr_data',
-                      'planning' if result[2].value != '' else '',
-                      True)
-
-    result[4] = Field('num_square_feet', proj.field('residential_sq_ft_net'))
-    result[5] = Field('num_square_feet_data',
-                      'planning' if result[4].value != '' else '',
-                      True)
-
-    return result
-
-
-def gen_geom(proj):
-    result = [Field()] * 2  # TODO datafreshness
-
-    if proj.field('the_geom') != '':
-        result[0] = Field('name', 'geom')
-        result[1] = Field('value', proj.field('the_geom'))
-
-    return result
-
-
-def atleast_one_measure(row, header):
-    atleast_one = False
-    seen_measure = False
-    for (value, name) in zip(row, header):
-        if (name == 'num_units' or
-                name == 'num_units_bmr' or
-                name == 'num_square_feet'):
-            seen_measure = True
-            if value != '':
-                atleast_one = True
-                break
-    return not seen_measure or atleast_one
 
 
 # TODO: ugly global state
@@ -104,12 +46,17 @@ def store_seen_id(row, header, seen_set):
 
 TableDefinition = namedtuple('TableDefinition',
                              ['data_generators',
-                              'additional_output_predicate',
+                              'name_value_generators',
+                              'addl_output_predicate',
                               'post_process'],
-                             defaults=[[], None, None])
+                             defaults=[[], [], None, None])
 
-# Mapping of tables to a set of data generators.  All data generators must
-# accept a Project.
+# Mapping of tables to a set of data generators.
+# * All data generators must accept a Project and return a list<string>.
+# * All name value generators must accept a Project and return a list
+#   of NameValue.
+# * For a combination of data generators and name value, all data returned
+#   by data generators will be duplicated for each name value.
 config = OrderedDict([
     ('project_facts', TableDefinition(
         data_generators=[
@@ -117,8 +64,17 @@ config = OrderedDict([
             gen_facts,
             gen_units,
         ],
-        additional_output_predicate=atleast_one_measure,
+        addl_output_predicate=atleast_one_measure,
         post_process=lambda r, h: store_seen_id(r, h, __seen_ids),
+    )),
+    ('project_unit_counts_full', TableDefinition(
+        data_generators=[
+            gen_id,
+        ],
+        name_value_generators=[
+            nv_all_units,
+        ],
+        addl_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
     )),
     ('project_status_history', TableDefinition(
         # TODO
@@ -126,25 +82,25 @@ config = OrderedDict([
     ('project_geo', TableDefinition(
         data_generators=[
             gen_id,
-            gen_geom,
         ],
-        additional_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
+        name_value_generators=[
+            nv_geom,
+        ],
+        addl_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
     )),
     ('project_details', TableDefinition(
-        # TODO
+        data_generators=[
+            gen_id,
+        ],
+        name_value_generators=[
+            nv_square_feet,
+        ],
+        addl_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
     )),
 ])
 
 
 # TODO data freshness table, which is not on a per-project basis
-
-
-# TODO: possible code smell, need a better structure
-def four_level_dict():
-    return defaultdict(
-        lambda: defaultdict(
-            lambda: defaultdict(
-                lambda: defaultdict(str))))
 
 
 def build_projects(schemaless_file, uuid_mapping):
@@ -200,82 +156,6 @@ def build_projects(schemaless_file, uuid_mapping):
     return projects
 
 
-Record = namedtuple('Record', ['key', 'values'], defaults=[None, None])
-
-
-class Project:
-    """A way to abstract some of the details of handling multiple records for a
-    project, from multiple sources."""
-
-    def __init__(self, id, data):
-        self.id = id
-        if len(data['ppts']) == 0:
-            raise Exception('No implementation to handle non-ppts data yet')
-
-        main = None
-        children = []
-        main_date = datetime.min
-        for (fk, values) in data['ppts'].items():
-            if not values['parent']['value']:
-                if main is None or (
-                        main is not None and
-                        values['parent']['last_updated'] > main_date):
-                    main = Record(fk, values)
-                    main_date = values['parent']['last_updated']
-            else:
-                children.append(Record(fk, values))
-
-        if not main:
-            # upgrade the oldest child
-            oldest_child_and_date = None
-            for child in children:
-                oldest_date = datetime.max
-                for (name, data) in child.values.items():
-                    if data['last_updated'] < oldest_date:
-                        oldest_date = data['last_updated']
-
-                if (not oldest_child_and_date or
-                        oldest_date < oldest_child_and_date[1]):
-                    oldest_child_and_date = (child, oldest_date)
-
-            if oldest_child_and_date:
-                main = oldest_child_and_date[0]
-                children.remove(main)
-            else:
-                raise Exception('No main record found for a project %s' % id)
-
-        self.__ppts_main = main
-        self.__ppts_children = children
-
-    @property
-    def main(self):
-        return self.__ppts_main
-
-    @property
-    def children(self):
-        return self.__ppts_children
-
-    def field(self, name):
-        # for ppts, prefer parent record, only moving to children if none
-        # found, at which point we choose the value with the latest
-        # last_updated
-        # TODO: I'm not even sure this is the correct logic to use for dealing
-        # with ambiguities.
-        val = ''
-        if name in self.__ppts_main.values:
-            val = self.__ppts_main.values[name]['value']
-
-        update_date = datetime.min
-        if val == '':
-            for child in self.__ppts_children:
-                if name in child.values:
-                    if child.values[name]['last_updated'] > update_date:
-                        update_date = child.values[name]['last_updated']
-                        val = child.values[name]['value']
-
-        return val
-
-
 def output_projects(projects, config):
     """Generates the relational tables from the project info"""
 
@@ -306,24 +186,46 @@ def output_projects(projects, config):
                                 result.value != ""):
                             atleast_one = True
                         output.append(result.value)
+
+                nvs = []
+                if len(table_def.name_value_generators) > 0:
+                    if not headers_done:
+                        headers.extend(['name', 'value', 'data_source'])
+                    for name_value in table_def.name_value_generators:
+                        nvs.extend(name_value(proj))
+
+                final_output = [output]
+                if len(nvs) > 0:
+                    final_output = []
+                    for nv in nvs:
+                        final_output.append(output +
+                                            [nv.name, nv.value,
+                                             nv.data_source])
+
+                    if len(final_output) > 0:
+                        atleast_one = True
+
                 headers_done = True
 
-                if atleast_one and (
-                    not table_def.additional_output_predicate or
-                        table_def.additional_output_predicate(output,
-                                                              headers)):
-                    if not headers_printed and len(headers) > 0:
-                        writer.writerow(headers)
-                        headers_printed = True
+                if atleast_one:
+                    for out in final_output:
+                        if (not table_def.addl_output_predicate or
+                                table_def.addl_output_predicate(out, headers)):
+                            if not headers_printed and len(headers) > 0:
+                                writer.writerow(headers)
+                                headers_printed = True
 
-                    lines_out += 1
-                    if lines_out % 10000 == 0:
-                        print("%s entries to %s" % (lines_out, finalfile))
+                            lines_out += 1
+                            if lines_out % 10000 == 0:
+                                print("%s entries to %s" % (lines_out,
+                                                            finalfile))
 
-                    writer.writerow(output)
+                            writer.writerow(out)
 
-                    if table_def.post_process:
-                        table_def.post_process(output, headers)
+                            if table_def.post_process:
+                                table_def.post_process(out, headers)
+    if lines_out > 0:
+        print("%s total entries" % lines_out)
 
 
 def build_uuid_mapping(uuid_map_file):
