@@ -9,6 +9,7 @@ import shutil
 from create_schemaless import dump_and_diff
 from create_schemaless import just_dump
 from create_schemaless import latest_values
+from create_schemaless import PPTS
 
 
 TESTDATA_GEN_DATE = date(2020, 1, 29)
@@ -70,7 +71,10 @@ def test_latest_values_no_collision():
 def test_just_dump(tmpdir):
     """Ensure dumping produces the expected result."""
     outfile = tmpdir.join("schemaless.csv")
-    just_dump('testdata/ppts-one.csv', outfile, the_date=TESTDATA_GEN_DATE)
+    just_dump(
+        {PPTS: 'testdata/ppts-one.csv'},
+        outfile,
+        the_date=TESTDATA_GEN_DATE)
     assert filecmp.cmp('testdata/schemaless-one.csv', outfile)
 
 
@@ -78,7 +82,7 @@ def test_dump_and_diff(tmpdir):
     """Ensure dumping produces the expected result."""
     outfile = tmpdir.join("schemaless.csv")
     dump_and_diff(
-        'testdata/ppts-two.csv',
+        {PPTS: 'testdata/ppts-two.csv'},
         outfile,
         'testdata/schemaless-one.csv',
         the_date=TESTDATA_GEN_DATE)
