@@ -158,3 +158,15 @@ class PTS(Source):
         'Proposed Construction Type Description':
         'proposed_construction_type_description',
     }
+
+
+class TCO(Source):
+    FK = 'Building Permit'
+    NAME = 'tco'
+    FIELDS = {
+        'Building Permit Application Number': 'building_permit_number',
+        'Building Address': 'address',
+        'Date Issued': 'date_issued',
+        'Document Type': 'building_permit_type',
+        'Number of Units Certified': 'num_units',
+    }
