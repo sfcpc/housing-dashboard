@@ -1323,8 +1323,8 @@ MB1401513,ppts,2020-01-29,planner_phone,415-575-9138
 2016-001514ETM,ppts,2020-01-29,name,1950 MISSION ST
 2016-001514ETM,ppts,2020-01-29,description,"Demolish 11 modular wood framed buildings at 1950 Mission Street
 MULTIPOLYGON (((-122.390146674 37.787310971"
-2016-001514ETM,ppts,2020-01-29,parent,-122.389962894 37.787722742
-2016-001514ETM,ppts,2020-01-29,children,-122.389797269 37.787587174
+2016-001514ETM,ppts,2020-01-29,parent, -122.389962894 37.787722742
+2016-001514ETM,ppts,2020-01-29,children, -122.389797269 37.787587174
 2016-001514ETM,ppts,2020-01-29,planner_name,65543
 2016-001514ETM,ppts,2020-01-29,planner_email,2014-002033PRJ
 2016-001514ETM,ppts,2020-01-29,planner_phone,11/24/2014 12:00:00 AM +0000
@@ -1555,7 +1555,7 @@ R66.058,ppts,2020-01-29,name,1348 10th Ave
 2016-001514ETR,ppts,2020-01-29,name,1950 MISSION ST
 2016-001514ETR,ppts,2020-01-29,description,"Demolish 11 modular wood framed buildings at 1950 Mission Street
 MULTIPOLYGON (((-122.466662284 37.761357372"
-2016-001514ETR,ppts,2020-01-29,parent,"-122.466662284 37.761357372)))"""
+2016-001514ETR,ppts,2020-01-29,parent," -122.466662284 37.761357372)))"""
 2016-001514ETR,ppts,2020-01-29,children,132093
 2016-001514ETR,ppts,2020-01-29,planner_name,12/16/2003 12:00:00 AM +0000
 2016-001514ETR,ppts,2020-01-29,planner_email,Closed
@@ -1644,7 +1644,7 @@ MB1401513,ppts,2020-01-29,name,"HPM OF AMERICA, LLC"
 2016-001514PPA,ppts,2020-01-29,name,1950 MISSION ST
 2016-001514PPA,ppts,2020-01-29,description,"Demolish 11 modular wood framed buildings at 1950 Mission Street
 MULTIPOLYGON (((-122.466759043 37.756791147"
-2016-001514PPA,ppts,2020-01-29,parent,"-122.466759043 37.756791147)))"""
+2016-001514PPA,ppts,2020-01-29,parent," -122.466759043 37.756791147)))"""
 2016-001514PPA,ppts,2020-01-29,children,109920
 2016-001514PPA,ppts,2020-01-29,planner_name,06/04/2007 12:00:00 AM +0000
 2016-001514PPA,ppts,2020-01-29,planner_email,Closed
@@ -1699,7 +1699,7 @@ EE80.114,ppts,2020-01-29,status,Closed - CEQA Clearance Issued
 EE80.114,ppts,2020-01-29,name,1950 Mission St
 EE80.114,ppts,2020-01-29,description,"Leasing of School Property
 MULTIPOLYGON (((-122.467683034 37.774865322"
-EE80.114,ppts,2020-01-29,parent,"-122.467683034 37.774865322)))"""
+EE80.114,ppts,2020-01-29,parent," -122.467683034 37.774865322)))"""
 EE80.114,ppts,2020-01-29,children,28574
 EE80.114,ppts,2020-01-29,planner_name,06/05/2017 12:00:00 AM +0000
 EE80.114,ppts,2020-01-29,planner_phone,06/05/2017 12:00:00 AM +0000
@@ -1708,7 +1708,7 @@ EE80.114,ppts,2020-01-29,is_adu,415-575-9191
 2016-001514ENV,ppts,2020-01-29,name,1950 MISSION ST
 2016-001514ENV,ppts,2020-01-29,description,"Demolish 11 modular wood framed buildings at 1950 Mission Street
 MULTIPOLYGON (((-122.467194508 37.763024399"
-2016-001514ENV,ppts,2020-01-29,parent,"-122.467194508 37.763024399)))"""
+2016-001514ENV,ppts,2020-01-29,parent," -122.467194508 37.763024399)))"""
 2016-001514ENV,ppts,2020-01-29,children,195545
 2016-001514ENV,ppts,2020-01-29,planner_name,01/20/1969 12:00:00 AM +0000
 2016-001514ENV,ppts,2020-01-29,planner_email,Closed - Approved
@@ -1892,7 +1892,7 @@ MB1301338,ppts,2020-01-29,name,"HPM OF AMERICA, LLC"
 863PRV,ppts,2020-01-29,status,Closed - Informational
 863PRV,ppts,2020-01-29,name,"Project Review Meeting with Carol Reif
 MULTIPOLYGON (((-122.467925194 37.773616411"
-863PRV,ppts,2020-01-29,description,-122.467766434 37.77362364
+863PRV,ppts,2020-01-29,description, -122.467766434 37.77362364
 863PRV,ppts,2020-01-29,parent,31130
 863PRV,ppts,2020-01-29,children,2017-004109MIS
 863PRV,ppts,2020-01-29,planner_name,Closed - Disapproved
@@ -1935,8 +1935,8 @@ MULTIPOLYGON (((-122.467925194 37.773616411"
 2018-000851ENF,ppts,2020-01-29,name,8 10th Street Illegal Short-Term Rentals by Lessees in MultipleDwelling Units
 2018-000851ENF,ppts,2020-01-29,description,"8 10th Street Illegal Short-Term Rentals. Ongoing Illegal Short-Term Rentals by Lesses resulting in quality of life complaints from long-term residents. Listings appear to include persons involved in illegal short-term rentals at multiple properties including Paul Hamadeh & Heigo Paartalu (lLooky homes operation) : https://www.airbnb.com/rooms/18522159; https://www.airbnb.com/rooms/18859942; https://www.airbnb.com/rooms/19590104; https://www.airbnb.com/rooms/20857978; https://www.airbnb.com/rooms/21553816; https://www.airbnb.com/rooms/6186737; https://www.airbnb.com/rooms/6559856; https://www.airbnb.com/rooms/7439398; https://www.airbnb.com/rooms/17027820
 MULTIPOLYGON (((-122.390146674 37.787310971"
-2018-000851ENF,ppts,2020-01-29,parent,-122.389962894 37.787722742
-2018-000851ENF,ppts,2020-01-29,children,-122.389797269 37.787587174
+2018-000851ENF,ppts,2020-01-29,parent, -122.389962894 37.787722742
+2018-000851ENF,ppts,2020-01-29,children, -122.389797269 37.787587174
 2018-000851ENF,ppts,2020-01-29,planner_name,53068
 2018-000851ENF,ppts,2020-01-29,planner_email,2015-018514GEN
 2018-000851ENF,ppts,2020-01-29,planner_phone,10/06/2015 12:00:00 AM +0000
