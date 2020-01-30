@@ -151,11 +151,13 @@ fields = {
 }
 
 
-def just_dump(sources, outfile):
-    with open(outfile, 'w') as outf:
+def just_dump(sources, outfile, the_date=None):
+    with open(outfile, 'w', newline='\n', encoding='utf-8') as outf:
         writer = csv.writer(outf)
         writer.writerow(['fk', 'source', 'last_updated', 'name', 'value'])
         last_updated = date.today().isoformat()
+        if the_date:
+            last_updated = the_date.isoformat()
 
         for source_name, source_file in sources.items():
             with open_file(source_file,
@@ -173,7 +175,7 @@ def just_dump(sources, outfile):
                         if val:
                             writer.writerow([
                                 fk, source_name, last_updated,
-                                fields[source_name][key], val
+                                fields[source_name][key], val.strip()
                             ])
 
 
@@ -187,14 +189,16 @@ def latest_values(schemaless_file):
     return records
 
 
-def dump_and_diff(sources, outfile, schemaless_file):
+def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
     records = latest_values(schemaless_file)
     print("Loaded %d records" % len(records))
 
     shutil.copyfile(schemaless_file, outfile)
-    with open(outfile, 'a') as outf:
+    with open(outfile, 'a', newline='\n', encoding='utf-8') as outf:
         writer = csv.writer(outf)
         last_updated = date.today().isoformat()
+        if the_date:
+            last_updated = the_date.isoformat()
 
         for source_name, source_file in sources.items():
             with open_file(source_file,
@@ -218,9 +222,9 @@ def dump_and_diff(sources, outfile, schemaless_file):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('ppts_file', help='PPTS file')
-    parser.add_argument('pts_file', help='PTS file')
-    parser.add_argument('out_file', help='output file for schemaless csv')
+    parser.add_argument('--ppts_file', help='PPTS file', default='')
+    parser.add_argument('--pts_file', help='PTS file', default='')
+    parser.add_argument('--out_file', help='output file for schemaless csv')
 
     parser.add_argument(
         '--diff',
@@ -228,7 +232,11 @@ if __name__ == "__main__":
         default='')
     args = parser.parse_args()
 
-    source_map = {PPTS: args.ppts_file, PTS: args.pts_file}
+    source_map = {}
+    if args.ppts_file:
+        source_map[PPTS] = args.ppts_file
+    if args.pts_file:
+        source_map[PTS] = args.pts_file
 
     if not args.diff:
         just_dump(source_map, args.out_file)
