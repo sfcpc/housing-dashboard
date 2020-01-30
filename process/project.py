@@ -27,7 +27,7 @@ class Project:
             if not values['parent']['value']:
                 if main is None or (
                         main is not None and
-                        values['parent']['last_updated'] > main_date):
+                        values['parent']['last_updated'] >= main_date):
                     main = _Record(fk, values)
                     main_date = values['parent']['last_updated']
             else:
