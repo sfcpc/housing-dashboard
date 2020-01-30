@@ -43,7 +43,7 @@ def latest_values(schemaless_file):
     """Collapse the schemaless file into the latest values for each record."""
     records = defaultdict(lambda: defaultdict(str))
     with open(schemaless_file, 'r') as inf:
-        reader = DictReader(inf, dialect='excel')
+        reader = DictReader(inf)
         for line in reader:
             records[line['fk']][line['name']] = line['value']
     return records
