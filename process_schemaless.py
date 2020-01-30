@@ -2,94 +2,110 @@
 """Convert a schemaless csv into relational tables (a set of csvs)."""
 import argparse
 from datetime import datetime
+from collections import OrderedDict
 from collections import defaultdict
 from collections import namedtuple
 import csv
 import lzma
 import sys
 
+from fileutils import open_file
+
+from process.project import Project
+from process.generators import gen_id
+from process.generators import gen_facts
+from process.generators import gen_units
+from process.generators import nv_geom
+from process.generators import nv_all_units
+from process.generators import nv_bedroom_info
+from process.generators import nv_square_feet
+from process.generators import atleast_one_measure
+from process.types import four_level_dict
+
 csv.field_size_limit(sys.maxsize)
 
-Field = namedtuple('Field',
-                   ['name', 'value', 'always_treat_as_empty'],
-                   defaults=['', '', False])
+
+# TODO: ugly global state
+__seen_ids = set()
 
 
-def gen_id(proj):
-    return [Field('id', proj.id, True)]
+def is_seen_id(row, header, seen_set):
+    try:
+        id_index = header.index('id')
+        return row[id_index] in seen_set
+    except ValueError:
+        return False
 
 
-def gen_facts(proj):
-    result = [Field()] * 5
-
-    if proj.field('address') != '':
-        result[0] = Field('address', proj.field('address'))
-        result[1] = Field('applicant', '')
-        result[2] = Field('supervisor_district', '')
-        result[3] = Field('permit_authority', 'planning')
-        result[4] = Field('permit_authority_id', proj.field('fk'))
-
-    return result
+def store_seen_id(row, header, seen_set):
+    try:
+        id_index = header.index('id')
+        seen_set.add(row[id_index])
+    except ValueError:
+        pass
 
 
-def gen_units(proj):
-    result = [Field()] * 6
+TableDefinition = namedtuple('TableDefinition',
+                             ['data_generators',
+                              'name_value_generators',
+                              'addl_output_predicate',
+                              'post_process'],
+                             defaults=[[], [], None, None])
 
-    # TODO: how to handle cases where better numbers exist from dbi
-    # TODO: how to handle cases where prop - existing != net ?
-    result[0] = Field('num_units', proj.field('market_rate_units_net'))
-    if result[0].value != '':
-        result[1] = Field('num_units_data', 'planning', True)
-
-    result[2] = Field('num_units_bmr', proj.field('affordable_units_net'))
-    if result[2].value != '':
-        result[3] = Field('num_units_bmr_data', 'planning', True)
-
-    result[4] = Field('num_square_feet', proj.field('residential_sq_ft_net'))
-    if result[4].value != '':
-        result[5] = Field('num_square_feet_data', 'planning', True)
-
-    return result
-
-
-def gen_geom(proj):
-    result = [Field()] * 2  # TODO datafreshness
-
-    if proj.field('the_geom') != '':
-        result[0] = Field('name', 'geom')
-        result[1] = Field('value', proj.field('the_geom'))
-
-    return result
-
-
-# Mapping of tables to a set of data generators.  All data generators must
-# accept two arguments: project id, and a dict[source][fk][name] = value.
-# They return a list of sequential columns of data to output.
-config = {
-    'project_facts': [
+# Mapping of tables to a set of data generators.
+# * All data generators must accept a Project and return a list<string>.
+# * All name value generators must accept a Project and return a list
+#   of NameValue.
+# * For a combination of data generators and name value, all data returned
+#   by data generators will be duplicated for each name value.
+config = OrderedDict([
+    ('project_facts', TableDefinition(
+        data_generators=[
             gen_id,
             gen_facts,
             gen_units,
-    ],
-    'project_status_history': [
-            # gen_id,
-            # TODO
-    ],
-    'project_geo': [
+        ],
+        addl_output_predicate=atleast_one_measure,
+        post_process=lambda r, h: store_seen_id(r, h, __seen_ids),
+    )),
+    ('project_unit_counts_full', TableDefinition(
+        data_generators=[
             gen_id,
-            gen_geom,
-            # TODO blocklot
-    ],
-    'project_details': [
-            # gen_id,
-    ],
-}
+        ],
+        name_value_generators=[
+            nv_all_units,
+        ],
+        addl_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
+    )),
+    ('project_status_history', TableDefinition(
+        # TODO
+    )),
+    ('project_geo', TableDefinition(
+        data_generators=[
+            gen_id,
+        ],
+        name_value_generators=[
+            nv_geom,
+        ],
+        addl_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
+    )),
+    ('project_details', TableDefinition(
+        data_generators=[
+            gen_id,
+        ],
+        name_value_generators=[
+            nv_square_feet,
+            nv_bedroom_info,
+        ],
+        addl_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
+    )),
+])
 
 
 # TODO data freshness table, which is not on a per-project basis
 
 
-def build_projects(schemaless_file):
+def build_projects(schemaless_file, uuid_mapping):
     """Consumes all data in the schemaless file to get the latest values.
 
     Returns: a nested dict keyed as:
@@ -117,18 +133,18 @@ def build_projects(schemaless_file):
         reader = csv.DictReader(inf)
 
         # five levels of dict
-        projects = defaultdict(
-            lambda: defaultdict(
-                lambda: defaultdict(
-                    lambda: defaultdict(
-                        lambda: defaultdict(str)))))
+        projects = defaultdict(lambda: four_level_dict())
 
         for line in reader:
             date = datetime.fromisoformat(line['last_updated'])
             value = line['value']
 
-            id, src, fk, name = (
-                line['id'], line['source'], line['fk'], line['name'])
+            src, fk, name = (
+                line['source'], line['fk'], line['name'])
+            id = uuid_mapping[fk]
+            if not id:
+                raise KeyError("Entry %s does not have a uuid" % fk)
+
             existing = projects[id][src][fk][name]
 
             if existing['value'] == '' or date > existing['last_updated']:
@@ -136,96 +152,17 @@ def build_projects(schemaless_file):
                 existing['last_updated'] = date
 
             processed += 1
-            if processed % 75000 == 0:
+            if processed % 500000 == 0:
                 print("Processed %s lines" % processed)
 
     return projects
-
-
-Record = namedtuple('Record', ['key', 'values'], defaults=[None, None])
-
-
-class Project:
-    """A way to abstract some of the details of handling multiple records for a
-    project, from multiple sources."""
-
-    def __init__(self, id, data):
-        self.id = id
-        if len(data['ppts']) == 0:
-            raise Exception('No implementation to handle non-ppts data yet')
-
-        main = None
-        children = []
-        main_date = datetime.min
-        for (fk, values) in data['ppts'].items():
-            if (values['parent']['value'] is None or
-                    values['parent']['value'] == ''):
-                if main is None or (
-                        main is not None and
-                        values['parent']['last_updated'] > main_date):
-                    main = Record(fk, values)
-                    main_date = values['parent']['last_updated']
-            else:
-                if id == 'e23d90d3-fa75-40f6-957d-bf8e6626a37f':
-                    print('Appending as child %s' % fk)
-                children.append(Record(fk, values))
-
-        if main is None:
-            # upgrade the oldest child
-            oldest_child_and_date = None
-            for child in children:
-                oldest_date = datetime.max
-                for (name, data) in child.values.items():
-                    if data['last_updated'] < oldest_date:
-                        oldest_date = data['last_updated']
-
-                if (oldest_child_and_date is None or
-                        oldest_date < oldest_child_and_date[1]):
-                    oldest_child_and_date = (child, oldest_date)
-
-            if oldest_child_and_date is not None:
-                main = oldest_child_and_date[0]
-                children.remove(main)
-            else:
-                raise Exception('No main record found for a project %s' % id)
-
-        self.__ppts_main = main
-        self.__ppts_children = children
-
-    @property
-    def main(self):
-        return self.__ppts_main
-
-    @property
-    def children(self):
-        return self.__ppts_children
-
-    def field(self, name):
-        # for ppts, prefer parent record, only moving to children if none
-        # found, at which point we choose the value with the latest
-        # last_updated
-        # TODO: I'm not even sure this is the correct logic to use for dealing
-        # with ambiguities.
-        val = ''
-        if name in self.__ppts_main.values:
-            val = self.__ppts_main.values[name]['value']
-
-        update_date = datetime.min
-        if val == '':
-            for child in self.__ppts_children:
-                if name in child.values:
-                    if child.values[name]['last_updated'] > update_date:
-                        update_date = child.values[name]['last_updated']
-                        val = child.values[name]['value']
-
-        return val
 
 
 def output_projects(projects, config):
     """Generates the relational tables from the project info"""
 
     lines_out = 0
-    for (outfile, generators) in config.items():
+    for (outfile, table_def) in config.items():
         if lines_out > 0:
             print("%s total entries" % lines_out)
             lines_out = 0
@@ -233,46 +170,89 @@ def output_projects(projects, config):
         finalfile = args.out_prefix + outfile + ".csv"
         with open(finalfile, 'w') as outf:
             print("Handling %s" % finalfile)
-            headers = []
             headers_printed = False
+            headers_done = False
+            headers = []
             for (projectid, sources) in projects.items():
                 writer = csv.writer(outf)
                 proj = Project(projectid, sources)
                 output = []
 
                 atleast_one = False
-                for generator in generators:
+                for generator in table_def.data_generators:
                     results = generator(proj)
                     for result in results:
-                        if not headers_printed:
+                        if not headers_done:
                             headers.append(result.name)
                         if (not result.always_treat_as_empty and
                                 result.value != ""):
                             atleast_one = True
                         output.append(result.value)
 
+                nvs = []
+                if len(table_def.name_value_generators) > 0:
+                    if not headers_done:
+                        headers.extend(['name', 'value', 'data_source'])
+                    for name_value in table_def.name_value_generators:
+                        nvs.extend(name_value(proj))
+
+                final_output = [output]
+                if len(nvs) > 0:
+                    final_output = []
+                    for nv in nvs:
+                        final_output.append(output +
+                                            [nv.name, nv.value,
+                                             nv.data_source])
+
+                    if len(final_output) > 0:
+                        atleast_one = True
+
+                headers_done = True
+
                 if atleast_one:
-                    if not headers_printed and len(headers) > 0:
-                        writer.writerow(headers)
-                        headers_printed = True
+                    for out in final_output:
+                        if (not table_def.addl_output_predicate or
+                                table_def.addl_output_predicate(out, headers)):
+                            if not headers_printed and len(headers) > 0:
+                                writer.writerow(headers)
+                                headers_printed = True
 
-                    lines_out += 1
-                    if lines_out % 10000 == 0:
-                        print("%s entries to %s" % (lines_out, finalfile))
+                            lines_out += 1
+                            if lines_out % 10000 == 0:
+                                print("%s entries to %s" % (lines_out,
+                                                            finalfile))
 
-                    writer.writerow(output)
+                            writer.writerow(out)
+
+                            if table_def.post_process:
+                                table_def.post_process(out, headers)
+    if lines_out > 0:
+        print("%s total entries" % lines_out)
+
+
+def build_uuid_mapping(uuid_map_file):
+    mapping = {}
+    with open_file(uuid_map_file, 'r') as f:
+        reader = csv.DictReader(f)
+        for line in reader:
+            mapping[line['fk']] = line['uuid']
+    return mapping
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('schemaless_file', help='Schema-less CSV to use')
+    parser.add_argument('uuid_map_file',
+                        help='CSV that maps uuids to all seen fks')
     parser.add_argument(
             '--out_prefix',
             help='Prefix for output files',
             default='')
     args = parser.parse_args()
 
-    projects = build_projects(args.schemaless_file)
+    uuid_mapping = build_uuid_mapping(args.uuid_map_file)
+
+    projects = build_projects(args.schemaless_file, uuid_mapping)
 
     print("Some stats:")
     print("\tnumber of projects: %s" % len(projects))

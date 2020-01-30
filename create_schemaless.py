@@ -1,8 +1,9 @@
 # Lint as: python3
-"""Convert a PPTS file into a schemaless csv.
+"""Convert departmental data files into a schemaless csv.
 
-If you run this with a single arg, it will just dump the PPTS file to a
-schemaless csv. If you provide two args, it will diff against an existing
+If you run this with a PPTS and PTS file specified, it will
+dump those into a schemaless csv. If you provide the files
+and also set the --diff flag, it will diff against an existing
 schemaless csv.
 """
 
@@ -16,12 +17,16 @@ import sys
 
 from fileutils import open_file
 
-
 csv.field_size_limit(sys.maxsize)
 
+# Names of departmental data sources.
+PPTS = 'ppts'
+PTS = 'pts'
+
+foreign_keys = {PPTS: 'record_id', PTS: 'Record ID'}
 
 fields = {
-    'ppts': {
+    PPTS: {
         'record_id': 'record_id',
         'record_type': 'record_type',
         'record_type_category': 'record_type_category',
@@ -84,7 +89,8 @@ fields = {
         'RESIDENTIAL_3BR_EXIST': 'residential_units_3br_existing',
         'RESIDENTIAL_3BR_PROP': 'residential_units_3br_proposed',
         'RESIDENTIAL_3BR_NET': 'residential_units_3br_net',
-        'RESIDENTIAL_ADU_STUDIO_EXIST': 'residential_units_adu_studio_existing',  # NOQA
+        'RESIDENTIAL_ADU_STUDIO_EXIST':
+        'residential_units_adu_studio_existing',  # NOQA
         'RESIDENTIAL_ADU_STUDIO_PROP': 'residential_units_adu_studio_proposed',
         'RESIDENTIAL_ADU_STUDIO_NET': 'residential_units_adu_studio_net',
         'RESIDENTIAL_ADU_STUDIO_AREA': 'residential_sq_ft_adu_studio',
@@ -106,32 +112,71 @@ fields = {
         'RESIDENTIAL_MICRO_EXIST': 'residential_units_micro_existing',
         'RESIDENTIAL_MICRO_PROP': 'residential_units_micro_proposed',
         'RESIDENTIAL_MICRO_NET': 'residential_units_micro_net',
+    },
+    PTS: {
+        'Record ID': 'record_id',
+        'Permit Number': 'permit_number',
+        'Permit Type': 'permit_type',
+        'Permit Type Definition': 'permit_type_definition',
+        'Permit Creation Date': 'permit_creation_date',
+        'Block': 'block',
+        'Lot': 'lot',
+        'Street Number': 'street_number',
+        'Street Number Suffix': 'street_number_suffix',
+        'Street Name': 'street_name',
+        'Street Name Suffix': 'street_name_suffix',
+        'Unit': 'unit',
+        'Unit Suffix': 'unit_suffix',
+        'Zipcode': 'zipcode',
+        'Location': 'location',
+        'Supervisor District': 'supervisor_district',
+        'Current Status': 'current_status',
+        'Current Status Date': 'current_status_date',
+        'Filed Date': 'filed_date',
+        'Issued Date': 'issued_date',
+        'Completed Date': 'completed_date',
+        'First Construction Document Date': 'first_construction_document_date',
+        'Permit Expiration Date': 'permit_expiration_date',
+        'Existing Use': 'existing_use',
+        'Proposed Use': 'proposed_use',
+        'Existing Units': 'existing_units',
+        'Proposed Units': 'proposed_units',
+        'Existing Construction Type': 'existing_construction_type',
+        'Existing Construction Type Description':
+        'existing_construction_type_description',
+        'Proposed Construction Type': 'proposed_construction_type',
+        'Proposed Construction Type Description':
+        'proposed_construction_type_description',
     }
 }
 
 
-def just_dump(ppts_file, outfile, the_date=None):
-    with open_file(
-            ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
-        reader = DictReader(inf)
-        today = date.today()
+def just_dump(sources, outfile, the_date=None):
+    with open(outfile, 'w', newline='\n', encoding='utf-8') as outf:
+        writer = csv.writer(outf)
+        writer.writerow(['fk', 'source', 'last_updated', 'name', 'value'])
+        last_updated = date.today().isoformat()
         if the_date:
-            today = the_date
-        with open(outfile, 'w', newline='\n', encoding='utf-8') as outf:
-            writer = csv.writer(outf, lineterminator='\n')
-            writer.writerow(
-                ['fk', 'source', 'last_updated', 'name', 'value'])
-            source = 'ppts'
-            last_updated = today.isoformat()
-            for line in reader:
-                fk = line['record_id']
-                for (key, val) in line.items():
-                    if key not in fields[source]:
-                        continue
-                    if val:
-                        writer.writerow(
-                            [fk, source, last_updated,
-                             fields[source][key], val.strip()])
+            last_updated = the_date.isoformat()
+
+        for source_name, source_file in sources.items():
+            with open_file(source_file,
+                           mode='rt',
+                           encoding='utf-8',
+                           errors='replace') as inf:
+                reader = DictReader(inf)
+
+                for line in reader:
+                    fk = line[foreign_keys[source_name]]
+
+                    for (key, val) in line.items():
+                        if key not in fields[source_name]:
+                            continue
+                        if val:
+                            writer.writerow([
+                                fk, source_name, last_updated,
+                                fields[source_name][key], val.strip()
+                            ])
 
 
 def latest_values(schemaless_file):
@@ -144,44 +189,52 @@ def latest_values(schemaless_file):
     return records
 
 
-def dump_and_diff(ppts_file, outfile, schemaless_file, the_date=None):
+def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
     records = latest_values(schemaless_file)
     print("Loaded %d records" % len(records))
 
-    with open_file(
-            ppts_file, mode='rt', encoding='utf-8', errors='replace') as inf:
-        reader = DictReader(inf)
-        today = date.today()
+    shutil.copyfile(schemaless_file, outfile)
+    with open(outfile, 'a', newline='\n', encoding='utf-8') as outf:
+        writer = csv.writer(outf)
+        last_updated = date.today().isoformat()
         if the_date:
-            today = the_date
-        shutil.copyfile(schemaless_file, outfile)
-        with open(outfile, 'a', newline='\n', encoding='utf-8') as outf:
-            writer = csv.writer(outf, lineterminator='\n')
-            source = 'ppts'
-            last_updated = today.isoformat()
-            for line in reader:
-                fk = line['record_id']
-                for (key, val) in line.items():
-                    if key not in fields[source]:
-                        continue
-                    if val and val != records[fk][key]:
-                        records[fk][key] = val
-                        writer.writerow(
-                            [fk, source, last_updated,
-                             fields[source][key], val.strip()])
+            last_updated = the_date.isoformat()
+
+        for source_name, source_file in sources.items():
+            with open_file(source_file,
+                           mode='rt',
+                           encoding='utf-8',
+                           errors='replace') as inf:
+                reader = DictReader(inf)
+
+                for line in reader:
+                    fk = line[foreign_keys[source_name]]
+                    for (key, val) in line.items():
+                        if key not in fields[source_name]:
+                            continue
+                        if val and val != records[fk][key]:
+                            records[fk][key] = val
+                            writer.writerow([
+                                fk, source_name, last_updated,
+                                fields[source_name][key], val
+                            ])
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('ppts_file', help='PPTS file')
+    parser.add_argument('pts_file', help='PTS file')
     parser.add_argument('out_file', help='output file for schemaless csv')
+
     parser.add_argument(
         '--diff',
         help='A schemaless csv generated by this script, to diff against.',
         default='')
     args = parser.parse_args()
 
+    source_map = {PPTS: args.ppts_file, PTS: args.pts_file}
+
     if not args.diff:
-        just_dump(args.ppts_file, args.out_file)
+        just_dump(source_map, args.out_file)
     else:
-        dump_and_diff(args.ppts_file, args.out_file, args.diff)
+        dump_and_diff(source_map, args.out_file, args.diff)
