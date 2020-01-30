@@ -17,12 +17,15 @@ def test_extract_freshness():
     data['uuid2']['ppts']['PRJ']['date_opened']['value'] = '01/01/2010'
     data['uuid3']['ppts']['PRJ']['date_opened']['value'] = '01/01/2020'
 
-    # ignored
+    # ignored because the field isn't whitelisted
     data['uuid4']['ppts']['PRJ']['arbitrary']['value'] = '02/01/2020'
 
     # ignored, in the future
     data['uuid5']['ppts']['PRJ']['date_opened']['value'] = \
         datetime.max.strftime('%m/%d/%Y')
+
+    # ignored because the source is unknown
+    data['uuid4']['bamboozle']['PRJ']['arbitrary']['value'] = '02/01/2020'
 
     freshness = extract_freshness(data)
 

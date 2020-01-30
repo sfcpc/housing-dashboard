@@ -102,9 +102,9 @@ config = OrderedDict([
 ])
 
 
-_FIELDS_TO_CHECK = set()
-_FIELDS_TO_CHECK.add('date_opened')
-_FIELDS_TO_CHECK.add('date_closed')
+_FIELDS_TO_CHECK = defaultdict(set)
+_FIELDS_TO_CHECK['ppts'].add('date_opened')
+_FIELDS_TO_CHECK['ppts'].add('date_closed')
 
 
 def extract_freshness(projects):
@@ -115,12 +115,17 @@ def extract_freshness(projects):
     data_freshness = {}
     for (projectid, sources) in projects.items():
         for (source, records) in sources.items():
+            if source not in _FIELDS_TO_CHECK:
+                print('Warning: unknown source for '
+                      'data freshness: %s, skipping' % source)
+                continue
+
             if source not in data_freshness:
                 data_freshness[source] = datetime.min
 
             for (fk, nvs) in records.items():
                 for (name, value) in nvs.items():
-                    if name in _FIELDS_TO_CHECK:
+                    if name in _FIELDS_TO_CHECK[source]:
                         nvdate = datetime.strptime(
                                 value['value'].split(' ')[0],
                                 '%m/%d/%Y')
