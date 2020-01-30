@@ -115,18 +115,23 @@ def extract_freshness(projects):
     data_freshness = {}
     for (projectid, sources) in projects.items():
         for (source, records) in sources.items():
-            latest_date = datetime.min
+            if source not in data_freshness:
+                data_freshness[source] = datetime.min
 
             for (fk, nvs) in records.items():
                 for (name, value) in nvs.items():
                     if name in _FIELDS_TO_CHECK:
-                        nvdate = datetime.fromisoformat(value['value'])
+                        nvdate = datetime.strptime(
+                                value['value'].split(' ')[0],
+                                '%m/%d/%Y')
+                        if nvdate > datetime.today():
+                            print('Bad date "%s" found for %s, skipping' %
+                                  (nvdate, fk))
+                            continue
 
-                        if nvdate and nvdate > latest_date:
-                            latest_date = nvdate
+                        if nvdate and nvdate > data_freshness[source]:
+                            data_freshness[source] = nvdate
 
-            if latest_date > datetime.min:
-                data_freshness[source] = latest_date
     return data_freshness
 
 
