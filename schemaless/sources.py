@@ -1,32 +1,37 @@
 # Lint as: python3
-"""Convert departmental data files into a schemaless csv.
-
-If you run this with a PPTS and PTS file specified, it will
-dump those into a schemaless csv. If you provide the files
-and also set the --diff flag, it will diff against an existing
-schemaless csv.
-"""
-
-import argparse
-from collections import defaultdict
-import csv
+"""Source class to define the interface for reading a source file."""
 from csv import DictReader
-from datetime import date
-import shutil
-import sys
-
 from fileutils import open_file
 
-csv.field_size_limit(sys.maxsize)
 
-# Names of departmental data sources.
-PPTS = 'ppts'
-PTS = 'pts'
+class Source:
+    FK = 'None'
+    FIELDS = {}
+    NAME = 'Base Class'
 
-foreign_keys = {PPTS: 'record_id', PTS: 'Record ID'}
+    def __init__(self, filepath):
+        self._filepath = filepath
 
-fields = {
-    PPTS: {
+    def foreign_key(self, record):
+        return record[self.FK]
+
+    def yield_records(self):
+        with open_file(self._filepath,
+                       mode='rt',
+                       encoding='utf-8',
+                       errors='replace') as inf:
+            reader = DictReader(inf)
+
+            for line in reader:
+                yield {self.FIELDS[key]: val.strip()
+                       for key, val in line.items()
+                       if key in self.FIELDS and val}
+
+
+class PPTS(Source):
+    FK = 'record_id'
+    NAME = 'ppts'
+    FIELDS = {
         'record_id': 'record_id',
         'record_type': 'record_type',
         'record_type_category': 'record_type_category',
@@ -112,8 +117,13 @@ fields = {
         'RESIDENTIAL_MICRO_EXIST': 'residential_units_micro_existing',
         'RESIDENTIAL_MICRO_PROP': 'residential_units_micro_proposed',
         'RESIDENTIAL_MICRO_NET': 'residential_units_micro_net',
-    },
-    PTS: {
+    }
+
+
+class PTS(Source):
+    FK = 'Record ID'
+    NAME = 'pts'
+    FIELDS = {
         'Record ID': 'record_id',
         'Permit Number': 'permit_number',
         'Permit Type': 'permit_type',
@@ -148,97 +158,3 @@ fields = {
         'Proposed Construction Type Description':
         'proposed_construction_type_description',
     }
-}
-
-
-def just_dump(sources, outfile, the_date=None):
-    with open(outfile, 'w', newline='\n', encoding='utf-8') as outf:
-        writer = csv.writer(outf)
-        writer.writerow(['fk', 'source', 'last_updated', 'name', 'value'])
-        last_updated = date.today().isoformat()
-        if the_date:
-            last_updated = the_date.isoformat()
-
-        for source_name, source_file in sources.items():
-            with open_file(source_file,
-                           mode='rt',
-                           encoding='utf-8',
-                           errors='replace') as inf:
-                reader = DictReader(inf)
-
-                for line in reader:
-                    fk = line[foreign_keys[source_name]]
-
-                    for (key, val) in line.items():
-                        if key not in fields[source_name]:
-                            continue
-                        if val:
-                            writer.writerow([
-                                fk, source_name, last_updated,
-                                fields[source_name][key], val.strip()
-                            ])
-
-
-def latest_values(schemaless_file):
-    """Collapse the schemaless file into the latest values for each record."""
-    records = defaultdict(lambda: defaultdict(str))
-    with open(schemaless_file, 'r') as inf:
-        reader = DictReader(inf)
-        for line in reader:
-            records[line['fk']][line['name']] = line['value']
-    return records
-
-
-def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
-    records = latest_values(schemaless_file)
-    print("Loaded %d records" % len(records))
-
-    shutil.copyfile(schemaless_file, outfile)
-    with open(outfile, 'a', newline='\n', encoding='utf-8') as outf:
-        writer = csv.writer(outf)
-        last_updated = date.today().isoformat()
-        if the_date:
-            last_updated = the_date.isoformat()
-
-        for source_name, source_file in sources.items():
-            with open_file(source_file,
-                           mode='rt',
-                           encoding='utf-8',
-                           errors='replace') as inf:
-                reader = DictReader(inf)
-
-                for line in reader:
-                    fk = line[foreign_keys[source_name]]
-                    for (key, val) in line.items():
-                        if key not in fields[source_name]:
-                            continue
-                        if val and val != records[fk][key]:
-                            records[fk][key] = val
-                            writer.writerow([
-                                fk, source_name, last_updated,
-                                fields[source_name][key], val
-                            ])
-
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--ppts_file', help='PPTS file', default='')
-    parser.add_argument('--pts_file', help='PTS file', default='')
-    parser.add_argument('--out_file', help='output file for schemaless csv')
-
-    parser.add_argument(
-        '--diff',
-        help='A schemaless csv generated by this script, to diff against.',
-        default='')
-    args = parser.parse_args()
-
-    source_map = {}
-    if args.ppts_file:
-        source_map[PPTS] = args.ppts_file
-    if args.pts_file:
-        source_map[PTS] = args.pts_file
-
-    if not args.diff:
-        just_dump(source_map, args.out_file)
-    else:
-        dump_and_diff(source_map, args.out_file, args.diff)

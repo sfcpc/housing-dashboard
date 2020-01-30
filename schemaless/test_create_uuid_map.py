@@ -4,8 +4,8 @@ import uuid
 
 import pytest
 
-from create_uuid_map import RecordGraph
-from create_uuid_map import Node
+from schemaless.create_uuid_map import RecordGraph
+from schemaless.create_uuid_map import Node
 
 
 @pytest.fixture
