@@ -2,11 +2,11 @@ import argparse
 from collections import OrderedDict
 import csv
 from csv import DictReader
-from datetime import datetime
 import uuid
 
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
+from schemaless.sources import source_map
 
 
 class RecordGraph:
@@ -25,10 +25,13 @@ class RecordGraph:
                 parents = record['parents'].split(",")
             if record['children']:
                 children = record['children'].split(",")
+            the_date = None
+            for source in source_map.values():
+                if source.DATE_KEY in record:
+                    the_date = source.get_date(record)
             rg.add(Node(
                 record_id=fk,
-                date_opened=datetime.strptime(
-                    record['date_opened'].split(" ")[0], '%m/%d/%Y'),
+                date=the_date,
                 parents=parents,
                 children=children,
                 uuid=None,
@@ -66,7 +69,7 @@ class RecordGraph:
             # This may either be an update or adding a parent/child for an
             # existing node.
             node = self._nodes[rid]
-            node.date_opened = record.date_opened
+            node.date = record.date
             if not node.uuid and record.uuid:
                 node.uuid = record.uuid
             node.parents.update(record.parents)
@@ -100,7 +103,7 @@ class RecordGraph:
             return record
         all_parents = []
         for idx, pid in enumerate(record.parents):
-            if pid not in self._nodes or self._nodes[pid].date_opened is None:
+            if pid not in self._nodes or self._nodes[pid].date is None:
                 # This implies this record is bad data and cannot be properly
                 # connected to a real parent record.
                 continue
@@ -112,10 +115,10 @@ class RecordGraph:
         # of these records have related building permits.
         if not all_parents:
             return record
-        # Sort on the tuple of (date_opened, record_id) so we have a stable
+        # Sort on the tuple of (date, record_id) so we have a stable
         # ordering for the same dates.
         return sorted(all_parents,
-                      key=lambda x: (x.date_opened, x.record_id),
+                      key=lambda x: (x.date, x.record_id),
                       reverse=True)[0]
 
     def _assign_uuids(self):
@@ -154,12 +157,12 @@ class RecordGraph:
 class Node:
     def __init__(self,
                  record_id,
-                 date_opened=None,
+                 date=None,
                  parents=None,
                  children=None,
                  uuid=None):
         self.record_id = record_id
-        self.date_opened = date_opened
+        self.date = date
         if parents is None:
             self.parents = set()
         else:
