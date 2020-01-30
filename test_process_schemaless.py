@@ -11,13 +11,18 @@ from process.types import four_level_dict
 def test_extract_freshness():
     data = defaultdict(lambda: four_level_dict())
 
-    oldest = datetime.fromisoformat('2000-01-01')
-    old = datetime.fromisoformat('2010-01-01')
     newer = datetime.fromisoformat('2020-01-01')
 
-    data['uuid1']['ppts']['PRJ']['foo'] = {'last_updated': oldest}
-    data['uuid1']['ppts']['PRJ']['foo'] = {'last_updated': old}
-    data['uuid1']['ppts']['PRJ']['foo'] = {'last_updated': newer}
+    data['uuid1']['ppts']['PRJ']['date_opened']['value'] = '01/01/2000'
+    data['uuid2']['ppts']['PRJ']['date_opened']['value'] = '01/01/2010'
+    data['uuid3']['ppts']['PRJ']['date_opened']['value'] = '01/01/2020'
+
+    # ignored
+    data['uuid4']['ppts']['PRJ']['arbitrary']['value'] = '02/01/2020'
+
+    # ignored, in the future
+    data['uuid5']['ppts']['PRJ']['date_opened']['value'] = \
+        datetime.max.strftime('%m/%d/%Y')
 
     freshness = extract_freshness(data)
 
