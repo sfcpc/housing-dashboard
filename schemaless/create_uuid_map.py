@@ -6,7 +6,7 @@ from datetime import datetime
 import uuid
 
 from fileutils import open_file
-from create_schemaless import latest_values
+from schemaless.create_schemaless import latest_values
 
 
 class RecordGraph:
