@@ -222,9 +222,9 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('ppts_file', help='PPTS file')
-    parser.add_argument('pts_file', help='PTS file')
-    parser.add_argument('out_file', help='output file for schemaless csv')
+    parser.add_argument('--ppts_file', help='PPTS file', default='')
+    parser.add_argument('--pts_file', help='PTS file', default='')
+    parser.add_argument('--out_file', help='output file for schemaless csv')
 
     parser.add_argument(
         '--diff',
@@ -232,7 +232,11 @@ if __name__ == "__main__":
         default='')
     args = parser.parse_args()
 
-    source_map = {PPTS: args.ppts_file, PTS: args.pts_file}
+    source_map = {}
+    if args.ppts_file:
+        source_map[PPTS] = args.ppts_file
+    if args.pts_file:
+        source_map[PTS] = args.pts_file
 
     if not args.diff:
         just_dump(source_map, args.out_file)
