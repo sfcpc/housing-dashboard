@@ -112,8 +112,10 @@ class RecordGraph:
         # of these records have related building permits.
         if not all_parents:
             return record
+        # Sort on the tuple of (date_opened, record_id) so we have a stable
+        # ordering for the same dates.
         return sorted(all_parents,
-                      key=lambda x: x.date_opened,
+                      key=lambda x: (x.date_opened, x.record_id),
                       reverse=True)[0]
 
     def _assign_uuids(self):
