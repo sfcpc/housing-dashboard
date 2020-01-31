@@ -18,8 +18,6 @@ TESTDATA_GEN_DATE = date(2020, 1, 29)
 
 def test_latest_values_num_entries():
     """Each unique fk gets its own entry in latest_values.
-
-    TODO: Should this actually be (source, fk) pair?
     """
     unique_fks = set()
     with open('testdata/schemaless-one.csv', 'r') as f:
@@ -29,7 +27,7 @@ def test_latest_values_num_entries():
 
     latest = latest_values('testdata/schemaless-one.csv')
     assert len(unique_fks) > 1  # Sanity check
-    assert len(latest) == len(unique_fks)
+    assert sum(map(lambda x: len(x), latest.values())) == len(unique_fks)
 
 
 def test_latest_values_update(tmpdir):
@@ -41,7 +39,7 @@ def test_latest_values_update(tmpdir):
     aff_key = 'affordable_units_proposed'
 
     latest = latest_values(sf)
-    assert latest[fk][aff_key] == '157'
+    assert latest[PPTS.NAME][fk][aff_key] == '157'
 
     # Change the units
     with open(sf, 'a') as outf:
@@ -50,7 +48,7 @@ def test_latest_values_update(tmpdir):
             [fk, 'ppts', date.today().isoformat(),
              'affordable_units_proposed', '700'])
     latest = latest_values(sf)
-    assert latest[fk][aff_key] == '700'
+    assert latest[PPTS.NAME][fk][aff_key] == '700'
 
     # Change the units again
     with open(sf, 'a') as outf:
@@ -59,14 +57,14 @@ def test_latest_values_update(tmpdir):
             [fk, 'ppts', date.today().isoformat(),
              'affordable_units_proposed', '100'])
     latest = latest_values(sf)
-    assert latest[fk][aff_key] == '100'
+    assert latest[PPTS.NAME][fk][aff_key] == '100'
 
 
 def test_latest_values_no_collision():
     """Ensure we're not overwriting values for unrelated projects."""
     latest = latest_values('testdata/schemaless-one.csv')
-    assert latest['2016-008581PRJ']['market_rate_units_proposed'] != \
-        latest['2017-007883PRJ']['market_rate_units_proposed']
+    assert latest[PPTS.NAME]['2016-008581PRJ']['market_rate_units_proposed'] != \
+        latest[PPTS.NAME]['2017-007883PRJ']['market_rate_units_proposed']
 
 
 def test_just_dump(tmpdir):

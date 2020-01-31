@@ -22,11 +22,13 @@ class RecordGraph:
         latest_records = latest_values(schemaless_file)
 
         # Create a mapping between permit numbers and their associated PPTS
-        # record (so we an ensure they are assigned the same UUID)
+        # record (so we an ensure they are assigned the same UUID).
         permit_number_to_ppts = {}
         for fk, record in latest_records[PPTS.NAME].items():
             if record['related_building_permits']:
                 for permit_number in record['related_building_permit'].split(","):
+                    #  This assumes that a given permit can only have one PPTS
+                    #  parent. Is that accurate? 
                     permit_number_to_ppts[permit_number] = fk
 
         # Read the latest values from the schemaless file to build the graph.
@@ -42,7 +44,6 @@ class RecordGraph:
 
                 if source == PTS.NAME:
                     if permit_number_to_ppts[record['permit_number']]:
-                      # Can a permit have more than one PPTS parent?
                       parents = [permit_number_to_ppts[record['permit_number']]]
 
                 the_date = None
