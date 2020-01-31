@@ -429,3 +429,35 @@ def test_assign_uuids_uuid_reassign_parent(graph_uuid_reassign_parent):
     assert graph.get('1').uuid != orig_uuid
     assert graph.get('2').uuid != orig_uuid
     assert graph.get('3').uuid == orig_uuid
+
+
+# Tests below use the data in the 'testdata' directory
+def test_ppts_child_1950_mission():
+    # All children of 1950 Mission's PRJ should be accounted for
+    prj_fk = '2016-001514PRJ'
+    expected_ppts_children = [
+        '2016-001514PPA',
+        '2016-001514CUA',
+        '2016-001514GPR',
+        '2016-001514ENV',
+    ]
+    expected_pts_children = [
+    ]
+    expected_mohcd_children = [
+        '2013-046',
+    ]
+    rg = RecordGraph.from_files(
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv')
+    parent = rg.get(prj_fk)
+    assert len(parent.children) == (
+        len(expected_ppts_children) +
+        len(expected_pts_children) +
+        len(expected_mohcd_children))
+    for child_fk in zip(expected_ppts_children,
+                        expected_pts_children,
+                        expected_mohcd_children):
+        assert child_fk in parent.children
+        child = rg.get(child_fk)
+        assert child.uuid == parent.uuid
+        assert prj_fk in child.parents
