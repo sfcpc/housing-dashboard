@@ -143,6 +143,7 @@ def extract_freshness(projects):
 def build_projects(schemaless_file, uuid_mapping):
     """Consumes all data in the schemaless file to get the latest values.
 
+    Returns: a list of Project
     Returns: a nested dict keyed as:
          dict[id][source][fk][name] = {
             value: str,
