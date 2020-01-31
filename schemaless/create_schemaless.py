@@ -42,11 +42,11 @@ def just_dump(sources, outfile, the_date=None):
 
 def latest_values(schemaless_file):
     """Collapse the schemaless file into the latest values for each record."""
-    records = defaultdict(lambda: defaultdict(str))
+    records = defaultdict(lambda: defaultdict(lambda: defaultdict(str)))
     with open(schemaless_file, 'r') as inf:
         reader = DictReader(inf)
         for line in reader:
-            records[line['fk']][line['name']] = line['value']
+            records[line['source']][line['fk']][line['name']] = line['value']
     return records
 
 
@@ -65,7 +65,7 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
             for line in source.yield_records():
                 fk = source.foreign_key(line)
                 for (key, val) in line.items():
-                    if val != records[fk][key]:
+                    if val != records[source.NAME][fk][key]:
                         records[fk][key] = val
                         writer.writerow([
                             fk, source.NAME, last_updated, key, val.strip()

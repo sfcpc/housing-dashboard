@@ -1,4 +1,5 @@
 import argparse
+from collections import defaultdict
 from collections import OrderedDict
 import csv
 from csv import DictReader
@@ -7,6 +8,8 @@ import uuid
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import source_map
+from schemaless.sources import PPTS
+from schemaless.sources import PTS
 
 
 class RecordGraph:
@@ -17,25 +20,44 @@ class RecordGraph:
     def from_files(cls, schemaless_file, uuid_map_file):
         """Build a RecordGraph from schemaless & uuid_map files."""
         rg = cls()
+
+        latest_records = latest_values(schemaless_file)
+
+        # Create a mapping between permit numbers and their associated PPTS
+        # record (so we an ensure they are assigned the same UUID).
+        permit_number_to_ppts = defaultdict(list)
+        for fk, record in latest_records[PPTS.NAME].items():
+            if record['building_permit_id']:
+                for permit_number in record['building_permit_id'].split(","):
+                    permit_number_to_ppts[permit_number].append(fk)
+
         # Read the latest values from the schemaless file to build the graph.
-        for fk, record in latest_values(schemaless_file).items():
-            parents = []
-            children = []
-            if record['parents']:
-                parents = record['parents'].split(",")
-            if record['children']:
-                children = record['children'].split(",")
-            the_date = None
-            for source in source_map.values():
-                if source.DATE_KEY in record:
-                    the_date = source.get_date(record)
-            rg.add(Node(
-                record_id=fk,
-                date=the_date,
-                parents=parents,
-                children=children,
-                uuid=None,
-            ))
+        for source, source_records in latest_records.items():
+            for fk, record in source_records.items():
+                parents = []
+                children = []
+                if source == PPTS.NAME:
+                    if record['parents']:
+                        parents = record['parents'].split(",")
+                    if record['children']:
+                        children = record['children'].split(",")
+
+                if source == PTS.NAME:
+                    if record['permit_number'] in permit_number_to_ppts:
+                        parents = permit_number_to_ppts[
+                            record['permit_number']]
+
+                the_date = None
+
+                if source_map[source].DATE_KEY in record:
+                    the_date = source_map[source].get_date(record)
+                rg.add(Node(
+                    record_id=fk,
+                    date=the_date,
+                    parents=parents,
+                    children=children,
+                    uuid=None,
+                ))
 
         # Read existing record_id->uuid mapping from the existing schemaless
         # map and update nodes with exisitng UUIDs.
