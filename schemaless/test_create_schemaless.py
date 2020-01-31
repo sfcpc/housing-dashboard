@@ -63,8 +63,8 @@ def test_latest_values_update(tmpdir):
 def test_latest_values_no_collision():
     """Ensure we're not overwriting values for unrelated projects."""
     latest = latest_values('testdata/schemaless-one.csv')
-    assert latest[PPTS.NAME]['2016-008581PRJ']['market_rate_units_proposed'] != \
-        latest[PPTS.NAME]['2017-007883PRJ']['market_rate_units_proposed']
+    assert latest[PPTS.NAME]['2016-008581PRJ']['market_rate_units_proposed'] \
+        != latest[PPTS.NAME]['2017-007883PRJ']['market_rate_units_proposed']
 
 
 def test_just_dump(tmpdir):

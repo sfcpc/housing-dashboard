@@ -10,6 +10,7 @@ from schemaless.sources import source_map
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 
+
 class RecordGraph:
     def __init__(self):
         self._nodes = OrderedDict()
@@ -28,7 +29,7 @@ class RecordGraph:
             if record['building_permit_id']:
                 for permit_number in record['building_permit_id'].split(","):
                     #  This assumes that a given permit can only have one PPTS
-                    #  parent. Is that accurate? 
+                    #  parent. Is that accurate?
                     permit_number_to_ppts[permit_number] = fk
 
         # Read the latest values from the schemaless file to build the graph.
@@ -44,7 +45,8 @@ class RecordGraph:
 
                 if source == PTS.NAME:
                     if permit_number_to_ppts[record['permit_number']]:
-                      parents = [permit_number_to_ppts[record['permit_number']]]
+                        parents = [permit_number_to_ppts[
+                            record['permit_number']]]
 
                 the_date = None
 
