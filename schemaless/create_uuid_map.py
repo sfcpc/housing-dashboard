@@ -44,7 +44,7 @@ class RecordGraph:
                         children = record['children'].split(",")
 
                 if source == PTS.NAME:
-                    if permit_number_to_ppts[record['permit_number']]:
+                    if record['permit_number'] in permit_number_to_ppts:
                         parents = [permit_number_to_ppts[
                             record['permit_number']]]
 
