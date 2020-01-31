@@ -202,7 +202,7 @@ class MOHCD(Source):
         'Zip Code': 'zip_code',
         # TODO: How can we synthesize fields? eg add an 'address' field
         'Supervisor District': 'supervisor_district',
-        'Location': 'location',
+        'Location': 'location',  # This is a POINT()
         'Project Lead Sponsor': 'project_lead_sponsor',
         # 'Project Co-Sponsor': 'project_co_sponsor',  # TODO: Not included?
         'Project Owner': 'project_owner',
@@ -221,6 +221,7 @@ class MOHCD(Source):
                 'date_estimated_construction_completion'),
         # NOTE: There are actually two spaces in 'Planning  Case Number' in
         # the source dataset.
+        # planning_case_number is the PPTS record_id
         'Planning  Case Number': 'planning_case_number',
         # 'Property Informaiton Map Link': 'property_informaiton_map_link',
         'Planning Entitlements': 'planning_entitlements',
