@@ -25,8 +25,8 @@ class RecordGraph:
         # record (so we an ensure they are assigned the same UUID).
         permit_number_to_ppts = {}
         for fk, record in latest_records[PPTS.NAME].items():
-            if record['related_building_permits']:
-                for permit_number in record['related_building_permit'].split(","):
+            if record['building_permit_id']:
+                for permit_number in record['building_permit_id'].split(","):
                     #  This assumes that a given permit can only have one PPTS
                     #  parent. Is that accurate? 
                     permit_number_to_ppts[permit_number] = fk

@@ -46,7 +46,7 @@ def latest_values(schemaless_file):
     with open(schemaless_file, 'r') as inf:
         reader = DictReader(inf)
         for line in reader:
-          records[line['source']][line['fk']][line['name']] = line['value']
+            records[line['source']][line['fk']][line['name']] = line['value']
     return records
 
 
