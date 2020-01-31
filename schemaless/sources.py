@@ -175,7 +175,7 @@ class PTS(Source):
 
 class TCO(Source):
     FK = 'building_permit_number'
-    DATE_KEY = 'date_issues'
+    DATE_KEY = 'date_issued'
     DATE_FORMAT = '%Y/%m/%d'
     NAME = 'tco'
     FIELDS = {
@@ -187,8 +187,93 @@ class TCO(Source):
     }
 
 
+class MOHCD(Source):
+    FK = 'project_id'
+    DATE_KEY = 'date_issuance_of_notice_to_proceed'  # TODO: correct?
+    DATE_FORMAT = '%m/%d/%Y'
+    NAME = 'mohcd'
+    FIELDS = {
+        'Project ID': 'project_id',
+        'Project Status': 'project_status',
+        'Project Name': 'project_name',
+        'Street Number': 'street_number',
+        'Street Name': 'street_name',
+        'Street Type': 'street_type',
+        'Zip Code': 'zip_code',
+        # TODO: How can we synthesize fields? eg add an 'address' field
+        'Supervisor District': 'supervisor_district',
+        'Location': 'location',  # This is a POINT()
+        'Project Lead Sponsor': 'project_lead_sponsor',
+        # 'Project Co-Sponsor': 'project_co_sponsor',  # TODO: Not included?
+        'Project Owner': 'project_owner',
+        'Lead Agency': 'lead_agency',
+        'Program Area': 'program_area',
+        # 'Project Area': 'project_area',  # TODO: Not included?
+        'Project Type': 'project_type',
+        'Housing Tenure': 'housing_tenure',
+        'Issuance of Notice to Proceed': 'date_issuance_of_notice_to_proceed',
+        'Issuance of Building Permit': 'date_issuance_of_building_permit',
+        'Issuance of First Construction Document': (
+                'date_issuance_of_first_construction_document'),
+        'Estimated/Actual Construction Start Date': (
+                'date_estimated_or_actual_actual_construction_start'),
+        'Estimated Construction Completion': (
+                'date_estimated_construction_completion'),
+        # NOTE: There are actually two spaces in 'Planning  Case Number' in
+        # the source dataset.
+        # planning_case_number is the PPTS record_id
+        'Planning  Case Number': 'planning_case_number',
+        # 'Property Informaiton Map Link': 'property_informaiton_map_link',
+        'Planning Entitlements': 'planning_entitlements',
+        # 'Entitlement Approval': 'entitlement_approval',
+        'Section 415 Declaration': 'section_415_declaration',
+        'Project Units': 'total_project_units',
+        'Affordable Units': 'total_affordable_units',
+        'Market Rate Units': 'total_market_rate_units',
+        '% Affordable': 'percent_affordable',
+        'SRO Units': 'num_sro_units',
+        'Studio Units': 'num_studio_units',
+        '1bd Units': 'num_1bd_units',
+        '2bd Units': 'num_2bd_units',
+        '3bd Units': 'num_3bd_units',
+        '4bd Units': 'num_4bd_units',
+        '5+ bd Units': 'num_5_plus_bd_units',
+        # 'Mobility Units': 'mobility_units',
+        # 'Manager Units': 'manager_units',
+        # 'Manager Unit(s) Type': 'manager_unit(s) type',
+
+        # TODO: I think we might care about these unit types
+        # 'Family Units': 'family_units',
+        # 'Senior Units': 'senior_units',
+        # 'TAY Units': 'tay_units',
+        # 'Homeless Units': 'homeless_units',
+        # 'Disabled Units': 'disabled_units',
+        # 'LOSP Units': 'losp_units',
+        # 'Public Housing Replacement Units': \
+        #     'public_housing_replacement_units',
+        '20% AMI': 'num_20_percent_ami_units',
+        '30% AMI': 'num_30_percent_ami_units',
+        '40% AMi': 'num_40_percent_ami_units',
+        '50% AMI': 'num_50_percent_ami_units',
+        '55% AMI': 'num_55_percent_ami_units',
+        '60% AMI': 'num_60_percent_ami_units',
+        '80% AMI': 'num_80_percent_ami_units',
+        '90% AMI': 'num_90_percent_ami_units',
+        '100% AMI': 'num_100_percent_ami_units',
+        '105% AMI': 'num_105_percent_ami_units',
+        '110% AMI': 'num_110_percent_ami_units',
+        '120% AMI': 'num_120_percent_ami_units',
+        '130% AMI': 'num_130_percent_ami_units',
+        '150% AMI': 'num_150_percent_ami_units',
+        'AMI Undeclared': 'num_ami_undeclared_units',
+        # 'Latitude': 'latitude',
+        # 'Longitude': 'longitude',
+    }
+
+
 source_map = {
     PPTS.NAME: PPTS,
     PTS.NAME: PTS,
     TCO.NAME: TCO,
+    MOHCD.NAME: MOHCD,
 }
