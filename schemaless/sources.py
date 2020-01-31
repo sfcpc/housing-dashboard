@@ -2,7 +2,6 @@
 """Source class to define the interface for reading a source file."""
 from csv import DictReader
 from datetime import datetime
-
 from fileutils import open_file
 
 

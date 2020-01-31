@@ -102,15 +102,50 @@ config = OrderedDict([
 ])
 
 
-# TODO data freshness table, which is not on a per-project basis
+_FIELDS_TO_CHECK = defaultdict(set)
+_FIELDS_TO_CHECK['ppts'].add('date_opened')
+_FIELDS_TO_CHECK['ppts'].add('date_closed')
+
+
+def extract_freshness(projects):
+    """Extracts the last time a data source has been fetched
+
+    Returns: a dict with key data source and value a datetime
+    """
+    data_freshness = {}
+    for (projectid, sources) in projects.items():
+        for (source, records) in sources.items():
+            if source not in _FIELDS_TO_CHECK:
+                print('Warning: unknown source for '
+                      'data freshness: %s, skipping' % source)
+                continue
+
+            if source not in data_freshness:
+                data_freshness[source] = datetime.min
+
+            for (fk, nvs) in records.items():
+                for (name, value) in nvs.items():
+                    if name in _FIELDS_TO_CHECK[source]:
+                        nvdate = datetime.strptime(
+                                value['value'].split(' ')[0],
+                                '%m/%d/%Y')
+                        if nvdate > datetime.today():
+                            print('Bad date "%s" found for %s, skipping' %
+                                  (nvdate, fk))
+                            continue
+
+                        if nvdate and nvdate > data_freshness[source]:
+                            data_freshness[source] = nvdate
+
+    return data_freshness
 
 
 def build_projects(schemaless_file, uuid_mapping):
     """Consumes all data in the schemaless file to get the latest values.
 
     Returns: a nested dict keyed as:
-        dict[id][source][name] = {
-            value: '',
+         dict[id][source][fk][name] = {
+            value: str,
             last_updated: datetime,
         }
     """
@@ -145,17 +180,34 @@ def build_projects(schemaless_file, uuid_mapping):
             if not id:
                 raise KeyError("Entry %s does not have a uuid" % fk)
 
-            existing = projects[id][src][fk][name]
-
-            if existing['value'] == '' or date > existing['last_updated']:
-                existing['value'] = value
-                existing['last_updated'] = date
+            if (projects[id][src][fk][name]['value'] == '' or
+                    date > projects[id][src][fk][name]['last_updated']):
+                projects[id][src][fk][name]['value'] = value
+                projects[id][src][fk][name]['last_updated'] = date
 
             processed += 1
             if processed % 500000 == 0:
                 print("Processed %s lines" % processed)
 
     return projects
+
+
+def output_freshness(freshness):
+    """Generates the table for indicating data freshness of sources."""
+    finalfile = args.out_prefix + 'data_freshness.csv'
+    with open(finalfile, 'w') as outf:
+        print('Handling %s' % finalfile)
+        writer = csv.writer(outf)
+        writer.writerow(['source', 'freshness'])
+
+        for (source, freshness) in freshness.items():
+            out_source = source
+
+            # TODO: for multiple sources, have a better way to normalize this
+            if out_source == 'ppts':
+                out_source = 'planning'
+
+            writer.writerow([out_source, freshness.strftime('%Y-%m-%d')])
 
 
 def output_projects(projects, config):
@@ -275,3 +327,5 @@ if __name__ == '__main__':
     print("\test bytes for values: %s" % est_bytes)
 
     output_projects(projects, config)
+    freshness = extract_freshness(projects)
+    output_freshness(freshness)
