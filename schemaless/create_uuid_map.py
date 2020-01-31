@@ -1,4 +1,5 @@
 import argparse
+from collections import defaultdict
 from collections import OrderedDict
 import csv
 from csv import DictReader
@@ -24,13 +25,11 @@ class RecordGraph:
 
         # Create a mapping between permit numbers and their associated PPTS
         # record (so we an ensure they are assigned the same UUID).
-        permit_number_to_ppts = {}
+        permit_number_to_ppts = defaultdict(list)
         for fk, record in latest_records[PPTS.NAME].items():
             if record['building_permit_id']:
                 for permit_number in record['building_permit_id'].split(","):
-                    #  This assumes that a given permit can only have one PPTS
-                    #  parent. Is that accurate?
-                    permit_number_to_ppts[permit_number] = fk
+                    permit_number_to_ppts[permit_number].append(fk)
 
         # Read the latest values from the schemaless file to build the graph.
         for source, source_records in latest_records.items():
@@ -45,8 +44,8 @@ class RecordGraph:
 
                 if source == PTS.NAME:
                     if record['permit_number'] in permit_number_to_ppts:
-                        parents = [permit_number_to_ppts[
-                            record['permit_number']]]
+                        parents = permit_number_to_ppts[
+                            record['permit_number']]
 
                 the_date = None
 
