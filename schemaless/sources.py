@@ -190,7 +190,7 @@ class TCO(Source):
 class MOHCD(Source):
     FK = 'project_id'
     DATE_KEY = 'date_issuance_of_notice_to_proceed'  # TODO: correct?
-    DATE_FORMAT = '%Y/%m/%d'
+    DATE_FORMAT = '%m/%d/%Y'
     FIELDS = {
         'Project ID': 'project_id',
         'Project Status': 'project_status',
