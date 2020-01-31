@@ -10,6 +10,7 @@ from schemaless.create_schemaless import dump_and_diff
 from schemaless.create_schemaless import just_dump
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import PPTS
+from schemaless.sources import TCO
 
 
 TESTDATA_GEN_DATE = date(2020, 1, 29)
@@ -72,7 +73,7 @@ def test_just_dump(tmpdir):
     """Ensure dumping produces the expected result."""
     outfile = tmpdir.join("schemaless.csv")
     just_dump(
-        [PPTS('testdata/ppts-one.csv')],
+        [PPTS('testdata/ppts-one.csv'), TCO('testdata/tco.csv')],
         outfile,
         the_date=TESTDATA_GEN_DATE)
     assert filecmp.cmp('testdata/schemaless-one.csv', outfile)

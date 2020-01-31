@@ -11,10 +11,10 @@ from schemaless.create_uuid_map import Node
 @pytest.fixture
 def graph_no_parents():
     rg = RecordGraph()
-    rg.add(Node(record_id='1', date_opened=date(2020, 1, 1)))
-    rg.add(Node(record_id='2', date_opened=date(2020, 1, 1)))
-    rg.add(Node(record_id='3', date_opened=date(2020, 1, 2)))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+    rg.add(Node(record_id='1', date=date(2020, 1, 1)))
+    rg.add(Node(record_id='2', date=date(2020, 1, 1)))
+    rg.add(Node(record_id='3', date=date(2020, 1, 2)))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 
@@ -37,10 +37,10 @@ def test_assign_uuids_no_parents(graph_no_parents):
 def graph_one_parent():
     rg = RecordGraph()
     rg.add(Node(
-            record_id='1', date_opened=date(2020, 1, 1), parents=['2']))
-    rg.add(Node(record_id='2', date_opened=date(2020, 1, 1)))
-    rg.add(Node(record_id='3', date_opened=date(2020, 1, 2)))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+            record_id='1', date=date(2020, 1, 1), parents=['2']))
+    rg.add(Node(record_id='2', date=date(2020, 1, 1)))
+    rg.add(Node(record_id='3', date=date(2020, 1, 2)))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 
@@ -70,10 +70,10 @@ def test_assign_uuids_one_parent(graph_one_parent):
 def graph_one_child():
     rg = RecordGraph()
     rg.add(Node(
-            record_id='1', date_opened=date(2020, 1, 1), children=['2']))
-    rg.add(Node(record_id='2', date_opened=date(2020, 1, 1)))
-    rg.add(Node(record_id='3', date_opened=date(2020, 1, 2)))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+            record_id='1', date=date(2020, 1, 1), children=['2']))
+    rg.add(Node(record_id='2', date=date(2020, 1, 1)))
+    rg.add(Node(record_id='3', date=date(2020, 1, 2)))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 
@@ -104,13 +104,13 @@ def graph_one_parent_one_child():
     rg = RecordGraph()
     rg.add(Node(
         record_id='1',
-        date_opened=date(2020, 1, 1),
+        date=date(2020, 1, 1),
         parents=['4'],
         children=['2'],
     ))
-    rg.add(Node(record_id='2', date_opened=date(2020, 1, 1)))
-    rg.add(Node(record_id='3', date_opened=date(2020, 1, 2)))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+    rg.add(Node(record_id='2', date=date(2020, 1, 1)))
+    rg.add(Node(record_id='3', date=date(2020, 1, 2)))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 
@@ -142,11 +142,11 @@ def test_assign_uuids_one_parent_one_child(
 def graph_chained_parent():
     rg = RecordGraph()
     rg.add(Node(
-        record_id='1', date_opened=date(2020, 1, 1), parents=['2']))
+        record_id='1', date=date(2020, 1, 1), parents=['2']))
     rg.add(Node(
-        record_id='2', date_opened=date(2020, 1, 1), parents=['3']))
-    rg.add(Node(record_id='3', date_opened=date(2020, 1, 2)))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+        record_id='2', date=date(2020, 1, 1), parents=['3']))
+    rg.add(Node(record_id='3', date=date(2020, 1, 2)))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 
@@ -180,11 +180,11 @@ def test_assign_uuids_chained_parent(graph_chained_parent):
 def graph_chained_child():
     rg = RecordGraph()
     rg.add(Node(
-        record_id='1', date_opened=date(2020, 1, 1), children=['2']))
+        record_id='1', date=date(2020, 1, 1), children=['2']))
     rg.add(Node(
-        record_id='2', date_opened=date(2020, 1, 1), children=['3']))
-    rg.add(Node(record_id='3', date_opened=date(2020, 1, 2)))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+        record_id='2', date=date(2020, 1, 1), children=['3']))
+    rg.add(Node(record_id='3', date=date(2020, 1, 2)))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 
@@ -217,10 +217,10 @@ def test_assign_uuids_chained_child(graph_chained_child):
 def graph_multiple_parents():
     rg = RecordGraph()
     rg.add(Node(
-        record_id='1', date_opened=date(2020, 1, 1), parents=['2', '3']))
-    rg.add(Node(record_id='2', date_opened=date(2020, 1, 1)))
-    rg.add(Node(record_id='3', date_opened=date(2020, 1, 2)))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+        record_id='1', date=date(2020, 1, 1), parents=['2', '3']))
+    rg.add(Node(record_id='2', date=date(2020, 1, 1)))
+    rg.add(Node(record_id='3', date=date(2020, 1, 2)))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 
@@ -251,11 +251,11 @@ def test_assign_uuids_multiple_parents(graph_multiple_parents):
 def graph_multiple_chained_parents():
     rg = RecordGraph()
     rg.add(Node(
-        record_id='1', date_opened=date(2020, 1, 1), parents=['2', '3']))
-    rg.add(Node(record_id='2', date_opened=date(2020, 1, 1)))
+        record_id='1', date=date(2020, 1, 1), parents=['2', '3']))
+    rg.add(Node(record_id='2', date=date(2020, 1, 1)))
     rg.add(Node(
-        record_id='3', date_opened=date(2020, 1, 2), parents=['4']))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+        record_id='3', date=date(2020, 1, 2), parents=['4']))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 
@@ -289,10 +289,10 @@ def test_assign_uuids_multiple_chained_parents(
 def graph_missing_parent():
     rg = RecordGraph()
     rg.add(Node(
-        record_id='1', date_opened=date(2020, 1, 1), parents=['12', '13']))
-    rg.add(Node(record_id='2', date_opened=date(2020, 1, 1)))
-    rg.add(Node(record_id='3', date_opened=date(2020, 1, 2)))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+        record_id='1', date=date(2020, 1, 1), parents=['12', '13']))
+    rg.add(Node(record_id='2', date=date(2020, 1, 1)))
+    rg.add(Node(record_id='3', date=date(2020, 1, 2)))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 
@@ -319,11 +319,11 @@ def graph_one_missing_parent():
     rg = RecordGraph()
     rg.add(Node(
         record_id='1',
-        date_opened=date(2020, 1, 1),
+        date=date(2020, 1, 1),
         parents=['2', '12', '13']))
-    rg.add(Node(record_id='2', date_opened=date(2020, 1, 1)))
-    rg.add(Node(record_id='3', date_opened=date(2020, 1, 2)))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+    rg.add(Node(record_id='2', date=date(2020, 1, 1)))
+    rg.add(Node(record_id='3', date=date(2020, 1, 2)))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 
@@ -357,11 +357,11 @@ def graph_uuid_new_parent():
     rg.add(Node(
         uuid=uuid.uuid4(),
         record_id='1',
-        date_opened=date(2020, 1, 1),
+        date=date(2020, 1, 1),
         parents=['2']))
-    rg.add(Node(record_id='2', date_opened=date(2020, 1, 1)))
-    rg.add(Node(record_id='3', date_opened=date(2020, 1, 2)))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+    rg.add(Node(record_id='2', date=date(2020, 1, 1)))
+    rg.add(Node(record_id='3', date=date(2020, 1, 2)))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 
@@ -393,18 +393,18 @@ def graph_uuid_reassign_parent():
     rg.add(Node(
         uuid=puid,
         record_id='1',
-        date_opened=date(2020, 1, 1),
+        date=date(2020, 1, 1),
         parents=['2']))
     rg.add(Node(
         uuid=uuid.uuid4(),
         record_id='2',
-        date_opened=date(2020, 1, 1)))
+        date=date(2020, 1, 1)))
     # This simulates the case where record_id=3 used to be a parent of 1
     rg.add(Node(
         uuid=puid,
         record_id='3',
-        date_opened=date(2020, 1, 2)))
-    rg.add(Node(record_id='4', date_opened=date(2020, 1, 3)))
+        date=date(2020, 1, 2)))
+    rg.add(Node(record_id='4', date=date(2020, 1, 3)))
     return rg
 
 

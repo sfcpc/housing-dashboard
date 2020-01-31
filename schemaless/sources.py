@@ -1,19 +1,28 @@
 # Lint as: python3
 """Source class to define the interface for reading a source file."""
 from csv import DictReader
+from datetime import datetime
 from fileutils import open_file
 
 
 class Source:
     FK = 'None'
+    DATE_KEY = 'None'
+    DATE_FORMAT = '%m/%d/%Y'
     FIELDS = {}
     NAME = 'Base Class'
 
     def __init__(self, filepath):
         self._filepath = filepath
 
-    def foreign_key(self, record):
-        return record[self.FK]
+    @classmethod
+    def foreign_key(cls, record):
+        return record[cls.FK]
+
+    @classmethod
+    def get_date(cls, record):
+        return datetime.strptime(
+            record[cls.DATE_KEY].split(" ")[0], cls.DATE_FORMAT)
 
     def yield_records(self):
         with open_file(self._filepath,
@@ -30,6 +39,8 @@ class Source:
 
 class PPTS(Source):
     FK = 'record_id'
+    DATE_KEY = 'date_opened'
+    DATE_FORMAT = '%m/%d/%Y'
     NAME = 'ppts'
     FIELDS = {
         'record_id': 'record_id',
@@ -121,7 +132,9 @@ class PPTS(Source):
 
 
 class PTS(Source):
-    FK = 'Record ID'
+    FK = 'record_id'
+    DATE_KEY = 'filed_date'
+    DATE_FORMAT = '%m/%d/%Y'
     NAME = 'pts'
     FIELDS = {
         'Record ID': 'record_id',
@@ -158,3 +171,24 @@ class PTS(Source):
         'Proposed Construction Type Description':
         'proposed_construction_type_description',
     }
+
+
+class TCO(Source):
+    FK = 'building_permit_number'
+    DATE_KEY = 'date_issues'
+    DATE_FORMAT = '%Y/%m/%d'
+    NAME = 'tco'
+    FIELDS = {
+        'Building Permit Application Number': 'building_permit_number',
+        'Building Address': 'address',
+        'Date Issued': 'date_issued',
+        'Document Type': 'building_permit_type',
+        'Number of Units Certified': 'num_units',
+    }
+
+
+source_map = {
+    PPTS.NAME: PPTS,
+    PTS.NAME: PTS,
+    TCO.NAME: TCO,
+}

@@ -18,6 +18,7 @@ import sys
 
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
+from schemaless.sources import TCO
 
 csv.field_size_limit(sys.maxsize)
 
@@ -75,6 +76,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--ppts_file', help='PPTS file', default='')
     parser.add_argument('--pts_file', help='PTS file', default='')
+    parser.add_argument('--tco_file', help='TCO file', default='')
     parser.add_argument('--out_file', help='output file for schemaless csv')
 
     parser.add_argument(
@@ -96,6 +98,8 @@ if __name__ == "__main__":
         sources.append(PPTS(args.ppts_file))
     if args.pts_file:
         sources.append(PTS(args.pts_file))
+    if args.tco_file:
+        sources.append(TCO(args.tco_file))
 
     if not args.diff:
         just_dump(sources, args.out_file, the_date)
