@@ -39,14 +39,14 @@ class RecordGraph:
                 children = []
                 if source == PPTS.NAME:
                     if 'parent' in record:
-                        parents = record['parent'].split(",")
+                        parents.extend(record['parent'].split(","))
                     if 'children' in record:
-                        children = record['children'].split(",")
+                        children.extend(record['children'].split(","))
 
                 if source == PTS.NAME:
                     if record['permit_number'] in permit_number_to_ppts:
-                        parents = permit_number_to_ppts[
-                            record['permit_number']]
+                        parents.extend(permit_number_to_ppts[
+                            record['permit_number']])
 
                 if source == MOHCD.NAME:
                     if 'planning_case_number' in record:
