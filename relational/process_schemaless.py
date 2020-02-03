@@ -11,16 +11,18 @@ import sys
 
 from fileutils import open_file
 
-from process.project import Project
-from process.generators import gen_id
-from process.generators import gen_facts
-from process.generators import gen_units
-from process.generators import nv_geom
-from process.generators import nv_all_units
-from process.generators import nv_bedroom_info
-from process.generators import nv_square_feet
-from process.generators import atleast_one_measure
-from process.types import four_level_dict
+from relational.project import Entry
+from relational.project import NameValue
+from relational.project import Project
+from relational.generators import gen_id
+from relational.generators import gen_facts
+from relational.generators import gen_units
+from relational.generators import nv_geom
+from relational.generators import nv_all_units
+from relational.generators import nv_bedroom_info
+from relational.generators import nv_square_feet
+from relational.generators import atleast_one_measure
+from schemaless.create_uuid_map import RecordGraph
 
 csv.field_size_limit(sys.maxsize)
 
@@ -55,7 +57,7 @@ TableDefinition = namedtuple('TableDefinition',
 # Mapping of tables to a set of data generators.
 # * All data generators must accept a Project and return a list<string>.
 # * All name value generators must accept a Project and return a list
-#   of NameValue.
+#   of OutputNameValue.
 # * For a combination of data generators and name value, all data returned
 #   by data generators will be duplicated for each name value.
 config = OrderedDict([
@@ -107,47 +109,42 @@ _FIELDS_TO_CHECK['ppts'].add('date_opened')
 _FIELDS_TO_CHECK['ppts'].add('date_closed')
 
 
-def extract_freshness(projects):
+def extract_freshness(entries_map):
     """Extracts the last time a data source has been fetched
 
     Returns: a dict with key data source and value a datetime
     """
     data_freshness = {}
-    for (projectid, sources) in projects.items():
-        for (source, records) in sources.items():
-            if source not in _FIELDS_TO_CHECK:
+    for (projectid, entries) in entries_map.items():
+        for entry in entries:
+            if entry.source not in _FIELDS_TO_CHECK:
                 print('Warning: unknown source for '
-                      'data freshness: %s, skipping' % source)
+                      'data freshness: %s, skipping' % entry.source)
                 continue
 
-            if source not in data_freshness:
-                data_freshness[source] = datetime.min
+            if entry.source not in data_freshness:
+                data_freshness[entry.source] = datetime.min
 
-            for (fk, nvs) in records.items():
-                for (name, value) in nvs.items():
-                    if name in _FIELDS_TO_CHECK[source]:
-                        nvdate = datetime.strptime(
-                                value['value'].split(' ')[0],
-                                '%m/%d/%Y')
-                        if nvdate > datetime.today():
-                            print('Bad date "%s" found for %s, skipping' %
-                                  (nvdate, fk))
-                            continue
+            for (name, value) in entry.latest_name_values().items():
+                if name in _FIELDS_TO_CHECK[entry.source]:
+                    nvdate = datetime.strptime(
+                            value.split(' ')[0],
+                            '%m/%d/%Y')
+                    if not nvdate or nvdate > datetime.today():
+                        print('Bad date "%s" found for %s, skipping' %
+                              (nvdate, entry.fk))
+                        continue
 
-                        if nvdate and nvdate > data_freshness[source]:
-                            data_freshness[source] = nvdate
+                    if nvdate > data_freshness[entry.source]:
+                        data_freshness[entry.source] = nvdate
 
     return data_freshness
 
 
-def build_projects(schemaless_file, uuid_mapping):
+def build_entries_map(schemaless_file, uuid_mapping):
     """Consumes all data in the schemaless file to get the latest values.
 
-    Returns: a nested dict keyed as:
-         dict[id][source][fk][name] = {
-            value: str,
-            last_updated: datetime,
-        }
+    Returns: a dict with key project uuid and value a list of Entry
     """
     # TODO: for large schemaless files, this will fail with OOM.  We should
     # probably ensure a uuid sort order in the schemaless so we can batch
@@ -167,24 +164,31 @@ def build_projects(schemaless_file, uuid_mapping):
            errors='replace') as inf:
         reader = csv.DictReader(inf)
 
-        # five levels of dict
-        projects = defaultdict(lambda: four_level_dict())
+        projects = defaultdict(list)
+
+        def _get_or_insert(id, fk, src):
+            found_entry = None
+            for entry in projects[id]:
+                if entry.fk == fk and entry.source == src:
+                    found_entry = entry
+                    break
+
+            if not found_entry:
+                found_entry = Entry(fk, src, [])
+                projects[id].append(found_entry)
+
+            return found_entry
 
         for line in reader:
             date = datetime.fromisoformat(line['last_updated'])
-            value = line['value']
-
-            src, fk, name = (
-                line['source'], line['fk'], line['name'])
+            src, fk, name, value = (
+                line['source'], line['fk'], line['name'], line['value'])
             id = uuid_mapping[fk]
             if not id:
                 raise KeyError("Entry %s does not have a uuid" % fk)
 
-            if (projects[id][src][fk][name]['value'] == '' or
-                    date > projects[id][src][fk][name]['last_updated']):
-                projects[id][src][fk][name]['value'] = value
-                projects[id][src][fk][name]['last_updated'] = date
-
+            entry = _get_or_insert(id, fk, src)
+            entry.add_name_value(NameValue(name, value, date))
             processed += 1
             if processed % 500000 == 0:
                 print("Processed %s lines" % processed)
@@ -210,6 +214,15 @@ def output_freshness(freshness):
             writer.writerow([out_source, freshness.strftime('%Y-%m-%d')])
 
 
+def build_projects(entries_map, recordgraph):
+    """Returns a list of Project"""
+    projects = []
+    for (projectid, entries) in entries_map.items():
+        projects.append(Project(projectid, entries, recordgraph))
+
+    return projects
+
+
 def output_projects(projects, config):
     """Generates the relational tables from the project info"""
 
@@ -225,9 +238,8 @@ def output_projects(projects, config):
             headers_printed = False
             headers_done = False
             headers = []
-            for (projectid, sources) in projects.items():
+            for proj in projects:
                 writer = csv.writer(outf)
-                proj = Project(projectid, sources)
                 output = []
 
                 atleast_one = False
@@ -303,29 +315,22 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     uuid_mapping = build_uuid_mapping(args.uuid_map_file)
-
-    projects = build_projects(args.schemaless_file, uuid_mapping)
+    entries_map = build_entries_map(args.schemaless_file, uuid_mapping)
 
     print("Some stats:")
-    print("\tnumber of projects: %s" % len(projects))
+    print("\tnumber of projects: %s" % len(entries_map))
 
-    source_count = defaultdict(int)
-    fk_count = 0
+    entry_count = 0
     nv_count = 0
-    est_bytes = 0
-    for (id, sources) in projects.items():
-        for (source, entries) in sources.items():
-            source_count[source] += 1
-            fk_count += len(entries)
-            for (entry, namevalue) in entries.items():
-                nv_count += len(namevalue)
-                for (name, value) in namevalue.items():
-                    est_bytes += sys.getsizeof(value)
-    print("\tsource counts: %s" % source_count)
-    print("\ttotal records rolled up: %s" % fk_count)
-    print("\ttotal fields: %s" % nv_count)
-    print("\test bytes for values: %s" % est_bytes)
 
-    output_projects(projects, config)
-    freshness = extract_freshness(projects)
+    for (id, entries) in entries_map.items():
+        entry_count += len(entries)
+        for entry in entries:
+            nv_count += entry.num_name_values()
+    print("\ttotal records rolled up: %s" % entry_count)
+    print("\ttotal fields: %s" % nv_count)
+
+    rg = RecordGraph.from_files(args.schemaless_file, args.uuid_map_file)
+    output_projects(build_projects(entries_map, rg), config)
+    freshness = extract_freshness(entries_map)
     output_freshness(freshness)
