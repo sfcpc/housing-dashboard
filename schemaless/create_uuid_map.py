@@ -7,9 +7,10 @@ import uuid
 
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
-from schemaless.sources import source_map
+from schemaless.sources import MOHCD
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
+from schemaless.sources import source_map
 
 
 class RecordGraph:
@@ -46,6 +47,11 @@ class RecordGraph:
                     if record['permit_number'] in permit_number_to_ppts:
                         parents = permit_number_to_ppts[
                             record['permit_number']]
+
+                if source == MOHCD.NAME:
+                    if 'planning_case_number' in record:
+                        parents.extend(
+                            record['planning_case_number'].split(","))
 
                 the_date = None
 
