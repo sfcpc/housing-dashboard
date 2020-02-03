@@ -39,8 +39,8 @@ class RecordGraph:
 
                 # TODO: Refactor the source-specific logic somewhere else.
                 if source == PPTS.NAME:
-                    if record['parents']:
-                        parents = record['parents'].split(",")
+                    if record['parent']:
+                        parents = record['parent'].split(",")
                     if record['children']:
                         children = record['children'].split(",")
 
