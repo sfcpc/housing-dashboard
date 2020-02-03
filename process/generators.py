@@ -66,13 +66,15 @@ def nv_all_units(proj):
     # TODO: more useful when we have more than just one data source
     result = []
     if proj.field('market_rate_units_net', PPTS.NAME):
-        result.append(OutputNameValue('net_num_units',
-                                      proj.field('market_rate_units_net'),
-                                      'planning'))
+        result.append(OutputNameValue(
+            'net_num_units',
+            proj.field('market_rate_units_net', PPTS.NAME),
+            'planning'))
     if proj.field('affordable_units_net', PPTS.NAME):
-        result.append(OutputNameValue('net_num_units_bmr',
-                                      proj.field('affordable_units_net'),
-                                      'planning'))
+        result.append(OutputNameValue(
+            'net_num_units_bmr',
+            proj.field('affordable_units_net', PPTS.NAME),
+            'planning'))
     return result
 
 
