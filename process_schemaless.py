@@ -141,7 +141,7 @@ def extract_freshness(entries_map):
     return data_freshness
 
 
-def build_projects(schemaless_file, uuid_mapping):
+def build_entries_map(schemaless_file, uuid_mapping):
     """Consumes all data in the schemaless file to get the latest values.
 
     Returns: a dict with key project uuid and value a list of Entry
@@ -307,7 +307,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     uuid_mapping = build_uuid_mapping(args.uuid_map_file)
-    entries_map = build_projects(args.schemaless_file, uuid_mapping)
+    entries_map = build_entries_map(args.schemaless_file, uuid_mapping)
 
     print("Some stats:")
     print("\tnumber of projects: %s" % len(entries_map))
