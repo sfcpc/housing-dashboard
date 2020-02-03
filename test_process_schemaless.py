@@ -3,31 +3,48 @@ from datetime import datetime
 from collections import defaultdict
 from collections import namedtuple
 
+from process.project import Entry
+from process.project import NameValue
 from process_schemaless import extract_freshness
 from process_schemaless import is_seen_id
-from process.types import four_level_dict
 
 
 def test_extract_freshness():
-    data = defaultdict(lambda: four_level_dict())
-
+    entries_map = defaultdict(list)
     newer = datetime.fromisoformat('2020-01-01')
 
-    data['uuid1']['ppts']['PRJ']['date_opened']['value'] = '01/01/2000'
-    data['uuid2']['ppts']['PRJ']['date_opened']['value'] = '01/01/2010'
-    data['uuid3']['ppts']['PRJ']['date_opened']['value'] = '01/01/2020'
+    entries_map['uuid1'].append(Entry(
+            'PRJ1', 'ppts',
+            [NameValue('date_opened', '01/01/2000', newer)],
+    ))
+    entries_map['uuid2'].append(Entry(
+            'PRJ1', 'ppts',
+            [NameValue('date_opened', '01/01/2010', newer)],
+    ))
+    entries_map['uuid3'].append(Entry(
+            'PRJ1', 'ppts',
+            [NameValue('date_opened', '01/01/2020', newer)],
+    ))
 
     # ignored because the field isn't whitelisted
-    data['uuid4']['ppts']['PRJ']['arbitrary']['value'] = '02/01/2020'
+    entries_map['uuid4'].append(Entry(
+            'PRJ1', 'ppts',
+            [NameValue('arbitrary', '02/01/2020', newer)],
+    ))
 
     # ignored, in the future
-    data['uuid5']['ppts']['PRJ']['date_opened']['value'] = \
-        datetime.max.strftime('%m/%d/%Y')
+    entries_map['uuid5'].append(Entry(
+            'PRJ1', 'ppts',
+            [NameValue('arbitrary', datetime.max.strftime('%m/%d/%Y'), newer)],
+    ))
 
     # ignored because the source is unknown
-    data['uuid4']['bamboozle']['PRJ']['arbitrary']['value'] = '02/01/2020'
+    entries_map['uuid6'].append(Entry(
+            'PRJ1', 'bamboozle',
+            [NameValue('date_opened', '02/01/2020', newer)],
+    ))
 
-    freshness = extract_freshness(data)
+    freshness = extract_freshness(entries_map)
 
     assert freshness['ppts'] == newer
 
