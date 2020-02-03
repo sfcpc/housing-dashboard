@@ -9,6 +9,8 @@ from process.project import Entry
 from process.project import NameValue
 from process.project import Project
 
+from schemaless.sources import PPTS
+
 
 @pytest.fixture
 def basic_entries():
@@ -67,13 +69,13 @@ def test_project_simple_case(basic_entries, basic_graph):
     assert proj.roots['ppts'][0].fk == '1'
 
     # only source data from the parent even if present in child
-    assert proj.field('num_units_bmr') == '22'
+    assert proj.field('num_units_bmr', PPTS.NAME) == '22'
 
     # pull data from the child since not present on the parent
-    assert proj.field('residential_units_1br') == '1'
+    assert proj.field('residential_units_1br', PPTS.NAME) == '1'
 
     # pull data from the latest child
-    assert proj.field('num_square_feet') == '2100'
+    assert proj.field('num_square_feet', PPTS.NAME) == '2100'
 
 
 def test_project_no_main_record(basic_entries, rootless_graph):
@@ -85,7 +87,7 @@ def test_project_no_main_record(basic_entries, rootless_graph):
     assert proj.roots['ppts'][0].fk == '2'
 
     # pull data from oldest child, which got upgraded to be main
-    assert proj.field('num_square_feet') == '2300'
+    assert proj.field('num_square_feet', PPTS.NAME) == '2300'
 
 
 def test_project_ppts_and_pts(multi_source_entries, basic_graph):
@@ -93,12 +95,6 @@ def test_project_ppts_and_pts(multi_source_entries, basic_graph):
     assert len(proj.roots) == 1
     assert len(proj.roots['ppts']) == 1
     assert proj.roots['ppts'][0].fk == '1'
-
-    # source entry form pts even though on ppts root
-    assert proj.field('num_units_bmr') == '32'
-
-    # pull data from pts even though a later ppts child
-    assert proj.field('num_square_feet') == '2300'
 
 
 def test_entry():

@@ -1,9 +1,11 @@
 # Lint as: python3
 """Contains data and name-value generators for processing schema-less CSV.
 """
+import re
+
 from collections import namedtuple
 
-import re
+from schemaless.sources import PPTS
 
 Field = namedtuple('Field',
                    ['name', 'value', 'always_treat_as_empty'],
@@ -21,12 +23,12 @@ def gen_id(proj):
 def gen_facts(proj):
     result = [Field()] * 5
 
-    if proj.field('address') != '':
-        result[0] = Field('address', proj.field('address'))
+    if proj.field('address', PPTS.NAME) != '':
+        result[0] = Field('address', proj.field('address', PPTS.NAME))
         result[1] = Field('applicant', '')
         result[2] = Field('supervisor_district', '')
         result[3] = Field('permit_authority', 'planning')
-        result[4] = Field('permit_authority_id', proj.field('fk'))
+        result[4] = Field('permit_authority_id', proj.field('fk', PPTS.NAME))
 
     return result
 
@@ -36,12 +38,14 @@ def gen_units(proj):
 
     # TODO: how to handle cases where better numbers exist from dbi
     # TODO: how to handle cases where prop - existing != net ?
-    result[0] = Field('net_num_units', proj.field('market_rate_units_net'))
+    result[0] = Field('net_num_units',
+                      proj.field('market_rate_units_net', PPTS.NAME))
     result[1] = Field('net_num_units_data',
                       'planning' if result[0].value != '' else '',
                       True)
 
-    result[2] = Field('net_num_units_bmr', proj.field('affordable_units_net'))
+    result[2] = Field('net_num_units_bmr',
+                      proj.field('affordable_units_net', PPTS.NAME))
     result[3] = Field('net_num_units_bmr_data',
                       'planning' if result[2].value != '' else '',
                       True)
@@ -51,7 +55,9 @@ def gen_units(proj):
 
 def nv_geom(proj):
     if proj.field('the_geom') != '':
-        return [OutputNameValue('geom', proj.field('the_geom'), 'planning')]
+        return [OutputNameValue('geom',
+                                proj.field('the_geom', PPTS.NAME),
+                                'planning')]
 
     return []
 
@@ -59,11 +65,11 @@ def nv_geom(proj):
 def nv_all_units(proj):
     # TODO: more useful when we have more than just one data source
     result = []
-    if proj.field('market_rate_units_net'):
+    if proj.field('market_rate_units_net', PPTS.NAME):
         result.append(OutputNameValue('net_num_units',
                                       proj.field('market_rate_units_net'),
                                       'planning'))
-    if proj.field('affordable_units_net'):
+    if proj.field('affordable_units_net', PPTS.NAME):
         result.append(OutputNameValue('net_num_units_bmr',
                                       proj.field('affordable_units_net'),
                                       'planning'))
@@ -78,7 +84,7 @@ def nv_bedroom_info(proj):
         net = 0
         ok = False
         try:
-            net = str(int(proj.field(prefix + '_net')))
+            net = str(int(proj.field(prefix + '_net', PPTS.NAME)))
             ok = True
 
             if re.search('_adu_', prefix):

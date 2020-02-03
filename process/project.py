@@ -11,7 +11,6 @@ from collections import namedtuple
 from datetime import datetime
 
 from schemaless.sources import PPTS
-from schemaless.sources import PTS
 
 
 NameValue = namedtuple('NameValue',
@@ -106,8 +105,8 @@ class Project:
         for entry in entries:
             node = self.recordgraph.get(entry.fk)
             if not node:
-                print('Warning: found an entry not in our record graph: %s'
-                      % entry.fk)
+                print('Warning: entry not in our record graph: %s from %s'
+                      % (entry.fk, entry.source))
                 continue
 
             if len(node.parents) == 0:
@@ -129,58 +128,36 @@ class Project:
                 self.roots[oldest_child.source].append(oldest_child)
                 self.children[oldest_child.source].remove(oldest_child)
 
-    LatestValue = namedtuple('LatestValue', ['val', 'time', 'weight'],
-                             defaults=[None, datetime.min, float('inf')])
-
-    # in priority order
-    _SOURCES = [PTS.NAME, PPTS.NAME]
-
-    def field(self, name):
+    def field(self, name, source):
         """Fetches the value for a field, using some business logic.
 
+        source is a source.NAME from schemaless.sources
+
         The process of getting a field:
-        1. Check pts. Start with root project and descend to children. If
-           none found:
-        2. Check ppts. Start with root project and descend to children only
-           if none found on the root.
+          * Start with root project.
+            * If multiple roots, choose one with latest update time.
+          * If source != PPTS, then descend to children.
+            * If multiple children, choose one with latest update time.
+          * If source == PTS, then only descend to children if None found on
+            root.
 
         Returns:
             string
         """
-        # TODO: I'm not even sure this is the correct logic to use for dealing
-        # with ambiguities.
-        result = self.LatestValue()
-        for (weight, source) in enumerate(self._SOURCES):
-            parents = self.roots[source]
+        result = (None, datetime.min)
 
-            if len(parents) > 0:
-                for parent in parents:
-                    val = parent.get_latest(name)
-                    if val and (weight < result.weight or
-                                val[1] > result.time):
-                        result = self.LatestValue(val[0], val[1], weight)
+        parents = self.roots[source]
 
-                if result.val:
-                    break
+        if len(parents) > 0:
+            for parent in parents:
+                val = parent.get_latest(name)
+                if val and val[1] > result[1]:
+                    result = val
 
-        latest = result
-        for (weight, source) in enumerate(self._SOURCES):
-            # if we found something on the parent, only consider higher-
-            # priority children
-            if result.val and weight >= result.weight:
-                continue
-
-            children = self.children[source]
-            if len(children) > 0:
-                for child in children:
+            if source != PPTS.NAME or result[0] is None:
+                for child in self.children[source]:
                     val = child.get_latest(name)
-                    if val and (weight < latest.weight or
-                                val[1] > latest.time):
-                        latest = self.LatestValue(val[0], val[1], weight)
+                    if val and val[1] > result[1]:
+                        result = val
 
-                if latest.val and (latest.weight < result.weight or
-                                   latest.time > result.time):
-                    result = latest
-                    break
-
-        return result.val if result.val else ''
+        return result[0] if result[0] else ''
