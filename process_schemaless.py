@@ -214,7 +214,16 @@ def output_freshness(freshness):
             writer.writerow([out_source, freshness.strftime('%Y-%m-%d')])
 
 
-def output_projects(entries_map, config, recordgraph):
+def build_projects(entries_map, recordgraph):
+    """Returns a list of Project"""
+    projects = []
+    for (projectid, entries) in entries_map.items():
+        projects.append(Project(projectid, entries, recordgraph))
+
+    return projects
+
+
+def output_projects(projects, config):
     """Generates the relational tables from the project info"""
 
     lines_out = 0
@@ -229,9 +238,8 @@ def output_projects(entries_map, config, recordgraph):
             headers_printed = False
             headers_done = False
             headers = []
-            for (projectid, entries) in entries_map.items():
+            for proj in projects:
                 writer = csv.writer(outf)
-                proj = Project(projectid, entries, rg)
                 output = []
 
                 atleast_one = False
@@ -323,6 +331,6 @@ if __name__ == '__main__':
     print("\ttotal fields: %s" % nv_count)
 
     rg = RecordGraph.from_files(args.schemaless_file, args.uuid_map_file)
-    output_projects(entries_map, config, rg)
+    output_projects(build_projects(entries_map, rg), config)
     freshness = extract_freshness(entries_map)
     output_freshness(freshness)
