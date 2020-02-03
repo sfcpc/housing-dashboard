@@ -3,10 +3,10 @@ from datetime import datetime
 from collections import defaultdict
 from collections import namedtuple
 
-from process.project import Entry
-from process.project import NameValue
-from process.process_schemaless import extract_freshness
-from process.process_schemaless import is_seen_id
+from relational.project import Entry
+from relational.project import NameValue
+from relational.process_schemaless import extract_freshness
+from relational.process_schemaless import is_seen_id
 
 
 def test_extract_freshness():

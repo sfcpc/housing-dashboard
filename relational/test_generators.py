@@ -4,11 +4,11 @@ from collections import namedtuple
 
 import pytest
 
-from process.project import Entry
-from process.project import NameValue
-from process.project import Project
-from process.generators import atleast_one_measure
-from process.generators import nv_bedroom_info
+from relational.project import Entry
+from relational.project import NameValue
+from relational.project import Project
+from relational.generators import atleast_one_measure
+from relational.generators import nv_bedroom_info
 from schemaless.create_uuid_map import Node
 from schemaless.create_uuid_map import RecordGraph
 
