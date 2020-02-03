@@ -459,9 +459,12 @@ def test_ppts_child_1950_mission_just_parent():
         'testdata/uuid-map-one.csv')
     child = rg.get('2016-001514GPR')
     parent = rg.get('2016-001514PPA')
+    grandparent = rg.get('2016-001514PRJ')
     assert len(child.parents) == 1
     assert child.record_id in parent.children
     assert parent.record_id in child.parents
+    assert child.uuid == parent.uuid
+    assert child.uuid == grandparent.uuid
 
 
 def test_link_pts_to_ppts_records():
@@ -489,5 +492,3 @@ def verify_valid_children(rg, parent_fk, expected_child_fks):
         child = rg.get(child_fk)
         assert child.uuid == parent.uuid
         assert parent_fk in child.parents
-
-
