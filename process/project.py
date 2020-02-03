@@ -4,6 +4,8 @@
 Project information can come from multiple data sources with multiple
 records, and this contains all the handling to make sense of it all.
 """
+import bisect
+
 from collections import defaultdict
 from collections import namedtuple
 from datetime import datetime
@@ -28,13 +30,23 @@ class Entry:
         """
         self.fk = fk
         self.source = source
-        self.data = defaultdict(list)
+        self._data = defaultdict(list)
         for nv in namevalues:
-            self.data[nv.key].append(nv)
+            self._data[nv.key].append(nv)
 
-        for (key, nvs) in self.data.items():
-            self.data[nv.key].sort(key=lambda nv: nv.last_updated,
-                                   reverse=True)
+        for (key, nvs) in self._data.items():
+            self._data[nv.key].sort(key=lambda nv: nv.last_updated)
+
+    def add_name_value(self, new_nv):
+        """Makes sure sort order is maintained for new name values"""
+        if len(self._data[new_nv.key]) == 0:
+            self._data[new_nv.key].append(new_nv)
+            return
+
+        dates = [nv.last_updated for nv in self._data[new_nv.key]]
+        self._data[new_nv.key].insert(bisect.bisect_left(dates,
+                                                         new_nv.last_updated),
+                                      new_nv)
 
     def get_latest(self, key):
         """
@@ -43,8 +55,8 @@ class Entry:
           when it was updated in the schema-less file.  If no value found for
           the key, None is returned.
         """
-        nvs = self.data.get(key, [])
-        return (nvs[0].value, nvs[0].last_updated) if len(nvs) > 0 else None
+        nvs = self._data.get(key, [])
+        return (nvs[-1].value, nvs[-1].last_updated) if len(nvs) > 0 else None
 
 
 class Project:

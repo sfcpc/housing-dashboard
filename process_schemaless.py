@@ -11,6 +11,8 @@ import sys
 
 from fileutils import open_file
 
+from process.project import Entry
+from process.project import NameValue
 from process.project import Project
 from process.generators import gen_id
 from process.generators import gen_facts
@@ -20,7 +22,7 @@ from process.generators import nv_all_units
 from process.generators import nv_bedroom_info
 from process.generators import nv_square_feet
 from process.generators import atleast_one_measure
-from process.types import four_level_dict
+from schemaless.create_uuid_map import RecordGraph
 
 csv.field_size_limit(sys.maxsize)
 
@@ -140,10 +142,10 @@ def extract_freshness(projects):
     return data_freshness
 
 
-def build_projects(schemaless_file, uuid_mapping):
+def build_projects(schemaless_file, uuid_mapping, recordgraph):
     """Consumes all data in the schemaless file to get the latest values.
 
-    Returns: a list of Project
+    Returns: a dict with key project uuid and value a list of Entry
     Returns: a nested dict keyed as:
          dict[id][source][fk][name] = {
             value: str,
@@ -168,24 +170,31 @@ def build_projects(schemaless_file, uuid_mapping):
            errors='replace') as inf:
         reader = csv.DictReader(inf)
 
-        # five levels of dict
-        projects = defaultdict(lambda: four_level_dict())
+        projects = defaultdict(list)
+
+        def _get_or_insert(id, fk, src):
+            found_entry = None
+            for entry in projects[id]:
+                if entry.fk == fk and entry.source == source:
+                    found_entry = entry
+                    break
+
+            if not found_entry:
+                found_entry = Entry(fk, src, [])
+                projects[id].append(found_entry)
+
+            return found_entry
 
         for line in reader:
             date = datetime.fromisoformat(line['last_updated'])
-            value = line['value']
-
-            src, fk, name = (
-                line['source'], line['fk'], line['name'])
+            src, fk, name, value = (
+                line['source'], line['fk'], line['name'], line['value'])
             id = uuid_mapping[fk]
             if not id:
                 raise KeyError("Entry %s does not have a uuid" % fk)
 
-            if (projects[id][src][fk][name]['value'] == '' or
-                    date > projects[id][src][fk][name]['last_updated']):
-                projects[id][src][fk][name]['value'] = value
-                projects[id][src][fk][name]['last_updated'] = date
-
+            entry = _get_or_insert(id, fk, src)
+            entry.add_name_value(NameValue(name, value, date))
             processed += 1
             if processed % 500000 == 0:
                 print("Processed %s lines" % processed)
@@ -211,7 +220,7 @@ def output_freshness(freshness):
             writer.writerow([out_source, freshness.strftime('%Y-%m-%d')])
 
 
-def output_projects(projects, config):
+def output_projects(projects, config, recordgraph):
     """Generates the relational tables from the project info"""
 
     lines_out = 0
@@ -228,7 +237,7 @@ def output_projects(projects, config):
             headers = []
             for (projectid, sources) in projects.items():
                 writer = csv.writer(outf)
-                proj = Project(projectid, sources)
+                proj = Project(projectid, sources, rg)
                 output = []
 
                 atleast_one = False
@@ -304,7 +313,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     uuid_mapping = build_uuid_mapping(args.uuid_map_file)
-
     projects = build_projects(args.schemaless_file, uuid_mapping)
 
     print("Some stats:")
@@ -327,6 +335,7 @@ if __name__ == '__main__':
     print("\ttotal fields: %s" % nv_count)
     print("\test bytes for values: %s" % est_bytes)
 
-    output_projects(projects, config)
+    rg = RecordGraph.from_files(args.schemaless_file, args.uuid_map_file)
+    output_projects(projects, config, rg)
     freshness = extract_freshness(projects)
     output_freshness(freshness)
