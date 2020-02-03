@@ -54,7 +54,7 @@ def gen_units(proj):
 
 
 def nv_geom(proj):
-    if proj.field('the_geom') != '':
+    if proj.field('the_geom', PPTS.NAME) != '':
         return [OutputNameValue('geom',
                                 proj.field('the_geom', PPTS.NAME),
                                 'planning')]
