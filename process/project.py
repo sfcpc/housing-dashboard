@@ -34,8 +34,8 @@ class Entry:
         for nv in namevalues:
             self._data[nv.key].append(nv)
 
-        for (key, nvs) in self._data.items():
-            self._data[nv.key].sort(key=lambda nv: nv.last_updated)
+        for k in self._data.keys():
+            self._data[k].sort(key=lambda nv: nv.last_updated)
 
     def latest_name_values(self):
         """Gets a dict snapshot of the latest name values for this entry."""
@@ -45,7 +45,10 @@ class Entry:
         return result
 
     def num_name_values(self):
-        return len(self._data)
+        c = 0
+        for (key, nvs) in self._data.items():
+            c += len(nvs)
+        return c
 
     def add_name_value(self, new_nv):
         """Makes sure sort order is maintained for new name values"""
