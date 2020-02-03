@@ -38,6 +38,14 @@ def basic_graph():
     return rg
 
 
+@pytest.fixture
+def rootless_graph():
+    rg = RecordGraph()
+    rg.add(Node(record_id='2', parents=['4']))
+    rg.add(Node(record_id='3', parents=['4']))
+    return rg
+
+
 def test_project_simple_case(basic_entries, basic_graph):
     proj = Project('uuid-0001', basic_entries, basic_graph)
     assert len(proj.roots) == 1
@@ -54,31 +62,17 @@ def test_project_simple_case(basic_entries, basic_graph):
     assert proj.field('num_square_feet') == '2100'
 
 
-# def test_project_no_main_record():
-#    old = datetime.fromisoformat('2019-01-01')
-#    lessold = datetime.fromisoformat('2020-01-01')
-#
-#    data = four_level_dict()
-#    data['ppts']['CUA1']['parent']['value'] = 'PRJ'
-#    data['ppts']['CUA1']['parent']['last_updated'] = old
-#    data['ppts']['CUA1']['num_units_bmr']['value'] = '22'
-#    data['ppts']['CUA1']['num_units_bmr']['last_updated'] = old
-#
-#    data['ppts']['CUA2']['parent']['value'] = 'PRJ'
-#    data['ppts']['CUA2']['parent']['last_updated'] = lessold
-#    data['ppts']['CUA2']['num_units_bmr']['value'] = '32'
-#    data['ppts']['CUA2']['num_units_bmr']['last_updated'] = lessold
-#    data['ppts']['CUA2']['num_square_feet']['value'] = '2300'
-#    data['ppts']['CUA2']['num_square_feet']['last_updated'] = lessold
-#
-#    proj = Project('uuid-0001', data)
-#
-#    # oldest one got upgraded
-#    assert proj.main is not None
-#    assert proj.main.key == 'CUA1'
-#    assert len(proj.children) == 1
-#    assert proj.children[0].key == 'CUA2'
-#    assert proj.field('num_units_bmr') == '22'
+def test_project_no_main_record(basic_entries, rootless_graph):
+    proj = Project('uuid-0001', basic_entries, rootless_graph)
+
+    # oldest child got updated
+    assert len(proj.roots) == 1
+    assert len(proj.roots['ppts']) == 1
+    assert proj.roots['ppts'][0].fk == '2'
+
+    # pull data from oldest child, which got upgraded to be main
+    assert proj.field('num_square_feet') == '2300'
+
 #
 #
 # def test_project_field():

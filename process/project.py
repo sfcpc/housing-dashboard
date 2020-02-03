@@ -68,6 +68,17 @@ class Entry:
         nvs = self._data.get(key, [])
         return (nvs[-1].value, nvs[-1].last_updated) if len(nvs) > 0 else None
 
+    def oldest_name_value(self):
+        """
+        Returns:
+          The oldest update time we have for any name value on this entry.
+        """
+        oldest = datetime.max
+        for (key, nvs) in self._data.items():
+            if nvs[0].last_updated < oldest:
+                oldest = nvs[0].last_updated
+        return oldest
+
 
 class Project:
     """A way to abstract some of the details of handling multiple records for a
@@ -91,10 +102,29 @@ class Project:
         self.children = defaultdict(list)
         for entry in entries:
             node = self.recordgraph.get(entry.fk)
+            if not node:
+                print('Warning: found an entry not in our record graph: %s'
+                      % entry.fk)
+                continue
+
             if len(node.parents) == 0:
                 self.roots[entry.source].append(entry)
             else:
                 self.children[entry.source].append(entry)
+
+        if len(self.roots) == 0:
+            # upgrade oldest child
+            oldest_child = None
+            for (source, entries) in self.children.items():
+                for entry in entries:
+                    if (not oldest_child or
+                            entry.oldest_name_value() <
+                            oldest_child.oldest_name_value()):
+                        oldest_child = entry
+
+            if oldest_child:
+                self.roots[oldest_child.source].append(oldest_child)
+                self.children[oldest_child.source].remove(oldest_child)
 
     def field(self, name):
         """Fetches the value for a field, using some business logic.
