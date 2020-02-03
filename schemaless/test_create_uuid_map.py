@@ -449,7 +449,9 @@ def test_ppts_child_1950_mission():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    verify_valid_children(rg, prj_fk, expected_ppts_children + expected_pts_children + expected_mohcd_children)
+    verify_valid_children(rg, prj_fk, expected_ppts_children
+                          + expected_pts_children
+                          + expected_mohcd_children)
 
 
 def test_link_pts_to_ppts_records():
