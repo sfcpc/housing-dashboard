@@ -438,7 +438,6 @@ def test_ppts_child_1950_mission():
     expected_ppts_children = [
         '2016-001514PPA',
         '2016-001514CUA',
-        '2016-001514GPR',
         '2016-001514ENV',
     ]
     expected_pts_children = [
