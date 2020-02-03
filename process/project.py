@@ -129,6 +129,12 @@ class Project:
                 self.roots[oldest_child.source].append(oldest_child)
                 self.children[oldest_child.source].remove(oldest_child)
 
+    LatestValue = namedtuple('LatestValue', ['val', 'time', 'weight'],
+                             defaults=[None, datetime.min, float('inf')])
+
+    # in priority order
+    _SOURCES = [PTS.NAME, PPTS.NAME]
+
     def field(self, name):
         """Fetches the value for a field, using some business logic.
 
@@ -143,28 +149,38 @@ class Project:
         """
         # TODO: I'm not even sure this is the correct logic to use for dealing
         # with ambiguities.
-        result = (None, datetime.min)
-        for source in [PTS.NAME, PPTS.NAME]:
+        result = self.LatestValue()
+        for (weight, source) in enumerate(self._SOURCES):
             parents = self.roots[source]
 
             if len(parents) > 0:
-                latest = (None, datetime.min)
                 for parent in parents:
                     val = parent.get_latest(name)
-                    if val and val[1] > latest[1]:
-                        latest = val
-                if not latest[0]:
-                    children = self.children[source]
-                    if len(children) > 0:
-                        for child in children:
-                            val = child.get_latest(name)
-                            if val and val[1] > latest[1]:
-                                latest = val
+                    if val and (weight < result.weight or
+                                val[1] > result.time):
+                        result = self.LatestValue(val[0], val[1], weight)
 
-                if latest[0] and latest[1] > result[1]:
-                    result = latest
-
-                if result[0]:
+                if result.val:
                     break
 
-        return result[0] if result[0] else ''
+        latest = result
+        for (weight, source) in enumerate(self._SOURCES):
+            # if we found something on the parent, only consider higher-
+            # priority children
+            if result.val and weight >= result.weight:
+                continue
+
+            children = self.children[source]
+            if len(children) > 0:
+                for child in children:
+                    val = child.get_latest(name)
+                    if val and (weight < latest.weight or
+                                val[1] > latest.time):
+                        latest = self.LatestValue(val[0], val[1], weight)
+
+                if latest.val and (latest.weight < result.weight or
+                                   latest.time > result.time):
+                    result = latest
+                    break
+
+        return result.val if result.val else ''

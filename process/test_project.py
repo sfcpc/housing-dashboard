@@ -17,13 +17,27 @@ def basic_entries():
 
     e = []
     e.append(Entry('1', 'ppts', [NameValue('num_units_bmr', '22', old)]))
-    e.append(Entry('2',
-                   'ppts',
+    e.append(Entry('2', 'ppts',
                    [NameValue('num_units_bmr', '32', lessold),
                     NameValue('num_square_feet', '2300', old),
                     NameValue('residential_units_1br', '1', old)]))
-    e.append(Entry('3',
-                   'ppts',
+    e.append(Entry('3', 'ppts',
+                   [NameValue('num_square_feet', '2100', lessold)]))
+    return e
+
+
+@pytest.fixture
+def multi_source_entries():
+    old = datetime.fromisoformat('2019-01-01')
+    lessold = datetime.fromisoformat('2020-01-01')
+
+    e = []
+    e.append(Entry('1', 'ppts', [NameValue('num_units_bmr', '22', old)]))
+    e.append(Entry('2', 'pts',
+                   [NameValue('num_units_bmr', '32', lessold),
+                    NameValue('num_square_feet', '2300', old),
+                    NameValue('residential_units_1br', '1', old)]))
+    e.append(Entry('3', 'ppts',
                    [NameValue('num_square_feet', '2100', lessold)]))
     return e
 
@@ -71,6 +85,19 @@ def test_project_no_main_record(basic_entries, rootless_graph):
     assert proj.roots['ppts'][0].fk == '2'
 
     # pull data from oldest child, which got upgraded to be main
+    assert proj.field('num_square_feet') == '2300'
+
+
+def test_project_ppts_and_pts(multi_source_entries, basic_graph):
+    proj = Project('uuid-0001', multi_source_entries, basic_graph)
+    assert len(proj.roots) == 1
+    assert len(proj.roots['ppts']) == 1
+    assert proj.roots['ppts'][0].fk == '1'
+
+    # source entry form pts even though on ppts root
+    assert proj.field('num_units_bmr') == '32'
+
+    # pull data from pts even though a later ppts child
     assert proj.field('num_square_feet') == '2300'
 
 
