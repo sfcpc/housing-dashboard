@@ -7,10 +7,11 @@ import uuid
 
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
-from schemaless.sources import source_map
+from schemaless.sources import MOHCD
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
-from schemaless.sources import MOHCD
+from schemaless.sources import source_map
+
 
 class RecordGraph:
     def __init__(self):
@@ -27,7 +28,7 @@ class RecordGraph:
         # record (so we an ensure they are assigned the same UUID).
         permit_number_to_ppts = defaultdict(list)
         for fk, record in latest_records[PPTS.NAME].items():
-            if record['building_permit_id']:
+            if 'building_permit_id' in record:
                 for permit_number in record['building_permit_id'].split(","):
                     permit_number_to_ppts[permit_number].append(fk)
 
@@ -39,15 +40,20 @@ class RecordGraph:
 
                 # TODO: Refactor the source-specific logic somewhere else.
                 if source == PPTS.NAME:
-                    if record['parent']:
-                        parents = record['parent'].split(",")
-                    if record['children']:
-                        children = record['children'].split(",")
+                    if 'parent' in record:
+                        parents.extend(record['parent'].split(","))
+                    if 'children' in record:
+                        children.extend(record['children'].split(","))
 
                 if source == PTS.NAME:
                     if record['permit_number'] in permit_number_to_ppts:
-                        parents = permit_number_to_ppts[
-                            record['permit_number']]
+                        parents.extend(permit_number_to_ppts[
+                            record['permit_number']])
+
+                if source == MOHCD.NAME:
+                    if 'planning_case_number' in record:
+                        parents.extend(
+                            record['planning_case_number'].split(","))
 
                 if source == MOHCD.NAME:
                     if record['planning_case_number']:
