@@ -34,22 +34,27 @@ def gen_facts(proj):
     return result
 
 
-def gen_units(proj):
-    result = [Field()] * 4
-
-    # TODO: how to handle cases where better numbers exist from dbi
-    # TODO: how to handle cases where prop - existing != net ?
-    dbi_exist = dbi_prop = 0
+def _get_dbi_units(proj):
     try:
         dbi_exist = int(proj.field('existing_units', PTS.NAME))
         dbi_prop = int(proj.field('proposed_units', PTS.NAME))
+        return (dbi_exist, dbi_prop)
     except ValueError:
         pass
+
+    return (0, 0)
+
+
+def gen_units(proj):
+    result = [Field()] * 4
+
+    dbi_exist, dbi_prop = _get_dbi_units(proj)
 
     if dbi_exist and dbi_prop:
         result[0] = Field('net_num_units', str(dbi_prop - dbi_exist))
         result[1] = Field('net_num_units_data', 'dbi', True)
     else:
+        # TODO: how to handle cases where prop - existing != net ?
         result[0] = Field('net_num_units',
                           proj.field('market_rate_units_net', PPTS.NAME))
         result[1] = Field('net_num_units_data',
@@ -75,7 +80,6 @@ def nv_geom(proj):
 
 
 def nv_all_units(proj):
-    # TODO: more useful when we have more than just one data source
     result = []
     if proj.field('market_rate_units_net', PPTS.NAME):
         result.append(OutputNameValue(
@@ -87,6 +91,13 @@ def nv_all_units(proj):
             'net_num_units_bmr',
             proj.field('affordable_units_net', PPTS.NAME),
             'planning'))
+
+    dbi_exist, dbi_prop = _get_dbi_units(proj)
+    if dbi_exist and dbi_prop:
+        result.append(OutputNameValue('net_num_units',
+                                      str(dbi_prop - dbi_exist),
+                                      'dbi'))
+
     return result
 
 
