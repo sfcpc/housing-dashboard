@@ -75,10 +75,17 @@ class Project:
                 self.children[entry.source].append(entry)
 
     def field(self, name):
-        # 1. Check pts. Start with root project and descend to children. If
-        #   none found:
-        # 2. Check ppts. Start with root project and descend to children only
-        #   if none found on the root.
+        """Fetches the value for a field, using some business logic.
+
+        The process of getting a field:
+        1. Check pts. Start with root project and descend to children. If
+           none found:
+        2. Check ppts. Start with root project and descend to children only
+           if none found on the root.
+
+        Returns:
+            string
+        """
         # TODO: I'm not even sure this is the correct logic to use for dealing
         # with ambiguities.
         result = (None, datetime.min)
@@ -105,4 +112,4 @@ class Project:
                 if result[0]:
                     break
 
-        return result[0]
+        return result[0] if result[0] else ''
