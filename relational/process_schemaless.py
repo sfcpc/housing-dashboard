@@ -11,17 +11,17 @@ import sys
 
 from fileutils import open_file
 
-from process.project import Entry
-from process.project import NameValue
-from process.project import Project
-from process.generators import gen_id
-from process.generators import gen_facts
-from process.generators import gen_units
-from process.generators import nv_geom
-from process.generators import nv_all_units
-from process.generators import nv_bedroom_info
-from process.generators import nv_square_feet
-from process.generators import atleast_one_measure
+from relational.project import Entry
+from relational.project import NameValue
+from relational.project import Project
+from relational.generators import gen_id
+from relational.generators import gen_facts
+from relational.generators import gen_units
+from relational.generators import nv_geom
+from relational.generators import nv_all_units
+from relational.generators import nv_bedroom_info
+from relational.generators import nv_square_feet
+from relational.generators import atleast_one_measure
 from schemaless.create_uuid_map import RecordGraph
 
 csv.field_size_limit(sys.maxsize)
