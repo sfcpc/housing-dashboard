@@ -5,7 +5,7 @@ xzcat data/ppts/2018-04-24-ppts.csv.xz | egrep -i "(1950 mission)|(8 10th)|(429 
 xzcat data/ppts/2019-06-02-ppts.csv.xz | head -n1 > testdata/ppts-two.csv
 xzcat data/ppts/2019-06-02-ppts.csv.xz | egrep -i "(1950 mission)|(8 10th)|(429 beale)|(430 main)|(2015-011205)" >> testdata/ppts-two.csv
 
-cat data/mohcd/mohcd-2020-01-30.csv | head -n1 > testdata/mohcd.csv
+head -n1 data/mohcd/mohcd-2020-01-30.csv > testdata/mohcd.csv
 cat data/mohcd/mohcd-2020-01-30.csv | egrep -i "(1950 mission)|(2015-011205)|(transbay)" >> testdata/mohcd.csv
 
 

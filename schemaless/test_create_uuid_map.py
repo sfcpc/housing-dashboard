@@ -438,7 +438,6 @@ def test_ppts_child_1950_mission():
     expected_ppts_children = [
         '2016-001514PPA',
         '2016-001514CUA',
-        '2016-001514GPR',
         '2016-001514ENV',
     ]
     expected_pts_children = [
@@ -461,3 +460,14 @@ def test_ppts_child_1950_mission():
         child = rg.get(child_fk)
         assert child.uuid == parent.uuid
         assert prj_fk in child.parents
+
+
+def test_ppts_child_1950_mission_just_parent():
+    rg = RecordGraph.from_files(
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv')
+    child = rg.get('2016-001514GPR')
+    parent = rg.get('2016-001514PPA')
+    assert len(child.parents) == 1
+    assert child.record_id in parent.children
+    assert parent.record_id in child.parents
