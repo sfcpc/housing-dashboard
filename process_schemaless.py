@@ -57,7 +57,7 @@ TableDefinition = namedtuple('TableDefinition',
 # Mapping of tables to a set of data generators.
 # * All data generators must accept a Project and return a list<string>.
 # * All name value generators must accept a Project and return a list
-#   of NameValue.
+#   of OutputNameValue.
 # * For a combination of data generators and name value, all data returned
 #   by data generators will be duplicated for each name value.
 config = OrderedDict([
@@ -141,7 +141,7 @@ def extract_freshness(entries_map):
     return data_freshness
 
 
-def build_projects(schemaless_file, uuid_mapping, recordgraph):
+def build_projects(schemaless_file, uuid_mapping):
     """Consumes all data in the schemaless file to get the latest values.
 
     Returns: a dict with key project uuid and value a list of Entry
