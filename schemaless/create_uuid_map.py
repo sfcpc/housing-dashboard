@@ -10,7 +10,7 @@ from schemaless.create_schemaless import latest_values
 from schemaless.sources import source_map
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
-
+from schemaless.sources import MOHCD
 
 class RecordGraph:
     def __init__(self):
@@ -36,6 +36,8 @@ class RecordGraph:
             for fk, record in source_records.items():
                 parents = []
                 children = []
+
+                # TODO: Refactor the source-specific logic somewhere else.
                 if source == PPTS.NAME:
                     if record['parents']:
                         parents = record['parents'].split(",")
@@ -46,6 +48,10 @@ class RecordGraph:
                     if record['permit_number'] in permit_number_to_ppts:
                         parents = permit_number_to_ppts[
                             record['permit_number']]
+
+                if source == MOHCD.NAME:
+                    if record['planning_case_number']:
+                        parents = record['planning_case_number'].split(",")
 
                 the_date = None
 
