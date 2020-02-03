@@ -37,9 +37,9 @@ class RecordGraph:
                 parents = []
                 children = []
                 if source == PPTS.NAME:
-                    if record['parents']:
-                        parents = record['parents'].split(",")
-                    if record['children']:
+                    if 'parent' in record:
+                        parents = record['parent'].split(",")
+                    if 'children' in record:
                         children = record['children'].split(",")
 
                 if source == PTS.NAME:
