@@ -6,6 +6,7 @@ import re
 from collections import namedtuple
 
 from schemaless.sources import PPTS
+from schemaless.sources import PTS
 
 Field = namedtuple('Field',
                    ['name', 'value', 'always_treat_as_empty'],
@@ -38,16 +39,27 @@ def gen_units(proj):
 
     # TODO: how to handle cases where better numbers exist from dbi
     # TODO: how to handle cases where prop - existing != net ?
-    result[0] = Field('net_num_units',
-                      proj.field('market_rate_units_net', PPTS.NAME))
-    result[1] = Field('net_num_units_data',
-                      'planning' if result[0].value != '' else '',
-                      True)
+    dbi_exist = dbi_prop = 0
+    try:
+        dbi_exist = int(proj.field('existing_units', PTS.NAME))
+        dbi_prop = int(proj.field('proposed_units', PTS.NAME))
+    except ValueError:
+        pass
+
+    if dbi_exist and dbi_prop:
+        result[0] = Field('net_num_units', str(dbi_prop - dbi_exist))
+        result[1] = Field('net_num_units_data', 'dbi', True)
+    else:
+        result[0] = Field('net_num_units',
+                          proj.field('market_rate_units_net', PPTS.NAME))
+        result[1] = Field('net_num_units_data',
+                          'planning' if result[0].value else '',
+                          True)
 
     result[2] = Field('net_num_units_bmr',
                       proj.field('affordable_units_net', PPTS.NAME))
     result[3] = Field('net_num_units_bmr_data',
-                      'planning' if result[2].value != '' else '',
+                      'planning' if result[2].value else '',
                       True)
 
     return result

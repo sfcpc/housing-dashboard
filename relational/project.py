@@ -86,6 +86,10 @@ class Project:
     """A way to abstract some of the details of handling multiple records for a
     project, from multiple sources."""
 
+    def __str__(self):
+        return '%s => { roots: %s, children %s }' % (self.id, self.roots,
+                                                     self.children)
+
     def __init__(self, id, entries, recordgraph):
         """Initializes the Project.
 
@@ -154,10 +158,10 @@ class Project:
                 if val and val[1] > result[1]:
                     result = val
 
-            if source != PPTS.NAME or result[0] is None:
-                for child in self.children[source]:
-                    val = child.get_latest(name)
-                    if val and val[1] > result[1]:
-                        result = val
+        if source != PPTS.NAME or result[0] is None:
+            for child in self.children[source]:
+                val = child.get_latest(name)
+                if val and val[1] > result[1]:
+                    result = val
 
         return result[0] if result[0] else ''
