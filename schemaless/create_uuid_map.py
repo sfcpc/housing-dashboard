@@ -27,7 +27,7 @@ class RecordGraph:
         # record (so we an ensure they are assigned the same UUID).
         permit_number_to_ppts = defaultdict(list)
         for fk, record in latest_records[PPTS.NAME].items():
-            if record['building_permit_id']:
+            if 'building_permit_id' in record:
                 for permit_number in record['building_permit_id'].split(","):
                     permit_number_to_ppts[permit_number].append(fk)
 
