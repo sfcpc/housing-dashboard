@@ -138,7 +138,7 @@ class Project:
             * If multiple roots, choose one with latest update time.
           * If source != PPTS, then descend to children.
             * If multiple children, choose one with latest update time.
-          * If source == PTS, then only descend to children if None found on
+          * If source == PPTS, then only descend to children if None found on
             root.
 
         Returns:
