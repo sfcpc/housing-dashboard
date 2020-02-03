@@ -119,9 +119,9 @@ def nv_bedroom_info(proj):
 
 
 def nv_square_feet(proj):
-    if proj.field('residential_sq_ft_net') != '':
+    if proj.field('residential_sq_ft_net', PPTS.NAME) != '':
         return [OutputNameValue('net_num_square_feet',
-                                proj.field('residential_sq_ft_net'),
+                                proj.field('residential_sq_ft_net', PPTS.NAME),
                                 'planning')]
     return []
 
