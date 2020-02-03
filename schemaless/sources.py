@@ -24,14 +24,6 @@ class Source:
         return datetime.strptime(
             record[cls.DATE_KEY].split(" ")[0], cls.DATE_FORMAT)
 
-    @classmethod
-    def get_parents(cls, record):
-        return []
-
-    @classmethod
-    def get_children(cls, record):
-        return []
-
     def yield_records(self):
         with open_file(self._filepath,
                        mode='rt',
@@ -137,23 +129,6 @@ class PPTS(Source):
         'RESIDENTIAL_MICRO_PROP': 'residential_units_micro_proposed',
         'RESIDENTIAL_MICRO_NET': 'residential_units_micro_net',
     }
-
-    @classmethod
-    def get_parents(cls, record):
-        parents = []
-        if record['parents']:
-            parents = record['parents'].split(",")
-        return parents
-
-    @classmethod
-    def get_children(cls, record):
-        children = []
-        if record['children']:
-            children.extend(record['children'].split(","))
-        # Associate PTS records with this PPTS record
-        if record['building_permit_id']:
-            children.extend(record['building_permit_id'].split(","))
-        return children
 
 
 class PTS(Source):
@@ -294,13 +269,6 @@ class MOHCD(Source):
         # 'Latitude': 'latitude',
         # 'Longitude': 'longitude',
     }
-
-    @classmethod
-    def get_parents(cls, record):
-        parents = []
-        if record['planning_case_number']:
-            parents = record['planning_case_number'].split(",")
-        return parents
 
 
 source_map = {
