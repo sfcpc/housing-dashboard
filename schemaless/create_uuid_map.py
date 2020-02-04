@@ -55,10 +55,6 @@ class RecordGraph:
                         parents.extend(
                             record['planning_case_number'].split(","))
 
-                if source == MOHCD.NAME:
-                    if record['planning_case_number']:
-                        parents = record['planning_case_number'].split(",")
-
                 the_date = None
 
                 if source_map[source].DATE_KEY in record:
