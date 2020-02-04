@@ -132,10 +132,17 @@ class Project:
                 self.roots[oldest_child.source].append(oldest_child)
                 self.children[oldest_child.source].remove(oldest_child)
 
-    def field(self, name, source):
+    def field(self, name, source, entry_predicate=None):
         """Fetches the value for a field, using some business logic.
 
         source is a source.NAME from schemaless.sources
+
+        If specified, entry_predicate is a list of two-element tuples, where
+        the first element is a name, and the second element is either None
+        or a string.  entry_predicate is used to make sure whatever field
+        value is extracted comes from an entry that at least has this other
+        field as well (if the second element is None) or has a field with
+        exactly the given value (if the second element is a string).
 
         The process of getting a field:
           * Start with root project.
@@ -146,22 +153,34 @@ class Project:
             root.
 
         Returns:
-            string
+            string (an empty string if no value found)
         """
         result = (None, datetime.min)
 
         parents = self.roots[source]
 
+        def _test_predicates(entry):
+            nonlocal entry_predicate
+
+            if entry_predicate:
+                for pred in entry_predicate:
+                    e = entry.get_latest(pred[0])
+                    valid_entry = (e is not None and (pred[1] is None or
+                                                      e[0] == pred[1]))
+                    if not valid_entry:
+                        return False
+            return True
+
         if len(parents) > 0:
             for parent in parents:
                 val = parent.get_latest(name)
-                if val and val[1] > result[1]:
+                if val and val[1] > result[1] and _test_predicates(parent):
                     result = val
 
         if source != PPTS.NAME or result[0] is None:
             for child in self.children[source]:
                 val = child.get_latest(name)
-                if val and val[1] > result[1]:
+                if val and val[1] > result[1] and _test_predicates(child):
                     result = val
 
         return result[0] if result[0] else ''

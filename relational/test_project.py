@@ -76,6 +76,21 @@ def test_project_simple_case(basic_entries, basic_graph):
     # pull data from the latest child
     assert proj.field('num_square_feet', PPTS.NAME) == '2100'
 
+    # pull data from an earlier child because of the predicate
+    assert proj.field('num_square_feet', PPTS.NAME,
+                      entry_predicate=[('residential_units_1br',
+                                        None)]) == '2300'
+
+    # nothing because the predicate value doesn't match
+    assert proj.field('num_square_feet', PPTS.NAME,
+                      entry_predicate=[('residential_units_1br',
+                                        '2')]) == ''
+
+    # pull data from the earlier child because the predicate value DOES match
+    assert proj.field('num_square_feet', PPTS.NAME,
+                      entry_predicate=[('residential_units_1br',
+                                        '1')]) == '2300'
+
 
 def test_project_no_main_record(basic_entries, rootless_graph):
     proj = Project('uuid-0001', basic_entries, rootless_graph)
