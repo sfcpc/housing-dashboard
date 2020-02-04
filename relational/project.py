@@ -138,11 +138,10 @@ class Project:
         source is a source.NAME from schemaless.sources
 
         If specified, entry_predicate is a list of two-element tuples, where
-        the first element is a name, and the second element is either None
-        or a string.  entry_predicate is used to make sure whatever field
-        value is extracted comes from an entry that at least has this other
-        field as well (if the second element is None) or has a field with
-        exactly the given value (if the second element is a string).
+        the first element is a name, and the second element is a lambda that
+        can take a string and returns a bool.  entry_predicate is used to make
+        sure whatever field value is extracted comes from an entry that at
+        least has this other field as well.
 
         The process of getting a field:
           * Start with root project.
@@ -165,8 +164,7 @@ class Project:
             if entry_predicate:
                 for pred in entry_predicate:
                     e = entry.get_latest(pred[0])
-                    valid_entry = (e is not None and (pred[1] is None or
-                                                      e[0] == pred[1]))
+                    valid_entry = e is not None and pred[1](e[0])
                     if not valid_entry:
                         return False
             return True
