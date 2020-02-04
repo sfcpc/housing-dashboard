@@ -7,6 +7,7 @@ from collections import defaultdict
 from collections import namedtuple
 import csv
 import lzma
+import re
 import sys
 
 from fileutils import open_file
@@ -23,6 +24,8 @@ from relational.generators import nv_bedroom_info
 from relational.generators import nv_square_feet
 from relational.generators import atleast_one_measure
 from schemaless.create_uuid_map import RecordGraph
+from schemaless.sources import PPTS
+from schemaless.sources import PTS
 
 csv.field_size_limit(sys.maxsize)
 
@@ -104,9 +107,10 @@ config = OrderedDict([
 ])
 
 
-_FIELDS_TO_CHECK = defaultdict(set)
-_FIELDS_TO_CHECK['ppts'].add('date_opened')
-_FIELDS_TO_CHECK['ppts'].add('date_closed')
+_FIELD_PREDICATE = {}
+_FIELD_PREDICATE[PPTS.NAME] = lambda field: \
+        field == 'date_opened' or field == 'date_closed'
+_FIELD_PREDICATE[PTS.NAME] = lambda field: re.search('date', field)
 
 
 def extract_freshness(entries_map):
@@ -117,7 +121,7 @@ def extract_freshness(entries_map):
     data_freshness = {}
     for (projectid, entries) in entries_map.items():
         for entry in entries:
-            if entry.source not in _FIELDS_TO_CHECK:
+            if entry.source not in _FIELD_PREDICATE:
                 print('Warning: unknown source for '
                       'data freshness: %s, skipping' % entry.source)
                 continue
@@ -126,7 +130,7 @@ def extract_freshness(entries_map):
                 data_freshness[entry.source] = datetime.min
 
             for (name, value) in entry.latest_name_values().items():
-                if name in _FIELDS_TO_CHECK[entry.source]:
+                if _FIELD_PREDICATE[entry.source](name):
                     nvdate = datetime.strptime(
                             value.split(' ')[0],
                             '%m/%d/%Y')

@@ -7,34 +7,45 @@ from relational.project import Entry
 from relational.project import NameValue
 from relational.process_schemaless import extract_freshness
 from relational.process_schemaless import is_seen_id
+from schemaless.sources import PPTS
+from schemaless.sources import PTS
 
 
 def test_extract_freshness():
     entries_map = defaultdict(list)
     newer = datetime.fromisoformat('2020-01-01')
+    pts = datetime.fromisoformat('2020-02-01')
 
     entries_map['uuid1'].append(Entry(
-            'PRJ1', 'ppts',
+            'PRJ1', PPTS.NAME,
             [NameValue('date_opened', '01/01/2000', newer)],
     ))
     entries_map['uuid2'].append(Entry(
-            'PRJ1', 'ppts',
+            'PRJ1', PPTS.NAME,
             [NameValue('date_opened', '01/01/2010', newer)],
     ))
     entries_map['uuid3'].append(Entry(
-            'PRJ1', 'ppts',
+            'PRJ1', PPTS.NAME,
             [NameValue('date_opened', '01/01/2020', newer)],
+    ))
+    entries_map['uuid7'].append(Entry(
+            '201911', PTS.NAME,
+            [NameValue('file_date', '02/01/2020', newer)],
+    ))
+    entries_map['uuid8'].append(Entry(
+            '201911', PTS.NAME,
+            [NameValue('some_date_else', '01/01/2020', newer)],
     ))
 
     # ignored because the field isn't whitelisted
     entries_map['uuid4'].append(Entry(
-            'PRJ1', 'ppts',
+            'PRJ1', PPTS.NAME,
             [NameValue('arbitrary', '02/01/2020', newer)],
     ))
 
     # ignored, in the future
     entries_map['uuid5'].append(Entry(
-            'PRJ1', 'ppts',
+            'PRJ1', PPTS.NAME,
             [NameValue('arbitrary', datetime.max.strftime('%m/%d/%Y'), newer)],
     ))
 
@@ -46,7 +57,8 @@ def test_extract_freshness():
 
     freshness = extract_freshness(entries_map)
 
-    assert freshness['ppts'] == newer
+    assert freshness[PPTS.NAME] == newer
+    assert freshness[PTS.NAME] == pts
 
 
 def test_is_seen_id():

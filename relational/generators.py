@@ -28,7 +28,7 @@ def gen_facts(proj):
         result[0] = Field('address', proj.field('address', PPTS.NAME))
         result[1] = Field('applicant', '')
         result[2] = Field('supervisor_district', '')
-        result[3] = Field('permit_authority', 'planning')
+        result[3] = Field('permit_authority', PPTS.OUTPUT_NAME)
         result[4] = Field('permit_authority_id', proj.field('fk', PPTS.NAME))
 
     return result
@@ -52,19 +52,19 @@ def gen_units(proj):
 
     if dbi_exist and dbi_prop:
         result[0] = Field('net_num_units', str(dbi_prop - dbi_exist))
-        result[1] = Field('net_num_units_data', 'dbi', True)
+        result[1] = Field('net_num_units_data', PTS.OUTPUT_NAME, True)
     else:
         # TODO: how to handle cases where prop - existing != net ?
         result[0] = Field('net_num_units',
                           proj.field('market_rate_units_net', PPTS.NAME))
         result[1] = Field('net_num_units_data',
-                          'planning' if result[0].value else '',
+                          PPTS.OUTPUT_NAME if result[0].value else '',
                           True)
 
     result[2] = Field('net_num_units_bmr',
                       proj.field('affordable_units_net', PPTS.NAME))
     result[3] = Field('net_num_units_bmr_data',
-                      'planning' if result[2].value else '',
+                      PPTS.OUTPUT_NAME if result[2].value else '',
                       True)
 
     return result
@@ -74,7 +74,7 @@ def nv_geom(proj):
     if proj.field('the_geom', PPTS.NAME) != '':
         return [OutputNameValue('geom',
                                 proj.field('the_geom', PPTS.NAME),
-                                'planning')]
+                                PPTS.OUTPUT_NAME)]
 
     return []
 
@@ -85,18 +85,18 @@ def nv_all_units(proj):
         result.append(OutputNameValue(
             'net_num_units',
             proj.field('market_rate_units_net', PPTS.NAME),
-            'planning'))
+            PPTS.OUTPUT_NAME))
     if proj.field('affordable_units_net', PPTS.NAME):
         result.append(OutputNameValue(
             'net_num_units_bmr',
             proj.field('affordable_units_net', PPTS.NAME),
-            'planning'))
+            PPTS.OUTPUT_NAME))
 
     dbi_exist, dbi_prop = _get_dbi_units(proj)
     if dbi_exist and dbi_prop:
         result.append(OutputNameValue('net_num_units',
                                       str(dbi_prop - dbi_exist),
-                                      'dbi'))
+                                      PTS.OUTPUT_NAME))
 
     return result
 
@@ -132,11 +132,11 @@ def nv_bedroom_info(proj):
                   'residential_units_sro']:
         (net, ok) = _crunch_number(field)
         if ok:
-            result.append(OutputNameValue(field, net, 'planning'))
+            result.append(OutputNameValue(field, net, PPTS.OUTPUT_NAME))
 
     result.append(OutputNameValue('is_adu',
                                   'TRUE' if is_adu else 'FALSE',
-                                  'planning'))
+                                  PPTS.OUTPUT_NAME))
 
     return result
 
@@ -145,7 +145,7 @@ def nv_square_feet(proj):
     if proj.field('residential_sq_ft_net', PPTS.NAME) != '':
         return [OutputNameValue('net_num_square_feet',
                                 proj.field('residential_sq_ft_net', PPTS.NAME),
-                                'planning')]
+                                PPTS.OUTPUT_NAME)]
     return []
 
 
