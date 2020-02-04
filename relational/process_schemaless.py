@@ -7,6 +7,7 @@ from collections import defaultdict
 from collections import namedtuple
 import csv
 import lzma
+import queue
 import re
 import sys
 
@@ -119,6 +120,8 @@ def extract_freshness(entries_map):
     Returns: a dict with key data source and value a datetime
     """
     data_freshness = {}
+    bad_dates = 0
+    bad_date_sample = queue.Queue(maxsize=10)
     for (projectid, entries) in entries_map.items():
         for entry in entries:
             if entry.source not in _FIELD_PREDICATE:
@@ -135,12 +138,20 @@ def extract_freshness(entries_map):
                             value.split(' ')[0],
                             '%m/%d/%Y')
                     if not nvdate or nvdate > datetime.today():
-                        print('Bad date "%s" found for %s, skipping' %
-                              (nvdate, entry.fk))
+                        bad_dates += 1
+                        if not bad_date_sample.full():
+                            bad_date_sample.put_nowait(
+                                '"%s" for %s' % (value, entry.fk))
                         continue
 
                     if nvdate > data_freshness[entry.source]:
                         data_freshness[entry.source] = nvdate
+
+    print('Found %s bad dates' % bad_dates)
+    print('Sample entries:')
+    while not bad_date_sample.empty():
+        sample = bad_date_sample.get_nowait()
+        print('\t%s' % sample)
 
     return data_freshness
 
