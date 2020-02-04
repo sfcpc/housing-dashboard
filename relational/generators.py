@@ -58,7 +58,7 @@ def _get_dbi_units(proj):
     except ValueError:
         pass
 
-    if dbi_exist or dbi_prop:
+    if dbi_prop:
         return dbi_prop - dbi_exist
 
     return None

@@ -95,17 +95,38 @@ def test_gen_units(basic_graph):
 
     entries2 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2', PTS.NAME, [NameValue('existing_units', '7', d)]),
+        Entry('2', PTS.NAME, [NameValue('proposed_units', '7', d)]),
     ]
-    proj_missing_proposed_units = Project('uuid1', entries2, basic_graph)
-    fields = gen_units(proj_missing_proposed_units)
-    # Gets from PPTS because PTS data is incomplete
+    proj_no_permit_type = Project('uuid1', entries2, basic_graph)
+    fields = gen_units(proj_no_permit_type)
+    # Gets from PPTS because PTS data is incomplete (no permit type)
     assert _get_value_for_name(fields, 'net_num_units') == '10'
 
     entries3 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('2', PTS.NAME, [NameValue('permit_type', '1', d),
+                              NameValue('existing_units', '7', d)]),
     ]
-    proj_ppts_only = Project('uuid1', entries3, basic_graph)
+    proj_missing_proposed_units = Project('uuid1', entries3, basic_graph)
+    fields = gen_units(proj_missing_proposed_units)
+    # Gets from PPTS because PTS data is incomplete (proper permit type, no
+    # proposed)
+    assert _get_value_for_name(fields, 'net_num_units') == '10'
+
+    entries4 = [
+        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('2', PTS.NAME, [NameValue('permit_type', '1', d),
+                              NameValue('proposed_units', '7', d)]),
+    ]
+    proj_missing_existing = Project('uuid1', entries4, basic_graph)
+    fields = gen_units(proj_missing_existing)
+    # Gets from PTS because we can infer with just proposed
+    assert _get_value_for_name(fields, 'net_num_units') == '7'
+
+    entries5 = [
+        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+    ]
+    proj_ppts_only = Project('uuid1', entries5, basic_graph)
     fields = gen_units(proj_ppts_only)
     # Gets from PPTS because no other choice
     assert _get_value_for_name(fields, 'net_num_units') == '10'
