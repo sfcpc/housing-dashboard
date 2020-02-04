@@ -33,3 +33,5 @@ python3 -m schemaless.create_uuid_map \
   testdata/schemaless-one.csv \
   testdata/uuid-map-two.csv \
   --uuid_map_file=testdata/uuid-map-two.csv
+  # Note: When adding new records, use uuid-map-one so new UUIDs are persisted
+  # --uuid_map_file=testdata/uuid-map-one.csv
