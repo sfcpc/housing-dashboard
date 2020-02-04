@@ -448,18 +448,9 @@ def test_ppts_child_1950_mission():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    parent = rg.get(prj_fk)
-    assert len(parent.children) == (
-        len(expected_ppts_children) +
-        len(expected_pts_children) +
-        len(expected_mohcd_children))
-    for child_fk in zip(expected_ppts_children,
-                        expected_pts_children,
-                        expected_mohcd_children):
-        assert child_fk in parent.children
-        child = rg.get(child_fk)
-        assert child.uuid == parent.uuid
-        assert prj_fk in child.parents
+    verify_valid_children(rg, prj_fk, expected_ppts_children
+                          + expected_pts_children
+                          + expected_mohcd_children)
 
 
 def test_ppts_child_1950_mission_just_parent():
@@ -474,3 +465,30 @@ def test_ppts_child_1950_mission_just_parent():
     assert parent.record_id in child.parents
     assert child.uuid == parent.uuid
     assert child.uuid == grandparent.uuid
+
+
+def test_link_pts_to_ppts_records():
+    prj_fk = '2017-007883PRJ'
+    expected_pts_children = [
+        '1465081108606',
+        '1465082390978'
+    ]
+    rg = RecordGraph.from_files(
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv')
+    verify_valid_children(rg, prj_fk, expected_pts_children)
+    prj_fk = '2017-006969PRL'
+    expected_pts_children = [
+        '1465580423638',
+    ]
+    verify_valid_children(rg, prj_fk, expected_pts_children)
+
+
+def verify_valid_children(rg, parent_fk, expected_child_fks):
+    parent = rg.get(parent_fk)
+    assert len(parent.children) == len(expected_child_fks)
+    for child_fk in expected_child_fks:
+        assert child_fk in parent.children
+        child = rg.get(child_fk)
+        assert child.uuid == parent.uuid
+        assert parent_fk in child.parents

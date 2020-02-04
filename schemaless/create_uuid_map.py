@@ -37,6 +37,8 @@ class RecordGraph:
             for fk, record in source_records.items():
                 parents = []
                 children = []
+
+                # TODO: Refactor the source-specific logic somewhere else.
                 if source == PPTS.NAME:
                     if 'parent' in record:
                         parents.extend(record['parent'].split(","))
