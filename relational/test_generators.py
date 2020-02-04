@@ -84,7 +84,8 @@ def test_gen_units(basic_graph):
 
     entries1 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2', PTS.NAME, [NameValue('existing_units', '7', d),
+        Entry('2', PTS.NAME, [NameValue('permit_type', '1', d),
+                              NameValue('existing_units', '7', d),
                               NameValue('proposed_units', '5', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
@@ -106,7 +107,7 @@ def test_gen_units(basic_graph):
     ]
     proj_ppts_only = Project('uuid1', entries3, basic_graph)
     fields = gen_units(proj_ppts_only)
-    # Gets from PPTS because no ohter choice
+    # Gets from PPTS because no other choice
     assert _get_value_for_name(fields, 'net_num_units') == '10'
 
 
@@ -115,7 +116,8 @@ def test_nv_all_units(basic_graph):
 
     entries1 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2', PTS.NAME, [NameValue('existing_units', '7', d),
+        Entry('2', PTS.NAME, [NameValue('permit_type', '1', d),
+                              NameValue('existing_units', '7', d),
                               NameValue('proposed_units', '5', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)

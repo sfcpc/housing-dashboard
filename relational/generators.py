@@ -35,9 +35,20 @@ def gen_facts(proj):
 
 
 def _get_dbi_units(proj):
+    """
+    Returns:
+      net new units from DBI, only if it could be sourced from a new
+      construction permit
+    """
     try:
-        dbi_exist = int(proj.field('existing_units', PTS.NAME))
-        dbi_prop = int(proj.field('proposed_units', PTS.NAME))
+        dbi_exist = int(proj.field(
+            'existing_units', PTS.NAME,
+            entry_predicate=[('permit_type',
+                              lambda x: x == '1' or x == '2')]))
+        dbi_prop = int(proj.field(
+            'proposed_units', PTS.NAME,
+            entry_predicate=[('permit_type',
+                              lambda x: x == '1' or x == '2')]))
         return (dbi_exist, dbi_prop)
     except ValueError:
         pass
