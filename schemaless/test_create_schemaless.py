@@ -11,6 +11,7 @@ from schemaless.create_schemaless import just_dump
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import MOHCD
 from schemaless.sources import PPTS
+from schemaless.sources import PTS
 from schemaless.sources import TCO
 
 
@@ -73,6 +74,7 @@ def test_just_dump(tmpdir):
     outfile = tmpdir.join("schemaless.csv")
     just_dump(
         [PPTS('testdata/ppts-one.csv'),
+         PTS('testdata/pts.csv'),
          TCO('testdata/tco.csv'),
          MOHCD('testdata/mohcd.csv')],
         outfile,

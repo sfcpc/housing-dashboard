@@ -8,7 +8,6 @@ schemaless csv.
 """
 
 import argparse
-from collections import defaultdict
 import csv
 from csv import DictReader
 from datetime import date
@@ -43,11 +42,17 @@ def just_dump(sources, outfile, the_date=None):
 
 def latest_values(schemaless_file):
     """Collapse the schemaless file into the latest values for each record."""
-    records = defaultdict(lambda: defaultdict(lambda: defaultdict(str)))
+    records = {}
     with open(schemaless_file, 'r') as inf:
         reader = DictReader(inf)
         for line in reader:
-            records[line['source']][line['fk']][line['name']] = line['value']
+            source, fk, key, val = (
+                line['source'], line['fk'], line['name'], line['value'])
+            if source not in records:
+                records[source] = {}
+            if fk not in records[source]:
+                records[source][fk] = {}
+            records[source][fk][key] = val
     return records
 
 
@@ -65,9 +70,11 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
         for source in sources:
             for line in source.yield_records():
                 fk = source.foreign_key(line)
+                if fk not in records[source.NAME]:
+                    records[source.NAME][fk] = {}
                 for (key, val) in line.items():
-                    if val != records[source.NAME][fk][key]:
-                        records[fk][key] = val
+                    if val != records[source.NAME][fk].get(key, None):
+                        records[source.NAME][fk][key] = val
                         writer.writerow([
                             fk, source.NAME, last_updated, key, val.strip()
                         ])
