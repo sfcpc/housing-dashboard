@@ -37,32 +37,40 @@ def gen_facts(proj):
 def _get_dbi_units(proj):
     """
     Returns:
-      net new units from DBI, only if it could be sourced from a new
-      construction permit
+      Net new units from DBI, only if it could be sourced from a new
+      construction permit.  None if no data from DBI.
     """
+    dbi_exist = 0
+    dbi_prop = 0
     try:
         dbi_exist = int(proj.field(
             'existing_units', PTS.NAME,
             entry_predicate=[('permit_type',
                               lambda x: x == '1' or x == '2')]))
+    except ValueError:
+        pass
+
+    try:
         dbi_prop = int(proj.field(
             'proposed_units', PTS.NAME,
             entry_predicate=[('permit_type',
                               lambda x: x == '1' or x == '2')]))
-        return (dbi_exist, dbi_prop)
     except ValueError:
         pass
 
-    return (0, 0)
+    if dbi_exist or dbi_prop:
+        return dbi_prop - dbi_exist
+
+    return None
 
 
 def gen_units(proj):
     result = [Field()] * 4
 
-    dbi_exist, dbi_prop = _get_dbi_units(proj)
+    dbi_net = _get_dbi_units(proj)
 
-    if dbi_exist and dbi_prop:
-        result[0] = Field('net_num_units', str(dbi_prop - dbi_exist))
+    if dbi_net is not None:
+        result[0] = Field('net_num_units', str(dbi_net))
         result[1] = Field('net_num_units_data', PTS.OUTPUT_NAME, True)
     else:
         # TODO: how to handle cases where prop - existing != net ?
@@ -103,10 +111,10 @@ def nv_all_units(proj):
             proj.field('affordable_units_net', PPTS.NAME),
             PPTS.OUTPUT_NAME))
 
-    dbi_exist, dbi_prop = _get_dbi_units(proj)
-    if dbi_exist and dbi_prop:
+    dbi_net = _get_dbi_units(proj)
+    if dbi_net is not None:
         result.append(OutputNameValue('net_num_units',
-                                      str(dbi_prop - dbi_exist),
+                                      str(dbi_net),
                                       PTS.OUTPUT_NAME))
 
     return result
