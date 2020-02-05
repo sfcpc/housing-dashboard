@@ -5,57 +5,32 @@ from datetime import datetime
 from fileutils import open_file
 
 
-class BaseField:
-    def __init__(self, *args, **kwargs):
-        self._source = None
+class Field:
+    def get_value(self, record):
+        pass
 
-    def _contribute_to_class(self, cls, name):
-        self._source = cls
-        setattr(cls, name, self)
+    def get_value_str(self, record):
+        return str(self.get_value(record))
 
 
-class PrimaryKey(BaseField):
+class PrimaryKey(Field):
     def __init__(self, *fields):
-        super().__init__()
         self.fields = fields
 
-    @property
-    def prefix(self):
-        if not self._source:
-            raise RuntimeError(
-                "%s must be an attribute of a Source object." %
-                type(self))
-        return self._source.__name__
-
     def __str__(self):
-        return "%s_%s" % (self.prefix, "_".join(self.fields))
+        return "_".join(self.fields)
 
     def get_value(self, record):
-        return "%s_%s" % (
-            self.prefix,
-            "_".join(record.get(field)
-                     for field in self.fields))
-
-
-class SourceBase(type):
-    def __new__(cls, name, bases, dct):
-        # Copying a pattern from Django
-        # https://github.com/django/django/blob/72b97a5b1e22f5d464045be2e33f0436fa8061d3/django/db/models/base.py#L93
-        new_attrs = {}
-        cont_attrs = {}
-
-        for obj_name, obj in list(dct.items()):
-            if hasattr(obj, '_contribute_to_class'):
-                cont_attrs[obj_name] = obj
+        vals = []
+        for field in self.fields:
+            if isinstance(field, Field):
+                vals.append(field.get_value_str(record))
             else:
-                new_attrs[obj_name] = obj
-        inst = super().__new__(cls, name, bases, new_attrs)
-        for obj_name, obj in cont_attrs.items():
-            obj._contribute_to_class(inst, obj_name)
-        return inst
+                vals.append(record.get(field))
+        return "_".join(vals)
 
 
-class Source(metaclass=SourceBase):
+class Source:
     FK = PrimaryKey('None')
     NAME = 'Base Class'
     DATE_KEY = 'None'
