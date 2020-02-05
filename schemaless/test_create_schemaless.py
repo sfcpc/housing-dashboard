@@ -9,7 +9,7 @@ import shutil
 from schemaless.create_schemaless import dump_and_diff
 from schemaless.create_schemaless import just_dump
 from schemaless.create_schemaless import latest_values
-from schemaless.sources import MOHCD
+from schemaless.sources import MOHCD_PIPELINE
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 from schemaless.sources import TCO
@@ -76,7 +76,7 @@ def test_just_dump(tmpdir):
         [PPTS('testdata/ppts-one.csv'),
          PTS('testdata/pts.csv'),
          TCO('testdata/tco.csv'),
-         MOHCD('testdata/mohcd.csv')],
+         MOHCD_PIPELINE('testdata/mohcd-pipeline.csv')],
         outfile,
         the_date=TESTDATA_GEN_DATE)
     assert filecmp.cmp('testdata/schemaless-one.csv', outfile)

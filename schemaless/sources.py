@@ -189,11 +189,11 @@ class TCO(Source):
     }
 
 
-class MOHCD(Source):
+class MOHCD_PIPELINE(Source):
     FK = 'project_id'
     DATE_KEY = 'date_issuance_of_notice_to_proceed'  # TODO: correct?
     DATE_FORMAT = '%m/%d/%Y'
-    NAME = 'mohcd'
+    NAME = 'mohcd_pipeline'
     FIELDS = {
         'Project ID': 'project_id',
         'Project Status': 'project_status',
@@ -277,5 +277,5 @@ source_map = {
     PPTS.NAME: PPTS,
     PTS.NAME: PTS,
     TCO.NAME: TCO,
-    MOHCD.NAME: MOHCD,
+    MOHCD_PIPELINE.NAME: MOHCD_PIPELINE,
 }

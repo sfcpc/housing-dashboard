@@ -7,7 +7,7 @@ import uuid
 
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
-from schemaless.sources import MOHCD
+from schemaless.sources import MOHCD_PIPELINE
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 from schemaless.sources import source_map
@@ -56,7 +56,7 @@ class RecordGraph:
                         parents.extend(permit_number_to_ppts[
                             record['permit_number']])
 
-                if source == MOHCD.NAME:
+                if source == MOHCD_PIPELINE.NAME:
                     if 'planning_case_number' in record:
                         parents.extend(
                             record['planning_case_number'].split(","))

@@ -18,7 +18,7 @@ python3 -m schemaless.create_schemaless \
   --ppts_file testdata/ppts-one.csv \
   --pts_file testdata/pts.csv \
   --tco_file testdata/tco.csv \
-  --mohcd_file testdata/mohcd-pipeline.csv \
+  --mohcd_pipeline_file testdata/mohcd-pipeline.csv \
   --out_file testdata/schemaless-one.csv \
   --the-date=2020-01-29
 # We read in the uuid-map file generated previously so our uuids are stable
