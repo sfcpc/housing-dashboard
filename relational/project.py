@@ -86,6 +86,10 @@ class Project:
     """A way to abstract some of the details of handling multiple records for a
     project, from multiple sources."""
 
+    def __str__(self):
+        return '%s => { roots: %s, children %s }' % (
+            self.id, self.roots, self.children)
+
     def __init__(self, id, entries, recordgraph):
         """Initializes the Project.
 
@@ -128,10 +132,16 @@ class Project:
                 self.roots[oldest_child.source].append(oldest_child)
                 self.children[oldest_child.source].remove(oldest_child)
 
-    def field(self, name, source):
+    def field(self, name, source, entry_predicate=None):
         """Fetches the value for a field, using some business logic.
 
         source is a source.NAME from schemaless.sources
+
+        If specified, entry_predicate is a list of two-element tuples, where
+        the first element is a name, and the second element is a lambda that
+        can take a string and returns a bool.  entry_predicate is used to make
+        sure whatever field value is extracted comes from an entry that at
+        least has this other field as well.
 
         The process of getting a field:
           * Start with root project.
@@ -142,22 +152,33 @@ class Project:
             root.
 
         Returns:
-            string
+            string (an empty string if no value found)
         """
         result = (None, datetime.min)
 
         parents = self.roots[source]
 
+        def _test_predicates(entry):
+            nonlocal entry_predicate
+
+            if entry_predicate:
+                for pred in entry_predicate:
+                    e = entry.get_latest(pred[0])
+                    valid_entry = e is not None and pred[1](e[0])
+                    if not valid_entry:
+                        return False
+            return True
+
         if len(parents) > 0:
             for parent in parents:
                 val = parent.get_latest(name)
-                if val and val[1] > result[1]:
+                if val and val[1] > result[1] and _test_predicates(parent):
                     result = val
 
-            if source != PPTS.NAME or result[0] is None:
-                for child in self.children[source]:
-                    val = child.get_latest(name)
-                    if val and val[1] > result[1]:
-                        result = val
+        if source != PPTS.NAME or result[0] is None:
+            for child in self.children[source]:
+                val = child.get_latest(name)
+                if val and val[1] > result[1] and _test_predicates(child):
+                    result = val
 
         return result[0] if result[0] else ''

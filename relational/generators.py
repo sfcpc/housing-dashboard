@@ -6,6 +6,7 @@ import re
 from collections import namedtuple
 
 from schemaless.sources import PPTS
+from schemaless.sources import PTS
 
 Field = namedtuple('Field',
                    ['name', 'value', 'always_treat_as_empty'],
@@ -27,27 +28,62 @@ def gen_facts(proj):
         result[0] = Field('address', proj.field('address', PPTS.NAME))
         result[1] = Field('applicant', '')
         result[2] = Field('supervisor_district', '')
-        result[3] = Field('permit_authority', 'planning')
+        result[3] = Field('permit_authority', PPTS.OUTPUT_NAME)
         result[4] = Field('permit_authority_id', proj.field('fk', PPTS.NAME))
 
     return result
 
 
+def _get_dbi_units(proj):
+    """
+    Returns:
+      Net new units from DBI, only if it could be sourced from a new
+      construction permit.  None if no data from DBI.
+    """
+    dbi_exist = 0
+    dbi_prop = 0
+    try:
+        dbi_exist = int(proj.field(
+            'existing_units', PTS.NAME,
+            entry_predicate=[('permit_type',
+                              lambda x: x == '1' or x == '2')]))
+    except ValueError:
+        pass
+
+    try:
+        dbi_prop = int(proj.field(
+            'proposed_units', PTS.NAME,
+            entry_predicate=[('permit_type',
+                              lambda x: x == '1' or x == '2')]))
+    except ValueError:
+        pass
+
+    if dbi_prop:
+        return dbi_prop - dbi_exist
+
+    return None
+
+
 def gen_units(proj):
     result = [Field()] * 4
 
-    # TODO: how to handle cases where better numbers exist from dbi
-    # TODO: how to handle cases where prop - existing != net ?
-    result[0] = Field('net_num_units',
-                      proj.field('market_rate_units_net', PPTS.NAME))
-    result[1] = Field('net_num_units_data',
-                      'planning' if result[0].value != '' else '',
-                      True)
+    dbi_net = _get_dbi_units(proj)
+
+    if dbi_net is not None:
+        result[0] = Field('net_num_units', str(dbi_net))
+        result[1] = Field('net_num_units_data', PTS.OUTPUT_NAME, True)
+    else:
+        # TODO: how to handle cases where prop - existing != net ?
+        result[0] = Field('net_num_units',
+                          proj.field('market_rate_units_net', PPTS.NAME))
+        result[1] = Field('net_num_units_data',
+                          PPTS.OUTPUT_NAME if result[0].value else '',
+                          True)
 
     result[2] = Field('net_num_units_bmr',
                       proj.field('affordable_units_net', PPTS.NAME))
     result[3] = Field('net_num_units_bmr_data',
-                      'planning' if result[2].value != '' else '',
+                      PPTS.OUTPUT_NAME if result[2].value else '',
                       True)
 
     return result
@@ -57,24 +93,30 @@ def nv_geom(proj):
     if proj.field('the_geom', PPTS.NAME) != '':
         return [OutputNameValue('geom',
                                 proj.field('the_geom', PPTS.NAME),
-                                'planning')]
+                                PPTS.OUTPUT_NAME)]
 
     return []
 
 
 def nv_all_units(proj):
-    # TODO: more useful when we have more than just one data source
     result = []
     if proj.field('market_rate_units_net', PPTS.NAME):
         result.append(OutputNameValue(
             'net_num_units',
             proj.field('market_rate_units_net', PPTS.NAME),
-            'planning'))
+            PPTS.OUTPUT_NAME))
     if proj.field('affordable_units_net', PPTS.NAME):
         result.append(OutputNameValue(
             'net_num_units_bmr',
             proj.field('affordable_units_net', PPTS.NAME),
-            'planning'))
+            PPTS.OUTPUT_NAME))
+
+    dbi_net = _get_dbi_units(proj)
+    if dbi_net is not None:
+        result.append(OutputNameValue('net_num_units',
+                                      str(dbi_net),
+                                      PTS.OUTPUT_NAME))
+
     return result
 
 
@@ -109,11 +151,11 @@ def nv_bedroom_info(proj):
                   'residential_units_sro']:
         (net, ok) = _crunch_number(field)
         if ok:
-            result.append(OutputNameValue(field, net, 'planning'))
+            result.append(OutputNameValue(field, net, PPTS.OUTPUT_NAME))
 
     result.append(OutputNameValue('is_adu',
                                   'TRUE' if is_adu else 'FALSE',
-                                  'planning'))
+                                  PPTS.OUTPUT_NAME))
 
     return result
 
@@ -122,7 +164,7 @@ def nv_square_feet(proj):
     if proj.field('residential_sq_ft_net', PPTS.NAME) != '':
         return [OutputNameValue('net_num_square_feet',
                                 proj.field('residential_sq_ft_net', PPTS.NAME),
-                                'planning')]
+                                PPTS.OUTPUT_NAME)]
     return []
 
 

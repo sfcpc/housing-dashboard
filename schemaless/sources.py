@@ -75,6 +75,7 @@ class PPTS(Source):
     FK = PrimaryKey('record_id')
     NAME = 'ppts'
     DATE = Date('date_opened', '%m/%d/%Y')
+    OUTPUT_NAME = 'planning'
     FIELDS = {
         'record_id': 'record_id',
         'record_type': 'record_type',
@@ -168,6 +169,7 @@ class PTS(Source):
     FK = PrimaryKey('record_id')
     NAME = 'pts'
     DATE = Date('filed_date', '%m/%d/%Y')
+    OUTPUT_NAME = 'dbi'
     FIELDS = {
         'Record ID': 'record_id',
         'Permit Number': 'permit_number',

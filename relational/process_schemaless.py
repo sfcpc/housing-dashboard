@@ -7,6 +7,7 @@ from collections import defaultdict
 from collections import namedtuple
 import csv
 import lzma
+import queue
 import sys
 
 from fileutils import open_file
@@ -23,6 +24,8 @@ from relational.generators import nv_bedroom_info
 from relational.generators import nv_square_feet
 from relational.generators import atleast_one_measure
 from schemaless.create_uuid_map import RecordGraph
+from schemaless.sources import PPTS
+from schemaless.sources import PTS
 
 csv.field_size_limit(sys.maxsize)
 
@@ -104,9 +107,18 @@ config = OrderedDict([
 ])
 
 
-_FIELDS_TO_CHECK = defaultdict(set)
-_FIELDS_TO_CHECK['ppts'].add('date_opened')
-_FIELDS_TO_CHECK['ppts'].add('date_closed')
+_FIELD_PREDICATE = {
+    PPTS.NAME: set(['date_opened', 'date_closed']),
+    PTS.NAME: set([
+        'completed_date',
+        'current_status_date',
+        'filed_date',
+        'first_construction_document_date',
+        'issued_date',
+        'permit_creation_date',
+        'permit_expiration_date',
+    ]),
+}
 
 
 def extract_freshness(entries_map):
@@ -115,9 +127,11 @@ def extract_freshness(entries_map):
     Returns: a dict with key data source and value a datetime
     """
     data_freshness = {}
+    bad_dates = 0
+    bad_date_sample = queue.Queue(maxsize=10)
     for (projectid, entries) in entries_map.items():
         for entry in entries:
-            if entry.source not in _FIELDS_TO_CHECK:
+            if entry.source not in _FIELD_PREDICATE:
                 print('Warning: unknown source for '
                       'data freshness: %s, skipping' % entry.source)
                 continue
@@ -126,17 +140,25 @@ def extract_freshness(entries_map):
                 data_freshness[entry.source] = datetime.min
 
             for (name, value) in entry.latest_name_values().items():
-                if name in _FIELDS_TO_CHECK[entry.source]:
+                if name in _FIELD_PREDICATE[entry.source]:
                     nvdate = datetime.strptime(
                             value.split(' ')[0],
                             '%m/%d/%Y')
                     if not nvdate or nvdate > datetime.today():
-                        print('Bad date "%s" found for %s, skipping' %
-                              (nvdate, entry.fk))
+                        bad_dates += 1
+                        if not bad_date_sample.full():
+                            bad_date_sample.put_nowait(
+                                '"%s" for %s' % (value, entry.fk))
                         continue
 
                     if nvdate > data_freshness[entry.source]:
                         data_freshness[entry.source] = nvdate
+
+    print('Found %s bad dates' % bad_dates)
+    print('Sample entries:')
+    while not bad_date_sample.empty():
+        sample = bad_date_sample.get_nowait()
+        print('\t%s' % sample)
 
     return data_freshness
 

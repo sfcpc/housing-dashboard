@@ -18,11 +18,13 @@ def basic_entries():
 
     e = []
     e.append(Entry('1', 'ppts', [NameValue('num_units_bmr', '22', old)]))
-    e.append(Entry('2', 'ppts',
+    e.append(Entry('2',
+                   'ppts',
                    [NameValue('num_units_bmr', '32', lessold),
                     NameValue('num_square_feet', '2300', old),
                     NameValue('residential_units_1br', '1', old)]))
-    e.append(Entry('3', 'ppts',
+    e.append(Entry('3',
+                   'ppts',
                    [NameValue('num_square_feet', '2100', lessold)]))
     return e
 
@@ -34,11 +36,13 @@ def multi_source_entries():
 
     e = []
     e.append(Entry('1', 'ppts', [NameValue('num_units_bmr', '22', old)]))
-    e.append(Entry('2', 'pts',
+    e.append(Entry('2',
+                   'pts',
                    [NameValue('num_units_bmr', '32', lessold),
                     NameValue('num_square_feet', '2300', old),
                     NameValue('residential_units_1br', '1', old)]))
-    e.append(Entry('3', 'ppts',
+    e.append(Entry('3',
+                   'ppts',
                    [NameValue('num_square_feet', '2100', lessold)]))
     return e
 
@@ -76,6 +80,24 @@ def test_project_simple_case(basic_entries, basic_graph):
     # pull data from the latest child
     assert proj.field('num_square_feet', PPTS.NAME) == '2100'
 
+    # pull data from an earlier child because of the predicate
+    assert proj.field('num_square_feet',
+                      PPTS.NAME,
+                      entry_predicate=[('residential_units_1br',
+                                        lambda x: True)]) == '2300'
+
+    # nothing because the predicate value doesn't match
+    assert proj.field('num_square_feet',
+                      PPTS.NAME,
+                      entry_predicate=[('residential_units_1br',
+                                        lambda x: x == '2')]) == ''
+
+    # pull data from the earlier child because the predicate value DOES match
+    assert proj.field('num_square_feet',
+                      PPTS.NAME,
+                      entry_predicate=[('residential_units_1br',
+                                        lambda x: x == '1')]) == '2300'
+
 
 def test_project_no_main_record(basic_entries, rootless_graph):
     proj = Project('uuid-0001', basic_entries, rootless_graph)
@@ -101,13 +123,15 @@ def test_entry():
     lessold = datetime.fromisoformat('2020-01-01')
     leastold = datetime.fromisoformat('2020-02-01')
 
-    e = Entry('2', 'ppts', [
+    e = Entry(
+        '2',
+        'ppts', [
             NameValue('num_units_bmr', '32', lessold),
             NameValue('num_square_feet', '2200', lessold),
             NameValue('residential_units_1br', '-1', leastold),
             NameValue('num_square_feet', '2300', old),
-            NameValue('residential_units_1br', '1', old)
-    ])
+            NameValue('residential_units_1br', '1', old),
+        ])
 
     assert e.oldest_name_value() == old
     assert e.num_name_values() == 5
