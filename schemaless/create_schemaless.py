@@ -15,6 +15,7 @@ from datetime import datetime
 import shutil
 import sys
 
+from schemaless.sources import MOHCD_INCLUSIONARY
 from schemaless.sources import MOHCD_PIPELINE
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
@@ -86,6 +87,7 @@ if __name__ == "__main__":
     parser.add_argument('--pts_file', help='PTS file', default='')
     parser.add_argument('--tco_file', help='TCO file', default='')
     parser.add_argument('--mohcd_pipeline_file', help='MOHCD Pipeline file', default='')
+    parser.add_argument('--mohcd_inclusionary_file', help='MOHCD Inclusionary file', default='')
     parser.add_argument('--out_file', help='output file for schemaless csv')
 
     parser.add_argument(
@@ -111,6 +113,8 @@ if __name__ == "__main__":
         sources.append(TCO(args.tco_file))
     if args.mohcd_pipeline_file:
         sources.append(MOHCD_PIPELINE(args.mohcd_pipeline_file))
+    if args.mohcd_inclusionary_file:
+        sources.append(MOHCD_INCLUSIONARY(args.mohcd_inclusionary_file))
 
     if not args.diff:
         just_dump(sources, args.out_file, the_date)
