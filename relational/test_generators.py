@@ -20,7 +20,8 @@ from schemaless.sources import PTS
 def test_atleast_one_measure():
     header = ['net_num_units', 'net_num_units_bmr', 'net_num_square_feet']
 
-    RowTest = namedtuple('RowTest', ['input', 'want', 'header'],
+    RowTest = namedtuple('RowTest',
+                         ['input', 'want', 'header'],
                          defaults=[header])
     tests = [
         RowTest(['', '', ''], False),  # empty row
@@ -84,9 +85,11 @@ def test_gen_units(basic_graph):
 
     entries1 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2', PTS.NAME, [NameValue('permit_type', '1', d),
-                              NameValue('existing_units', '7', d),
-                              NameValue('proposed_units', '5', d)]),
+        Entry('2',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('existing_units', '7', d),
+               NameValue('proposed_units', '5', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
     fields = gen_units(proj_normal)
@@ -115,8 +118,10 @@ def test_gen_units(basic_graph):
 
     entries4 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2', PTS.NAME, [NameValue('permit_type', '1', d),
-                              NameValue('proposed_units', '7', d)]),
+        Entry('2',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('proposed_units', '7', d)]),
     ]
     proj_missing_existing = Project('uuid1', entries4, basic_graph)
     fields = gen_units(proj_missing_existing)
@@ -137,9 +142,11 @@ def test_nv_all_units(basic_graph):
 
     entries1 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2', PTS.NAME, [NameValue('permit_type', '1', d),
-                              NameValue('existing_units', '7', d),
-                              NameValue('proposed_units', '5', d)]),
+        Entry('2',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('existing_units', '7', d),
+               NameValue('proposed_units', '5', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
     nvs = nv_all_units(proj_normal)
@@ -154,13 +161,15 @@ def test_nv_bedroom_info(unit_graph):
     d = datetime.fromisoformat('2019-01-01')
 
     entries1 = [
-        Entry('1', PPTS.NAME,
+        Entry('1',
+              PPTS.NAME,
               [NameValue('residential_units_1br_net', '10', d)]),
     ]
     proj_normal = Project('uuid1', entries1, unit_graph)
 
     entries2 = [
-        Entry('1', PPTS.NAME,
+        Entry('1',
+              PPTS.NAME,
               [NameValue('residential_units_adu_1br_net', '1', d)]),
     ]
     proj_adu = Project('uuid2', entries2, unit_graph)

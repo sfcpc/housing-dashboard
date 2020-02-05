@@ -87,8 +87,8 @@ class Project:
     project, from multiple sources."""
 
     def __str__(self):
-        return '%s => { roots: %s, children %s }' % (self.id, self.roots,
-                                                     self.children)
+        return '%s => { roots: %s, children %s }' % (
+            self.id, self.roots, self.children)
 
     def __init__(self, id, entries, recordgraph):
         """Initializes the Project.
