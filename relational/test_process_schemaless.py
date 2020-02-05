@@ -34,12 +34,12 @@ def test_extract_freshness():
     entries_map['uuid7'].append(Entry(
         '201911',
         PTS.NAME,
-        [NameValue('file_date', '02/01/2020', newer)],
+        [NameValue('filed_date', '02/01/2020', newer)],
     ))
     entries_map['uuid8'].append(Entry(
         '201911',
         PTS.NAME,
-        [NameValue('some_date_else', '01/01/2020', newer)],
+        [NameValue('completed_date', '01/01/2020', newer)],
     ))
 
     # ignored because the field isn't whitelisted

@@ -8,7 +8,6 @@ from collections import namedtuple
 import csv
 import lzma
 import queue
-import re
 import sys
 
 from fileutils import open_file
@@ -108,10 +107,18 @@ config = OrderedDict([
 ])
 
 
-_FIELD_PREDICATE = {}
-_FIELD_PREDICATE[PPTS.NAME] = lambda field: \
-        field == 'date_opened' or field == 'date_closed'
-_FIELD_PREDICATE[PTS.NAME] = lambda field: re.search('date', field)
+_FIELD_PREDICATE = {
+    PPTS.NAME: set(['date_opened', 'date_closed']),
+    PTS.NAME: set([
+        'completed_date',
+        'current_status_date',
+        'filed_date',
+        'first_construction_document_date',
+        'issued_date',
+        'permit_creation_date',
+        'permit_expiration_date',
+    ]),
+}
 
 
 def extract_freshness(entries_map):
@@ -133,7 +140,7 @@ def extract_freshness(entries_map):
                 data_freshness[entry.source] = datetime.min
 
             for (name, value) in entry.latest_name_values().items():
-                if _FIELD_PREDICATE[entry.source](name):
+                if name in _FIELD_PREDICATE[entry.source]:
                     nvdate = datetime.strptime(
                             value.split(' ')[0],
                             '%m/%d/%Y')
