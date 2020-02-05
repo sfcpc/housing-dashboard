@@ -2804,3 +2804,75 @@ MB1401513,ppts,2020-01-29,planner_phone,415-575-9138
 2016-088,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
 2016-088,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
 2016-088,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+2016-023,mohcd_inclusionary,2020-01-29,project_id,2016-023
+2016-023,mohcd_inclusionary,2020-01-29,project_status,(5) First Construction Document Issued
+2016-023,mohcd_inclusionary,2020-01-29,project_name,1699 Market
+2016-023,mohcd_inclusionary,2020-01-29,street_number,1699
+2016-023,mohcd_inclusionary,2020-01-29,street_name,Market
+2016-023,mohcd_inclusionary,2020-01-29,street_type,St
+2016-023,mohcd_inclusionary,2020-01-29,zip_code,94103
+2016-023,mohcd_inclusionary,2020-01-29,housing_tenure,Unknown
+2016-023,mohcd_inclusionary,2020-01-29,section_415_declaration,Fee Payment
+2016-023,mohcd_inclusionary,2020-01-29,entitlement_approval_date,03/24/2016
+2016-023,mohcd_inclusionary,2020-01-29,date_estimated_or_actual_completion,12/10/2019
+2016-023,mohcd_inclusionary,2020-01-29,planning_case_number,2014.0484
+2016-023,mohcd_inclusionary,2020-01-29,planning_entitlements,"2014-002961CUA,2014.0484CND,2014.0484E,2014.0484PPA,2014.0484U"
+2016-023,mohcd_inclusionary,2020-01-29,total_project_units,160
+2016-023,mohcd_inclusionary,2020-01-29,total_affordable_units,0
+2016-023,mohcd_inclusionary,2020-01-29,units_subject_to_415_declaration,160
+2016-023,mohcd_inclusionary,2020-01-29,on_site_affordable_units,0
+2016-023,mohcd_inclusionary,2020-01-29,off_site_affordable_units,0
+2016-023,mohcd_inclusionary,2020-01-29,off_site_affordable_units_at_site,0
+2016-023,mohcd_inclusionary,2020-01-29,num_sro_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_studio_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_1bd_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_2bd_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_3bd_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_4bd_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_30_percent_ami_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_50_percent_ami_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_55_percent_ami_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_60_percent_ami_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_80_percent_ami_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_90_percent_ami_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_100_percent_ami_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_120_percent_ami_units,0
+2016-023,mohcd_inclusionary,2020-01-29,num_150_percent_ami_units,0
+2016-023,mohcd_inclusionary,2020-01-29,supervisor_district,6
+2016-023,mohcd_inclusionary,2020-01-29,location,POINT (-122.4218785 37.77223589)
+2011-005,mohcd_inclusionary,2020-01-29,project_id,2011-005
+2011-005,mohcd_inclusionary,2020-01-29,project_status,(5) First Construction Document Issued
+2011-005,mohcd_inclusionary,2020-01-29,project_name,1255-1275 Columbus
+2011-005,mohcd_inclusionary,2020-01-29,street_number,1255-1275
+2011-005,mohcd_inclusionary,2020-01-29,street_name,Columbus
+2011-005,mohcd_inclusionary,2020-01-29,street_type,Ave
+2011-005,mohcd_inclusionary,2020-01-29,zip_code,94133
+2011-005,mohcd_inclusionary,2020-01-29,housing_tenure,Unknown
+2011-005,mohcd_inclusionary,2020-01-29,section_415_declaration,Fee Payment
+2011-005,mohcd_inclusionary,2020-01-29,entitlement_approval_date,06/08/2011
+2011-005,mohcd_inclusionary,2020-01-29,date_estimated_or_actual_completion,02/05/2019
+2011-005,mohcd_inclusionary,2020-01-29,planning_case_number,2008.0723
+2011-005,mohcd_inclusionary,2020-01-29,planning_entitlements,"2008.0723E,2008.0723E_3,2008.0723E_4,2008.0723V"
+2011-005,mohcd_inclusionary,2020-01-29,total_project_units,20
+2011-005,mohcd_inclusionary,2020-01-29,total_affordable_units,0
+2011-005,mohcd_inclusionary,2020-01-29,units_subject_to_415_declaration,20
+2011-005,mohcd_inclusionary,2020-01-29,on_site_affordable_units,0
+2011-005,mohcd_inclusionary,2020-01-29,off_site_affordable_units,0
+2011-005,mohcd_inclusionary,2020-01-29,off_site_affordable_units_at_site,0
+2011-005,mohcd_inclusionary,2020-01-29,num_sro_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_studio_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_1bd_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_2bd_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_3bd_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_4bd_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_30_percent_ami_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_50_percent_ami_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_55_percent_ami_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_60_percent_ami_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_80_percent_ami_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_90_percent_ami_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_100_percent_ami_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_120_percent_ami_units,0
+2011-005,mohcd_inclusionary,2020-01-29,num_150_percent_ami_units,0
+2011-005,mohcd_inclusionary,2020-01-29,supervisor_district,2
+2011-005,mohcd_inclusionary,2020-01-29,location,POINT (-122.4182387 37.80560374)
