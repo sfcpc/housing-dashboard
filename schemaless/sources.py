@@ -42,6 +42,7 @@ class PPTS(Source):
     DATE_KEY = 'date_opened'
     DATE_FORMAT = '%m/%d/%Y'
     NAME = 'ppts'
+    OUTPUT_NAME = 'planning'
     FIELDS = {
         'record_id': 'record_id',
         'record_type': 'record_type',
@@ -136,6 +137,7 @@ class PTS(Source):
     DATE_KEY = 'filed_date'
     DATE_FORMAT = '%m/%d/%Y'
     NAME = 'pts'
+    OUTPUT_NAME = 'dbi'
     FIELDS = {
         'Record ID': 'record_id',
         'Permit Number': 'permit_number',
