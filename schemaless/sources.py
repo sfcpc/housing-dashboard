@@ -30,11 +30,26 @@ class PrimaryKey(Field):
         return "_".join(vals)
 
 
+class Date(Field):
+    def __init__(self, field, date_format):
+        self.field = field
+        self.date_format = date_format
+
+    def __str__(self):
+        return "%s (%s)" % (self.field, self.date_format)
+
+    def get_value(self, record):
+        return datetime.strptime(
+            record[self.field].split(" ")[0], self.date_format).date()
+
+    def get_value_str(self, record):
+        return self.get_value(record).isoformat()
+
+
 class Source:
     FK = PrimaryKey('None')
     NAME = 'Base Class'
-    DATE_KEY = 'None'
-    DATE_FORMAT = '%m/%d/%Y'
+    DATE = Date('None', '%m/%d/%Y')
     FIELDS = {}
 
     def __init__(self, filepath):
@@ -42,11 +57,6 @@ class Source:
 
     def foreign_key(self, record):
         return self.FK.get_value(record)
-
-    @classmethod
-    def get_date(cls, record):
-        return datetime.strptime(
-            record[cls.DATE_KEY].split(" ")[0], cls.DATE_FORMAT)
 
     def yield_records(self):
         with open_file(self._filepath,
@@ -64,8 +74,7 @@ class Source:
 class PPTS(Source):
     FK = PrimaryKey('record_id')
     NAME = 'ppts'
-    DATE_KEY = 'date_opened'
-    DATE_FORMAT = '%m/%d/%Y'
+    DATE = Date('date_opened', '%m/%d/%Y')
     FIELDS = {
         'record_id': 'record_id',
         'record_type': 'record_type',
@@ -157,9 +166,8 @@ class PPTS(Source):
 
 class PTS(Source):
     FK = PrimaryKey('record_id')
-    DATE_KEY = 'filed_date'
-    DATE_FORMAT = '%m/%d/%Y'
     NAME = 'pts'
+    DATE = Date('filed_date', '%m/%d/%Y')
     FIELDS = {
         'Record ID': 'record_id',
         'Permit Number': 'permit_number',
@@ -198,10 +206,9 @@ class PTS(Source):
 
 
 class TCO(Source):
-    FK = PrimaryKey('building_permit_number', 'date_issued')
-    DATE_KEY = 'date_issued'
-    DATE_FORMAT = '%Y/%m/%d'
     NAME = 'tco'
+    DATE = Date('date_issued', '%Y/%m/%d')
+    FK = PrimaryKey('building_permit_number', DATE)
     FIELDS = {
         'Building Permit Application Number': 'building_permit_number',
         'Building Address': 'address',
@@ -213,9 +220,9 @@ class TCO(Source):
 
 class MOHCD(Source):
     FK = PrimaryKey('project_id')
-    DATE_KEY = 'date_issuance_of_notice_to_proceed'  # TODO: correct?
-    DATE_FORMAT = '%m/%d/%Y'
     NAME = 'mohcd'
+    # TODO: correct date to sort by?
+    DATE = Date('date_issuance_of_notice_to_proceed', '%m/%d/%Y')
     FIELDS = {
         'Project ID': 'project_id',
         'Project Status': 'project_status',
