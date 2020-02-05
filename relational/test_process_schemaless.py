@@ -17,42 +17,50 @@ def test_extract_freshness():
     pts = datetime.fromisoformat('2020-02-01')
 
     entries_map['uuid1'].append(Entry(
-            'PRJ1', PPTS.NAME,
-            [NameValue('date_opened', '01/01/2000', newer)],
+        'PRJ1',
+        PPTS.NAME,
+        [NameValue('date_opened', '01/01/2000', newer)],
     ))
     entries_map['uuid2'].append(Entry(
-            'PRJ1', PPTS.NAME,
-            [NameValue('date_opened', '01/01/2010', newer)],
+        'PRJ1',
+        PPTS.NAME,
+        [NameValue('date_opened', '01/01/2010', newer)],
     ))
     entries_map['uuid3'].append(Entry(
-            'PRJ1', PPTS.NAME,
-            [NameValue('date_opened', '01/01/2020', newer)],
+        'PRJ1',
+        PPTS.NAME,
+        [NameValue('date_opened', '01/01/2020', newer)],
     ))
     entries_map['uuid7'].append(Entry(
-            '201911', PTS.NAME,
-            [NameValue('file_date', '02/01/2020', newer)],
+        '201911',
+        PTS.NAME,
+        [NameValue('file_date', '02/01/2020', newer)],
     ))
     entries_map['uuid8'].append(Entry(
-            '201911', PTS.NAME,
-            [NameValue('some_date_else', '01/01/2020', newer)],
+        '201911',
+        PTS.NAME,
+        [NameValue('some_date_else', '01/01/2020', newer)],
     ))
 
     # ignored because the field isn't whitelisted
     entries_map['uuid4'].append(Entry(
-            'PRJ1', PPTS.NAME,
-            [NameValue('arbitrary', '02/01/2020', newer)],
+        'PRJ1',
+        PPTS.NAME,
+        [NameValue('arbitrary', '02/01/2020', newer)],
     ))
 
     # ignored, in the future
     entries_map['uuid5'].append(Entry(
-            'PRJ1', PPTS.NAME,
-            [NameValue('arbitrary', datetime.max.strftime('%m/%d/%Y'), newer)],
+        'PRJ1',
+        PPTS.NAME,
+        [NameValue('arbitrary', datetime.max.strftime('%m/%d/%Y'), newer)],
     ))
 
     # ignored because the source is unknown
     entries_map['uuid6'].append(Entry(
-            'PRJ1', 'bamboozle',
-            [NameValue('date_opened', '02/01/2020', newer)],
+        'PRJ1',
+        'bamboozle',
+        [NameValue('date_opened', '02/01/2020', newer)],
     ))
 
     freshness = extract_freshness(entries_map)
@@ -65,8 +73,10 @@ def test_is_seen_id():
     seen_set = set('123')
 
     header = ['id']
-    RowTest = namedtuple('RowTest', ['input', 'want', 'header'],
-                         defaults=[header])
+    RowTest = namedtuple(
+        'RowTest',
+        ['input', 'want', 'header'],
+        defaults=[header])
     tests = [
         RowTest(['1'], True),
         RowTest(['4'], False),
