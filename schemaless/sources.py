@@ -5,19 +5,68 @@ from datetime import datetime
 from fileutils import open_file
 
 
-class Source:
-    FK = 'None'
+class BaseField:
+    def __init__(self, *args, **kwargs):
+        self._source = None
+
+    def _contribute_to_class(self, cls, name):
+        self._source = cls
+        setattr(cls, name, self)
+
+
+class PrimaryKey(BaseField):
+    def __init__(self, *fields):
+        super().__init__()
+        self.fields = fields
+
+    @property
+    def prefix(self):
+        if not self._source:
+            raise RuntimeError(
+                "%s must be an attribute of a Source object." %
+                type(self))
+        return self._source.__name__
+
+    def __str__(self):
+        return "%s_%s" % (self.prefix, "_".join(self.fields))
+
+    def get_value(self, record):
+        return "%s_%s" % (
+            self.prefix,
+            "_".join(record.get(field)
+                     for field in self.fields))
+
+
+class SourceBase(type):
+    def __new__(cls, name, bases, dct):
+        # Copying a pattern from Django
+        # https://github.com/django/django/blob/72b97a5b1e22f5d464045be2e33f0436fa8061d3/django/db/models/base.py#L93
+        new_attrs = {}
+        cont_attrs = {}
+
+        for obj_name, obj in list(dct.items()):
+            if hasattr(obj, '_contribute_to_class'):
+                cont_attrs[obj_name] = obj
+            else:
+                new_attrs[obj_name] = obj
+        inst = super().__new__(cls, name, bases, new_attrs)
+        for obj_name, obj in cont_attrs.items():
+            obj._contribute_to_class(inst, obj_name)
+        return inst
+
+
+class Source(metaclass=SourceBase):
+    FK = PrimaryKey('None')
+    NAME = 'Base Class'
     DATE_KEY = 'None'
     DATE_FORMAT = '%m/%d/%Y'
     FIELDS = {}
-    NAME = 'Base Class'
 
     def __init__(self, filepath):
         self._filepath = filepath
 
-    @classmethod
-    def foreign_key(cls, record):
-        return record[cls.FK]
+    def foreign_key(self, record):
+        return self.FK.get_value(record)
 
     @classmethod
     def get_date(cls, record):
@@ -38,10 +87,10 @@ class Source:
 
 
 class PPTS(Source):
-    FK = 'record_id'
+    FK = PrimaryKey('record_id')
+    NAME = 'ppts'
     DATE_KEY = 'date_opened'
     DATE_FORMAT = '%m/%d/%Y'
-    NAME = 'ppts'
     FIELDS = {
         'record_id': 'record_id',
         'record_type': 'record_type',
@@ -132,7 +181,7 @@ class PPTS(Source):
 
 
 class PTS(Source):
-    FK = 'record_id'
+    FK = PrimaryKey('record_id')
     DATE_KEY = 'filed_date'
     DATE_FORMAT = '%m/%d/%Y'
     NAME = 'pts'
@@ -174,7 +223,7 @@ class PTS(Source):
 
 
 class TCO(Source):
-    FK = 'building_permit_number'
+    FK = PrimaryKey('building_permit_number', 'date_issued')
     DATE_KEY = 'date_issued'
     DATE_FORMAT = '%Y/%m/%d'
     NAME = 'tco'
@@ -188,7 +237,7 @@ class TCO(Source):
 
 
 class MOHCD(Source):
-    FK = 'project_id'
+    FK = PrimaryKey('project_id')
     DATE_KEY = 'date_issuance_of_notice_to_proceed'  # TODO: correct?
     DATE_FORMAT = '%m/%d/%Y'
     NAME = 'mohcd'
