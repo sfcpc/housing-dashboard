@@ -11,6 +11,7 @@ from schemaless.sources import MOHCD
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 from schemaless.sources import source_map
+from schemaless.sources import TCO
 
 
 class RecordGraph:
@@ -27,10 +28,15 @@ class RecordGraph:
         # Create a mapping between permit numbers and their associated PPTS
         # record (so we an ensure they are assigned the same UUID).
         permit_number_to_ppts = defaultdict(list)
-        for fk, record in latest_records[PPTS.NAME].items():
+        for fk, record in latest_records.get(PPTS.NAME, {}).items():
             if 'building_permit_id' in record:
                 for permit_number in record['building_permit_id'].split(","):
                     permit_number_to_ppts[permit_number].append(fk)
+
+        permit_number_to_pts = defaultdict(list)
+        for fk, record in latest_records.get(PTS.NAME, {}).items():
+            if 'permit_number' in record:
+                permit_number_to_pts[record['permit_number']].append(fk)
 
         # Read the latest values from the schemaless file to build the graph.
         for source, source_records in latest_records.items():
@@ -55,6 +61,12 @@ class RecordGraph:
                         parents.extend(
                             record['planning_case_number'].split(","))
 
+                if source == TCO.NAME:
+                    if 'building_permit_number' in record:
+                        pts = permit_number_to_pts.get(
+                            record['building_permit_number'])
+                        if pts:
+                            parents.extend(pts)
                 the_date = None
 
                 if source_map[source].DATE_KEY in record:
