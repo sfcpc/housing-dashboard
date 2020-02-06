@@ -2,7 +2,6 @@
 """Convert a schemaless csv into relational tables (a set of csvs)."""
 import argparse
 from datetime import datetime
-from collections import OrderedDict
 from collections import defaultdict
 from collections import namedtuple
 import csv
@@ -12,17 +11,10 @@ import sys
 
 from fileutils import open_file
 
+import relational.table as table
 from relational.project import Entry
 from relational.project import NameValue
 from relational.project import Project
-from relational.generators import gen_id
-from relational.generators import gen_facts
-from relational.generators import gen_units
-from relational.generators import nv_geom
-from relational.generators import nv_all_units
-from relational.generators import nv_bedroom_info
-from relational.generators import nv_square_feet
-from relational.generators import atleast_one_measure
 from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import MOHCD
 from schemaless.sources import PPTS
@@ -35,28 +27,25 @@ csv.field_size_limit(sys.maxsize)
 __seen_ids = set()
 
 
-def is_seen_id(row, header, seen_set):
+def is_seen_id(row, table, seen_set):
     try:
-        id_index = header.index('id')
+        id_index = table.index(table.ID)
         return row[id_index] in seen_set
     except ValueError:
         return False
 
 
-def store_seen_id(row, header, seen_set):
+def store_seen_id(row, table, seen_set):
     try:
-        id_index = header.index('id')
+        id_index = table.index(table.ID)
         seen_set.add(row[id_index])
     except ValueError:
         pass
 
 
-TableDefinition = namedtuple('TableDefinition',
-                             ['data_generators',
-                              'name_value_generators',
-                              'addl_output_predicate',
-                              'post_process'],
-                             defaults=[[], [], None, None])
+TableConfig = namedtuple('TableConfig',
+                         ['table', 'pre_process', 'post_process'],
+                         defaults=[None, None])
 
 # Mapping of tables to a set of data generators.
 # * All data generators must accept a Project and return a list<string>.
@@ -64,48 +53,18 @@ TableDefinition = namedtuple('TableDefinition',
 #   of OutputNameValue.
 # * For a combination of data generators and name value, all data returned
 #   by data generators will be duplicated for each name value.
-config = OrderedDict([
-    ('project_facts', TableDefinition(
-        data_generators=[
-            gen_id,
-            gen_facts,
-            gen_units,
-        ],
-        addl_output_predicate=atleast_one_measure,
-        post_process=lambda r, h: store_seen_id(r, h, __seen_ids),
-    )),
-    ('project_unit_counts_full', TableDefinition(
-        data_generators=[
-            gen_id,
-        ],
-        name_value_generators=[
-            nv_all_units,
-        ],
-        addl_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
-    )),
-    ('project_status_history', TableDefinition(
-        # TODO
-    )),
-    ('project_geo', TableDefinition(
-        data_generators=[
-            gen_id,
-        ],
-        name_value_generators=[
-            nv_geom,
-        ],
-        addl_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
-    )),
-    ('project_details', TableDefinition(
-        data_generators=[
-            gen_id,
-        ],
-        name_value_generators=[
-            nv_square_feet,
-            nv_bedroom_info,
-        ],
-        addl_output_predicate=lambda r, h: is_seen_id(r, h, __seen_ids),
-    )),
-])
+config = [
+    TableConfig(table.ProjectFacts,
+                None,
+                lambda r, t: store_seen_id(r, t, __seen_ids)),
+    TableConfig(table.ProjectUnitCountsFull,
+                lambda r, t: store_seen_id(r, t, __seen_ids)),
+    # TODO: ProjectStatusHistory
+    TableConfig(table.ProjectGeo,
+                lambda r, t: store_seen_id(r, t, __seen_ids)),
+    TableConfig(table.ProjectDetails,
+                lambda r, t: store_seen_id(r, t, __seen_ids)),
+]
 
 
 _FIELD_PREDICATE = {
@@ -257,69 +216,42 @@ def output_projects(projects, config):
     """Generates the relational tables from the project info"""
 
     lines_out = 0
-    for (outfile, table_def) in config.items():
+    for table_config in config.items():
         if lines_out > 0:
             print("%s total entries" % lines_out)
             lines_out = 0
 
-        finalfile = args.out_prefix + outfile + ".csv"
+        finalfile = args.out_prefix + table_config.table.name + ".csv"
         with open(finalfile, 'w') as outf:
             print("Handling %s" % finalfile)
             headers_printed = False
-            headers_done = False
-            headers = []
             for proj in projects:
                 writer = csv.writer(outf)
+
                 output = []
+                for row in table_config.table.rows(proj):
+                    if (table_config.pre_process and
+                            not table_config.pre_process(row,
+                                                         table_config.table)):
+                        continue
 
-                atleast_one = False
-                for generator in table_def.data_generators:
-                    results = generator(proj)
-                    for result in results:
-                        if not headers_done:
-                            headers.append(result.name)
-                        if (not result.always_treat_as_empty and
-                                result.value != ""):
-                            atleast_one = True
-                        output.append(result.value)
+                    output.append(row)
 
-                nvs = []
-                if len(table_def.name_value_generators) > 0:
-                    if not headers_done:
-                        headers.extend(['name', 'value', 'data_source'])
-                    for name_value in table_def.name_value_generators:
-                        nvs.extend(name_value(proj))
+                    if table_config.post_process:
+                        table_config.post_process(row, table_config.table)
 
-                final_output = [output]
-                if len(nvs) > 0:
-                    final_output = []
-                    for nv in nvs:
-                        final_output.append(output +
-                                            [nv.name, nv.value,
-                                             nv.data_source])
+                if len(output) > 0:
+                    if not headers_printed:
+                        writer.writerow(table_config.table.header())
+                        headers_printed = True
 
-                    if len(final_output) > 0:
-                        atleast_one = True
+                    for out in output:
+                        lines_out += 1
+                        if lines_out % 10000 == 0:
+                            print("%s entries to %s" % (lines_out,
+                                                        finalfile))
+                        writer.writerow(out)
 
-                headers_done = True
-
-                if atleast_one:
-                    for out in final_output:
-                        if (not table_def.addl_output_predicate or
-                                table_def.addl_output_predicate(out, headers)):
-                            if not headers_printed and len(headers) > 0:
-                                writer.writerow(headers)
-                                headers_printed = True
-
-                            lines_out += 1
-                            if lines_out % 10000 == 0:
-                                print("%s entries to %s" % (lines_out,
-                                                            finalfile))
-
-                            writer.writerow(out)
-
-                            if table_def.post_process:
-                                table_def.post_process(out, headers)
     if lines_out > 0:
         print("%s total entries" % lines_out)
 
