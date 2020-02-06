@@ -14,11 +14,12 @@ class Field:
 
 
 class PrimaryKey(Field):
-    def __init__(self, *fields):
+    def __init__(self, prefix, *fields):
+        self.prefix = prefix
         self.fields = fields
 
     def __str__(self):
-        return "_".join(self.fields)
+        return "_".join([self.prefix] + self.fields)
 
     def get_value(self, record):
         vals = []
@@ -27,7 +28,7 @@ class PrimaryKey(Field):
                 vals.append(field.get_value_str(record))
             else:
                 vals.append(record.get(field))
-        return "_".join(vals)
+        return "_".join([self.prefix] + vals)
 
 
 class Date(Field):
@@ -47,8 +48,8 @@ class Date(Field):
 
 
 class Source:
-    FK = PrimaryKey('None')
     NAME = 'Base Class'
+    FK = PrimaryKey(NAME, 'None')
     DATE = Date('None', '%m/%d/%Y')
     FIELDS = {}
 
@@ -72,8 +73,8 @@ class Source:
 
 
 class PPTS(Source):
-    FK = PrimaryKey('record_id')
     NAME = 'ppts'
+    FK = PrimaryKey(NAME, 'record_id')
     DATE = Date('date_opened', '%m/%d/%Y')
     OUTPUT_NAME = 'planning'
     FIELDS = {
@@ -166,8 +167,8 @@ class PPTS(Source):
 
 
 class PTS(Source):
-    FK = PrimaryKey('record_id')
     NAME = 'pts'
+    FK = PrimaryKey(NAME, 'record_id')
     DATE = Date('filed_date', '%m/%d/%Y')
     OUTPUT_NAME = 'dbi'
     FIELDS = {
@@ -210,7 +211,7 @@ class PTS(Source):
 class TCO(Source):
     NAME = 'tco'
     DATE = Date('date_issued', '%Y/%m/%d')
-    FK = PrimaryKey('building_permit_number', DATE)
+    FK = PrimaryKey(NAME, 'building_permit_number', DATE)
     FIELDS = {
         'Building Permit Application Number': 'building_permit_number',
         'Building Address': 'address',
@@ -221,8 +222,8 @@ class TCO(Source):
 
 
 class MOHCD(Source):
-    FK = PrimaryKey('project_id')
     NAME = 'mohcd'
+    FK = PrimaryKey(NAME, 'project_id')
     # TODO: correct date to sort by?
     DATE = Date('date_issuance_of_notice_to_proceed', '%m/%d/%Y')
     FIELDS = {
