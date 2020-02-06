@@ -114,7 +114,7 @@ class RecordGraph:
             writer = csv.writer(f)
             writer.writerow(['uuid', 'fk'])
             for fk, record in self._nodes.items():
-                writer.writerow([record.uuid, record.record_id])
+                writer.writerow([record.uuid, fk])
 
     def add(self, record):
         rid = record.record_id
