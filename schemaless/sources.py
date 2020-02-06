@@ -5,24 +5,58 @@ from datetime import datetime
 from fileutils import open_file
 
 
+class Field:
+    def get_value(self, record):
+        pass
+
+    def get_value_str(self, record):
+        return str(self.get_value(record))
+
+
+class PrimaryKey(Field):
+    def __init__(self, *fields):
+        self.fields = fields
+
+    def __str__(self):
+        return "_".join(self.fields)
+
+    def get_value(self, record):
+        vals = []
+        for field in self.fields:
+            if isinstance(field, Field):
+                vals.append(field.get_value_str(record))
+            else:
+                vals.append(record.get(field))
+        return "_".join(vals)
+
+
+class Date(Field):
+    def __init__(self, field, date_format):
+        self.field = field
+        self.date_format = date_format
+
+    def __str__(self):
+        return "%s (%s)" % (self.field, self.date_format)
+
+    def get_value(self, record):
+        return datetime.strptime(
+            record[self.field].split(" ")[0], self.date_format).date()
+
+    def get_value_str(self, record):
+        return self.get_value(record).isoformat()
+
+
 class Source:
-    FK = 'None'
-    DATE_KEY = 'None'
-    DATE_FORMAT = '%m/%d/%Y'
-    FIELDS = {}
+    FK = PrimaryKey('None')
     NAME = 'Base Class'
+    DATE = Date('None', '%m/%d/%Y')
+    FIELDS = {}
 
     def __init__(self, filepath):
         self._filepath = filepath
 
-    @classmethod
-    def foreign_key(cls, record):
-        return record[cls.FK]
-
-    @classmethod
-    def get_date(cls, record):
-        return datetime.strptime(
-            record[cls.DATE_KEY].split(" ")[0], cls.DATE_FORMAT)
+    def foreign_key(self, record):
+        return self.FK.get_value(record)
 
     def yield_records(self):
         with open_file(self._filepath,
@@ -38,10 +72,9 @@ class Source:
 
 
 class PPTS(Source):
-    FK = 'record_id'
-    DATE_KEY = 'date_opened'
-    DATE_FORMAT = '%m/%d/%Y'
+    FK = PrimaryKey('record_id')
     NAME = 'ppts'
+    DATE = Date('date_opened', '%m/%d/%Y')
     OUTPUT_NAME = 'planning'
     FIELDS = {
         'record_id': 'record_id',
@@ -133,10 +166,9 @@ class PPTS(Source):
 
 
 class PTS(Source):
-    FK = 'record_id'
-    DATE_KEY = 'filed_date'
-    DATE_FORMAT = '%m/%d/%Y'
+    FK = PrimaryKey('record_id')
     NAME = 'pts'
+    DATE = Date('filed_date', '%m/%d/%Y')
     OUTPUT_NAME = 'dbi'
     FIELDS = {
         'Record ID': 'record_id',
@@ -176,10 +208,9 @@ class PTS(Source):
 
 
 class TCO(Source):
-    FK = 'building_permit_number'
-    DATE_KEY = 'date_issued'
-    DATE_FORMAT = '%Y/%m/%d'
     NAME = 'tco'
+    DATE = Date('date_issued', '%Y/%m/%d')
+    FK = PrimaryKey('building_permit_number', DATE)
     FIELDS = {
         'Building Permit Application Number': 'building_permit_number',
         'Building Address': 'address',
@@ -190,10 +221,10 @@ class TCO(Source):
 
 
 class MOHCD(Source):
-    FK = 'project_id'
-    DATE_KEY = 'date_issuance_of_notice_to_proceed'  # TODO: correct?
-    DATE_FORMAT = '%m/%d/%Y'
+    FK = PrimaryKey('project_id')
     NAME = 'mohcd'
+    # TODO: correct date to sort by?
+    DATE = Date('date_issuance_of_notice_to_proceed', '%m/%d/%Y')
     FIELDS = {
         'Project ID': 'project_id',
         'Project Status': 'project_status',

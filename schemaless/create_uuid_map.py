@@ -69,8 +69,8 @@ class RecordGraph:
                             parents.extend(pts)
                 the_date = None
 
-                if source_map[source].DATE_KEY in record:
-                    the_date = source_map[source].get_date(record)
+                if source_map[source].DATE.field in record:
+                    the_date = source_map[source].DATE.get_value(record)
                 rg.add(Node(
                     record_id=fk,
                     date=the_date,
