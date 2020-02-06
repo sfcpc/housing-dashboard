@@ -24,6 +24,7 @@ from relational.generators import nv_bedroom_info
 from relational.generators import nv_square_feet
 from relational.generators import atleast_one_measure
 from schemaless.create_uuid_map import RecordGraph
+from schemaless.sources import MOHCD
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 
@@ -117,6 +118,13 @@ _FIELD_PREDICATE = {
         'issued_date',
         'permit_creation_date',
         'permit_expiration_date',
+    ]),
+    MOHCD.NAME: set([
+        'date_estimated_construction_completion',
+        'date_estimated_or_actual_actual_construction_start',
+        'date_issuance_of_building_permit',
+        'date_issuance_of_first_construction_document',
+        'date_issuance_of_notice_to_proceed',
     ]),
 }
 
