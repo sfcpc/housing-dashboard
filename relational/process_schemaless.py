@@ -16,7 +16,7 @@ from relational.project import Entry
 from relational.project import NameValue
 from relational.project import Project
 from schemaless.create_uuid_map import RecordGraph
-from schemaless.sources import MOHCD
+from schemaless.sources import MOHCD_PIPELINE
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 
@@ -68,7 +68,7 @@ _FIELD_PREDICATE = {
         'issued_date',
         'permit_creation_date',
     ]),
-    MOHCD.NAME: set([
+    MOHCD_PIPELINE.NAME: set([
         'date_issuance_of_building_permit',
         'date_issuance_of_first_construction_document',
         'date_issuance_of_notice_to_proceed',

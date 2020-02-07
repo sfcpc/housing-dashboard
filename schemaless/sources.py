@@ -222,7 +222,6 @@ class TCO(Source):
 
 
 class MOHCD_INCLUSIONARY(Source):
-    # TODO: Not sure what the date key should be for this data source.
     NAME = 'mohcd_inclusionary'
     FK = PrimaryKey(NAME, 'project_id')
     FIELDS = {
@@ -270,8 +269,6 @@ class MOHCD_INCLUSIONARY(Source):
 class MOHCD_PIPELINE(Source):
     NAME = 'mohcd_pipeline'
     FK = PrimaryKey(NAME, 'project_id')
-    # TODO: correct date to sort by?
-    DATE = Date('date_issuance_of_notice_to_proceed', '%m/%d/%Y')
     FIELDS = {
         'Project ID': 'project_id',
         'Project Status': 'project_status',

@@ -27,6 +27,7 @@ class RecordGraph:
 
         latest_records = latest_values(schemaless_file)
 
+        # TODO: Refactor this "pre-processing" logic?
         # Create a mapping between permit numbers and their associated PPTS
         # record (so we an ensure they are assigned the same UUID).
         ppts_id_to_fk = {}
