@@ -19,6 +19,7 @@ from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import MOHCD
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
+from schemaless.sources import source_map
 
 csv.field_size_limit(sys.maxsize)
 
@@ -74,18 +75,25 @@ class Freshness:
     def __init__(self):
         self.freshness = {}
         self.bad_dates = 0
-        self.bad_dates_sample = queue.Queue(maxsize=10)
+        self.bad_dates_sample = {}
         self._freshness_checks = {
             PPTS.NAME: self._ppts,
             PTS.NAME: self._pts,
             MOHCD.NAME: self._mohcd,
         }
 
-    def _check_and_log_good_date(self, date, line):
+    def _check_and_log_good_date(self, date, source, line):
         if not date or date > datetime.today():
             self.bad_dates += 1
-            if not self.bad_dates_sample.full():
-                self.bad_dates_sample.put_nowait(str(line))
+            if source not in self.bad_dates_sample:
+                self.bad_dates_sample[source] = queue.Queue(maxsize=10)
+            if not self.bad_dates_sample[source].full():
+                self.bad_dates_sample[source].put_nowait(
+                    '"%s" had a stored value of "%s" '
+                    'and the schema-less was last updated: "%s"' % (
+                        line['fk'],
+                        line['value'],
+                        line['last_updated']))
             return False
         return True
 
@@ -93,7 +101,7 @@ class Freshness:
         if (line['source'] == source and
                 line['name'] in self._FIELD_SETS[source]):
             nvdate = datetime.strptime(line['value'].split(' ')[0], '%m/%d/%Y')
-            if not self._check_and_log_good_date(nvdate, line):
+            if not self._check_and_log_good_date(nvdate, source, line):
                 return
 
             if (source not in self.freshness or
@@ -103,7 +111,7 @@ class Freshness:
     def _extract_last_updated(self, line, source):
         if line['source'] == source:
             nvdate = datetime.fromisoformat(line['last_updated'])
-            if not self._check_and_log_good_date(nvdate, line):
+            if not self._check_and_log_good_date(nvdate, source, line):
                 return
 
             if (source not in self.freshness or
@@ -196,21 +204,21 @@ def output_freshness(freshness):
         writer = csv.writer(outf)
         writer.writerow(['source', 'freshness'])
 
-        for (source, freshness) in freshness.freshness.items():
+        for (source, fresh_date) in freshness.freshness.items():
             out_source = source
+            if source in source_map and hasattr(source_map[source], 'NAME'):
+                out_source = source_map[source].NAME
 
-            # TODO: for multiple sources, have a better way to normalize this
-            if out_source == 'ppts':
-                out_source = 'planning'
-
-            writer.writerow([out_source, freshness.strftime('%Y-%m-%d')])
+            writer.writerow([out_source, fresh_date.strftime('%Y-%m-%d')])
 
     if freshness.bad_dates > 0:
         print('Found %s bad dates' % freshness.bad_dates)
         print('Sample entries:')
-        while not freshness.bad_dates_sample.empty():
-            sample = freshness.bad_dates_sample.get_nowait()
-            print('\t%s' % sample)
+        for (source, bad_dates_queue) in freshness.bad_dates_sample.items():
+            print('\tFor source "%s"' % source)
+            while not bad_dates_queue.empty():
+                sample = bad_dates_queue.get_nowait()
+                print('\t\t%s' % sample)
 
 
 def build_projects(entries_map, recordgraph):
