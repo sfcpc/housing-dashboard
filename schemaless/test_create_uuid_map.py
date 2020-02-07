@@ -434,16 +434,16 @@ def test_assign_uuids_uuid_reassign_parent(graph_uuid_reassign_parent):
 # Tests below use the data in the 'testdata' directory
 def test_ppts_child_1950_mission():
     # All children of 1950 Mission's PRJ should be accounted for
-    prj_fk = '2016-001514PRJ'
+    prj_fk = 'ppts_2016-001514PRJ'
     expected_ppts_children = [
-        '2016-001514PPA',
-        '2016-001514CUA',
-        '2016-001514ENV',
+        'ppts_2016-001514PPA',
+        'ppts_2016-001514CUA',
+        'ppts_2016-001514ENV',
     ]
     expected_pts_children = [
     ]
     expected_mohcd_children = [
-        '2013-046',
+        'mohcd_2013-046',
     ]
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
@@ -457,9 +457,9 @@ def test_ppts_child_1950_mission_just_parent():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    child = rg.get('2016-001514GPR')
-    parent = rg.get('2016-001514PPA')
-    grandparent = rg.get('2016-001514PRJ')
+    child = rg.get('ppts_2016-001514GPR')
+    parent = rg.get('ppts_2016-001514PPA')
+    grandparent = rg.get('ppts_2016-001514PRJ')
     assert len(child.parents) == 1
     assert child.record_id in parent.children
     assert parent.record_id in child.parents
@@ -468,29 +468,29 @@ def test_ppts_child_1950_mission_just_parent():
 
 
 def test_link_pts_to_ppts_records():
-    prj_fk = '2017-007883PRJ'
+    prj_fk = 'ppts_2017-007883PRJ'
     expected_pts_children = [
-        '1465081108606',
-        '1465082390978'
+        'pts_1465081108606',
+        'pts_1465082390978'
     ]
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
     verify_valid_children(rg, prj_fk, expected_pts_children)
-    prj_fk = '2017-006969PRL'
+    prj_fk = 'ppts_2017-006969PRL'
     expected_pts_children = [
-        '1465580423638',
+        'pts_1465580423638',
     ]
     verify_valid_children(rg, prj_fk, expected_pts_children)
 
 
 def test_tco_link():
-    prj_fk = '2017-006823PRJ'
+    prj_fk = 'ppts_2017-006823PRJ'
     expected_pts_children = [
-        '1492183510316', '1464175214172'
+        'pts_1492183510316', 'pts_1464175214172'
     ]
     expected_tco_children = [
-        '201705237369'
+        'tco_201705237369_2018-05-01'
     ]
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
