@@ -50,11 +50,11 @@ TableConfig = namedtuple('TableConfig',
 # Configure all tables to output; order is important so that we
 # populate seen project IDs from ProjectFacts.
 config = [
-    tabledef.ProjectFacts,
-    tabledef.ProjectUnitCountsFull,
+    tabledef.ProjectFacts(),
+    tabledef.ProjectUnitCountsFull(),
     # TODO: ProjectStatusHistory
-    tabledef.ProjectGeo,
-    tabledef.ProjectDetails,
+    tabledef.ProjectGeo(),
+    tabledef.ProjectDetails(),
 ]
 
 
@@ -67,11 +67,8 @@ _FIELD_PREDICATE = {
         'first_construction_document_date',
         'issued_date',
         'permit_creation_date',
-        'permit_expiration_date',
     ]),
     MOHCD.NAME: set([
-        'date_estimated_construction_completion',
-        'date_estimated_or_actual_actual_construction_start',
         'date_issuance_of_building_permit',
         'date_issuance_of_first_construction_document',
         'date_issuance_of_notice_to_proceed',
@@ -170,8 +167,8 @@ def build_entries_map(schemaless_file, uuid_mapping):
             entry = _get_or_insert(id, fk, src)
             entry.add_name_value(NameValue(name, value, date))
             processed += 1
-            if processed % 500000 == 0:
-                print("Processed %s lines" % processed)
+            if processed % 1000000 == 0:
+                print('Processed %s lines' % processed)
 
     return projects
 
@@ -197,8 +194,12 @@ def output_freshness(freshness):
 def build_projects(entries_map, recordgraph):
     """Returns a list of Project"""
     projects = []
+    projects_built = 0
     for (projectid, entries) in entries_map.items():
         projects.append(Project(projectid, entries, recordgraph))
+        projects_built += 1
+        if projects_built % 100000 == 0:
+            print('Processed %s projects' % projects_built)
 
     return projects
 
@@ -207,7 +208,7 @@ def output_projects(projects, config):
     """Generates the relational tables from the project info"""
 
     lines_out = 0
-    for table in config.items():
+    for table in config:
         if lines_out > 0:
             print("%s total entries" % lines_out)
             lines_out = 0
@@ -220,7 +221,8 @@ def output_projects(projects, config):
                 writer = csv.writer(outf)
 
                 output = []
-                if proj.id not in tabledef.ProjectFacts.SEEN_IDS:
+                if (isinstance(table, tabledef.ProjectFacts) or
+                        proj.id in tabledef.ProjectFacts.SEEN_IDS):
                     for row in table.rows(proj):
                         output.append(row)
 
