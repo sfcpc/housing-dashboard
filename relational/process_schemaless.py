@@ -11,7 +11,7 @@ import sys
 
 from fileutils import open_file
 
-import relational.table as table
+import relational.table as tabledef
 from relational.project import Entry
 from relational.project import NameValue
 from relational.project import Project
@@ -47,23 +47,14 @@ TableConfig = namedtuple('TableConfig',
                          ['table', 'pre_process', 'post_process'],
                          defaults=[None, None])
 
-# Mapping of tables to a set of data generators.
-# * All data generators must accept a Project and return a list<string>.
-# * All name value generators must accept a Project and return a list
-#   of OutputNameValue.
-# * For a combination of data generators and name value, all data returned
-#   by data generators will be duplicated for each name value.
+# Configure all tables to output; order is important so that we
+# populate seen project IDs from ProjectFacts.
 config = [
-    TableConfig(table.ProjectFacts,
-                None,
-                lambda r, t: store_seen_id(r, t, __seen_ids)),
-    TableConfig(table.ProjectUnitCountsFull,
-                lambda r, t: store_seen_id(r, t, __seen_ids)),
+    tabledef.ProjectFacts,
+    tabledef.ProjectUnitCountsFull,
     # TODO: ProjectStatusHistory
-    TableConfig(table.ProjectGeo,
-                lambda r, t: store_seen_id(r, t, __seen_ids)),
-    TableConfig(table.ProjectDetails,
-                lambda r, t: store_seen_id(r, t, __seen_ids)),
+    tabledef.ProjectGeo,
+    tabledef.ProjectDetails,
 ]
 
 
@@ -216,12 +207,12 @@ def output_projects(projects, config):
     """Generates the relational tables from the project info"""
 
     lines_out = 0
-    for table_config in config.items():
+    for table in config.items():
         if lines_out > 0:
             print("%s total entries" % lines_out)
             lines_out = 0
 
-        finalfile = args.out_prefix + table_config.table.name + ".csv"
+        finalfile = args.out_prefix + table.name + ".csv"
         with open(finalfile, 'w') as outf:
             print("Handling %s" % finalfile)
             headers_printed = False
@@ -229,27 +220,19 @@ def output_projects(projects, config):
                 writer = csv.writer(outf)
 
                 output = []
-                for row in table_config.table.rows(proj):
-                    if (table_config.pre_process and
-                            not table_config.pre_process(row,
-                                                         table_config.table)):
-                        continue
-
-                    output.append(row)
-
-                    if table_config.post_process:
-                        table_config.post_process(row, table_config.table)
+                if proj.id not in tabledef.ProjectFacts.SEEN_IDS:
+                    for row in table.rows(proj):
+                        output.append(row)
 
                 if len(output) > 0:
                     if not headers_printed:
-                        writer.writerow(table_config.table.header())
+                        writer.writerow(table.header())
                         headers_printed = True
 
                     for out in output:
                         lines_out += 1
                         if lines_out % 10000 == 0:
-                            print("%s entries to %s" % (lines_out,
-                                                        finalfile))
+                            print("%s entries to %s" % (lines_out, finalfile))
                         writer.writerow(out)
 
     if lines_out > 0:

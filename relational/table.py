@@ -1,8 +1,5 @@
 # Lint as: python3
-"""TODO(lechris): DO NOT SUBMIT without one-line documentation for table.
-
-TODO(lechris): DO NOT SUBMIT without a detailed description of table.
-"""
+"""Classes and subclasses that define our relational tables."""
 
 from abc import ABC
 from abc import abstractmethod
@@ -96,6 +93,8 @@ class ProjectFacts(Table):
     NET_NUM_UNITS_BMR = 'net_num_units_bmr'
     NET_NUM_UNITS_BMR_DATA = 'net_num_units_bmr_data'
 
+    SEEN_IDS = set()
+
     def __init__(self):
         super().__init__('project_facts', header=[
             self.ADDRESS,
@@ -146,6 +145,8 @@ class ProjectFacts(Table):
         self.gen_id(row, proj)
         self._gen_facts(row, proj)
         self._gen_units(row, proj)
+
+        self.SEEN_IDS.add(row[self.index(self.ID)])
 
         return [row] if self._atleast_one_measure(row) else []
 
