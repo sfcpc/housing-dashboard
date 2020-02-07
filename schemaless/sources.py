@@ -236,7 +236,8 @@ class MOHCD_INCLUSIONARY(Source):
         'Housing Tenure': 'housing_tenure',
         'Section 415 Declaration': 'section_415_declaration',
         'Entitlement Approval Date': 'entitlement_approval_date',
-        'Actual/Estimated Completion Date': 'date_estimated_or_actual_completion',
+        'Actual/Estimated Completion Date':
+        'date_estimated_or_actual_completion',
         'Planning Case Number': 'planning_case_number',
         'Planning Entitlements': 'planning_entitlements',
         'Project Units': 'total_project_units',
@@ -244,7 +245,8 @@ class MOHCD_INCLUSIONARY(Source):
         'Units Subject to Section 415': 'units_subject_to_415_declaration',
         'On-Site Affordable Units': 'on_site_affordable_units',
         'Off-Site Affordable Units': 'off_site_affordable_units',
-        'Off-Site Affordable Units at This Site': 'off_site_affordable_units_at_site',
+        'Off-Site Affordable Units at This Site':
+        'off_site_affordable_units_at_site',
         'SRO Units': 'num_sro_units',
         'Studio Units': 'num_studio_units',
         '1bd Units': 'num_1bd_units',

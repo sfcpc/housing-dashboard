@@ -70,7 +70,8 @@ class RecordGraph:
                         parents.extend(permit_number_to_ppts_fk[
                             record['permit_number']])
 
-                if source == MOHCD_PIPELINE.NAME or source == MOHCD_INCLUSIONARY.NAME:
+                if source == MOHCD_PIPELINE.NAME or \
+                   source == MOHCD_INCLUSIONARY.NAME:
                     if 'planning_case_number' in record:
                         for parent in (
                                 record['planning_case_number'].split(",")):
@@ -184,7 +185,8 @@ class RecordGraph:
         # Sort on the tuple of (date, record_id) so we have a stable
         # ordering for the same dates.
         return sorted(all_parents,
-                      key=lambda x: (x.date if x.date else date.min, x.record_id),
+                      key=lambda x: (x.date if x.date else date.min,
+                                     x.record_id),
                       reverse=True)[0]
 
     def _assign_uuids(self):

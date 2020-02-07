@@ -36,8 +36,8 @@ def test_assign_uuids_no_parents(graph_no_parents):
 @pytest.fixture
 def graph_one_parent():
     rg = RecordGraph()
-    rg.add(Node(
-            record_id='1', date=date(2020, 1, 1), parents=['2'], source='source'))
+    rg.add(Node(record_id='1', date=date(2020, 1, 1),
+                parents=['2'], source='source'))
     rg.add(Node(record_id='2', date=date(2020, 1, 1), source='source'))
     rg.add(Node(record_id='3', date=date(2020, 1, 2), source='source'))
     rg.add(Node(record_id='4', date=date(2020, 1, 3), source='source'))
@@ -70,7 +70,8 @@ def test_assign_uuids_one_parent(graph_one_parent):
 def graph_one_child():
     rg = RecordGraph()
     rg.add(Node(
-            record_id='1', date=date(2020, 1, 1), children=['2'], source='source'))
+            record_id='1', date=date(2020, 1, 1),
+            children=['2'], source='source'))
     rg.add(Node(record_id='2', date=date(2020, 1, 1), source='source'))
     rg.add(Node(record_id='3', date=date(2020, 1, 2), source='source'))
     rg.add(Node(record_id='4', date=date(2020, 1, 3), source='source'))
@@ -216,7 +217,8 @@ def test_assign_uuids_chained_child(graph_chained_child):
 def graph_multiple_parents():
     rg = RecordGraph()
     rg.add(Node(
-        record_id='1', date=date(2020, 1, 1), parents=['2', '3'], source='source'))
+        record_id='1', date=date(2020, 1, 1),
+        parents=['2', '3'], source='source'))
     rg.add(Node(record_id='2', date=date(2020, 1, 1), source='source'))
     rg.add(Node(record_id='3', date=date(2020, 1, 2), source='source'))
     rg.add(Node(record_id='4', date=date(2020, 1, 3), source='source'))
@@ -250,7 +252,8 @@ def test_assign_uuids_multiple_parents(graph_multiple_parents):
 def graph_multiple_chained_parents():
     rg = RecordGraph()
     rg.add(Node(
-        record_id='1', date=date(2020, 1, 1), parents=['2', '3'], source='source'))
+        record_id='1', date=date(2020, 1, 1),
+        parents=['2', '3'], source='source'))
     rg.add(Node(record_id='2', date=date(2020, 1, 1), source='source'))
     rg.add(Node(
         record_id='3', date=date(2020, 1, 2), parents=['4'], source='source'))
@@ -288,7 +291,8 @@ def test_assign_uuids_multiple_chained_parents(
 def graph_missing_parent():
     rg = RecordGraph()
     rg.add(Node(
-        record_id='1', date=date(2020, 1, 1), parents=['12', '13'], source='source'))
+        record_id='1', date=date(2020, 1, 1),
+        parents=['12', '13'], source='source'))
     rg.add(Node(record_id='2', date=date(2020, 1, 1), source='source'))
     rg.add(Node(record_id='3', date=date(2020, 1, 2), source='source'))
     rg.add(Node(record_id='4', date=date(2020, 1, 3), source='source'))
@@ -498,13 +502,18 @@ def test_tco_link():
     for pts in expected_pts_children:
         verify_valid_children(rg, pts, expected_tco_children)
 
+
 def test_mohcd_records_link():
     mohcd_pipeline_fk = 'mohcd_pipeline_2016-023'
-    expected_mohcd_inclusionary_children = ['mohcd_inclusionary_2016-023']
+    expected_mohcd_inclusionary_children = [
+        'mohcd_inclusionary_2016-023'
+    ]
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    verify_valid_children(rg, mohcd_pipeline_fk, expected_mohcd_inclusionary_children)
+    verify_valid_children(rg, mohcd_pipeline_fk,
+                          expected_mohcd_inclusionary_children)
+
 
 def verify_valid_children(rg, parent_fk, expected_child_fks):
     parent = rg.get(parent_fk)

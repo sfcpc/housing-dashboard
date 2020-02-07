@@ -86,8 +86,10 @@ if __name__ == "__main__":
     parser.add_argument('--ppts_file', help='PPTS file', default='')
     parser.add_argument('--pts_file', help='PTS file', default='')
     parser.add_argument('--tco_file', help='TCO file', default='')
-    parser.add_argument('--mohcd_pipeline_file', help='MOHCD Pipeline file', default='')
-    parser.add_argument('--mohcd_inclusionary_file', help='MOHCD Inclusionary file', default='')
+    parser.add_argument('--mohcd_pipeline_file',
+                        help='MOHCD Pipeline file', default='')
+    parser.add_argument('--mohcd_inclusionary_file',
+                        help='MOHCD Inclusionary file', default='')
     parser.add_argument('--out_file', help='output file for schemaless csv')
 
     parser.add_argument(
