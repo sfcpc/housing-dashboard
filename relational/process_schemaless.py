@@ -194,12 +194,10 @@ def output_freshness(freshness):
 def build_projects(entries_map, recordgraph):
     """Returns a list of Project"""
     projects = []
-    projects_built = 0
     for (projectid, entries) in entries_map.items():
         projects.append(Project(projectid, entries, recordgraph))
-        projects_built += 1
-        if projects_built % 100000 == 0:
-            print('Processed %s projects' % projects_built)
+        if len(projects) % 100000 == 0:
+            print('Processed %s projects' % len(projects))
 
     return projects
 
@@ -210,12 +208,12 @@ def output_projects(projects, config):
     lines_out = 0
     for table in config:
         if lines_out > 0:
-            print("%s total entries" % lines_out)
+            print('%s total entries' % lines_out)
             lines_out = 0
 
-        finalfile = args.out_prefix + table.name + ".csv"
+        finalfile = args.out_prefix + table.name + '.csv'
         with open(finalfile, 'w') as outf:
-            print("Handling %s" % finalfile)
+            print('Handling %s' % finalfile)
             headers_printed = False
             for proj in projects:
                 writer = csv.writer(outf)
@@ -234,11 +232,11 @@ def output_projects(projects, config):
                     for out in output:
                         lines_out += 1
                         if lines_out % 10000 == 0:
-                            print("%s entries to %s" % (lines_out, finalfile))
+                            print('%s entries to %s' % (lines_out, finalfile))
                         writer.writerow(out)
 
     if lines_out > 0:
-        print("%s total entries" % lines_out)
+        print('%s total entries' % lines_out)
 
 
 def build_uuid_mapping(uuid_map_file):
@@ -264,8 +262,8 @@ if __name__ == '__main__':
     uuid_mapping = build_uuid_mapping(args.uuid_map_file)
     entries_map = build_entries_map(args.schemaless_file, uuid_mapping)
 
-    print("Some stats:")
-    print("\tnumber of projects: %s" % len(entries_map))
+    print('Some stats:')
+    print('\tnumber of projects: %s' % len(entries_map))
 
     entry_count = 0
     nv_count = 0
@@ -274,9 +272,10 @@ if __name__ == '__main__':
         entry_count += len(entries)
         for entry in entries:
             nv_count += entry.num_name_values()
-    print("\ttotal records rolled up: %s" % entry_count)
-    print("\ttotal fields: %s" % nv_count)
+    print('\ttotal records rolled up: %s' % entry_count)
+    print('\ttotal fields: %s' % nv_count)
 
+    print('Building record graph...')
     rg = RecordGraph.from_files(args.schemaless_file, args.uuid_map_file)
     output_projects(build_projects(entries_map, rg), config)
     freshness = extract_freshness(entries_map)
