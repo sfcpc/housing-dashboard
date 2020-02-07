@@ -41,6 +41,10 @@ class RecordGraph:
             if 'permit_number' in record:
                 permit_number_to_pts_fk[record['permit_number']].append(fk)
 
+        mohcd_id_to_fk = {}
+        for fk, record in latest_records.get(MOHCD_PIPELINE.NAME, {}).items():
+            mohcd_id_to_fk[record['project_id']] = fk
+
         # Read the latest values from the schemaless file to build the graph.
         for source, source_records in latest_records.items():
             for fk, record in source_records.items():
@@ -72,6 +76,11 @@ class RecordGraph:
                             parent_fk = ppts_id_to_fk.get(parent)
                             if parent_fk:
                                 parents.append(parent_fk)
+
+                    if source == MOHCD_INCLUSIONARY.NAME:
+                        parent_fk = mohcd_id_to_fk.get(record['project_id'])
+                        if parent_fk:
+                            parents.extend(parent_fk)
 
                 if source == TCO.NAME:
                     if 'building_permit_number' in record:
