@@ -5,6 +5,7 @@ import csv
 from csv import DictReader
 import uuid
 
+from datetime import date
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import MOHCD_INCLUSIONARY
@@ -94,6 +95,7 @@ class RecordGraph:
                     the_date = source_map[source].DATE.get_value(record)
                 rg.add(Node(
                     record_id=fk,
+                    source=source,
                     date=the_date,
                     parents=parents,
                     children=children,
@@ -133,6 +135,7 @@ class RecordGraph:
             # existing node.
             node = self._nodes[rid]
             node.date = record.date
+            node.source = record.source
             if not node.uuid and record.uuid:
                 node.uuid = record.uuid
             node.parents.update(record.parents)
@@ -166,7 +169,7 @@ class RecordGraph:
             return record
         all_parents = []
         for idx, pid in enumerate(record.parents):
-            if pid not in self._nodes or self._nodes[pid].date is None:
+            if pid not in self._nodes or self._nodes[pid].source is None:
                 # This implies this record is bad data and cannot be properly
                 # connected to a real parent record.
                 continue
@@ -181,7 +184,7 @@ class RecordGraph:
         # Sort on the tuple of (date, record_id) so we have a stable
         # ordering for the same dates.
         return sorted(all_parents,
-                      key=lambda x: (x.date, x.record_id),
+                      key=lambda x: (x.date if x.date else date.min, x.record_id),
                       reverse=True)[0]
 
     def _assign_uuids(self):
@@ -220,6 +223,7 @@ class RecordGraph:
 class Node:
     def __init__(self,
                  record_id,
+                 source=None,
                  date=None,
                  parents=None,
                  children=None,
@@ -235,6 +239,7 @@ class Node:
         else:
             self.children = set(children)
         self.uuid = uuid
+        self.source = source
 
     def add_child(self, child_record_id):
         self.children.add(child_record_id)
