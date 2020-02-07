@@ -498,6 +498,13 @@ def test_tco_link():
     for pts in expected_pts_children:
         verify_valid_children(rg, pts, expected_tco_children)
 
+def test_mohcd_records_link():
+    mohcd_pipeline_fk = 'mohcd_pipeline_2016-023'
+    expected_mohcd_inclusionary_children = ['mohcd_inclusionary_2016-023']
+    rg = RecordGraph.from_files(
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv')
+    verify_valid_children(rg, mohcd_pipeline_fk, expected_mohcd_inclusionary_children)
 
 def verify_valid_children(rg, parent_fk, expected_child_fks):
     parent = rg.get(parent_fk)

@@ -81,7 +81,7 @@ class RecordGraph:
                     if source == MOHCD_INCLUSIONARY.NAME:
                         parent_fk = mohcd_id_to_fk.get(record['project_id'])
                         if parent_fk:
-                            parents.extend(parent_fk)
+                            parents.append(parent_fk)
 
                 if source == TCO.NAME:
                     if 'building_permit_number' in record:
