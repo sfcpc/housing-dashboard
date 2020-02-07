@@ -28,8 +28,10 @@ class RecordGraph:
 
         # Create a mapping between permit numbers and their associated PPTS
         # record (so we an ensure they are assigned the same UUID).
+        prj_to_ppts = {}
         permit_number_to_ppts = defaultdict(list)
         for fk, record in latest_records.get(PPTS.NAME, {}).items():
+            prj_to_ppts[record['record_id']] = fk
             if 'building_permit_id' in record:
                 for permit_number in record['building_permit_id'].split(","):
                     permit_number_to_ppts[permit_number].append(fk)
@@ -48,24 +50,28 @@ class RecordGraph:
                 # TODO: Refactor the source-specific logic somewhere else.
                 if source == PPTS.NAME:
                     if 'parent' in record:
-                        parents.extend(record['parent'].split(","))
+                        for parent in record['parent'].split(","):
+                            prj = prj_to_ppts.get(parent)
+                            if prj:
+                                parents.append(prj)
                     if 'children' in record:
-                        children.extend(record['children'].split(","))
+                        for child in record['children'].split(","):
+                            prj = prj_to_ppts.get(child)
+                            if prj:
+                                children.append(prj)
 
                 if source == PTS.NAME:
                     if record['permit_number'] in permit_number_to_ppts:
                         parents.extend(permit_number_to_ppts[
                             record['permit_number']])
 
-                if source == MOHCD_PIPELINE.NAME:
+                if source == MOHCD_PIPELINE.NAME or source == MOHCD_INCLUSIONARY.NAME:
                     if 'planning_case_number' in record:
-                        parents.extend(
-                            record['planning_case_number'].split(","))
-
-                if source == MOHCD_INCLUSIONARY.NAME:
-                    if 'planning_case_number' in record:
-                        parents.extend(
-                            record['planning_case_number'].split(","))
+                        for parent in (
+                                record['planning_case_number'].split(",")):
+                            prj = prj_to_ppts.get(parent)
+                            if prj:
+                                parents.append(prj)
 
                 if source == TCO.NAME:
                     if 'building_permit_number' in record:
@@ -109,7 +115,7 @@ class RecordGraph:
             writer = csv.writer(f)
             writer.writerow(['uuid', 'fk'])
             for fk, record in self._nodes.items():
-                writer.writerow([record.uuid, record.record_id])
+                writer.writerow([record.uuid, fk])
 
     def add(self, record):
         rid = record.record_id

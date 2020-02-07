@@ -9,6 +9,7 @@ import shutil
 from schemaless.create_schemaless import dump_and_diff
 from schemaless.create_schemaless import just_dump
 from schemaless.create_schemaless import latest_values
+from schemaless.sources import MOHCD_INCLUSIONARY
 from schemaless.sources import MOHCD_PIPELINE
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
@@ -37,7 +38,7 @@ def test_latest_values_update(tmpdir):
     # Note: tmpdir is a built-in pytest fixture that makes a temp dir
     sf = tmpdir.join("schemaless.csv")
     shutil.copyfile('testdata/schemaless-one.csv', sf)
-    fk = '2016-001514PRJ'  # 1950 Mission St
+    fk = 'ppts_2016-001514PRJ'  # 1950 Mission St
     aff_key = 'affordable_units_proposed'
 
     latest = latest_values(sf)
@@ -65,8 +66,10 @@ def test_latest_values_update(tmpdir):
 def test_latest_values_no_collision():
     """Ensure we're not overwriting values for unrelated projects."""
     latest = latest_values('testdata/schemaless-one.csv')
-    assert latest[PPTS.NAME]['2016-008581PRJ']['market_rate_units_proposed'] \
-        != latest[PPTS.NAME]['2017-007883PRJ']['market_rate_units_proposed']
+    assert latest[PPTS.NAME][
+            'ppts_2016-008581PRJ']['market_rate_units_proposed'] \
+        != latest[PPTS.NAME][
+            'ppts_2017-007883PRJ']['market_rate_units_proposed']
 
 
 def test_just_dump(tmpdir):
@@ -76,7 +79,8 @@ def test_just_dump(tmpdir):
         [PPTS('testdata/ppts-one.csv'),
          PTS('testdata/pts.csv'),
          TCO('testdata/tco.csv'),
-         MOHCD_PIPELINE('testdata/mohcd-pipeline.csv')],
+         MOHCD_PIPELINE('testdata/mohcd-pipeline.csv'),
+         MOHCD_INCLUSIONARY('testdata/mohcd-inclusionary.csv')],
         outfile,
         the_date=TESTDATA_GEN_DATE)
     assert filecmp.cmp('testdata/schemaless-one.csv', outfile)
