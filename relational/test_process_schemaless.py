@@ -72,15 +72,19 @@ def test_extract_freshness():
 def test_is_seen_id():
     seen_set = set('123')
 
-    header = ['id']
+    class FakeTable:
+        ID = 'id'
+
+        def index(self, foo):
+            return 0
+
     RowTest = namedtuple(
         'RowTest',
-        ['input', 'want', 'header'],
-        defaults=[header])
+        ['input', 'want'])
     tests = [
         RowTest(['1'], True),
         RowTest(['4'], False),
-        RowTest(['1'], False, ['idx']),
+        RowTest(['2'], True),
     ]
     for test in tests:
-        assert is_seen_id(test.input, test.header, seen_set) == test.want
+        assert is_seen_id(test.input, FakeTable(), seen_set) == test.want

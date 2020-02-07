@@ -7,56 +7,45 @@ import pytest
 from relational.project import Entry
 from relational.project import NameValue
 from relational.project import Project
-from relational.generators import atleast_one_measure
-from relational.generators import gen_units
-from relational.generators import nv_all_units
-from relational.generators import nv_bedroom_info
+from relational.table import ProjectDetails
+from relational.table import ProjectFacts
+from relational.table import ProjectUnitCountsFull
 from schemaless.create_uuid_map import Node
 from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 
 
-def test_atleast_one_measure():
-    header = ['net_num_units', 'net_num_units_bmr', 'net_num_square_feet']
+def test_table_project_facts_atleast_one_measure():
+    table = ProjectFacts()
 
-    RowTest = namedtuple('RowTest',
-                         ['input', 'want', 'header'],
-                         defaults=[header])
+    RowTest = namedtuple('RowTest', ['input', 'want'])
     tests = [
-        RowTest(['', '', ''], False),  # empty row
-        RowTest(['', '0', ''], True),  # zero different from empty
-        RowTest(['1', '2', '3'], True),  # normal full row
-        # no relevant measures to filter on
-        RowTest(['1', '2', '3'], True, ['a', 'b', 'c']),
+        RowTest(['', ''], False),  # empty row
+        RowTest(['', '0'], True),  # zero different from empty
+        RowTest(['1', '2'], True),  # normal full row
     ]
     for test in tests:
-        assert atleast_one_measure(test.input, test.header) == test.want
+        row = [''] * len(table.header())
+        row[table.index(table.NET_NUM_UNITS)] = test.input[0]
+        row[table.index(table.NET_NUM_UNITS_BMR)] = test.input[1]
+        assert table._atleast_one_measure(row) == test.want
 
 
-@pytest.fixture
-def basic_entries():
-    old = datetime.fromisoformat('2019-01-01')
-    lessold = datetime.fromisoformat('2020-01-01')
-
-    e = []
-    e.append(Entry('1', 'ppts', [NameValue('num_units_bmr', '22', old)]))
-    e.append(Entry('2',
-                   'ppts',
-                   [NameValue('num_units_bmr', '32', lessold),
-                    NameValue('num_square_feet', '2300', old),
-                    NameValue('residential_units_1br', '1', old)]))
-    e.append(Entry('3',
-                   'ppts',
-                   [NameValue('num_square_feet', '2100', lessold)]))
-    return e
-
-
-@pytest.fixture
-def unit_graph():
-    rg = RecordGraph()
-    rg.add(Node(record_id='1'))
-    return rg
+def _get_value_for_name(table, rows, name, return_multiple=False):
+    result = []
+    if len(rows) == 1:
+        return rows[0][table.index(name)]
+    elif len(rows) > 1:
+        for row in rows:
+            row_name = row[table.index(table.NAME)]
+            if row_name == name:
+                row_value = row[table.index(table.VALUE)]
+                if return_multiple:
+                    result.append(row_value)
+                else:
+                    return row_value
+        return '' if not return_multiple else sorted(result)
 
 
 @pytest.fixture
@@ -67,21 +56,9 @@ def basic_graph():
     return rg
 
 
-def _get_value_for_name(data, name, return_multiple=False):
-    """Works for both Field and OutputNameValue"""
-
-    result = []
-    for datum in data:
-        if name == datum.name:
-            if return_multiple:
-                result.append(datum.value)
-            else:
-                return datum.value
-    return '' if not return_multiple else sorted(result)
-
-
-def test_gen_units(basic_graph):
+def test_table_project_facts_units(basic_graph):
     d = datetime.fromisoformat('2019-01-01')
+    table = ProjectFacts()
 
     entries1 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
@@ -92,18 +69,18 @@ def test_gen_units(basic_graph):
                NameValue('proposed_units', '5', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
-    fields = gen_units(proj_normal)
+    fields = table.rows(proj_normal)
     # Gets from PTS because it's present
-    assert _get_value_for_name(fields, 'net_num_units') == '-2'
+    assert _get_value_for_name(table, fields, 'net_num_units') == '-2'
 
     entries2 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
         Entry('2', PTS.NAME, [NameValue('proposed_units', '7', d)]),
     ]
     proj_no_permit_type = Project('uuid1', entries2, basic_graph)
-    fields = gen_units(proj_no_permit_type)
+    fields = table.rows(proj_no_permit_type)
     # Gets from PPTS because PTS data is incomplete (no permit type)
-    assert _get_value_for_name(fields, 'net_num_units') == '10'
+    assert _get_value_for_name(table, fields, 'net_num_units') == '10'
 
     entries3 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
@@ -111,10 +88,10 @@ def test_gen_units(basic_graph):
                               NameValue('existing_units', '7', d)]),
     ]
     proj_missing_proposed_units = Project('uuid1', entries3, basic_graph)
-    fields = gen_units(proj_missing_proposed_units)
+    fields = table.rows(proj_missing_proposed_units)
     # Gets from PPTS because PTS data is incomplete (proper permit type, no
     # proposed)
-    assert _get_value_for_name(fields, 'net_num_units') == '10'
+    assert _get_value_for_name(table, fields, 'net_num_units') == '10'
 
     entries4 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
@@ -124,21 +101,22 @@ def test_gen_units(basic_graph):
                NameValue('proposed_units', '7', d)]),
     ]
     proj_missing_existing = Project('uuid1', entries4, basic_graph)
-    fields = gen_units(proj_missing_existing)
+    fields = table.rows(proj_missing_existing)
     # Gets from PTS because we can infer with just proposed
-    assert _get_value_for_name(fields, 'net_num_units') == '7'
+    assert _get_value_for_name(table, fields, 'net_num_units') == '7'
 
     entries5 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
     ]
     proj_ppts_only = Project('uuid1', entries5, basic_graph)
-    fields = gen_units(proj_ppts_only)
+    fields = table.rows(proj_ppts_only)
     # Gets from PPTS because no other choice
-    assert _get_value_for_name(fields, 'net_num_units') == '10'
+    assert _get_value_for_name(table, fields, 'net_num_units') == '10'
 
 
-def test_nv_all_units(basic_graph):
+def test_table_project_units_full_count(basic_graph):
     d = datetime.fromisoformat('2019-01-01')
+    table = ProjectUnitCountsFull()
 
     entries1 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
@@ -149,16 +127,24 @@ def test_nv_all_units(basic_graph):
                NameValue('proposed_units', '5', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
-    nvs = nv_all_units(proj_normal)
-    net_num_units = _get_value_for_name(nvs, 'net_num_units',
+    nvs = table.rows(proj_normal)
+    net_num_units = _get_value_for_name(table, nvs, 'net_num_units',
                                         return_multiple=True)
     assert len(net_num_units) == 2
     assert net_num_units[0] == '-2'
     assert net_num_units[1] == '10'
 
 
-def test_nv_bedroom_info(unit_graph):
+@pytest.fixture
+def unit_graph():
+    rg = RecordGraph()
+    rg.add(Node(record_id='1'))
+    return rg
+
+
+def test_project_details_bedroom_info(unit_graph):
     d = datetime.fromisoformat('2019-01-01')
+    table = ProjectDetails()
 
     entries1 = [
         Entry('1',
@@ -174,9 +160,9 @@ def test_nv_bedroom_info(unit_graph):
     ]
     proj_adu = Project('uuid2', entries2, unit_graph)
 
-    nvs = nv_bedroom_info(proj_normal)
-    assert _get_value_for_name(nvs, 'residential_units_1br') == '10'
+    nvs = table.rows(proj_normal)
+    assert _get_value_for_name(table, nvs, 'residential_units_1br') == '10'
 
-    nvs = nv_bedroom_info(proj_adu)
-    assert _get_value_for_name(nvs, 'residential_units_adu_1br') == '1'
-    assert _get_value_for_name(nvs, 'is_adu') == 'TRUE'
+    nvs = table.rows(proj_adu)
+    assert _get_value_for_name(table, nvs, 'residential_units_adu_1br') == '1'
+    assert _get_value_for_name(table, nvs, 'is_adu') == 'TRUE'
