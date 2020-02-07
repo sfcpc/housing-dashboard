@@ -490,7 +490,7 @@ def test_tco_link():
         '1492183510316', '1464175214172'
     ]
     expected_tco_children = [
-        '201705237369'
+        '201705237369_2018-05-01'
     ]
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',

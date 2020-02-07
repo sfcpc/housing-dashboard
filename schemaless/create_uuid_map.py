@@ -62,7 +62,7 @@ class RecordGraph:
                         parents.extend(
                             record['planning_case_number'].split(","))
 
-                if source == MOHCD_INCLUSIONARY_NAME:
+                if source == MOHCD_INCLUSIONARY.NAME:
                     if 'planning_case_number' in record:
                         parents.extend(
                             record['planning_case_number'].split(","))
@@ -75,8 +75,8 @@ class RecordGraph:
                             parents.extend(pts)
                 the_date = None
 
-                if source_map[source].DATE_KEY in record:
-                    the_date = source_map[source].get_date(record)
+                if source_map[source].DATE.field in record:
+                    the_date = source_map[source].DATE.get_value(record)
                 rg.add(Node(
                     record_id=fk,
                     date=the_date,
