@@ -28,18 +28,18 @@ class RecordGraph:
 
         # Create a mapping between permit numbers and their associated PPTS
         # record (so we an ensure they are assigned the same UUID).
-        prj_to_ppts = {}
-        permit_number_to_ppts = defaultdict(list)
+        ppts_id_to_fk = {}
+        permit_number_to_ppts_fk = defaultdict(list)
         for fk, record in latest_records.get(PPTS.NAME, {}).items():
-            prj_to_ppts[record['record_id']] = fk
+            ppts_id_to_fk[record['record_id']] = fk
             if 'building_permit_id' in record:
                 for permit_number in record['building_permit_id'].split(","):
-                    permit_number_to_ppts[permit_number].append(fk)
+                    permit_number_to_ppts_fk[permit_number].append(fk)
 
-        permit_number_to_pts = defaultdict(list)
+        permit_number_to_pts_fk = defaultdict(list)
         for fk, record in latest_records.get(PTS.NAME, {}).items():
             if 'permit_number' in record:
-                permit_number_to_pts[record['permit_number']].append(fk)
+                permit_number_to_pts_fk[record['permit_number']].append(fk)
 
         # Read the latest values from the schemaless file to build the graph.
         for source, source_records in latest_records.items():
@@ -51,34 +51,34 @@ class RecordGraph:
                 if source == PPTS.NAME:
                     if 'parent' in record:
                         for parent in record['parent'].split(","):
-                            prj = prj_to_ppts.get(parent)
-                            if prj:
-                                parents.append(prj)
+                            parent_fk = ppts_id_to_fk.get(parent)
+                            if parent_fk:
+                                parents.append(parent_fk)
                     if 'children' in record:
                         for child in record['children'].split(","):
-                            prj = prj_to_ppts.get(child)
-                            if prj:
-                                children.append(prj)
+                            child_fk = ppts_id_to_fk.get(child)
+                            if child_fk:
+                                children.append(child_fk)
 
                 if source == PTS.NAME:
-                    if record['permit_number'] in permit_number_to_ppts:
-                        parents.extend(permit_number_to_ppts[
+                    if record['permit_number'] in permit_number_to_ppts_fk:
+                        parents.extend(permit_number_to_ppts_fk[
                             record['permit_number']])
 
                 if source == MOHCD_PIPELINE.NAME or source == MOHCD_INCLUSIONARY.NAME:
                     if 'planning_case_number' in record:
                         for parent in (
                                 record['planning_case_number'].split(",")):
-                            prj = prj_to_ppts.get(parent)
-                            if prj:
-                                parents.append(prj)
+                            parent_fk = ppts_id_to_fk.get(parent)
+                            if parent_fk:
+                                parents.append(parent_fk)
 
                 if source == TCO.NAME:
                     if 'building_permit_number' in record:
-                        pts = permit_number_to_pts.get(
+                        parent_fk = permit_number_to_pts_fk.get(
                             record['building_permit_number'])
-                        if pts:
-                            parents.extend(pts)
+                        if parent_fk:
+                            parents.extend(parent_fk)
                 the_date = None
 
                 if source_map[source].DATE.field in record:
