@@ -351,10 +351,56 @@ class MOHCDPipeline(Source):
     }
 
 
+class BMR(Source):
+    """MOHCD/OCII's affordable rental portfolio"""
+    NAME = 'bmr'
+    DATE = Date('date_issued', '%Y/%m/%d')
+    FK = PrimaryKey(NAME, 'building_permit_number', DATE)
+    FIELDS = {
+        'Project ID': 'project_id',
+        'Project Name': 'project_name',
+        'Street Number': 'street_number',
+        'Street Name': 'street_name',
+        'Street Type': 'street_type',
+        'Zip Code': 'zip_code',
+        'Location': 'location',
+        'Supervisor District': 'supervisor_district',
+        'Project Sponsor': 'project_sponsor',
+        'Total Units': 'total_units',
+        'Total Beds': 'total_beds',
+        'Affordable Units': 'total_affordable_units',
+        'Affordable Beds': 'total_affordable_beds',
+        'Single Room Occupancy Units': 'num_sro_units',
+        'Studio Units': 'num_studio_units',
+        '1bd Units': 'num_1bd_units',
+        '2bd Units': 'num_2bd_units',
+        '3bd Units': 'num_3bd_units',
+        '4bd Units': 'num_4bd_units',
+        '5+ bd Units': 'num_5_plus_bd_units',
+        'Family Units': 'num_family_units',
+        'Senior Units': 'num_senior_units',
+        'TAY Units': 'num_tay_units',
+        'Homeless Units': 'num_homeless_units',
+        'LOSP Units': 'num_losp_units',
+        'Disabled Units': 'num_disabled_units',
+        '20% AMI': 'num_20_percent_ami_units',
+        '30% AMI': 'num_30_percent_ami_units',
+        '40% AMI': 'num_40_percent_ami_units',
+        '50% AMI': 'num_50_percent_ami_units',
+        '60% AMI': 'num_60_percent_ami_units',
+        '80% AMI': 'num_80_percent_ami_units',
+        '120% AMI': 'num_120_percent_ami_units',
+        'More than 120% AMI': 'num_more_than_120_percent_ami_units',
+        'Year Building Constructed': 'year_constructed',
+        'Year Affordability Began': 'year_affordability_began',
+    }
+
+
 source_map = {
     PPTS.NAME: PPTS,
     PTS.NAME: PTS,
     TCO.NAME: TCO,
     MOHCDPipeline.NAME: MOHCDPipeline,
     MOHCDInclusionary.NAME: MOHCDInclusionary,
+    BMR.NAME: BMR,
 }
