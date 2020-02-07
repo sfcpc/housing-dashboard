@@ -146,9 +146,11 @@ class ProjectFacts(Table):
         self._gen_facts(row, proj)
         self._gen_units(row, proj)
 
-        self.SEEN_IDS.add(row[self.index(self.ID)])
+        if self._atleast_one_measure(row):
+            self.SEEN_IDS.add(row[self.index(self.ID)])
+            return [row]
 
-        return [row] if self._atleast_one_measure(row) else []
+        return []
 
 
 class ProjectGeo(NameValueTable):
@@ -239,10 +241,11 @@ class ProjectDetails(NameValueTable):
                                         value=net,
                                         data=PPTS.OUTPUT_NAME))
 
-        rows.append(self.nv_row(proj,
-                                name='is_adu',
-                                value='TRUE' if is_adu else 'FALSE',
-                                data=PPTS.OUTPUT_NAME))
+        if len(rows) > 0:
+            rows.append(self.nv_row(proj,
+                                    name='is_adu',
+                                    value='TRUE' if is_adu else 'FALSE',
+                                    data=PPTS.OUTPUT_NAME))
 
     def _square_feet(self, rows, proj):
         sqft = proj.field('residential_sq_ft_net', PPTS.NAME)
