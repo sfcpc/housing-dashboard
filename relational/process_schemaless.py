@@ -91,9 +91,9 @@ class Freshness:
                 self.bad_dates_sample[source].put_nowait(
                     '"%s" had a stored value of "%s" '
                     'and the schema-less was last updated: "%s"' % (
-                        line['fk'],
-                        line['value'],
-                        line['last_updated']))
+                        line.get('fk', ''),
+                        line.get('value', ''),
+                        line.get('last_updated', '')))
             return False
         return True
 
