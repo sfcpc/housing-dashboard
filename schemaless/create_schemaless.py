@@ -15,8 +15,8 @@ from datetime import datetime
 import shutil
 import sys
 
-from schemaless.sources import MOHCD_INCLUSIONARY
-from schemaless.sources import MOHCD_PIPELINE
+from schemaless.sources import MOHCDInclusionary
+from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 from schemaless.sources import TCO
@@ -114,9 +114,9 @@ if __name__ == "__main__":
     if args.tco_file:
         sources.append(TCO(args.tco_file))
     if args.mohcd_pipeline_file:
-        sources.append(MOHCD_PIPELINE(args.mohcd_pipeline_file))
+        sources.append(MOHCDPipeline(args.mohcd_pipeline_file))
     if args.mohcd_inclusionary_file:
-        sources.append(MOHCD_INCLUSIONARY(args.mohcd_inclusionary_file))
+        sources.append(MOHCDInclusionary(args.mohcd_inclusionary_file))
 
     if not args.diff:
         just_dump(sources, args.out_file, the_date)

@@ -221,7 +221,7 @@ class TCO(Source):
     }
 
 
-class MOHCD_INCLUSIONARY(Source):
+class MOHCDInclusionary(Source):
     NAME = 'mohcd_inclusionary'
     FK = PrimaryKey(NAME, 'project_id')
     FIELDS = {
@@ -266,7 +266,7 @@ class MOHCD_INCLUSIONARY(Source):
     }
 
 
-class MOHCD_PIPELINE(Source):
+class MOHCDPipeline(Source):
     NAME = 'mohcd_pipeline'
     FK = PrimaryKey(NAME, 'project_id')
     FIELDS = {
@@ -352,6 +352,6 @@ source_map = {
     PPTS.NAME: PPTS,
     PTS.NAME: PTS,
     TCO.NAME: TCO,
-    MOHCD_PIPELINE.NAME: MOHCD_PIPELINE,
-    MOHCD_INCLUSIONARY.NAME: MOHCD_INCLUSIONARY,
+    MOHCDPipeline.NAME: MOHCDPipeline,
+    MOHCDInclusionary.NAME: MOHCDInclusionary,
 }

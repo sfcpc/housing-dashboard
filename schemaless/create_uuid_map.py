@@ -8,8 +8,8 @@ import uuid
 from datetime import date
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
-from schemaless.sources import MOHCD_INCLUSIONARY
-from schemaless.sources import MOHCD_PIPELINE
+from schemaless.sources import MOHCDInclusionary
+from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 from schemaless.sources import source_map
@@ -44,7 +44,7 @@ class RecordGraph:
                 permit_number_to_pts_fk[record['permit_number']].append(fk)
 
         mohcd_id_to_fk = {}
-        for fk, record in latest_records.get(MOHCD_PIPELINE.NAME, {}).items():
+        for fk, record in latest_records.get(MOHCDPipeline.NAME, {}).items():
             mohcd_id_to_fk[record['project_id']] = fk
 
         # Read the latest values from the schemaless file to build the graph.
@@ -71,8 +71,8 @@ class RecordGraph:
                         parents.extend(permit_number_to_ppts_fk[
                             record['permit_number']])
 
-                if source == MOHCD_PIPELINE.NAME or \
-                   source == MOHCD_INCLUSIONARY.NAME:
+                if source == MOHCDPipeline.NAME or \
+                   source == MOHCDInclusionary.NAME:
                     if 'planning_case_number' in record:
                         for parent in (
                                 record['planning_case_number'].split(",")):
@@ -80,7 +80,7 @@ class RecordGraph:
                             if parent_fk:
                                 parents.append(parent_fk)
 
-                    if source == MOHCD_INCLUSIONARY.NAME:
+                    if source == MOHCDInclusionary.NAME:
                         parent_fk = mohcd_id_to_fk.get(record['project_id'])
                         if parent_fk:
                             parents.append(parent_fk)
@@ -97,8 +97,7 @@ class RecordGraph:
                     the_date = source_map[source].DATE.get_value(record)
                 rg.add(Node(
                     record_id=fk,
-                    source=source,
-                    date=the_date,
+                    date=the_date if the_date else date.min,
                     parents=parents,
                     children=children,
                     uuid=None,
@@ -137,7 +136,6 @@ class RecordGraph:
             # existing node.
             node = self._nodes[rid]
             node.date = record.date
-            node.source = record.source
             if not node.uuid and record.uuid:
                 node.uuid = record.uuid
             node.parents.update(record.parents)
@@ -171,7 +169,7 @@ class RecordGraph:
             return record
         all_parents = []
         for idx, pid in enumerate(record.parents):
-            if pid not in self._nodes or self._nodes[pid].source is None:
+            if pid not in self._nodes or self._nodes[pid].date is None:
                 # This implies this record is bad data and cannot be properly
                 # connected to a real parent record.
                 continue
@@ -186,8 +184,7 @@ class RecordGraph:
         # Sort on the tuple of (date, record_id) so we have a stable
         # ordering for the same dates.
         return sorted(all_parents,
-                      key=lambda x: (x.date if x.date else date.min,
-                                     x.record_id),
+                      key=lambda x: (x.date, x.record_id),
                       reverse=True)[0]
 
     def _assign_uuids(self):
@@ -226,7 +223,6 @@ class RecordGraph:
 class Node:
     def __init__(self,
                  record_id,
-                 source=None,
                  date=None,
                  parents=None,
                  children=None,
@@ -242,7 +238,6 @@ class Node:
         else:
             self.children = set(children)
         self.uuid = uuid
-        self.source = source
 
     def add_child(self, child_record_id):
         self.children.add(child_record_id)
