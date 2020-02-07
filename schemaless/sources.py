@@ -164,6 +164,7 @@ class PPTS(Source):
         'RESIDENTIAL_MICRO_PROP': 'residential_units_micro_proposed',
         'RESIDENTIAL_MICRO_NET': 'residential_units_micro_net',
     }
+    DATA_SF = "https://data.sfgov.org/dataset/PPTS-Records_data/kgai-svwy"
 
 
 class PTS(Source):
@@ -206,6 +207,7 @@ class PTS(Source):
         'Proposed Construction Type Description':
         'proposed_construction_type_description',
     }
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9"  # NOQA
 
 
 class TCO(Source):
@@ -219,6 +221,7 @@ class TCO(Source):
         'Document Type': 'building_permit_type',
         'Number of Units Certified': 'num_units',
     }
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Dwelling-Unit-Completion-Counts-by-Building-Permit/j67f-aayr"  # NOQA
 
 
 class MOHCD(Source):
@@ -303,6 +306,7 @@ class MOHCD(Source):
         # 'Latitude': 'latitude',
         # 'Longitude': 'longitude',
     }
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Affordable-Housing-Pipeline/aaxw-2cb8"  # NOQA
 
 
 class BMR(Source):
@@ -348,6 +352,7 @@ class BMR(Source):
         'Year Building Constructed': 'year_constructed',
         'Year Affordability Began': 'year_affordability_began',
     }
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Mayor-s-Office-of-Housing-and-Community-Developmen/9rdx-httc"  # NOQA
 
 
 source_map = {
