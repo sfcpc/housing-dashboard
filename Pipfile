@@ -10,6 +10,7 @@ flake8 = "*"
 pytest = "*"
 
 [packages]
+usaddress-scourgify = "*"
 
 [requires]
 python_version = "3.7"
