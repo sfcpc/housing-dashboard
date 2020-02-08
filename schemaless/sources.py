@@ -40,8 +40,11 @@ class Date(Field):
         return "%s (%s)" % (self.field, self.date_format)
 
     def get_value(self, record):
-        return datetime.strptime(
-            record[self.field].split(" ")[0], self.date_format).date()
+        try:
+            return datetime.strptime(
+                record[self.field].split(" ")[0], self.date_format).date()
+        except:
+            return None
 
     def get_value_str(self, record):
         return self.get_value(record).isoformat()
