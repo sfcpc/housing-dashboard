@@ -4,6 +4,11 @@ from csv import DictReader
 from datetime import datetime
 from fileutils import open_file
 
+from scourgify.exceptions import IncompleteAddressError
+from scourgify.exceptions import UnParseableAddressError
+from scourgify.normalize import format_address_record
+from scourgify.normalize import normalize_address_record
+
 
 class Field:
     def get_value(self, record):
@@ -45,6 +50,57 @@ class Date(Field):
 
     def get_value_str(self, record):
         return self.get_value(record).isoformat()
+
+
+class Address(Field):
+    def __init__(self, *fields):
+        self.fields = fields
+
+    def __str__(self):
+        return " ".join(self.fields)
+
+    def get_value(self, record):
+        vals = []
+        for field in self.fields:
+            if isinstance(field, Field):
+                vals.append(field.get_value_str(record))
+            else:
+                vals.append(record.get(field, ""))
+        addr_str = " ".join(vals).strip().title()
+        if not addr_str:
+            return ""
+        try:
+            addr = normalize_address_record(addr_str)
+        except UnParseableAddressError:
+            print("WARN1: Unparseable: %s" % addr_str)
+            return ""
+        else:
+            if not addr['postal_code']:
+                # We need this to normalize again, and we can't guess it
+                try:
+                    return format_address_record(addr)
+                except IncompleteAddressError:
+                    print("WARN2: Unable to format address %s" % addr)
+                    return ""
+
+            if not addr['city']:
+                addr['city'] = "San Francisco"
+            if not addr['state']:
+                addr['state'] = "California"
+
+        try:
+            addr = normalize_address_record(addr)
+        except UnParseableAddressError:
+            print("WARN3: Unparseable: %s" % addr)
+            return ""
+        else:
+            try:
+                return format_address_record(addr)
+            except IncompleteAddressError:
+                print("WARN4: Unable to parse address %s" % addr_str)
+                print(addr)
+                return ""
+        return ""
 
 
 class Source:
