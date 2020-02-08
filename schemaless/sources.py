@@ -401,8 +401,8 @@ class MOHCD(Source):
 class BMR(Source):
     """MOHCD/OCII's affordable rental portfolio"""
     NAME = 'bmr'
-    DATE = Date('date_issued', '%Y/%m/%d')
-    FK = PrimaryKey(NAME, 'building_permit_number', DATE)
+    DATE = Date('year_affordability_began', '%Y')
+    FK = PrimaryKey(NAME, 'project_id')
     FIELDS = {
         'Project ID': 'project_id',
         'Project Name': 'project_name',
