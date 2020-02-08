@@ -123,9 +123,26 @@ class Source:
             reader = DictReader(inf)
 
             for line in reader:
-                yield {self.FIELDS[key]: val.strip()
-                       for key, val in line.items()
-                       if key in self.FIELDS and val}
+                calc_fields = {}
+                ret = {}
+                for line_key, ret_key in self.FIELDS.items():
+                    # save calculated Fields for later
+                    if isinstance(ret_key, Field):
+                        calc_fields[line_key] = ret_key
+                        continue
+
+                    if line_key not in line:
+                        continue
+
+                    val = line[line_key].strip()
+                    if val:
+                        ret[ret_key] = val
+
+                for key, field in calc_fields.items():
+                    val = field.get_value_str(ret)
+                    if val:
+                        ret[key] = val.strip()
+                yield ret
 
 
 class PPTS(Source):
