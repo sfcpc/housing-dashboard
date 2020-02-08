@@ -163,6 +163,7 @@ class PPTS(Source):
         'date_closed': 'date_closed',
         # Location details
         'address': 'address',
+        'address_norm': Address('address'),
         'the_geom': 'the_geom',
 
         # Developer and Planner
@@ -260,6 +261,15 @@ class PTS(Source):
         'Unit': 'unit',
         'Unit Suffix': 'unit_suffix',
         'Zipcode': 'zipcode',
+        'address_norm': Address(
+            'street_number',
+            'street_number_suffix',
+            'street_name',
+            'street_name_suffix',
+            'unit',
+            'unit_suffix',
+            'zipcode',
+        ),
         'Location': 'location',
         'Supervisor District': 'supervisor_district',
         'Current Status': 'current_status',
@@ -290,6 +300,7 @@ class TCO(Source):
     FIELDS = {
         'Building Permit Application Number': 'building_permit_number',
         'Building Address': 'address',
+        'address_norm': Address('address'),
         'Date Issued': 'date_issued',
         'Document Type': 'building_permit_type',
         'Number of Units Certified': 'num_units',
@@ -310,7 +321,12 @@ class MOHCD(Source):
         'Street Name': 'street_name',
         'Street Type': 'street_type',
         'Zip Code': 'zip_code',
-        # TODO: How can we synthesize fields? eg add an 'address' field
+        'address_norm': Address(
+            'street_number'
+            'street_name',
+            'street_type',
+            'zip_code',
+        ),
         'Supervisor District': 'supervisor_district',
         'Location': 'location',  # This is a POINT()
         'Project Lead Sponsor': 'project_lead_sponsor',
@@ -394,6 +410,12 @@ class BMR(Source):
         'Street Name': 'street_name',
         'Street Type': 'street_type',
         'Zip Code': 'zip_code',
+        'address_norm': Address(
+            'street_number'
+            'street_name',
+            'street_type',
+            'zip_code',
+        ),
         'Location': 'location',
         'Supervisor District': 'supervisor_district',
         'Project Sponsor': 'project_sponsor',
