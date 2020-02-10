@@ -8,6 +8,7 @@ import uuid
 from datetime import date
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
@@ -31,16 +32,22 @@ class RecordGraph:
         # Create a mapping between permit numbers and their associated PPTS
         # record (so we an ensure they are assigned the same UUID).
         ppts_id_to_fk = {}
+        address_to_ppts_fk = defaultdict(list)
         permit_number_to_ppts_fk = defaultdict(list)
         for fk, record in latest_records.get(PPTS.NAME, {}).items():
             ppts_id_to_fk[record['record_id']] = fk
+            if 'address_norm' in record:
+                address_to_ppts_fk[record['address_norm']].append(fk)
             if 'building_permit_number' in record:
                 for permit_number in \
-                  record['building_permit_number'].split(","):
+                        record['building_permit_number'].split(","):
                     permit_number_to_ppts_fk[permit_number].append(fk)
 
         permit_number_to_pts_fk = defaultdict(list)
+        address_to_pts_fk = defaultdict(list)
         for fk, record in latest_records.get(PTS.NAME, {}).items():
+            if 'address_norm' in record:
+                address_to_pts_fk[record['address_norm']].append(fk)
             if 'permit_number' in record:
                 permit_number_to_pts_fk[record['permit_number']].append(fk)
 
@@ -99,6 +106,19 @@ class RecordGraph:
                         parent_fk = mohcd_id_to_fk.get(record['project_id'])
                         if parent_fk:
                             parents.append(parent_fk)
+
+                if source == AffordableRentalPortfolio.NAME:
+                    # TODO: There will be many matches, so we need to filter
+                    # on time range and record type. EG maybe only add parents
+                    # that are PRJs, or themselves have parents?
+                    if 'address_norm' in record:
+                        parents.extend(
+                            address_to_pts_fk.get(
+                                record['address_norm'], []))
+                        parents.extend(
+                            address_to_ppts_fk.get(
+                                record['address_norm'], []))
+                        print("Parents are now %s" % parents)
 
                 if source == TCO.NAME:
                     if 'building_permit_number' in record:
