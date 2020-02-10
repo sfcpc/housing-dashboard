@@ -3655,3 +3655,77 @@ mohcd_2016-088,mohcd,2020-01-29,num_120_percent_ami_units,0
 mohcd_2016-088,mohcd,2020-01-29,num_130_percent_ami_units,0
 mohcd_2016-088,mohcd,2020-01-29,num_150_percent_ami_units,0
 mohcd_2016-088,mohcd,2020-01-29,num_ami_undeclared_units,0
+bmr_2003-030,bmr,2020-01-29,project_id,2003-030
+bmr_2003-030,bmr,2020-01-29,project_name,Valencia Gardens
+bmr_2003-030,bmr,2020-01-29,street_number,340-370
+bmr_2003-030,bmr,2020-01-29,street_name,Valencia
+bmr_2003-030,bmr,2020-01-29,street_type,St
+bmr_2003-030,bmr,2020-01-29,zip_code,94103
+bmr_2003-030,bmr,2020-01-29,location,POINT (-122.4232025 37.77)
+bmr_2003-030,bmr,2020-01-29,supervisor_district,8
+bmr_2003-030,bmr,2020-01-29,project_sponsor,Mission Housing Development Corporation
+bmr_2003-030,bmr,2020-01-29,total_units,260
+bmr_2003-030,bmr,2020-01-29,total_beds,0
+bmr_2003-030,bmr,2020-01-29,total_affordable_units,259
+bmr_2003-030,bmr,2020-01-29,total_affordable_beds,0
+bmr_2003-030,bmr,2020-01-29,num_sro_units,0
+bmr_2003-030,bmr,2020-01-29,num_studio_units,0
+bmr_2003-030,bmr,2020-01-29,num_1bd_units,60
+bmr_2003-030,bmr,2020-01-29,num_2bd_units,97
+bmr_2003-030,bmr,2020-01-29,num_3bd_units,88
+bmr_2003-030,bmr,2020-01-29,num_4bd_units,14
+bmr_2003-030,bmr,2020-01-29,num_5_plus_bd_units,0
+bmr_2003-030,bmr,2020-01-29,num_family_units,217
+bmr_2003-030,bmr,2020-01-29,num_senior_units,42
+bmr_2003-030,bmr,2020-01-29,num_tay_units,0
+bmr_2003-030,bmr,2020-01-29,num_homeless_units,0
+bmr_2003-030,bmr,2020-01-29,num_losp_units,0
+bmr_2003-030,bmr,2020-01-29,num_disabled_units,0
+bmr_2003-030,bmr,2020-01-29,num_20_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,num_30_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,num_40_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,num_50_percent_ami_units,51
+bmr_2003-030,bmr,2020-01-29,num_60_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,num_80_percent_ami_units,208
+bmr_2003-030,bmr,2020-01-29,num_120_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,num_more_than_120_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,year_constructed,2005
+bmr_2003-030,bmr,2020-01-29,year_affordability_began,2005
+bmr_2003-030,bmr,2020-01-29,address_norm,"340-370 VALENCIA ST, SAN FRANCISCO, CA, 94103"
+bmr_2013-037,bmr,2020-01-29,project_id,2013-037
+bmr_2013-037,bmr,2020-01-29,project_name,Kennedy Towers (JFK Towers)
+bmr_2013-037,bmr,2020-01-29,street_number,2451
+bmr_2013-037,bmr,2020-01-29,street_name,Sacramento
+bmr_2013-037,bmr,2020-01-29,street_type,St
+bmr_2013-037,bmr,2020-01-29,zip_code,94115
+bmr_2013-037,bmr,2020-01-29,location,POINT (-122.43319449999998 37.79)
+bmr_2013-037,bmr,2020-01-29,supervisor_district,2
+bmr_2013-037,bmr,2020-01-29,project_sponsor,Mercy Housing California
+bmr_2013-037,bmr,2020-01-29,total_units,98
+bmr_2013-037,bmr,2020-01-29,total_beds,0
+bmr_2013-037,bmr,2020-01-29,total_affordable_units,97
+bmr_2013-037,bmr,2020-01-29,total_affordable_beds,0
+bmr_2013-037,bmr,2020-01-29,num_sro_units,0
+bmr_2013-037,bmr,2020-01-29,num_studio_units,76
+bmr_2013-037,bmr,2020-01-29,num_1bd_units,20
+bmr_2013-037,bmr,2020-01-29,num_2bd_units,1
+bmr_2013-037,bmr,2020-01-29,num_3bd_units,0
+bmr_2013-037,bmr,2020-01-29,num_4bd_units,0
+bmr_2013-037,bmr,2020-01-29,num_5_plus_bd_units,0
+bmr_2013-037,bmr,2020-01-29,num_family_units,0
+bmr_2013-037,bmr,2020-01-29,num_senior_units,97
+bmr_2013-037,bmr,2020-01-29,num_tay_units,0
+bmr_2013-037,bmr,2020-01-29,num_homeless_units,0
+bmr_2013-037,bmr,2020-01-29,num_losp_units,0
+bmr_2013-037,bmr,2020-01-29,num_disabled_units,97
+bmr_2013-037,bmr,2020-01-29,num_20_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_30_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_40_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_50_percent_ami_units,97
+bmr_2013-037,bmr,2020-01-29,num_60_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_80_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_120_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_more_than_120_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,year_constructed,1900
+bmr_2013-037,bmr,2020-01-29,year_affordability_began,2016
+bmr_2013-037,bmr,2020-01-29,address_norm,"2451 SACRAMENTO ST, SAN FRANCISCO, CA, 94115"
