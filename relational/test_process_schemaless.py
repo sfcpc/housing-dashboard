@@ -1,72 +1,83 @@
 # Lint as: python3
 from datetime import datetime
-from collections import defaultdict
 from collections import namedtuple
 
-from relational.project import Entry
-from relational.project import NameValue
-from relational.process_schemaless import extract_freshness
+from relational.process_schemaless import Freshness
 from relational.process_schemaless import is_seen_id
+from schemaless.sources import MOHCD
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 
 
-def test_extract_freshness():
-    entries_map = defaultdict(list)
+def test_freshness():
     newer = datetime.fromisoformat('2020-01-01')
     pts = datetime.fromisoformat('2020-02-01')
+    mohcd = datetime.fromisoformat('2019-01-01')
 
-    entries_map['uuid1'].append(Entry(
-        'PRJ1',
-        PPTS.NAME,
-        [NameValue('date_opened', '01/01/2000', newer)],
-    ))
-    entries_map['uuid2'].append(Entry(
-        'PRJ1',
-        PPTS.NAME,
-        [NameValue('date_opened', '01/01/2010', newer)],
-    ))
-    entries_map['uuid3'].append(Entry(
-        'PRJ1',
-        PPTS.NAME,
-        [NameValue('date_opened', '01/01/2020', newer)],
-    ))
-    entries_map['uuid7'].append(Entry(
-        '201911',
-        PTS.NAME,
-        [NameValue('filed_date', '02/01/2020', newer)],
-    ))
-    entries_map['uuid8'].append(Entry(
-        '201911',
-        PTS.NAME,
-        [NameValue('completed_date', '01/01/2020', newer)],
-    ))
+    lines = []
+    lines.append({
+        'source': PPTS.NAME,
+        'name': 'date_opened',
+        'value': '01/01/2000',
+    })
+    lines.append({
+        'source': PPTS.NAME,
+        'name': 'date_opened',
+        'value': '01/01/2010',
+    })
+    lines.append({
+        'source': PPTS.NAME,
+        'name': 'date_opened',
+        'value': '01/01/2020',
+    })
+    lines.append({
+        'source': PTS.NAME,
+        'name': 'filed_date',
+        'value': '01/01/2010',
+    })
+    lines.append({
+        'source': PTS.NAME,
+        'name': 'completed_date',
+        'value': '02/01/2020',
+    })
 
-    # ignored because the field isn't whitelisted
-    entries_map['uuid4'].append(Entry(
-        'PRJ1',
-        PPTS.NAME,
-        [NameValue('arbitrary', '02/01/2020', newer)],
-    ))
+    # ignored because the field isn't permitted
+    lines.append({
+        'source': PTS.NAME,
+        'name': 'arbitrary',
+        'value': '02/02/2020',
+    })
 
     # ignored, in the future
-    entries_map['uuid5'].append(Entry(
-        'PRJ1',
-        PPTS.NAME,
-        [NameValue('arbitrary', datetime.max.strftime('%m/%d/%Y'), newer)],
-    ))
+    lines.append({
+        'source': PPTS.NAME,
+        'name': 'date_opened',
+        'value': datetime.max.strftime('%m/%d/%Y'),
+    })
 
     # ignored because the source is unknown
-    entries_map['uuid6'].append(Entry(
-        'PRJ1',
-        'bamboozle',
-        [NameValue('date_opened', '02/01/2020', newer)],
-    ))
+    lines.append({
+        'source': 'bamboozle',
+        'name': 'date_opened',
+        'value': '02/01/2020',
+    })
 
-    freshness = extract_freshness(entries_map)
+    # mohcd extracts from last_updated
+    lines.append({
+        'last_updated': '2019-01-01',  # isoformat for last_updated
+        'source': MOHCD.NAME,
+        'name': 'date_opened',
+        'value': '01/01/2020',
+    })
 
-    assert freshness[PPTS.NAME] == newer
-    assert freshness[PTS.NAME] == pts
+    fresh = Freshness()
+    for line in lines:
+        fresh.update_freshness(line)
+
+    assert fresh.freshness[PPTS.NAME] == newer
+    assert fresh.freshness[PTS.NAME] == pts
+    assert fresh.freshness[MOHCD.NAME] == mohcd
+    assert 'bamboozle' not in fresh.freshness
 
 
 def test_is_seen_id():
