@@ -34,8 +34,8 @@ class RecordGraph:
         permit_number_to_ppts_fk = defaultdict(list)
         for fk, record in latest_records.get(PPTS.NAME, {}).items():
             ppts_id_to_fk[record['record_id']] = fk
-            if 'building_permit_id' in record:
-                for permit_number in record['building_permit_id'].split(","):
+            if 'building_permit_number' in record:
+                for permit_number in record['building_permit_number'].split(","):
                     permit_number_to_ppts_fk[permit_number].append(fk)
 
         permit_number_to_pts_fk = defaultdict(list)
