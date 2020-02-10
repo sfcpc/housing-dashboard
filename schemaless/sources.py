@@ -411,7 +411,7 @@ class BMR(Source):
         'Street Type': 'street_type',
         'Zip Code': 'zip_code',
         'address_norm': Address(
-            'street_number'
+            'street_number',
             'street_name',
             'street_type',
             'zip_code',
