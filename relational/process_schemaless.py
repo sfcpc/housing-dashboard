@@ -19,6 +19,7 @@ from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
+from schemaless.sources import source_map
 
 csv.field_size_limit(sys.maxsize)
 
@@ -58,76 +59,96 @@ config = [
 ]
 
 
-_FIELD_PREDICATE = {
-    PPTS.NAME: set(['date_opened', 'date_closed']),
-    PTS.NAME: set([
-        'completed_date',
-        'current_status_date',
-        'filed_date',
-        'first_construction_document_date',
-        'issued_date',
-        'permit_creation_date',
-    ]),
-    MOHCDPipeline.NAME: set([
-        'date_issuance_of_building_permit',
-        'date_issuance_of_first_construction_document',
-        'date_issuance_of_notice_to_proceed',
-    ]),
-}
+class Freshness:
+    _FIELD_SETS = {
+        PPTS.NAME: set(['date_opened', 'date_closed']),
+        PTS.NAME: set([
+            'completed_date',
+            'current_status_date',
+            'filed_date',
+            'first_construction_document_date',
+            'issued_date',
+            'permit_creation_date',
+        ]),
+    }
+
+    def __init__(self):
+        self.freshness = {}
+        self.bad_dates = 0
+        self.bad_dates_sample = {}
+        self._freshness_checks = {
+            PPTS.NAME: self._ppts,
+            PTS.NAME: self._pts,
+            MOHCDPipeline.NAME: self._mohcd,
+        }
+
+    def _check_and_log_good_date(self, date, source, line):
+        if not date or date > datetime.today():
+            self.bad_dates += 1
+            if source not in self.bad_dates_sample:
+                self.bad_dates_sample[source] = queue.Queue(maxsize=10)
+            if not self.bad_dates_sample[source].full():
+                self.bad_dates_sample[source].put_nowait(
+                    '"%s" had a stored value of "%s" '
+                    'and the schema-less was last updated: "%s"' % (
+                        line.get('fk', ''),
+                        line.get('value', ''),
+                        line.get('last_updated', '')))
+            return False
+        return True
+
+    def _extract_nv_date(self, line, source):
+        if (line['source'] == source and
+                line['name'] in self._FIELD_SETS[source]):
+            nvdate = datetime.strptime(line['value'].split(' ')[0], '%m/%d/%Y')
+            if not self._check_and_log_good_date(nvdate, source, line):
+                return
+
+            if (source not in self.freshness or
+                    nvdate > self.freshness[source]):
+                self.freshness[source] = nvdate
+
+    def _extract_last_updated(self, line, source):
+        if line['source'] == source:
+            nvdate = datetime.fromisoformat(line['last_updated'])
+            if not self._check_and_log_good_date(nvdate, source, line):
+                return
+
+            if (source not in self.freshness or
+                    nvdate > self.freshness[source]):
+                self.freshness[source] = nvdate
+
+    def update_freshness(self, line):
+        if line['source'] in self._freshness_checks:
+            self._freshness_checks[line['source']](line)
+        else:
+            print('Warning: unknown source for '
+                  'data freshness: %s, skipping' % line['source'])
+
+    def _ppts(self, line):
+        self._extract_nv_date(line, PPTS.NAME)
+
+    def _pts(self, line):
+        self._extract_nv_date(line, PTS.NAME)
+
+    def _mohcd(self, line):
+        self._extract_last_updated(line, MOHCDPipeline.NAME)
 
 
-def extract_freshness(entries_map):
-    """Extracts the last time a data source has been fetched
-
-    Returns: a dict with key data source and value a datetime
-    """
-    data_freshness = {}
-    bad_dates = 0
-    bad_date_sample = queue.Queue(maxsize=10)
-    for (projectid, entries) in entries_map.items():
-        for entry in entries:
-            if entry.source not in _FIELD_PREDICATE:
-                print('Warning: unknown source for '
-                      'data freshness: %s, skipping' % entry.source)
-                continue
-
-            if entry.source not in data_freshness:
-                data_freshness[entry.source] = datetime.min
-
-            for (name, value) in entry.latest_name_values().items():
-                if name in _FIELD_PREDICATE[entry.source]:
-                    nvdate = datetime.strptime(
-                            value.split(' ')[0],
-                            '%m/%d/%Y')
-                    if not nvdate or nvdate > datetime.today():
-                        bad_dates += 1
-                        if not bad_date_sample.full():
-                            bad_date_sample.put_nowait(
-                                '"%s" for %s' % (value, entry.fk))
-                        continue
-
-                    if nvdate > data_freshness[entry.source]:
-                        data_freshness[entry.source] = nvdate
-
-    print('Found %s bad dates' % bad_dates)
-    print('Sample entries:')
-    while not bad_date_sample.empty():
-        sample = bad_date_sample.get_nowait()
-        print('\t%s' % sample)
-
-    return data_freshness
+# entries_map is a dict of key, value of string=>list of Entry, where key is
+#   the project uuid.
+# freshness is a Freshness instance.
+ProcessResult = namedtuple('ProcessResult', ['entries_map', 'freshness'])
 
 
-def build_entries_map(schemaless_file, uuid_mapping):
+def process_files(schemaless_file, uuid_mapping):
     """Consumes all data in the schemaless file to get the latest values.
 
-    Returns: a dict with key project uuid and value a list of Entry
+    Returns: a ProcessResult
     """
     # TODO: for large schemaless files, this will fail with OOM.  We should
     # probably ensure a uuid sort order in the schemaless so we can batch
     # projects.
-    # TODO: don't use so many nested dicts and have a bit more structure,
-    # would make handling data from multiple sources and fks easier
 
     if schemaless_file.endswith('.xz'):
         o = lzma.open
@@ -142,6 +163,7 @@ def build_entries_map(schemaless_file, uuid_mapping):
         reader = csv.DictReader(inf)
 
         projects = defaultdict(list)
+        freshness = Freshness()
 
         def _get_or_insert(id, fk, src):
             found_entry = None
@@ -166,11 +188,12 @@ def build_entries_map(schemaless_file, uuid_mapping):
 
             entry = _get_or_insert(id, fk, src)
             entry.add_name_value(NameValue(name, value, date))
+            freshness.update_freshness(line)
             processed += 1
             if processed % 1000000 == 0:
                 print('Processed %s lines' % processed)
 
-    return projects
+        return ProcessResult(entries_map=projects, freshness=freshness)
 
 
 def output_freshness(freshness):
@@ -181,14 +204,21 @@ def output_freshness(freshness):
         writer = csv.writer(outf)
         writer.writerow(['source', 'freshness'])
 
-        for (source, freshness) in freshness.items():
+        for (source, fresh_date) in freshness.freshness.items():
             out_source = source
+            if source in source_map and hasattr(source_map[source], 'NAME'):
+                out_source = source_map[source].NAME
 
-            # TODO: for multiple sources, have a better way to normalize this
-            if out_source == 'ppts':
-                out_source = 'planning'
+            writer.writerow([out_source, fresh_date.strftime('%Y-%m-%d')])
 
-            writer.writerow([out_source, freshness.strftime('%Y-%m-%d')])
+    if freshness.bad_dates > 0:
+        print('Found %s bad dates' % freshness.bad_dates)
+        print('Sample entries:')
+        for (source, bad_dates_queue) in freshness.bad_dates_sample.items():
+            print('\tFor source "%s"' % source)
+            while not bad_dates_queue.empty():
+                sample = bad_dates_queue.get_nowait()
+                print('\t\t%s' % sample)
 
 
 def build_projects(entries_map, recordgraph):
@@ -260,15 +290,15 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     uuid_mapping = build_uuid_mapping(args.uuid_map_file)
-    entries_map = build_entries_map(args.schemaless_file, uuid_mapping)
+    process_result = process_files(args.schemaless_file, uuid_mapping)
 
     print('Some stats:')
-    print('\tnumber of projects: %s' % len(entries_map))
+    print('\tnumber of projects: %s' % len(process_result.entries_map))
 
     entry_count = 0
     nv_count = 0
 
-    for (id, entries) in entries_map.items():
+    for (id, entries) in process_result.entries_map.items():
         entry_count += len(entries)
         for entry in entries:
             nv_count += entry.num_name_values()
@@ -277,6 +307,5 @@ if __name__ == '__main__':
 
     print('Building record graph...')
     rg = RecordGraph.from_files(args.schemaless_file, args.uuid_map_file)
-    output_projects(build_projects(entries_map, rg), config)
-    freshness = extract_freshness(entries_map)
-    output_freshness(freshness)
+    output_projects(build_projects(process_result.entries_map, rg), config)
+    output_freshness(process_result.freshness)
