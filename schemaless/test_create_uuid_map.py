@@ -443,7 +443,7 @@ def test_ppts_child_1950_mission():
     expected_pts_children = [
     ]
     expected_mohcd_children = [
-        'mohcd_2013-046',
+        'mohcd_pipeline_2013-046',
     ]
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
@@ -498,6 +498,40 @@ def test_tco_link():
     verify_valid_children(rg, prj_fk, expected_pts_children)
     for pts in expected_pts_children:
         verify_valid_children(rg, pts, expected_tco_children)
+
+
+def test_mohcd_records_link_with_prj():
+    prj_fk = 'ppts_2015-014058PRJ'
+    expected_ppts_children = [
+        'ppts_2015-014058CUA',
+        'ppts_2015-014058ENV',
+        'ppts_2015-014058VAR',
+        'ppts_2015-014058TDM',
+    ]
+    expected_mohcd_pipeline_children = [
+        'mohcd_pipeline_2017-034'
+    ]
+    expected_mohcd_inclusionary_children = [
+        'mohcd_inclusionary_2017-034'
+    ]
+    rg = RecordGraph.from_files(
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv')
+    verify_valid_children(rg, prj_fk, expected_ppts_children + \
+                          expected_mohcd_pipeline_children + \
+                          expected_mohcd_inclusionary_children)
+
+
+def test_mohcd_records_link_without_prj():
+    mohcd_pipeline_fk = 'mohcd_pipeline_2016-023'
+    expected_mohcd_inclusionary_children = [
+        'mohcd_inclusionary_2016-023'
+    ]
+    rg = RecordGraph.from_files(
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv')
+    verify_valid_children(rg, mohcd_pipeline_fk,
+                          expected_mohcd_inclusionary_children)
 
 
 def verify_valid_children(rg, parent_fk, expected_child_fks):

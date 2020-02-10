@@ -40,8 +40,11 @@ class Date(Field):
         return "%s (%s)" % (self.field, self.date_format)
 
     def get_value(self, record):
-        return datetime.strptime(
-            record[self.field].split(" ")[0], self.date_format).date()
+        try:
+            return datetime.strptime(
+                record[self.field].split(" ")[0], self.date_format).date()
+        except:
+            return None
 
     def get_value_str(self, record):
         return self.get_value(record).isoformat()
@@ -221,11 +224,54 @@ class TCO(Source):
     }
 
 
-class MOHCD(Source):
-    NAME = 'mohcd'
+class MOHCDInclusionary(Source):
+    NAME = 'mohcd_inclusionary'
     FK = PrimaryKey(NAME, 'project_id')
-    # TODO: correct date to sort by?
-    DATE = Date('date_issuance_of_notice_to_proceed', '%m/%d/%Y')
+    FIELDS = {
+        'Project ID': 'project_id',
+        'Project Status': 'project_status',
+        'Project Name': 'project_name',
+        'Street Number': 'street_number',
+        'Street Name': 'street_name',
+        'Street Type': 'street_type',
+        'Zip Code': 'zip_code',
+        'Housing Tenure': 'housing_tenure',
+        'Section 415 Declaration': 'section_415_declaration',
+        'Entitlement Approval Date': 'entitlement_approval_date',
+        'Actual/Estimated Completion Date':
+        'date_estimated_or_actual_completion',
+        'Planning Case Number': 'planning_case_number',
+        'Planning Entitlements': 'planning_entitlements',
+        'Project Units': 'total_project_units',
+        'Affordable Units': 'total_affordable_units',
+        'Units Subject to Section 415': 'units_subject_to_415_declaration',
+        'On-Site Affordable Units': 'on_site_affordable_units',
+        'Off-Site Affordable Units': 'off_site_affordable_units',
+        'Off-Site Affordable Units at This Site':
+        'off_site_affordable_units_at_site',
+        'SRO Units': 'num_sro_units',
+        'Studio Units': 'num_studio_units',
+        '1bd Units': 'num_1bd_units',
+        '2bd Units': 'num_2bd_units',
+        '3bd Units': 'num_3bd_units',
+        '4bd Units': 'num_4bd_units',
+        '30% AMI': 'num_30_percent_ami_units',
+        '50% AMI': 'num_50_percent_ami_units',
+        '55% AMI': 'num_55_percent_ami_units',
+        '60% AMI': 'num_60_percent_ami_units',
+        '80% AMI': 'num_80_percent_ami_units',
+        '90% AMI': 'num_90_percent_ami_units',
+        '100% AMI': 'num_100_percent_ami_units',
+        '120% AMI': 'num_120_percent_ami_units',
+        '150% AMI': 'num_150_percent_ami_units',
+        'Supervisor District': 'supervisor_district',
+        'Location': 'location',
+    }
+
+
+class MOHCDPipeline(Source):
+    NAME = 'mohcd_pipeline'
+    FK = PrimaryKey(NAME, 'project_id')
     FIELDS = {
         'Project ID': 'project_id',
         'Project Status': 'project_status',
@@ -309,5 +355,6 @@ source_map = {
     PPTS.NAME: PPTS,
     PTS.NAME: PTS,
     TCO.NAME: TCO,
-    MOHCD.NAME: MOHCD,
+    MOHCDPipeline.NAME: MOHCDPipeline,
+    MOHCDInclusionary.NAME: MOHCDInclusionary,
 }
