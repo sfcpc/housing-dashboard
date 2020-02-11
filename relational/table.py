@@ -6,6 +6,8 @@ from abc import abstractmethod
 
 import re
 
+from schemaless.sources import MOHCDInclusionary
+from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 
@@ -50,6 +52,43 @@ class NameValueTable(Table):
         row[self.index(self.VALUE)] = value
         row[self.index(self.DATA)] = data
         return row
+
+
+def _get_mohcd_units(proj):
+    """
+    Gets net new units and bmr counts from the mohcd dataset.  Prioritizes
+    data from MOHCDPipeline, and falls back to MOHCDInclusionary if none
+    found.
+
+    Returns:
+      A tuple of (number units, number of BMR units, source) from MOHCD, or
+      None if nothing found.
+    """
+    net = bmr = None
+    for source in [MOHCDPipeline.NAME, MOHCDInclusionary.NAME]:
+        atleast_one = False
+        try:
+            net = int(proj.field('total_project_units', source))
+            atleast_one = True
+            bmr = 0
+        except ValueError:
+            pass
+
+        try:
+            bmr = int(proj.field('total_affordable_units', source))
+            if not atleast_one:
+                net = 0
+            atleast_one = True
+        except ValueError:
+            pass
+
+        if atleast_one:
+            break
+
+    if net is not None and bmr is not None:
+        return (net, bmr, source)
+
+    return None
 
 
 def _get_dbi_units(proj):
@@ -118,22 +157,29 @@ class ProjectFacts(Table):
                 'fk', PPTS.NAME)
 
     def _gen_units(self, row, proj):
-        dbi_net = _get_dbi_units(proj)
-
-        if dbi_net is not None:
-            row[self.index(self.NET_NUM_UNITS)] = str(dbi_net)
-            row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
+        mohcd = _get_mohcd_units(proj)
+        if mohcd is not None:
+            net, bmr, source = mohcd
+            row[self.index(self.NET_NUM_UNITS)] = str(net)
+            row[self.index(self.NET_NUM_UNITS_DATA)] = source
+            row[self.index(self.NET_NUM_UNITS_BMR)] = str(bmr)
+            row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = source
         else:
-            # TODO: how to handle cases where prop - existing != net ?
-            net = proj.field('market_rate_units_net', PPTS.NAME)
-            row[self.index(self.NET_NUM_UNITS)] = net
-            row[self.index(self.NET_NUM_UNITS_DATA)] = \
-                PPTS.OUTPUT_NAME if net else ''
+            dbi_net = _get_dbi_units(proj)
+            if dbi_net is not None:
+                row[self.index(self.NET_NUM_UNITS)] = str(dbi_net)
+                row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
+            else:
+                # TODO: how to handle cases where prop - existing != net ?
+                net = proj.field('market_rate_units_net', PPTS.NAME)
+                row[self.index(self.NET_NUM_UNITS)] = net
+                row[self.index(self.NET_NUM_UNITS_DATA)] = \
+                    PPTS.OUTPUT_NAME if net else ''
 
-        bmr_net = proj.field('affordable_units_net', PPTS.NAME)
-        row[self.index(self.NET_NUM_UNITS_BMR)] = bmr_net
-        row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = \
-            PPTS.OUTPUT_NAME if bmr_net else ''
+            bmr_net = proj.field('affordable_units_net', PPTS.NAME)
+            row[self.index(self.NET_NUM_UNITS_BMR)] = bmr_net
+            row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = \
+                PPTS.OUTPUT_NAME if bmr_net else ''
 
     def _atleast_one_measure(self, row):
         return (row[self.index(self.NET_NUM_UNITS)] != '' or

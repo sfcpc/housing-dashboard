@@ -12,6 +12,8 @@ from relational.table import ProjectFacts
 from relational.table import ProjectUnitCountsFull
 from schemaless.create_uuid_map import Node
 from schemaless.create_uuid_map import RecordGraph
+from schemaless.sources import MOHCDInclusionary
+from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 
@@ -33,10 +35,10 @@ def test_table_project_facts_atleast_one_measure():
 
 
 def _get_value_for_name(table, rows, name, return_multiple=False):
-    result = []
     if len(rows) == 1:
         return rows[0][table.index(name)]
     elif len(rows) > 1:
+        result = []
         for row in rows:
             row_name = row[table.index(table.NAME)]
             if row_name == name:
@@ -53,6 +55,7 @@ def basic_graph():
     rg = RecordGraph()
     rg.add(Node(record_id='1'))
     rg.add(Node(record_id='2', parents=['1']))
+    rg.add(Node(record_id='3', parents=['1']))
     return rg
 
 
@@ -112,6 +115,65 @@ def test_table_project_facts_units(basic_graph):
     fields = table.rows(proj_ppts_only)
     # Gets from PPTS because no other choice
     assert _get_value_for_name(table, fields, 'net_num_units') == '10'
+
+
+def test_table_project_facts_units_mohcd(basic_graph):
+    d = datetime.fromisoformat('2019-01-01')
+    table = ProjectFacts()
+
+    entries1 = [
+        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('2',
+              MOHCDPipeline.NAME,
+              [NameValue('total_project_units', '7', d),
+               NameValue('total_affordable_units', '1', d)]),
+        Entry('3',
+              MOHCDInclusionary.NAME,
+              [NameValue('total_project_units', '6', d),
+               NameValue('total_affordable_units', '2', d)]),
+    ]
+    proj_normal = Project('uuid1', entries1, basic_graph)
+    fields = table.rows(proj_normal)
+    # Gets from Pipeline because it has higher priority over Inclusionary
+    assert _get_value_for_name(table, fields, 'net_num_units') == '7'
+    assert _get_value_for_name(table, fields, 'net_num_units_bmr') == '1'
+    assert _get_value_for_name(table, fields, 'net_num_units_data') == \
+        MOHCDPipeline.NAME
+    assert _get_value_for_name(table, fields, 'net_num_units_bmr_data') == \
+        MOHCDPipeline.NAME
+
+    entries2 = [
+        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('3',
+              MOHCDInclusionary.NAME,
+              [NameValue('total_project_units', '6', d),
+               NameValue('total_affordable_units', '2', d)]),
+    ]
+    proj_incl = Project('uuid1', entries2, basic_graph)
+    fields = table.rows(proj_incl)
+    # Gets from Inclusionary because no other choice
+    assert _get_value_for_name(table, fields, 'net_num_units') == '6'
+    assert _get_value_for_name(table, fields, 'net_num_units_bmr') == '2'
+    assert _get_value_for_name(table, fields, 'net_num_units_data') == \
+        MOHCDInclusionary.NAME
+    assert _get_value_for_name(table, fields, 'net_num_units_bmr_data') == \
+        MOHCDInclusionary.NAME
+
+    entries3 = [
+        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('2',
+              MOHCDPipeline.NAME,
+              [NameValue('total_project_units', '7', d)]),
+        Entry('3',
+              MOHCDInclusionary.NAME,
+              [NameValue('total_affordable_units', '2', d)]),
+    ]
+    proj_bad = Project('uuid1', entries3, basic_graph)
+    fields = table.rows(proj_bad)
+    # No totally complete data set, but go with what Pipeline has (don't
+    # combine)
+    assert _get_value_for_name(table, fields, 'net_num_units') == '7'
+    assert _get_value_for_name(table, fields, 'net_num_units_bmr') == '0'
 
 
 def test_table_project_units_full_count(basic_graph):
