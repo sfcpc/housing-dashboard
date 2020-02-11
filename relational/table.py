@@ -77,14 +77,14 @@ def _get_mohcd_units(proj, source_override=False):
         atleast_one = False
         try:
             net = int(proj.field('total_project_units', source))
-            atleast_one = True
             bmr = 0
+            atleast_one = True
         except ValueError:
             pass
 
         try:
             bmr = int(proj.field('total_affordable_units', source))
-            if not atleast_one:
+            if not net:
                 net = 0
             atleast_one = True
         except ValueError:
@@ -93,10 +93,7 @@ def _get_mohcd_units(proj, source_override=False):
         if atleast_one:
             break
 
-    if net is not None and bmr is not None:
-        return (net, bmr, source)
-
-    return None
+    return (net, bmr, source) if atleast_one else None
 
 
 def _get_dbi_units(proj):
