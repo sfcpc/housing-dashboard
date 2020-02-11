@@ -528,8 +528,8 @@ def test_mohcd_records_link_with_prj():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    verify_valid_children(rg, prj_fk, expected_ppts_children + \
-                          expected_mohcd_pipeline_children + \
+    verify_valid_children(rg, prj_fk, expected_ppts_children +
+                          expected_mohcd_pipeline_children +
                           expected_mohcd_inclusionary_children)
 
 

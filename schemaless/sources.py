@@ -43,7 +43,7 @@ class Date(Field):
         try:
             return datetime.strptime(
                 record[self.field].split(" ")[0], self.date_format).date()
-        except:
+        except Exception:
             return None
 
     def get_value_str(self, record):

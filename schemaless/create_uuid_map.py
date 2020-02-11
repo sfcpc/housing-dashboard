@@ -35,7 +35,8 @@ class RecordGraph:
         for fk, record in latest_records.get(PPTS.NAME, {}).items():
             ppts_id_to_fk[record['record_id']] = fk
             if 'building_permit_number' in record:
-                for permit_number in record['building_permit_number'].split(","):
+                for permit_number in \
+                  record['building_permit_number'].split(","):
                     permit_number_to_ppts_fk[permit_number].append(fk)
 
         permit_number_to_pts_fk = defaultdict(list)
@@ -72,7 +73,8 @@ class RecordGraph:
                         parents.extend(permit_number_to_ppts_fk[permit_number])
                     elif permit_number in permit_number_to_pts_fk:
                         if permit_number_to_pts_fk[permit_number][0] == fk:
-                            children.extend(permit_number_to_pts_fk[permit_number][1:])
+                            children.extend(
+                                permit_number_to_pts_fk[permit_number][1:])
 
                 if source == MOHCDPipeline.NAME or \
                    source == MOHCDInclusionary.NAME:
