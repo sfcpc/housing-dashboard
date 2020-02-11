@@ -47,7 +47,7 @@ def _get_value_for_name(table, rows, name, return_multiple=False):
                     result.append(row_value)
                 else:
                     return row_value
-        return '' if not return_multiple else sorted(result)
+        return '' if not return_multiple else sorted(result, key=int)
 
 
 @pytest.fixture
@@ -56,6 +56,7 @@ def basic_graph():
     rg.add(Node(record_id='1'))
     rg.add(Node(record_id='2', parents=['1']))
     rg.add(Node(record_id='3', parents=['1']))
+    rg.add(Node(record_id='4', parents=['1']))
     return rg
 
 
@@ -187,14 +188,28 @@ def test_table_project_units_full_count(basic_graph):
               [NameValue('permit_type', '1', d),
                NameValue('existing_units', '7', d),
                NameValue('proposed_units', '5', d)]),
+        Entry('3',
+              MOHCDPipeline.NAME,
+              [NameValue('total_project_units', '7', d)]),
+        Entry('4',
+              MOHCDInclusionary.NAME,
+              [NameValue('total_affordable_units', '5', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
     nvs = table.rows(proj_normal)
     net_num_units = _get_value_for_name(table, nvs, 'net_num_units',
                                         return_multiple=True)
-    assert len(net_num_units) == 2
+    assert len(net_num_units) == 4
     assert net_num_units[0] == '-2'
-    assert net_num_units[1] == '10'
+    assert net_num_units[1] == '0'
+    assert net_num_units[2] == '7'
+    assert net_num_units[3] == '10'
+
+    net_num_bmr = _get_value_for_name(table, nvs, 'net_num_units_bmr',
+                                      return_multiple=True)
+    assert len(net_num_bmr) == 2  # only inferrable data is in MOHCD
+    assert net_num_bmr[0] == '0'
+    assert net_num_bmr[1] == '5'
 
 
 @pytest.fixture

@@ -54,18 +54,26 @@ class NameValueTable(Table):
         return row
 
 
-def _get_mohcd_units(proj):
+def _get_mohcd_units(proj, source_override=False):
     """
     Gets net new units and bmr counts from the mohcd dataset.  Prioritizes
     data from MOHCDPipeline, and falls back to MOHCDInclusionary if none
     found.
 
+    If source_override is specified, will pull numbers only from the given
+    source.  Otherwise will pull from pipeline and inclusionary mohcd data.
+    Nothing technically prevents you from providing a non-mohcd source, but
+    you will probably not get useful numbers.
+
     Returns:
       A tuple of (number units, number of BMR units, source) from MOHCD, or
       None if nothing found.
     """
+    sources = [source_override] if source_override else [
+        MOHCDPipeline.NAME,
+        MOHCDInclusionary.NAME]
     net = bmr = None
-    for source in [MOHCDPipeline.NAME, MOHCDInclusionary.NAME]:
+    for source in sources:
         atleast_one = False
         try:
             net = int(proj.field('total_project_units', source))
@@ -241,6 +249,19 @@ class ProjectUnitCountsFull(NameValueTable):
                                     name='net_num_units',
                                     value=str(dbi_net),
                                     data=PTS.OUTPUT_NAME))
+
+        for source_override in [MOHCDPipeline.NAME, MOHCDInclusionary.NAME]:
+            mohcd = _get_mohcd_units(proj, source_override=source_override)
+            if mohcd is not None:
+                net, bmr, source = mohcd
+                rows.append(self.nv_row(proj,
+                                        name='net_num_units',
+                                        value=str(net),
+                                        data=source))
+                rows.append(self.nv_row(proj,
+                                        name='net_num_units_bmr',
+                                        value=str(bmr),
+                                        data=source))
 
     def rows(self, proj):
         result = []
