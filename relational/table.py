@@ -281,7 +281,7 @@ class ProjectStatusHistory(Table):
             self.END_DATE,
             self.DATA_SOURCE])
 
-    def _predevelopment_date(self, rows, proj):
+    def _predevelopment_date(self, proj):
         # TODO: Use the PPA submitted date once we have pulled in the new
         # PPTS data pipeline (if that doesn't exist fall back to using our
         # own logic)
@@ -293,18 +293,21 @@ class ProjectStatusHistory(Table):
             ppa_opened_date = datetime.strptime(
                 ppa_opened_field.split(' ')[0],
                 "%m/%d/%Y").date()
-            return (ppa_opened_date.strftime("%Y-%m-%d"), PPTS.OUTPUT_NAME)
+            return (ppa_opened_date.isoformat(), PPTS.OUTPUT_NAME)
 
         return ('', None)
 
-    def _filed_for_entitlements_date(self, rows, proj):
+    def _filed_for_entitlements_date(self, proj):
         # TODO: Use the Application Submitted date once we have pulled
         # in the new PPTS data pipeline (if that doesn't exist fall back to
         # our own logic)
 
         # Look for the earliest date_opened on an ENT child of a PRJ.
-        root = proj.roots[PPTS.NAME][0]
-        if root.get_latest('record_type_category')[0] == 'PRJ':
+        root = proj.roots[PPTS.NAME]
+        if root is None:
+            print("Error: Project with non-PPTS root id %s" % proj.id)
+            return ('', None)
+        if root[0].get_latest('record_type_category')[0] == 'PRJ':
             oldest_open = date.max
             for child in proj.children[PPTS.NAME]:
                 record_type = child.get_latest('record_type_category')[0]
@@ -319,18 +322,21 @@ class ProjectStatusHistory(Table):
                     oldest_open = date_opened
 
             if oldest_open < date.max:
-                return (oldest_open.strftime("%Y-%m-%d"), PPTS.OUTPUT_NAME)
+                return (oldest_open.isoformat(), PPTS.OUTPUT_NAME)
 
         return ('', None)
 
-    def _entitled_date(self, rows, proj):
+    def _entitled_date(self, proj):
         # TODO: Use the Entitlements Approved date once we have pulled
         # in the new PPTS data pipeline (if that doesn't exist fall back)
 
         # Look for the ENT child of a PRJ with the latest date_closed
         # (assuming all are closed). Fall back to the PRJ date.
-        root = proj.roots[PPTS.NAME][0]
-        if root.get_latest('record_type_category')[0] == 'PRJ':
+        root = proj.roots[PPTS.NAME]
+        if root is None:
+            print("Error: Project with non-PPTS root id %s" % proj.id)
+            return ('', None)
+        if root[0].get_latest('record_type_category')[0] == 'PRJ':
             newest_closed = date.min
             count_closed_no_date = 0
             for child in proj.children[PPTS.NAME]:
@@ -353,16 +359,16 @@ class ProjectStatusHistory(Table):
                     return ('', None)
 
             if newest_closed > date.min:
-                return (newest_closed.strftime("%Y-%m-%d"), PPTS.OUTPUT_NAME)
+                return (newest_closed.isoformat(), PPTS.OUTPUT_NAME)
             elif count_closed_no_date > 0:
                 # Fall back to PRJ date if all ENT child records are closed
                 # but there's no date
-                date_closed_field = root.get_latest('date_closed')[0]
+                date_closed_field = root[0].get_latest('date_closed')[0]
                 if date_closed_field:
                     date_closed = datetime.strptime(
                         date_closed_field.split(' ')[0],
                         "%m/%d/%Y").date()
-                    return (date_closed.strftime("%Y-%m-%d"), PPTS.OUTPUT_NAME)
+                    return (date_closed.isoformat(), PPTS.OUTPUT_NAME)
 
         return ('', None)
 
@@ -381,12 +387,11 @@ class ProjectStatusHistory(Table):
         return row
 
     def rows(self, proj):
-        result = []
-        (predev_date, predev_data) = self._predevelopment_date(result, proj)
-        (filed_date, filed_data) = self._filed_for_entitlements_date(result,
-                                                                     proj)
-        (entitled_date, entitled_data) = self._entitled_date(result, proj)
+        (predev_date, predev_data) = self._predevelopment_date(proj)
+        (filed_date, filed_data) = self._filed_for_entitlements_date(proj)
+        (entitled_date, entitled_data) = self._entitled_date(proj)
 
+        result = []
         if predev_date:
             result.append(
                 self.status_row(proj,
