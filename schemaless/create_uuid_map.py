@@ -5,10 +5,12 @@ import csv
 from csv import DictReader
 import uuid
 
+from datetime import date
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import BMR
-from schemaless.sources import MOHCD
+from schemaless.sources import MOHCDInclusionary
+from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 from schemaless.sources import source_map
@@ -26,26 +28,31 @@ class RecordGraph:
 
         latest_records = latest_values(schemaless_file)
 
+        # TODO: Refactor this "pre-processing" logic?
         # Create a mapping between permit numbers and their associated PPTS
         # record (so we an ensure they are assigned the same UUID).
-        prj_to_ppts = {}
+        ppts_id_to_fk = {}
         address_to_ppts = defaultdict(list)
-        permit_number_to_ppts = defaultdict(list)
+        permit_number_to_ppts_fk = defaultdict(list)
         for fk, record in latest_records.get(PPTS.NAME, {}).items():
-            prj_to_ppts[record['record_id']] = fk
+            ppts_id_to_fk[record['record_id']] = fk
             if 'address_norm' in record:
                 address_to_ppts[record['address_norm']].append(fk)
             if 'building_permit_id' in record:
                 for permit_number in record['building_permit_id'].split(","):
-                    permit_number_to_ppts[permit_number].append(fk)
+                    permit_number_to_ppts_fk[permit_number].append(fk)
 
-        permit_number_to_pts = defaultdict(list)
         address_to_pts = defaultdict(list)
+        permit_number_to_pts_fk = defaultdict(list)
         for fk, record in latest_records.get(PTS.NAME, {}).items():
             if 'address_norm' in record:
                 address_to_pts[record['address_norm']].append(fk)
             if 'permit_number' in record:
-                permit_number_to_pts[record['permit_number']].append(fk)
+                permit_number_to_pts_fk[record['permit_number']].append(fk)
+
+        mohcd_id_to_fk = {}
+        for fk, record in latest_records.get(MOHCDPipeline.NAME, {}).items():
+            mohcd_id_to_fk[record['project_id']] = fk
 
         # Read the latest values from the schemaless file to build the graph.
         for source, source_records in latest_records.items():
@@ -57,27 +64,33 @@ class RecordGraph:
                 if source == PPTS.NAME:
                     if 'parent' in record:
                         for parent in record['parent'].split(","):
-                            prj = prj_to_ppts.get(parent)
-                            if prj:
-                                parents.append(prj)
+                            parent_fk = ppts_id_to_fk.get(parent)
+                            if parent_fk:
+                                parents.append(parent_fk)
                     if 'children' in record:
                         for child in record['children'].split(","):
-                            prj = prj_to_ppts.get(child)
-                            if prj:
-                                children.append(prj)
+                            child_fk = ppts_id_to_fk.get(child)
+                            if child_fk:
+                                children.append(child_fk)
 
                 if source == PTS.NAME:
-                    if record['permit_number'] in permit_number_to_ppts:
-                        parents.extend(permit_number_to_ppts[
+                    if record['permit_number'] in permit_number_to_ppts_fk:
+                        parents.extend(permit_number_to_ppts_fk[
                             record['permit_number']])
 
-                if source == MOHCD.NAME:
+                if source == MOHCDPipeline.NAME or \
+                   source == MOHCDInclusionary.NAME:
                     if 'planning_case_number' in record:
                         for parent in (
                                 record['planning_case_number'].split(",")):
-                            prj = prj_to_ppts.get(parent)
-                            if prj:
-                                parents.append(prj)
+                            parent_fk = ppts_id_to_fk.get(parent)
+                            if parent_fk:
+                                parents.append(parent_fk)
+
+                    if source == MOHCDInclusionary.NAME:
+                        parent_fk = mohcd_id_to_fk.get(record['project_id'])
+                        if parent_fk:
+                            parents.append(parent_fk)
 
                 if source == BMR.NAME:
                     # TODO: There will be many matches, so we need to filter
@@ -94,17 +107,17 @@ class RecordGraph:
 
                 if source == TCO.NAME:
                     if 'building_permit_number' in record:
-                        pts = permit_number_to_pts.get(
+                        parent_fk = permit_number_to_pts_fk.get(
                             record['building_permit_number'])
-                        if pts:
-                            parents.extend(pts)
+                        if parent_fk:
+                            parents.extend(parent_fk)
                 the_date = None
 
                 if source_map[source].DATE.field in record:
                     the_date = source_map[source].DATE.get_value(record)
                 rg.add(Node(
                     record_id=fk,
-                    date=the_date,
+                    date=the_date if the_date else date.min,
                     parents=parents,
                     children=children,
                     uuid=None,

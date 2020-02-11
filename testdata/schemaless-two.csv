@@ -437,21 +437,23 @@ ppts_3890_ENF,ppts,2020-01-29,planner_name,Scott Sanchez
 ppts_3890_ENF,ppts,2020-01-29,planner_email,scott.sanchez@sfgov.org
 ppts_3890_ENF,ppts,2020-01-29,planner_phone,415-558-6326
 ppts_3890_ENF,ppts,2020-01-29,address_norm,"438 10TH AVE, SAN FRANCISCO, CA, 94118"
-ppts_2007.0530D,ppts,2020-01-29,record_id,2007.0530D
-ppts_2007.0530D,ppts,2020-01-29,record_type,Discretionary Review - Public Initiated (DRP)
-ppts_2007.0530D,ppts,2020-01-29,record_type_category,DRP
-ppts_2007.0530D,ppts,2020-01-29,name,1698 10TH AV
-ppts_2007.0530D,ppts,2020-01-29,description,"The proposal is to construct a horizontal addition to northern side of the subject dwelling in order to incorporate a second dwelling unit and a second parking space in Zoning District RH-2. The addition is two stories and approximately 420 square feet on each floor. The proposal conforms to the requirements of the RH-2 (Residential, House, Two-Family) District."
-ppts_2007.0530D,ppts,2020-01-29,parent,2007.0530
-ppts_2007.0530D,ppts,2020-01-29,status,Closed
-ppts_2007.0530D,ppts,2020-01-29,date_opened,06/04/2007 12:00:00 AM +0000
-ppts_2007.0530D,ppts,2020-01-29,date_closed,05/09/2016 12:00:00 AM +0000
-ppts_2007.0530D,ppts,2020-01-29,address,"1698 10TH AV, SAN FRANCISCO, CA 94122"
-ppts_2007.0530D,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466759043 37.756791147, -122.466574171 37.756799281, -122.466564339 37.756658536, -122.466749211 37.756650402, -122.466759043 37.756791147)))"
-ppts_2007.0530D,ppts,2020-01-29,planner_name,Kate Conner
-ppts_2007.0530D,ppts,2020-01-29,planner_email,kate.conner@sfgov.org
-ppts_2007.0530D,ppts,2020-01-29,planner_phone,415-575-6914
-ppts_2007.0530D,ppts,2020-01-29,address_norm,"1698 10TH AVE, SAN FRANCISCO, CA, 94122"
+ppts_2015-014058PRJ,ppts,2020-01-29,record_id,2015-014058PRJ
+ppts_2015-014058PRJ,ppts,2020-01-29,record_type,Project Profile (PRJ)
+ppts_2015-014058PRJ,ppts,2020-01-29,record_type_category,PRJ
+ppts_2015-014058PRJ,ppts,2020-01-29,name,2465 VAN NESS AVE
+ppts_2015-014058PRJ,ppts,2020-01-29,description,"Construction of a new 7 story 41 unit multi-family residential structure over retail and parking garage for both vehicles and bikes.
+MULTIPOLYGON (((-122.466759043 37.756791147"
+ppts_2015-014058PRJ,ppts,2020-01-29,parent,"-122.466759043 37.756791147)))"""
+ppts_2015-014058PRJ,ppts,2020-01-29,children,92123
+ppts_2015-014058PRJ,ppts,2020-01-29,status,Under Review
+ppts_2015-014058PRJ,ppts,2020-01-29,date_opened,01/04/2016 12:00:00 AM +0000
+ppts_2015-014058PRJ,ppts,2020-01-29,address,2465 VAN NESS AVE 94123
+ppts_2015-014058PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.424440899 37.798016091, -122.424516106 37.798388965, -122.424177333 37.798432032, -122.424101931 37.798059181, -122.424440899 37.798016091)))"
+ppts_2015-014058PRJ,ppts,2020-01-29,planner_name,06/04/2007 12:00:00 AM +0000
+ppts_2015-014058PRJ,ppts,2020-01-29,planner_email,Closed
+ppts_2015-014058PRJ,ppts,2020-01-29,planner_phone,05/09/2016 12:00:00 AM +0000
+ppts_2015-014058PRJ,ppts,2020-01-29,is_adu,415-575-6914
+ppts_2015-014058PRJ,ppts,2020-01-29,address_norm,"2465 VAN NESS AVE, SAN FRANCISCO, CA, 94123"
 ppts_2002.0809K,ppts,2020-01-29,record_id,2002.0809K
 ppts_2002.0809K,ppts,2020-01-29,record_type,Shadow Study (SHD)
 ppts_2002.0809K,ppts,2020-01-29,record_type_category,SHD
@@ -795,6 +797,20 @@ ppts_2014-002033TDM,ppts,2020-01-29,planner_name,Doug Vu
 ppts_2014-002033TDM,ppts,2020-01-29,planner_email,doug.vu@sfgov.org
 ppts_2014-002033TDM,ppts,2020-01-29,planner_phone,415-575-9120
 ppts_2014-002033TDM,ppts,2020-01-29,address_norm,"429 BEALE ST, SAN FRANCISCO, CA, 94105"
+ppts_2015-014058CUA,ppts,2020-01-29,record_id,2015-014058CUA
+ppts_2015-014058CUA,ppts,2020-01-29,record_type,Conditional Use Authorization (CUA)
+ppts_2015-014058CUA,ppts,2020-01-29,record_type_category,CUA
+ppts_2015-014058CUA,ppts,2020-01-29,name,2465 VAN NESS AVE
+ppts_2015-014058CUA,ppts,2020-01-29,description,"Conditional Use Authorization to permit the demolition and new construction of a 7-story, 41 unit multi-family residential structure over retail with parking garage and bicycle parking."
+ppts_2015-014058CUA,ppts,2020-01-29,parent,2015-014058PRJ
+ppts_2015-014058CUA,ppts,2020-01-29,status,Approved
+ppts_2015-014058CUA,ppts,2020-01-29,date_opened,10/05/2016 12:00:00 AM +0000
+ppts_2015-014058CUA,ppts,2020-01-29,address,2465 VAN NESS AVE 94123
+ppts_2015-014058CUA,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.424440899 37.798016091, -122.424516106 37.798388965, -122.424177333 37.798432032, -122.424101931 37.798059181, -122.424440899 37.798016091)))"
+ppts_2015-014058CUA,ppts,2020-01-29,planner_name,Mary Cheung-Woods
+ppts_2015-014058CUA,ppts,2020-01-29,planner_email,mary.woods@sfgov.org
+ppts_2015-014058CUA,ppts,2020-01-29,planner_phone,415-558-6315
+ppts_2015-014058CUA,ppts,2020-01-29,address_norm,"2465 VAN NESS AVE, SAN FRANCISCO, CA, 94123"
 ppts_2007.0023C,ppts,2020-01-29,record_id,2007.0023C
 ppts_2007.0023C,ppts,2020-01-29,record_type,Conditional Use Authorization (CUA)
 ppts_2007.0023C,ppts,2020-01-29,record_type_category,CUA
@@ -868,6 +884,16 @@ ppts_2014-002033PRJ,ppts,2020-01-29,residential_units_2br_existing,0
 ppts_2014-002033PRJ,ppts,2020-01-29,residential_units_2br_proposed,56
 ppts_2014-002033PRJ,ppts,2020-01-29,residential_units_2br_net,56
 ppts_2014-002033PRJ,ppts,2020-01-29,address_norm,"429 BEALE ST, SAN FRANCISCO, CA, 94105"
+ppts_Planning,ppts,2020-01-29,record_id,Planning
+ppts_Planning,ppts,2020-01-29,record_type,Mary Cheung-Woods
+ppts_Planning,ppts,2020-01-29,record_type_category,mary.woods@sfgov.org
+ppts_Planning,ppts,2020-01-29,description,CHECKED
+ppts_Planning,ppts,2020-01-29,status,2015-014058PRJ
+ppts_Planning,ppts,2020-01-29,date_opened,15CAP-00000-00AUJ
+ppts_Planning,ppts,2020-01-29,address,0
+ppts_Planning,ppts,2020-01-29,the_geom,"The PPA was submitted on 10/09/15 and the 90 day deadline is 01/07/16."""
+ppts_Planning,ppts,2020-01-29,is_adu,60335
+ppts_Planning,ppts,2020-01-29,residential_units_sro_existing,0.000000129596107
 ppts_2015-018514GEN,ppts,2020-01-29,record_id,2015-018514GEN
 ppts_2015-018514GEN,ppts,2020-01-29,record_type,Generic (GEN)
 ppts_2015-018514GEN,ppts,2020-01-29,record_type_category,GEN
@@ -1020,6 +1046,21 @@ ppts_1998.176Q,ppts,2020-01-29,date_closed,04/15/1998 12:00:00 AM +0000
 ppts_1998.176Q,ppts,2020-01-29,address,"658 10TH AV, SAN FRANCISCO, CA 94118"
 ppts_1998.176Q,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.467668506 37.77592553, -122.468087639 37.775906444, -122.4680926 37.77597499, -122.467673468 37.775994074, -122.467668506 37.77592553)))"
 ppts_1998.176Q,ppts,2020-01-29,address_norm,"658 10TH AVE, SAN FRANCISCO, CA, 94118"
+ppts_2015-014058ENV,ppts,2020-01-29,record_id,2015-014058ENV
+ppts_2015-014058ENV,ppts,2020-01-29,record_type,Environmental (ENV)
+ppts_2015-014058ENV,ppts,2020-01-29,record_type_category,ENV
+ppts_2015-014058ENV,ppts,2020-01-29,name,2465 VAN NESS AVE
+ppts_2015-014058ENV,ppts,2020-01-29,description,"Demolish gas station and construct a new seven-story building containing 41 residences, approximately 3,000 sf of ground-floor retail, and 31 below-grade vehicle parking spaces."
+ppts_2015-014058ENV,ppts,2020-01-29,parent,2015-014058PRJ
+ppts_2015-014058ENV,ppts,2020-01-29,status,Closed - CEQA Clearance Issued
+ppts_2015-014058ENV,ppts,2020-01-29,date_opened,01/04/2016 12:00:00 AM +0000
+ppts_2015-014058ENV,ppts,2020-01-29,date_closed,11/07/2017 12:00:00 AM +0000
+ppts_2015-014058ENV,ppts,2020-01-29,address,2465 VAN NESS AVE 94123
+ppts_2015-014058ENV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.424440899 37.798016091, -122.424516106 37.798388965, -122.424177333 37.798432032, -122.424101931 37.798059181, -122.424440899 37.798016091)))"
+ppts_2015-014058ENV,ppts,2020-01-29,planner_name,Jennifer McKellar
+ppts_2015-014058ENV,ppts,2020-01-29,planner_email,Jennifer.McKellar@sfgov.org
+ppts_2015-014058ENV,ppts,2020-01-29,planner_phone,415-575-8754
+ppts_2015-014058ENV,ppts,2020-01-29,address_norm,"2465 VAN NESS AVE, SAN FRANCISCO, CA, 94123"
 ppts_EE80.114,ppts,2020-01-29,record_id,EE80.114
 ppts_EE80.114,ppts,2020-01-29,record_type,Environmental
 ppts_EE80.114,ppts,2020-01-29,record_type_category,ENV
@@ -1317,6 +1358,20 @@ ppts_2015-010665VAR,ppts,2020-01-29,planner_name,Kate Conner
 ppts_2015-010665VAR,ppts,2020-01-29,planner_email,kate.conner@sfgov.org
 ppts_2015-010665VAR,ppts,2020-01-29,planner_phone,415-575-6914
 ppts_2015-010665VAR,ppts,2020-01-29,address_norm,"2451 SACRAMENTO ST, SAN FRANCISCO, CA, 94115"
+ppts_2015-014058VAR,ppts,2020-01-29,record_id,2015-014058VAR
+ppts_2015-014058VAR,ppts,2020-01-29,record_type,Variance (VAR)
+ppts_2015-014058VAR,ppts,2020-01-29,record_type_category,VAR
+ppts_2015-014058VAR,ppts,2020-01-29,name,2465 VAN NESS AVE
+ppts_2015-014058VAR,ppts,2020-01-29,description,"Variances from the rear yard and dwelling unit exposure requirement to permit the construction of a  7-story, 41 unit multi-family residential structure over retail and parking garage."
+ppts_2015-014058VAR,ppts,2020-01-29,parent,2015-014058PRJ
+ppts_2015-014058VAR,ppts,2020-01-29,status,Under Review
+ppts_2015-014058VAR,ppts,2020-01-29,date_opened,11/02/2017 12:00:00 AM +0000
+ppts_2015-014058VAR,ppts,2020-01-29,address,2465 VAN NESS AVE 94123
+ppts_2015-014058VAR,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.424440899 37.798016091, -122.424516106 37.798388965, -122.424177333 37.798432032, -122.424101931 37.798059181, -122.424440899 37.798016091)))"
+ppts_2015-014058VAR,ppts,2020-01-29,planner_name,Mary Cheung-Woods
+ppts_2015-014058VAR,ppts,2020-01-29,planner_email,mary.woods@sfgov.org
+ppts_2015-014058VAR,ppts,2020-01-29,planner_phone,415-558-6315
+ppts_2015-014058VAR,ppts,2020-01-29,address_norm,"2465 VAN NESS AVE, SAN FRANCISCO, CA, 94123"
 ppts_2018-000948CUA,ppts,2020-01-29,record_id,2018-000948CUA
 ppts_2018-000948CUA,ppts,2020-01-29,record_type,Conditional Use Authorization (CUA)
 ppts_2018-000948CUA,ppts,2020-01-29,record_type_category,CUA
@@ -1640,6 +1695,20 @@ ppts_MB1401513,ppts,2020-01-29,planner_name,Carly Grob
 ppts_MB1401513,ppts,2020-01-29,planner_email,carly.grob@sfgov.org
 ppts_MB1401513,ppts,2020-01-29,planner_phone,415-575-9138
 ppts_MB1401513,ppts,2020-01-29,address_norm,"8 10TH ST, SAN FRANCISCO, CA, 94117"
+ppts_2015-014058TDM,ppts,2020-01-29,record_id,2015-014058TDM
+ppts_2015-014058TDM,ppts,2020-01-29,record_type,Transportation Demand Management (TDM)
+ppts_2015-014058TDM,ppts,2020-01-29,record_type_category,TDM
+ppts_2015-014058TDM,ppts,2020-01-29,name,2465 VAN NESS AVE
+ppts_2015-014058TDM,ppts,2020-01-29,description,"Demolition of an existing fuel canopy and retail structure at the site of a decommissioned gas station. New construction of a 7-story, 41 residential units and 2,900 square foot retail building."
+ppts_2015-014058TDM,ppts,2020-01-29,parent,2015-014058PRJ
+ppts_2015-014058TDM,ppts,2020-01-29,status,Under Review
+ppts_2015-014058TDM,ppts,2020-01-29,date_opened,09/27/2017 12:00:00 AM +0000
+ppts_2015-014058TDM,ppts,2020-01-29,address,2465 VAN NESS AVE 94123
+ppts_2015-014058TDM,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.424440899 37.798016091, -122.424516106 37.798388965, -122.424177333 37.798432032, -122.424101931 37.798059181, -122.424440899 37.798016091)))"
+ppts_2015-014058TDM,ppts,2020-01-29,planner_name,Mary Cheung-Woods
+ppts_2015-014058TDM,ppts,2020-01-29,planner_email,mary.woods@sfgov.org
+ppts_2015-014058TDM,ppts,2020-01-29,planner_phone,415-558-6315
+ppts_2015-014058TDM,ppts,2020-01-29,address_norm,"2465 VAN NESS AVE, SAN FRANCISCO, CA, 94123"
 ppts_1986.146,ppts,2020-01-29,record_id,1986.146
 ppts_1986.146,ppts,2020-01-29,record_type,Project Profile (PRJ)
 ppts_1986.146,ppts,2020-01-29,record_type_category,PRJ
@@ -3116,545 +3185,6 @@ tco_201708316569_2018-05-03,tco,2020-01-29,date_issued,2018/05/03
 tco_201708316569_2018-05-03,tco,2020-01-29,building_permit_type,CFC
 tco_201708316569_2018-05-03,tco,2020-01-29,num_units,1
 tco_201708316569_2018-05-03,tco,2020-01-29,address_norm,929-931 HAYES ST
-mohcd_2014-008,mohcd,2020-01-29,project_id,2014-008
-mohcd_2014-008,mohcd,2020-01-29,project_status,(5) First Construction Document Issued
-mohcd_2014-008,mohcd,2020-01-29,project_name,Transbay Block 1 (Affordable Project)
-mohcd_2014-008,mohcd,2020-01-29,street_name,Folsom
-mohcd_2014-008,mohcd,2020-01-29,street_type,St
-mohcd_2014-008,mohcd,2020-01-29,zip_code,94105
-mohcd_2014-008,mohcd,2020-01-29,supervisor_district,6
-mohcd_2014-008,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2014-008,mohcd,2020-01-29,project_lead_sponsor,Tishman Speyer
-mohcd_2014-008,mohcd,2020-01-29,project_owner,"Block One Property Holder, LP"
-mohcd_2014-008,mohcd,2020-01-29,lead_agency,OCII
-mohcd_2014-008,mohcd,2020-01-29,program_area,Multifamily Rental Program
-mohcd_2014-008,mohcd,2020-01-29,project_type,New Construction
-mohcd_2014-008,mohcd,2020-01-29,housing_tenure,Ownership
-mohcd_2014-008,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,05/01/2017
-mohcd_2014-008,mohcd,2020-01-29,date_issuance_of_building_permit,12/30/2016
-mohcd_2014-008,mohcd,2020-01-29,date_issuance_of_first_construction_document,05/25/2017
-mohcd_2014-008,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,05/25/2017
-mohcd_2014-008,mohcd,2020-01-29,date_estimated_construction_completion,02/01/2020
-mohcd_2014-008,mohcd,2020-01-29,planning_case_number,Not Applicable
-mohcd_2014-008,mohcd,2020-01-29,total_project_units,76
-mohcd_2014-008,mohcd,2020-01-29,total_affordable_units,76
-mohcd_2014-008,mohcd,2020-01-29,total_market_rate_units,0
-mohcd_2014-008,mohcd,2020-01-29,percent_affordable,100
-mohcd_2014-008,mohcd,2020-01-29,num_sro_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_studio_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_1bd_units,42
-mohcd_2014-008,mohcd,2020-01-29,num_2bd_units,19
-mohcd_2014-008,mohcd,2020-01-29,num_3bd_units,15
-mohcd_2014-008,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_30_percent_ami_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_40_percent_ami_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_50_percent_ami_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_60_percent_ami_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_80_percent_ami_units,25
-mohcd_2014-008,mohcd,2020-01-29,num_90_percent_ami_units,26
-mohcd_2014-008,mohcd,2020-01-29,num_100_percent_ami_units,25
-mohcd_2014-008,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_120_percent_ami_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2014-008,mohcd,2020-01-29,num_ami_undeclared_units,0
-mohcd_2016-089,mohcd,2020-01-29,project_id,2016-089
-mohcd_2016-089,mohcd,2020-01-29,project_status,(1) Preliminary Phase
-mohcd_2016-089,mohcd,2020-01-29,project_name,Transbay Block 2 East
-mohcd_2016-089,mohcd,2020-01-29,street_name,Address not yet assigned
-mohcd_2016-089,mohcd,2020-01-29,zip_code,94105
-mohcd_2016-089,mohcd,2020-01-29,supervisor_district,6
-mohcd_2016-089,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2016-089,mohcd,2020-01-29,project_lead_sponsor,Developer not yet selected
-mohcd_2016-089,mohcd,2020-01-29,project_owner,Developer not yet selected
-mohcd_2016-089,mohcd,2020-01-29,lead_agency,OCII
-mohcd_2016-089,mohcd,2020-01-29,program_area,Multifamily Rental Program
-mohcd_2016-089,mohcd,2020-01-29,project_type,New Construction
-mohcd_2016-089,mohcd,2020-01-29,housing_tenure,Rental
-mohcd_2016-089,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,01/01/2022
-mohcd_2016-089,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,01/01/2022
-mohcd_2016-089,mohcd,2020-01-29,date_estimated_construction_completion,01/01/2024
-mohcd_2016-089,mohcd,2020-01-29,planning_case_number,Not Applicable
-mohcd_2016-089,mohcd,2020-01-29,total_project_units,169
-mohcd_2016-089,mohcd,2020-01-29,total_affordable_units,168
-mohcd_2016-089,mohcd,2020-01-29,total_market_rate_units,1
-mohcd_2016-089,mohcd,2020-01-29,percent_affordable,99
-mohcd_2016-089,mohcd,2020-01-29,num_sro_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_studio_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_1bd_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_2bd_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_3bd_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_30_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_40_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_50_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_60_percent_ami_units,168
-mohcd_2016-089,mohcd,2020-01-29,num_80_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_90_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_100_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_120_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2016-089,mohcd,2020-01-29,num_ami_undeclared_units,0
-mohcd_2014-003,mohcd,2020-01-29,project_id,2014-003
-mohcd_2014-003,mohcd,2020-01-29,project_status,(5) First Construction Document Issued
-mohcd_2014-003,mohcd,2020-01-29,project_name,Transbay Block 8
-mohcd_2014-003,mohcd,2020-01-29,street_name,Fremont
-mohcd_2014-003,mohcd,2020-01-29,street_type,St
-mohcd_2014-003,mohcd,2020-01-29,zip_code,94105
-mohcd_2014-003,mohcd,2020-01-29,supervisor_district,6
-mohcd_2014-003,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2014-003,mohcd,2020-01-29,project_lead_sponsor,Related California
-mohcd_2014-003,mohcd,2020-01-29,project_owner,"T8 Urban Housing Associates, LLC"
-mohcd_2014-003,mohcd,2020-01-29,lead_agency,OCII
-mohcd_2014-003,mohcd,2020-01-29,program_area,OCII Inclusionary Rental Program
-mohcd_2014-003,mohcd,2020-01-29,project_type,New Construction
-mohcd_2014-003,mohcd,2020-01-29,housing_tenure,Rental
-mohcd_2014-003,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,10/28/2016
-mohcd_2014-003,mohcd,2020-01-29,date_issuance_of_building_permit,07/13/2016
-mohcd_2014-003,mohcd,2020-01-29,date_issuance_of_first_construction_document,05/12/2016
-mohcd_2014-003,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,05/12/2016
-mohcd_2014-003,mohcd,2020-01-29,date_estimated_construction_completion,04/01/2019
-mohcd_2014-003,mohcd,2020-01-29,planning_case_number,Not Applicable
-mohcd_2014-003,mohcd,2020-01-29,total_project_units,350
-mohcd_2014-003,mohcd,2020-01-29,total_affordable_units,70
-mohcd_2014-003,mohcd,2020-01-29,total_market_rate_units,280
-mohcd_2014-003,mohcd,2020-01-29,percent_affordable,20
-mohcd_2014-003,mohcd,2020-01-29,num_sro_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_studio_units,20
-mohcd_2014-003,mohcd,2020-01-29,num_1bd_units,32
-mohcd_2014-003,mohcd,2020-01-29,num_2bd_units,18
-mohcd_2014-003,mohcd,2020-01-29,num_3bd_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_30_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_40_percent_ami_units,11
-mohcd_2014-003,mohcd,2020-01-29,num_50_percent_ami_units,59
-mohcd_2014-003,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_60_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_80_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_90_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_100_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_120_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2014-003,mohcd,2020-01-29,num_ami_undeclared_units,0
-mohcd_2016-133,mohcd,2020-01-29,project_id,2016-133
-mohcd_2016-133,mohcd,2020-01-29,project_status,(1) Preliminary Phase
-mohcd_2016-133,mohcd,2020-01-29,project_name,Transbay Block 4 (Podium)
-mohcd_2016-133,mohcd,2020-01-29,street_name,Address not yet assigned
-mohcd_2016-133,mohcd,2020-01-29,street_type,1899-12-31T00:00:00.000
-mohcd_2016-133,mohcd,2020-01-29,zip_code,94105
-mohcd_2016-133,mohcd,2020-01-29,supervisor_district,6
-mohcd_2016-133,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2016-133,mohcd,2020-01-29,project_lead_sponsor,1899-12-31T00:00:00.000
-mohcd_2016-133,mohcd,2020-01-29,lead_agency,OCII
-mohcd_2016-133,mohcd,2020-01-29,program_area,OCII Inclusionary Rental Program
-mohcd_2016-133,mohcd,2020-01-29,project_type,New Construction
-mohcd_2016-133,mohcd,2020-01-29,housing_tenure,Rental
-mohcd_2016-133,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,05/01/2021
-mohcd_2016-133,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,05/01/2021
-mohcd_2016-133,mohcd,2020-01-29,date_estimated_construction_completion,05/01/2024
-mohcd_2016-133,mohcd,2020-01-29,planning_case_number,Not Applicable
-mohcd_2016-133,mohcd,2020-01-29,total_project_units,192
-mohcd_2016-133,mohcd,2020-01-29,total_affordable_units,192
-mohcd_2016-133,mohcd,2020-01-29,total_market_rate_units,0
-mohcd_2016-133,mohcd,2020-01-29,percent_affordable,100
-mohcd_2016-133,mohcd,2020-01-29,num_sro_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_studio_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_1bd_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_2bd_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_3bd_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_30_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_40_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_50_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_60_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_80_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_90_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_100_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_120_percent_ami_units,192
-mohcd_2016-133,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2016-133,mohcd,2020-01-29,num_ami_undeclared_units,0
-mohcd_2013-039,mohcd,2020-01-29,project_id,2013-039
-mohcd_2013-039,mohcd,2020-01-29,project_status,(6) Complete
-mohcd_2013-039,mohcd,2020-01-29,project_name,Clementina Towers
-mohcd_2013-039,mohcd,2020-01-29,street_name,Clementina
-mohcd_2013-039,mohcd,2020-01-29,street_type,St
-mohcd_2013-039,mohcd,2020-01-29,zip_code,94103
-mohcd_2013-039,mohcd,2020-01-29,supervisor_district,6
-mohcd_2013-039,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2013-039,mohcd,2020-01-29,project_lead_sponsor,Tenderloin Neighborhood Development Corporation
-mohcd_2013-039,mohcd,2020-01-29,project_owner,"Clementina Towers Associates, LP"
-mohcd_2013-039,mohcd,2020-01-29,lead_agency,MOHCD
-mohcd_2013-039,mohcd,2020-01-29,program_area,Rental Assistance Demonstration Program (RAD)
-mohcd_2013-039,mohcd,2020-01-29,project_type,Rehabilitation
-mohcd_2013-039,mohcd,2020-01-29,housing_tenure,Rental
-mohcd_2013-039,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,11/07/2016
-mohcd_2013-039,mohcd,2020-01-29,date_issuance_of_building_permit,07/18/2016
-mohcd_2013-039,mohcd,2020-01-29,date_issuance_of_first_construction_document,11/30/2016
-mohcd_2013-039,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,11/30/2016
-mohcd_2013-039,mohcd,2020-01-29,date_estimated_construction_completion,05/15/2019
-mohcd_2013-039,mohcd,2020-01-29,planning_case_number,2015-011205PRJ
-mohcd_2013-039,mohcd,2020-01-29,planning_entitlements,2015-011205ENV
-mohcd_2013-039,mohcd,2020-01-29,total_project_units,276
-mohcd_2013-039,mohcd,2020-01-29,total_affordable_units,274
-mohcd_2013-039,mohcd,2020-01-29,total_market_rate_units,2
-mohcd_2013-039,mohcd,2020-01-29,percent_affordable,99
-mohcd_2013-039,mohcd,2020-01-29,num_sro_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_studio_units,226
-mohcd_2013-039,mohcd,2020-01-29,num_1bd_units,48
-mohcd_2013-039,mohcd,2020-01-29,num_2bd_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_3bd_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_30_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_40_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_50_percent_ami_units,274
-mohcd_2013-039,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_60_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_80_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_90_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_100_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_120_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2013-039,mohcd,2020-01-29,num_ami_undeclared_units,0
-mohcd_2013-051,mohcd,2020-01-29,project_id,2013-051
-mohcd_2013-051,mohcd,2020-01-29,project_status,(5) First Construction Document Issued
-mohcd_2013-051,mohcd,2020-01-29,project_name,Transbay Block 8 (Affordable Component)
-mohcd_2013-051,mohcd,2020-01-29,street_name,Fremont
-mohcd_2013-051,mohcd,2020-01-29,street_type,St
-mohcd_2013-051,mohcd,2020-01-29,zip_code,94105
-mohcd_2013-051,mohcd,2020-01-29,supervisor_district,6
-mohcd_2013-051,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2013-051,mohcd,2020-01-29,project_lead_sponsor,Related California
-mohcd_2013-051,mohcd,2020-01-29,project_owner,"T8 Housing Partners, LP"
-mohcd_2013-051,mohcd,2020-01-29,lead_agency,OCII
-mohcd_2013-051,mohcd,2020-01-29,program_area,Multifamily Rental Program
-mohcd_2013-051,mohcd,2020-01-29,project_type,New Construction
-mohcd_2013-051,mohcd,2020-01-29,housing_tenure,Rental
-mohcd_2013-051,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,12/20/2016
-mohcd_2013-051,mohcd,2020-01-29,date_issuance_of_building_permit,07/13/2016
-mohcd_2013-051,mohcd,2020-01-29,date_issuance_of_first_construction_document,03/06/2019
-mohcd_2013-051,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,03/06/2019
-mohcd_2013-051,mohcd,2020-01-29,date_estimated_construction_completion,04/04/2019
-mohcd_2013-051,mohcd,2020-01-29,planning_case_number,Not Applicable
-mohcd_2013-051,mohcd,2020-01-29,total_project_units,80
-mohcd_2013-051,mohcd,2020-01-29,total_affordable_units,79
-mohcd_2013-051,mohcd,2020-01-29,total_market_rate_units,1
-mohcd_2013-051,mohcd,2020-01-29,percent_affordable,99
-mohcd_2013-051,mohcd,2020-01-29,num_sro_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_studio_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_1bd_units,39
-mohcd_2013-051,mohcd,2020-01-29,num_2bd_units,16
-mohcd_2013-051,mohcd,2020-01-29,num_3bd_units,24
-mohcd_2013-051,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_30_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_40_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_50_percent_ami_units,79
-mohcd_2013-051,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_60_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_80_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_90_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_100_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_120_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2013-051,mohcd,2020-01-29,num_ami_undeclared_units,0
-mohcd_2013-046,mohcd,2020-01-29,project_id,2013-046
-mohcd_2013-046,mohcd,2020-01-29,project_status,(5) First Construction Document Issued
-mohcd_2013-046,mohcd,2020-01-29,project_name,1950 Mission
-mohcd_2013-046,mohcd,2020-01-29,street_name,Mission
-mohcd_2013-046,mohcd,2020-01-29,street_type,St
-mohcd_2013-046,mohcd,2020-01-29,zip_code,94103
-mohcd_2013-046,mohcd,2020-01-29,supervisor_district,9
-mohcd_2013-046,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2013-046,mohcd,2020-01-29,project_lead_sponsor,BRIDGE Housing Corporation
-mohcd_2013-046,mohcd,2020-01-29,project_owner,1950 Mission Associates LLC
-mohcd_2013-046,mohcd,2020-01-29,lead_agency,MOHCD
-mohcd_2013-046,mohcd,2020-01-29,program_area,Multifamily Rental Program
-mohcd_2013-046,mohcd,2020-01-29,project_type,New Construction
-mohcd_2013-046,mohcd,2020-01-29,housing_tenure,Rental
-mohcd_2013-046,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,12/07/2018
-mohcd_2013-046,mohcd,2020-01-29,date_issuance_of_building_permit,02/16/2018
-mohcd_2013-046,mohcd,2020-01-29,date_issuance_of_first_construction_document,12/28/2018
-mohcd_2013-046,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,12/28/2018
-mohcd_2013-046,mohcd,2020-01-29,date_estimated_construction_completion,10/31/2020
-mohcd_2013-046,mohcd,2020-01-29,planning_case_number,2016-001514PRJ
-mohcd_2013-046,mohcd,2020-01-29,planning_entitlements,"2016-001514CUA,2016-001514ENV,2016-001514PPA"
-mohcd_2013-046,mohcd,2020-01-29,total_project_units,157
-mohcd_2013-046,mohcd,2020-01-29,total_affordable_units,155
-mohcd_2013-046,mohcd,2020-01-29,total_market_rate_units,2
-mohcd_2013-046,mohcd,2020-01-29,percent_affordable,99
-mohcd_2013-046,mohcd,2020-01-29,num_sro_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_studio_units,32
-mohcd_2013-046,mohcd,2020-01-29,num_1bd_units,36
-mohcd_2013-046,mohcd,2020-01-29,num_2bd_units,73
-mohcd_2013-046,mohcd,2020-01-29,num_3bd_units,14
-mohcd_2013-046,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_30_percent_ami_units,40
-mohcd_2013-046,mohcd,2020-01-29,num_40_percent_ami_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_50_percent_ami_units,41
-mohcd_2013-046,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_60_percent_ami_units,74
-mohcd_2013-046,mohcd,2020-01-29,num_80_percent_ami_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_90_percent_ami_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_100_percent_ami_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_120_percent_ami_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2013-046,mohcd,2020-01-29,num_ami_undeclared_units,0
-mohcd_2016-097,mohcd,2020-01-29,project_id,2016-097
-mohcd_2016-097,mohcd,2020-01-29,project_status,(1) Preliminary Phase
-mohcd_2016-097,mohcd,2020-01-29,project_name,Transbay Block 12
-mohcd_2016-097,mohcd,2020-01-29,street_name,Address not yet assigned
-mohcd_2016-097,mohcd,2020-01-29,zip_code,94105
-mohcd_2016-097,mohcd,2020-01-29,supervisor_district,6
-mohcd_2016-097,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2016-097,mohcd,2020-01-29,project_lead_sponsor,Developer not yet selected
-mohcd_2016-097,mohcd,2020-01-29,project_owner,Developer not yet selected
-mohcd_2016-097,mohcd,2020-01-29,lead_agency,OCII
-mohcd_2016-097,mohcd,2020-01-29,program_area,Multifamily Rental Program
-mohcd_2016-097,mohcd,2020-01-29,project_type,New Construction
-mohcd_2016-097,mohcd,2020-01-29,housing_tenure,Unknown
-mohcd_2016-097,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,12/31/2027
-mohcd_2016-097,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,12/31/2027
-mohcd_2016-097,mohcd,2020-01-29,date_estimated_construction_completion,06/23/2029
-mohcd_2016-097,mohcd,2020-01-29,planning_case_number,Not Applicable
-mohcd_2016-097,mohcd,2020-01-29,total_project_units,80
-mohcd_2016-097,mohcd,2020-01-29,total_affordable_units,79
-mohcd_2016-097,mohcd,2020-01-29,total_market_rate_units,1
-mohcd_2016-097,mohcd,2020-01-29,percent_affordable,99
-mohcd_2016-097,mohcd,2020-01-29,num_sro_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_studio_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_1bd_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_2bd_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_3bd_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_30_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_40_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_50_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_60_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_80_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_90_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_100_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_120_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2016-097,mohcd,2020-01-29,num_ami_undeclared_units,79
-mohcd_2012-010,mohcd,2020-01-29,project_id,2012-010
-mohcd_2012-010,mohcd,2020-01-29,project_status,(5) First Construction Document Issued
-mohcd_2012-010,mohcd,2020-01-29,project_name,500 Folsom (Transbay Block 9)
-mohcd_2012-010,mohcd,2020-01-29,street_name,Folsom
-mohcd_2012-010,mohcd,2020-01-29,street_type,St
-mohcd_2012-010,mohcd,2020-01-29,zip_code,94105
-mohcd_2012-010,mohcd,2020-01-29,supervisor_district,6
-mohcd_2012-010,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2012-010,mohcd,2020-01-29,project_lead_sponsor,Essex/TMG
-mohcd_2012-010,mohcd,2020-01-29,project_owner,"Block 9 Residential, LLC"
-mohcd_2012-010,mohcd,2020-01-29,lead_agency,OCII
-mohcd_2012-010,mohcd,2020-01-29,program_area,OCII Inclusionary Rental Program
-mohcd_2012-010,mohcd,2020-01-29,project_type,New Construction
-mohcd_2012-010,mohcd,2020-01-29,housing_tenure,Rental
-mohcd_2012-010,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,02/16/2016
-mohcd_2012-010,mohcd,2020-01-29,date_issuance_of_building_permit,02/18/2016
-mohcd_2012-010,mohcd,2020-01-29,date_issuance_of_first_construction_document,04/26/2017
-mohcd_2012-010,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,04/26/2017
-mohcd_2012-010,mohcd,2020-01-29,date_estimated_construction_completion,09/11/2019
-mohcd_2012-010,mohcd,2020-01-29,planning_case_number,Not Applicable
-mohcd_2012-010,mohcd,2020-01-29,total_project_units,537
-mohcd_2012-010,mohcd,2020-01-29,total_affordable_units,109
-mohcd_2012-010,mohcd,2020-01-29,total_market_rate_units,428
-mohcd_2012-010,mohcd,2020-01-29,percent_affordable,20
-mohcd_2012-010,mohcd,2020-01-29,num_sro_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_studio_units,34
-mohcd_2012-010,mohcd,2020-01-29,num_1bd_units,61
-mohcd_2012-010,mohcd,2020-01-29,num_2bd_units,14
-mohcd_2012-010,mohcd,2020-01-29,num_3bd_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_30_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_40_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_50_percent_ami_units,109
-mohcd_2012-010,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_60_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_80_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_90_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_100_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_120_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2012-010,mohcd,2020-01-29,num_ami_undeclared_units,0
-mohcd_2014-024,mohcd,2020-01-29,project_id,2014-024
-mohcd_2014-024,mohcd,2020-01-29,project_status,(5) First Construction Document Issued
-mohcd_2014-024,mohcd,2020-01-29,project_name,Transbay Block 1 (Inclusionary)
-mohcd_2014-024,mohcd,2020-01-29,street_name,Folsom
-mohcd_2014-024,mohcd,2020-01-29,street_type,St
-mohcd_2014-024,mohcd,2020-01-29,zip_code,94105
-mohcd_2014-024,mohcd,2020-01-29,supervisor_district,6
-mohcd_2014-024,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2014-024,mohcd,2020-01-29,project_lead_sponsor,Tishman Speyer
-mohcd_2014-024,mohcd,2020-01-29,project_owner,"Block One Property Holder, LP"
-mohcd_2014-024,mohcd,2020-01-29,lead_agency,OCII
-mohcd_2014-024,mohcd,2020-01-29,program_area,Limited Equity Program
-mohcd_2014-024,mohcd,2020-01-29,project_type,New Construction
-mohcd_2014-024,mohcd,2020-01-29,housing_tenure,Ownership
-mohcd_2014-024,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,05/01/2017
-mohcd_2014-024,mohcd,2020-01-29,date_issuance_of_building_permit,12/30/2016
-mohcd_2014-024,mohcd,2020-01-29,date_issuance_of_first_construction_document,05/25/2017
-mohcd_2014-024,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,05/25/2017
-mohcd_2014-024,mohcd,2020-01-29,date_estimated_construction_completion,02/01/2020
-mohcd_2014-024,mohcd,2020-01-29,planning_case_number,Not Applicable
-mohcd_2014-024,mohcd,2020-01-29,total_project_units,316
-mohcd_2014-024,mohcd,2020-01-29,total_affordable_units,80
-mohcd_2014-024,mohcd,2020-01-29,total_market_rate_units,236
-mohcd_2014-024,mohcd,2020-01-29,percent_affordable,25
-mohcd_2014-024,mohcd,2020-01-29,num_sro_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_studio_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_1bd_units,30
-mohcd_2014-024,mohcd,2020-01-29,num_2bd_units,45
-mohcd_2014-024,mohcd,2020-01-29,num_3bd_units,5
-mohcd_2014-024,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_30_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_40_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_50_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_60_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_80_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_90_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_100_percent_ami_units,50
-mohcd_2014-024,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_120_percent_ami_units,30
-mohcd_2014-024,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2014-024,mohcd,2020-01-29,num_ami_undeclared_units,0
-mohcd_2016-108,mohcd,2020-01-29,project_id,2016-108
-mohcd_2016-108,mohcd,2020-01-29,project_status,(1) Preliminary Phase
-mohcd_2016-108,mohcd,2020-01-29,project_name,Transbay Block 4 (Tower)
-mohcd_2016-108,mohcd,2020-01-29,street_name,Address not yet assigned
-mohcd_2016-108,mohcd,2020-01-29,street_type,1899-12-31T00:00:00.000
-mohcd_2016-108,mohcd,2020-01-29,zip_code,94105
-mohcd_2016-108,mohcd,2020-01-29,supervisor_district,6
-mohcd_2016-108,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2016-108,mohcd,2020-01-29,project_lead_sponsor,1899-12-31T00:00:00.000
-mohcd_2016-108,mohcd,2020-01-29,lead_agency,OCII
-mohcd_2016-108,mohcd,2020-01-29,program_area,OCII Inclusionary Rental Program
-mohcd_2016-108,mohcd,2020-01-29,project_type,New Construction
-mohcd_2016-108,mohcd,2020-01-29,housing_tenure,Rental
-mohcd_2016-108,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,05/01/2021
-mohcd_2016-108,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,05/01/2021
-mohcd_2016-108,mohcd,2020-01-29,date_estimated_construction_completion,05/01/2024
-mohcd_2016-108,mohcd,2020-01-29,planning_case_number,Not Applicable
-mohcd_2016-108,mohcd,2020-01-29,total_project_units,352
-mohcd_2016-108,mohcd,2020-01-29,total_affordable_units,144
-mohcd_2016-108,mohcd,2020-01-29,total_market_rate_units,208
-mohcd_2016-108,mohcd,2020-01-29,percent_affordable,41
-mohcd_2016-108,mohcd,2020-01-29,num_sro_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_studio_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_1bd_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_2bd_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_3bd_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_30_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_40_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_50_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_60_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_80_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_90_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_100_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_120_percent_ami_units,337
-mohcd_2016-108,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2016-108,mohcd,2020-01-29,num_ami_undeclared_units,0
-mohcd_2016-088,mohcd,2020-01-29,project_id,2016-088
-mohcd_2016-088,mohcd,2020-01-29,project_status,(1) Preliminary Phase
-mohcd_2016-088,mohcd,2020-01-29,project_name,Transbay Block 2 West
-mohcd_2016-088,mohcd,2020-01-29,street_name,Fremont
-mohcd_2016-088,mohcd,2020-01-29,street_type,St
-mohcd_2016-088,mohcd,2020-01-29,zip_code,94105
-mohcd_2016-088,mohcd,2020-01-29,supervisor_district,6
-mohcd_2016-088,mohcd,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
-mohcd_2016-088,mohcd,2020-01-29,project_lead_sponsor,Developer not yet selected
-mohcd_2016-088,mohcd,2020-01-29,lead_agency,OCII
-mohcd_2016-088,mohcd,2020-01-29,program_area,Multifamily Rental Program
-mohcd_2016-088,mohcd,2020-01-29,project_type,New Construction
-mohcd_2016-088,mohcd,2020-01-29,housing_tenure,Rental
-mohcd_2016-088,mohcd,2020-01-29,date_issuance_of_notice_to_proceed,01/01/2022
-mohcd_2016-088,mohcd,2020-01-29,date_estimated_or_actual_actual_construction_start,01/01/2022
-mohcd_2016-088,mohcd,2020-01-29,date_estimated_construction_completion,01/01/2024
-mohcd_2016-088,mohcd,2020-01-29,planning_case_number,Not Applicable
-mohcd_2016-088,mohcd,2020-01-29,total_project_units,78
-mohcd_2016-088,mohcd,2020-01-29,total_affordable_units,77
-mohcd_2016-088,mohcd,2020-01-29,total_market_rate_units,1
-mohcd_2016-088,mohcd,2020-01-29,percent_affordable,99
-mohcd_2016-088,mohcd,2020-01-29,num_sro_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_studio_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_1bd_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_2bd_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_3bd_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_4bd_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_5_plus_bd_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_20_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_30_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_40_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_50_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_55_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_60_percent_ami_units,77
-mohcd_2016-088,mohcd,2020-01-29,num_80_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_90_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_100_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_105_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_110_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_120_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_130_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_150_percent_ami_units,0
-mohcd_2016-088,mohcd,2020-01-29,num_ami_undeclared_units,0
 bmr_2003-030,bmr,2020-01-29,project_id,2003-030
 bmr_2003-030,bmr,2020-01-29,project_name,Valencia Gardens
 bmr_2003-030,bmr,2020-01-29,street_number,340-370
@@ -3729,6 +3259,789 @@ bmr_2013-037,bmr,2020-01-29,num_more_than_120_percent_ami_units,0
 bmr_2013-037,bmr,2020-01-29,year_constructed,1900
 bmr_2013-037,bmr,2020-01-29,year_affordability_began,2016
 bmr_2013-037,bmr,2020-01-29,address_norm,"2451 SACRAMENTO ST, SAN FRANCISCO, CA, 94115"
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,project_id,2016-023
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,project_status,(6) Complete
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,project_name,The Rise Hayes Valley
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,street_name,Market
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,street_type,St
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,zip_code,94103
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,location,POINT (-122.421878544999 37.772235894)
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,lead_agency,MOHCD
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,program_area,Inclusionary Housing Program
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,housing_tenure,Ownership
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,date_issuance_of_building_permit,12/16/2016
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,date_issuance_of_first_construction_document,10/11/2017
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,10/11/2017
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,05/28/2019
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,planning_case_number,2014.0484
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,planning_entitlements,"2014-002961CUA,2014.0484CND,2014.0484E,2014.0484PPA,2014.0484U"
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,section_415_declaration,On-site BMR Project
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,total_project_units,160
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,total_affordable_units,19
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,total_market_rate_units,141
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,percent_affordable,12
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_studio_units,2
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_1bd_units,9
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_2bd_units,8
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_3bd_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,19
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2016-023,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,project_id,2017-034
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,project_status,(5) First Construction Document Issued
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,project_name,2465 Van Ness
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,street_name,Van Ness
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,street_type,Ave
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,zip_code,94123
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,supervisor_district,2
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,location,POINT (-122.424309063999 37.79822405)
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,project_lead_sponsor,DM Development
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,lead_agency,MOHCD
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,program_area,Inclusionary Housing Program
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,housing_tenure,Unknown
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,date_issuance_of_building_permit,06/29/2018
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,date_issuance_of_first_construction_document,12/19/2018
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,12/19/2018
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,02/11/2021
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,planning_case_number,2015-014058PRJ
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,planning_entitlements,"2015-014058CUA,2015-014058ENV,2015-014058PPA,2015-014058TDM,2015-014058VAR"
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,section_415_declaration,Off-site BMR Project (Small Sites)/Fee Payment
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,total_project_units,41
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,total_affordable_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,total_market_rate_units,41
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,percent_affordable,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_studio_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_1bd_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_2bd_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_3bd_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2017-034,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,project_id,2011-005
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,project_status,(6) Complete
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,project_name,1255-1275 Columbus
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,street_name,Columbus
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,street_type,Ave
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,zip_code,94133
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,supervisor_district,2
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,location,POINT (-122.418238739999 37.805603742)
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,lead_agency,MOHCD
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,program_area,Inclusionary Housing Program
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,housing_tenure,Unknown
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,date_issuance_of_building_permit,04/22/2014
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,date_issuance_of_first_construction_document,12/07/2016
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,12/07/2016
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,02/14/2019
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,planning_case_number,2008.0723
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,planning_entitlements,"2008.0723E,2008.0723E_3,2008.0723E_4,2008.0723V"
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,section_415_declaration,Fee Payment
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,total_project_units,20
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,total_affordable_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,total_market_rate_units,20
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,percent_affordable,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_studio_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_1bd_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_2bd_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_3bd_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2011-005,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,project_id,2014-008
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,project_status,(5) First Construction Document Issued
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,project_name,Transbay Block 1 (Affordable Project)
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,street_name,Folsom
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,street_type,St
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,zip_code,94105
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,project_lead_sponsor,Tishman Speyer
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,project_owner,"Block One Property Holder, LP"
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,lead_agency,OCII
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,program_area,Multifamily Rental Program
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,housing_tenure,Ownership
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,05/01/2017
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,date_issuance_of_building_permit,12/30/2016
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,date_issuance_of_first_construction_document,05/25/2017
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,05/25/2017
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,02/01/2020
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,planning_case_number,Not Applicable
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,total_project_units,76
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,total_affordable_units,76
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,total_market_rate_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,percent_affordable,100
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_studio_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_1bd_units,42
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_2bd_units,19
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_3bd_units,15
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,25
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,26
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,25
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2014-008,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,project_id,2016-089
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,project_status,(1) Preliminary Phase
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,project_name,Transbay Block 2 East
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,street_name,Address not yet assigned
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,zip_code,94105
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,project_lead_sponsor,Developer not yet selected
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,project_owner,Developer not yet selected
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,lead_agency,OCII
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,program_area,Multifamily Rental Program
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,housing_tenure,Rental
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,01/01/2022
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,01/01/2022
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,01/01/2024
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,planning_case_number,Not Applicable
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,total_project_units,169
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,total_affordable_units,168
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,total_market_rate_units,1
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,percent_affordable,99
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_studio_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_1bd_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_2bd_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_3bd_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,168
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2016-089,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,project_id,2014-003
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,project_status,(5) First Construction Document Issued
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,project_name,Transbay Block 8
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,street_name,Fremont
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,street_type,St
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,zip_code,94105
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,project_lead_sponsor,Related California
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,project_owner,"T8 Urban Housing Associates, LLC"
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,lead_agency,OCII
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,program_area,OCII Inclusionary Rental Program
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,housing_tenure,Rental
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,10/28/2016
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,date_issuance_of_building_permit,07/13/2016
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,date_issuance_of_first_construction_document,05/12/2016
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,05/12/2016
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,04/01/2019
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,planning_case_number,Not Applicable
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,total_project_units,350
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,total_affordable_units,70
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,total_market_rate_units,280
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,percent_affordable,20
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_studio_units,20
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_1bd_units,32
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_2bd_units,18
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_3bd_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,11
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,59
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2014-003,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,project_id,2016-133
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,project_status,(1) Preliminary Phase
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,project_name,Transbay Block 4 (Podium)
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,street_name,Address not yet assigned
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,street_type,1899-12-31T00:00:00.000
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,zip_code,94105
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,project_lead_sponsor,1899-12-31T00:00:00.000
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,lead_agency,OCII
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,program_area,OCII Inclusionary Rental Program
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,housing_tenure,Rental
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,05/01/2021
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,05/01/2021
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,05/01/2024
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,planning_case_number,Not Applicable
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,total_project_units,192
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,total_affordable_units,192
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,total_market_rate_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,percent_affordable,100
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_studio_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_1bd_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_2bd_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_3bd_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,192
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2016-133,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,project_id,2013-039
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,project_status,(6) Complete
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,project_name,Clementina Towers
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,street_name,Clementina
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,street_type,St
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,zip_code,94103
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,project_lead_sponsor,Tenderloin Neighborhood Development Corporation
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,project_owner,"Clementina Towers Associates, LP"
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,lead_agency,MOHCD
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,program_area,Rental Assistance Demonstration Program (RAD)
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,project_type,Rehabilitation
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,housing_tenure,Rental
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,11/07/2016
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,date_issuance_of_building_permit,07/18/2016
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,date_issuance_of_first_construction_document,11/30/2016
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,11/30/2016
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,05/15/2019
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,planning_case_number,2015-011205PRJ
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,planning_entitlements,2015-011205ENV
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,total_project_units,276
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,total_affordable_units,274
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,total_market_rate_units,2
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,percent_affordable,99
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_studio_units,226
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_1bd_units,48
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_2bd_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_3bd_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,274
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2013-039,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,project_id,2013-051
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,project_status,(5) First Construction Document Issued
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,project_name,Transbay Block 8 (Affordable Component)
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,street_name,Fremont
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,street_type,St
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,zip_code,94105
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,project_lead_sponsor,Related California
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,project_owner,"T8 Housing Partners, LP"
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,lead_agency,OCII
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,program_area,Multifamily Rental Program
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,housing_tenure,Rental
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,12/20/2016
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,date_issuance_of_building_permit,07/13/2016
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,date_issuance_of_first_construction_document,03/06/2019
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,03/06/2019
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,04/04/2019
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,planning_case_number,Not Applicable
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,total_project_units,80
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,total_affordable_units,79
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,total_market_rate_units,1
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,percent_affordable,99
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_studio_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_1bd_units,39
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_2bd_units,16
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_3bd_units,24
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,79
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2013-051,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,project_id,2013-046
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,project_status,(5) First Construction Document Issued
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,project_name,1950 Mission
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,street_name,Mission
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,street_type,St
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,zip_code,94103
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,supervisor_district,9
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,project_lead_sponsor,BRIDGE Housing Corporation
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,project_owner,1950 Mission Associates LLC
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,lead_agency,MOHCD
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,program_area,Multifamily Rental Program
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,housing_tenure,Rental
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,12/07/2018
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,date_issuance_of_building_permit,02/16/2018
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,date_issuance_of_first_construction_document,12/28/2018
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,12/28/2018
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,10/31/2020
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,planning_case_number,2016-001514PRJ
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,planning_entitlements,"2016-001514CUA,2016-001514ENV,2016-001514PPA"
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,total_project_units,157
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,total_affordable_units,155
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,total_market_rate_units,2
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,percent_affordable,99
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_studio_units,32
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_1bd_units,36
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_2bd_units,73
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_3bd_units,14
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,40
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,41
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,74
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2013-046,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,project_id,2016-097
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,project_status,(1) Preliminary Phase
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,project_name,Transbay Block 12
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,street_name,Address not yet assigned
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,zip_code,94105
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,project_lead_sponsor,Developer not yet selected
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,project_owner,Developer not yet selected
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,lead_agency,OCII
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,program_area,Multifamily Rental Program
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,housing_tenure,Unknown
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,12/31/2027
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,12/31/2027
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,06/23/2029
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,planning_case_number,Not Applicable
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,total_project_units,80
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,total_affordable_units,79
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,total_market_rate_units,1
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,percent_affordable,99
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_studio_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_1bd_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_2bd_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_3bd_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2016-097,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,79
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,project_id,2012-010
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,project_status,(5) First Construction Document Issued
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,project_name,500 Folsom (Transbay Block 9)
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,street_name,Folsom
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,street_type,St
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,zip_code,94105
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,project_lead_sponsor,Essex/TMG
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,project_owner,"Block 9 Residential, LLC"
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,lead_agency,OCII
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,program_area,OCII Inclusionary Rental Program
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,housing_tenure,Rental
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,02/16/2016
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,date_issuance_of_building_permit,02/18/2016
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,date_issuance_of_first_construction_document,04/26/2017
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,04/26/2017
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,09/11/2019
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,planning_case_number,Not Applicable
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,total_project_units,537
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,total_affordable_units,109
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,total_market_rate_units,428
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,percent_affordable,20
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_studio_units,34
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_1bd_units,61
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_2bd_units,14
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_3bd_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,109
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2012-010,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,project_id,2014-024
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,project_status,(5) First Construction Document Issued
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,project_name,Transbay Block 1 (Inclusionary)
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,street_name,Folsom
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,street_type,St
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,zip_code,94105
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,project_lead_sponsor,Tishman Speyer
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,project_owner,"Block One Property Holder, LP"
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,lead_agency,OCII
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,program_area,Limited Equity Program
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,housing_tenure,Ownership
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,05/01/2017
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,date_issuance_of_building_permit,12/30/2016
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,date_issuance_of_first_construction_document,05/25/2017
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,05/25/2017
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,02/01/2020
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,planning_case_number,Not Applicable
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,total_project_units,316
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,total_affordable_units,80
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,total_market_rate_units,236
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,percent_affordable,25
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_studio_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_1bd_units,30
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_2bd_units,45
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_3bd_units,5
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,50
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,30
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2014-024,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,project_id,2016-108
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,project_status,(1) Preliminary Phase
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,project_name,Transbay Block 4 (Tower)
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,street_name,Address not yet assigned
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,street_type,1899-12-31T00:00:00.000
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,zip_code,94105
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,project_lead_sponsor,1899-12-31T00:00:00.000
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,lead_agency,OCII
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,program_area,OCII Inclusionary Rental Program
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,housing_tenure,Rental
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,05/01/2021
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,05/01/2021
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,05/01/2024
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,planning_case_number,Not Applicable
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,total_project_units,352
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,total_affordable_units,144
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,total_market_rate_units,208
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,percent_affordable,41
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_studio_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_1bd_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_2bd_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_3bd_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,337
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2016-108,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,project_id,2016-088
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,project_status,(1) Preliminary Phase
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,project_name,Transbay Block 2 West
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,street_name,Fremont
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,street_type,St
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,zip_code,94105
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,supervisor_district,6
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,location,POINT (-122.416591818 37.7885785695712)
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,project_lead_sponsor,Developer not yet selected
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,lead_agency,OCII
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,program_area,Multifamily Rental Program
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,project_type,New Construction
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,housing_tenure,Rental
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,date_issuance_of_notice_to_proceed,01/01/2022
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,date_estimated_or_actual_actual_construction_start,01/01/2022
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,date_estimated_construction_completion,01/01/2024
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,planning_case_number,Not Applicable
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,total_project_units,78
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,total_affordable_units,77
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,total_market_rate_units,1
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,percent_affordable,99
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_sro_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_studio_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_1bd_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_2bd_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_3bd_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_4bd_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_5_plus_bd_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_20_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_30_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_40_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_50_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_55_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_60_percent_ami_units,77
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_80_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_90_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_100_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_105_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_110_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_120_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_130_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_150_percent_ami_units,0
+mohcd_pipeline_2016-088,mohcd_pipeline,2020-01-29,num_ami_undeclared_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,project_id,2016-023
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,project_status,(5) First Construction Document Issued
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,project_name,1699 Market
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,street_number,1699
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,street_name,Market
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,street_type,St
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,zip_code,94103
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,housing_tenure,Unknown
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,section_415_declaration,Fee Payment
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,entitlement_approval_date,03/24/2016
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,date_estimated_or_actual_completion,12/10/2019
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,planning_case_number,2014.0484
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,planning_entitlements,"2014-002961CUA,2014.0484CND,2014.0484E,2014.0484PPA,2014.0484U"
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,total_project_units,160
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,total_affordable_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,units_subject_to_415_declaration,160
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,on_site_affordable_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,off_site_affordable_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,off_site_affordable_units_at_site,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_sro_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_studio_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_1bd_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_2bd_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_3bd_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_4bd_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_30_percent_ami_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_50_percent_ami_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_55_percent_ami_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_60_percent_ami_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_80_percent_ami_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_90_percent_ami_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_100_percent_ami_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_120_percent_ami_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,num_150_percent_ami_units,0
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,supervisor_district,6
+mohcd_inclusionary_2016-023,mohcd_inclusionary,2020-01-29,location,POINT (-122.4218785 37.77223589)
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,project_id,2017-034
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,project_status,(3) Design with Entitlements Approved
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,project_name,2465 Van Ness Ave
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,street_number,2465
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,street_name,Van Ness
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,street_type,Ave
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,zip_code,94123
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,housing_tenure,Unknown
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,section_415_declaration,Off-site BMR Project/Fee Payment
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,entitlement_approval_date,12/14/2017
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,date_estimated_or_actual_completion,12/12/2024
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,planning_case_number,2015-014058PRJ
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,planning_entitlements,"2015-014058CUA,2015-014058ENV,2015-014058PPA,2015-014058TDM,2015-014058VAR"
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,total_project_units,41
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,total_affordable_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,units_subject_to_415_declaration,41
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,on_site_affordable_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,off_site_affordable_units,12
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,off_site_affordable_units_at_site,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_sro_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_studio_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_1bd_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_2bd_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_3bd_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_4bd_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_30_percent_ami_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_50_percent_ami_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_55_percent_ami_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_60_percent_ami_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_80_percent_ami_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_90_percent_ami_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_100_percent_ami_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_120_percent_ami_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,num_150_percent_ami_units,0
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,supervisor_district,2
+mohcd_inclusionary_2017-034,mohcd_inclusionary,2020-01-29,location,POINT (-122.4243091 37.79822405)
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,project_id,2011-005
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,project_status,(5) First Construction Document Issued
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,project_name,1255-1275 Columbus
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,street_number,1255-1275
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,street_name,Columbus
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,street_type,Ave
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,zip_code,94133
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,housing_tenure,Unknown
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,section_415_declaration,Fee Payment
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,entitlement_approval_date,06/08/2011
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,date_estimated_or_actual_completion,02/05/2019
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,planning_case_number,2008.0723
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,planning_entitlements,"2008.0723E,2008.0723E_3,2008.0723E_4,2008.0723V"
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,total_project_units,20
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,total_affordable_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,units_subject_to_415_declaration,20
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,on_site_affordable_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,off_site_affordable_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,off_site_affordable_units_at_site,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_sro_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_studio_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_1bd_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_2bd_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_3bd_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_4bd_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_30_percent_ami_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_50_percent_ami_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_55_percent_ami_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_60_percent_ami_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_80_percent_ami_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_90_percent_ami_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_100_percent_ami_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_120_percent_ami_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_150_percent_ami_units,0
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,supervisor_district,2
+mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,location,POINT (-122.4182387 37.80560374)
 ppts_2016-001514ETM,ppts,2020-01-29,record_id,2016-001514ETM
 ppts_2016-001514ETM,ppts,2020-01-29,record_type,Environmental Time and Materials (ETM)
 ppts_2016-001514ETM,ppts,2020-01-29,record_type_category,Environmental T and M-ETM
@@ -3809,8 +4122,15 @@ ppts_1997.055D,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.46678637 37.758794
 ppts_2007.1121V,ppts,2020-01-29,planner_name,Ben Fu
 ppts_2007.1121V,ppts,2020-01-29,planner_email,BEN.FU@SFGOV.ORG
 ppts_2007.1121V,ppts,2020-01-29,planner_phone,415-558-6613
+ppts_2015-014058CUA,ppts,2020-01-29,status,Closed - Approved
+ppts_2015-014058CUA,ppts,2020-01-29,date_closed,04/10/2018 12:00:00 AM +0000
 ppts_2675PRV,ppts,2020-01-29,date_opened,08/06/2003 10:31:25 AM +0000
 ppts_2015-001373MIS,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.417919582 37.775981011, -122.41779697 37.776077885, -122.417453754 37.776349056, -122.417025525 37.776007513, -122.416927898 37.775929647, -122.416854678 37.775871249, -122.416769255 37.775803116, -122.416583973 37.775655337, -122.416828954 37.7754614, -122.416865702 37.775432309, -122.416780279 37.775364177, -122.416872894 37.775290249, -122.417091738 37.775464796, -122.417156729 37.775413457, -122.41729831 37.775524434, -122.417322834 37.775505061, -122.417919582 37.775981011)))"
+ppts_2015-014058TDM,ppts,2020-01-29,description,"Demolition of an existing fuel canopy and retail structure at the site of a decommissioned gas station. New construction of a 7-story mixed-use building containing 41 dwelling units, approximately 2,800 square feet of commercial/retail space, 31 off-street vehicle parking spaces, three (3) car-share parking spaces, 41 Class 1 bicycle parking spaces and four (4) Class 2 bicycle parking spaces."
+ppts_2015-014058TDM,ppts,2020-01-29,status,Approved
+ppts_2015-014058TDM,ppts,2020-01-29,planner_name,Audrey Harris
+ppts_2015-014058TDM,ppts,2020-01-29,planner_email,audrey.harris@sfgov.org
+ppts_2015-014058TDM,ppts,2020-01-29,planner_phone,415-575-9136
 ppts_6559PRV,ppts,2020-01-29,planner_name,Ben Fu
 ppts_6559PRV,ppts,2020-01-29,planner_email,BEN.FU@SFGOV.ORG
 ppts_6559PRV,ppts,2020-01-29,planner_phone,415-558-6613
@@ -4003,6 +4323,14 @@ ppts_V09-055,ppts,2020-01-29,planner_phone,415-558-6613
 ppts_2016-010699ENF,ppts,2020-01-29,name,1316/1318 10th Avenue Illegal Short-Term Rentals by Owners
 ppts_2016-010699ENF,ppts,2020-01-29,description,"Illegal short-term rentals on Airbnb by Owners. Certificate issued, then revoked by OSTR staff (September 2018)."
 ppts_2016-010699ENF,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466816413 37.763563606, -122.466814497 37.763536184, -122.467228993 37.763517982, -122.467233783 37.763586535, -122.46690564 37.763600945, -122.466819287 37.763604738, -122.466816413 37.763563606)))"
+ppts_2015-014058PRJ,ppts,2020-01-29,description,"Construction of a new 7 story 41 unit multi-family residential structure over retail and parking garage for both vehicles and bikes.
+MULTIPOLYGON (((-122.390146674 37.787310971"
+ppts_2015-014058PRJ,ppts,2020-01-29,parent,-122.389962894 37.787722742
+ppts_2015-014058PRJ,ppts,2020-01-29,children,-122.389797269 37.787587174
+ppts_2015-014058PRJ,ppts,2020-01-29,planner_name,48684
+ppts_2015-014058PRJ,ppts,2020-01-29,planner_email,2016-002196GEN
+ppts_2015-014058PRJ,ppts,2020-01-29,planner_phone,01/12/2016 12:00:00 AM +0000
+ppts_2015-014058PRJ,ppts,2020-01-29,is_adu,Josephine Chen
 ppts_EE80.114,ppts,2020-01-29,description,"Leasing of School Property
 MULTIPOLYGON (((-122.467683034 37.774865322"
 ppts_EE80.114,ppts,2020-01-29,parent,"-122.467683034 37.774865322)))"""
@@ -4020,6 +4348,21 @@ ppts_2016-001514ENV,ppts,2020-01-29,planner_phone,02/21/1969 12:00:00 AM +0000
 ppts_2017-000155MIS,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.417919582 37.775981011, -122.41779697 37.776077885, -122.417453754 37.776349056, -122.417025525 37.776007513, -122.416927898 37.775929647, -122.416854678 37.775871249, -122.416769255 37.775803116, -122.416583973 37.775655337, -122.416828954 37.7754614, -122.416865702 37.775432309, -122.416780279 37.775364177, -122.416872894 37.775290249, -122.417091738 37.775464796, -122.417156729 37.775413457, -122.41729831 37.775524434, -122.417322834 37.775505061, -122.417919582 37.775981011)))"
 ppts_MB1301338,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.417919582 37.775981011, -122.41779697 37.776077885, -122.417453754 37.776349056, -122.417025525 37.776007513, -122.416927898 37.775929647, -122.416854678 37.775871249, -122.416769255 37.775803116, -122.416583973 37.775655337, -122.416828954 37.7754614, -122.416865702 37.775432309, -122.416780279 37.775364177, -122.416872894 37.775290249, -122.417091738 37.775464796, -122.417156729 37.775413457, -122.41729831 37.775524434, -122.417322834 37.775505061, -122.417919582 37.775981011)))"
 ppts_1997.055Q,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.46678637 37.758794114, -122.46689862 37.758789175, -122.46690341 37.758857729, -122.466487121 37.758876044, -122.466482332 37.75880749, -122.466527327 37.75880551, -122.466613674 37.758801712, -122.466700021 37.758797913, -122.46678637 37.758794114)))"
+ppts_2007.0530D,ppts,2020-01-29,record_id,2007.0530D
+ppts_2007.0530D,ppts,2020-01-29,record_type,Discretionary Review - Public Initiated (DRP)
+ppts_2007.0530D,ppts,2020-01-29,record_type_category,DRP
+ppts_2007.0530D,ppts,2020-01-29,name,1698 10TH AV
+ppts_2007.0530D,ppts,2020-01-29,description,"The proposal is to construct a horizontal addition to northern side of the subject dwelling in order to incorporate a second dwelling unit and a second parking space in Zoning District RH-2. The addition is two stories and approximately 420 square feet on each floor. The proposal conforms to the requirements of the RH-2 (Residential, House, Two-Family) District."
+ppts_2007.0530D,ppts,2020-01-29,parent,2007.0530
+ppts_2007.0530D,ppts,2020-01-29,status,Closed
+ppts_2007.0530D,ppts,2020-01-29,date_opened,06/04/2007 12:00:00 AM +0000
+ppts_2007.0530D,ppts,2020-01-29,date_closed,05/09/2016 12:00:00 AM +0000
+ppts_2007.0530D,ppts,2020-01-29,address,"1698 10TH AV, SAN FRANCISCO, CA 94122"
+ppts_2007.0530D,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466759043 37.756791147, -122.466574171 37.756799281, -122.466564339 37.756658536, -122.466749211 37.756650402, -122.466759043 37.756791147)))"
+ppts_2007.0530D,ppts,2020-01-29,planner_name,Kate Conner
+ppts_2007.0530D,ppts,2020-01-29,planner_email,kate.conner@sfgov.org
+ppts_2007.0530D,ppts,2020-01-29,planner_phone,415-575-6914
+ppts_2007.0530D,ppts,2020-01-29,address_norm,"1698 10TH AVE, SAN FRANCISCO, CA, 94122"
 ppts_2004.0661D,ppts,2020-01-29,record_id,2004.0661D
 ppts_2004.0661D,ppts,2020-01-29,record_type,Discretionary Review - Public Initiated (DRP)
 ppts_2004.0661D,ppts,2020-01-29,record_type_category,DRP
@@ -4081,6 +4424,21 @@ ppts_2019-005712MIS,ppts,2020-01-29,planner_name,David Weissglass
 ppts_2019-005712MIS,ppts,2020-01-29,planner_email,David.Weissglass@sfgov.org
 ppts_2019-005712MIS,ppts,2020-01-29,planner_phone,415-575-9177
 ppts_2019-005712MIS,ppts,2020-01-29,address_norm,"8 10TH ST, SAN FRANCISCO, CA, 94103"
+ppts_2015-014058CND,ppts,2020-01-29,record_id,2015-014058CND
+ppts_2015-014058CND,ppts,2020-01-29,record_type,Condo-REF (CND)
+ppts_2015-014058CND,ppts,2020-01-29,record_type_category,CND
+ppts_2015-014058CND,ppts,2020-01-29,name,2465 VAN NESS AVE
+ppts_2015-014058CND,ppts,2020-01-29,description,E-Condo for 41 Residential and 2 Commercial Mixed Use Units New Condominium.
+ppts_2015-014058CND,ppts,2020-01-29,parent,2015-014058PRJ
+ppts_2015-014058CND,ppts,2020-01-29,status,Closed - Approved
+ppts_2015-014058CND,ppts,2020-01-29,date_opened,11/08/2018 12:00:00 AM +0000
+ppts_2015-014058CND,ppts,2020-01-29,date_closed,01/03/2019 12:00:00 AM +0000
+ppts_2015-014058CND,ppts,2020-01-29,address,2465 VAN NESS AVE 94123
+ppts_2015-014058CND,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.424440899 37.798016091, -122.424516106 37.798388965, -122.424177333 37.798432032, -122.424101931 37.798059181, -122.424440899 37.798016091)))"
+ppts_2015-014058CND,ppts,2020-01-29,planner_name,Katherine Wilborn
+ppts_2015-014058CND,ppts,2020-01-29,planner_email,katherine.wilborn@sfgov.org
+ppts_2015-014058CND,ppts,2020-01-29,planner_phone,415-575-9114
+ppts_2015-014058CND,ppts,2020-01-29,address_norm,"2465 VAN NESS AVE, SAN FRANCISCO, CA, 94123"
 ppts_2018-007177GEN,ppts,2020-01-29,record_id,2018-007177GEN
 ppts_2018-007177GEN,ppts,2020-01-29,record_type,Generic (GEN)
 ppts_2018-007177GEN,ppts,2020-01-29,record_type_category,GEN

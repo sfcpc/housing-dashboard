@@ -4,7 +4,7 @@ from collections import namedtuple
 
 from relational.process_schemaless import Freshness
 from relational.process_schemaless import is_seen_id
-from schemaless.sources import MOHCD
+from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 
@@ -65,7 +65,7 @@ def test_freshness():
     # mohcd extracts from last_updated
     lines.append({
         'last_updated': '2019-01-01',  # isoformat for last_updated
-        'source': MOHCD.NAME,
+        'source': MOHCDPipeline.NAME,
         'name': 'date_opened',
         'value': '01/01/2020',
     })
@@ -76,7 +76,7 @@ def test_freshness():
 
     assert fresh.freshness[PPTS.NAME] == newer
     assert fresh.freshness[PTS.NAME] == pts
-    assert fresh.freshness[MOHCD.NAME] == mohcd
+    assert fresh.freshness[MOHCDPipeline.NAME] == mohcd
     assert 'bamboozle' not in fresh.freshness
 
 

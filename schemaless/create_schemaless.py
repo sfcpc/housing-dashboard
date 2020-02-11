@@ -16,7 +16,8 @@ import shutil
 import sys
 
 from schemaless.sources import BMR
-from schemaless.sources import MOHCD
+from schemaless.sources import MOHCDInclusionary
+from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 from schemaless.sources import TCO
@@ -74,7 +75,7 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
                 if fk not in records[source.NAME]:
                     records[source.NAME][fk] = {}
                 for (key, val) in line.items():
-                    if val != records[source.NAME][fk].get(key, None):
+                    if val and val != records[source.NAME][fk].get(key, ""):
                         records[source.NAME][fk][key] = val
                         writer.writerow([
                             fk, source.NAME, last_updated, key, val.strip()
@@ -86,8 +87,11 @@ if __name__ == "__main__":
     parser.add_argument('--ppts_file', help='PPTS file', default='')
     parser.add_argument('--pts_file', help='PTS file', default='')
     parser.add_argument('--tco_file', help='TCO file', default='')
-    parser.add_argument('--mohcd_file', help='MOHCD file', default='')
     parser.add_argument('--bmr_file', help='BMR file', default='')
+    parser.add_argument('--mohcd_pipeline_file',
+                        help='MOHCD Pipeline file', default='')
+    parser.add_argument('--mohcd_inclusionary_file',
+                        help='MOHCD Inclusionary file', default='')
     parser.add_argument('--out_file', help='output file for schemaless csv')
 
     parser.add_argument(
@@ -111,10 +115,12 @@ if __name__ == "__main__":
         sources.append(PTS(args.pts_file))
     if args.tco_file:
         sources.append(TCO(args.tco_file))
-    if args.mohcd_file:
-        sources.append(MOHCD(args.mohcd_file))
     if args.bmr_file:
         sources.append(BMR(args.bmr_file))
+    if args.mohcd_pipeline_file:
+        sources.append(MOHCDPipeline(args.mohcd_pipeline_file))
+    if args.mohcd_inclusionary_file:
+        sources.append(MOHCDInclusionary(args.mohcd_inclusionary_file))
 
     if not args.diff:
         just_dump(sources, args.out_file, the_date)
