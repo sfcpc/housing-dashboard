@@ -160,6 +160,26 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY)] = PPTS.OUTPUT_NAME
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
                 'fk', PPTS.NAME)
+        elif proj.field('project_id', MOHCDPipeline.NAME) != '':
+            row[self.index(self.ADDRESS)] = proj.field('project_name',
+                                                       MOHCDPipeline.NAME)
+            row[self.index(self.APPLICANT)] = \
+                proj.field('project_lead_sponsor', MOHCDPipeline.NAME)
+            row[self.index(self.SUPERVISOR_DISTRICT)] = \
+                proj.field('supervisor_district', MOHCDPipeline.NAME)
+            row[self.index(self.PERMIT_AUTHORITY)] = MOHCDPipeline.NAME
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
+                'fk', MOHCDPipeline.NAME)
+        elif proj.field('project_id', MOHCDInclusionary.NAME) != '':
+            row[self.index(self.ADDRESS)] = proj.field('project_name',
+                                                       MOHCDInclusionary.NAME)
+            row[self.index(self.APPLICANT)] = \
+                proj.field('project_lead_sponsor', MOHCDInclusionary.NAME)
+            row[self.index(self.SUPERVISOR_DISTRICT)] = \
+                proj.field('supervisor_district', MOHCDInclusionary.NAME)
+            row[self.index(self.PERMIT_AUTHORITY)] = MOHCDInclusionary.NAME
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
+                'fk', MOHCDInclusionary.NAME)
 
     def _gen_units(self, row, proj):
         mohcd = _get_mohcd_units(proj)
