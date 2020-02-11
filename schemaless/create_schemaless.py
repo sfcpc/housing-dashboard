@@ -92,7 +92,7 @@ if __name__ == "__main__":
     parser.add_argument('--mohcd_inclusionary_file',
                         help='MOHCD Inclusionary file', default='')
     parser.add_argument('--bmr_file', help='BMR file', default='')
-    parser.add_argument('--out_file', help='output file for schemaless csv')
+    parser.add_argument('out_file', help='output file for schemaless csv')
 
     parser.add_argument(
         '--diff',
@@ -121,6 +121,11 @@ if __name__ == "__main__":
         sources.append(MOHCDInclusionary(args.mohcd_inclusionary_file))
     if args.bmr_file:
         sources.append(BMR(args.bmr_file))
+
+    if len(sources) == 0:
+        parser.print_help()
+        print('\nERROR: at least one source must be specified.')
+        sys.exit(1)
 
     if not args.diff:
         just_dump(sources, args.out_file, the_date)
