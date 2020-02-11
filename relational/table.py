@@ -161,6 +161,7 @@ class ProjectFacts(Table):
         ])
 
     def _gen_facts(self, row, proj):
+        pts_pred = [('permit_type', lambda x: x == '1' or x == '2')]
         if proj.field('address', PPTS.NAME) != '':
             row[self.index(self.ADDRESS)] = proj.field('address', PPTS.NAME)
             row[self.index(self.APPLICANT)] = ''  # TODO
@@ -168,6 +169,27 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY)] = PPTS.OUTPUT_NAME
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
                 'fk', PPTS.NAME)
+        elif proj.field('permit_number',
+                        PTS.NAME,
+                        entry_predicate=pts_pred) != '':
+            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
+                    proj.field('street_number',
+                               PTS.NAME,
+                               entry_predicate=pts_pred),
+                    proj.field('street_name',
+                               PTS.NAME,
+                               entry_predicate=pts_pred),
+                    proj.field('zip_code',
+                               PTS.NAME,
+                               entry_predicate=pts_pred))
+            row[self.index(self.APPLICANT)] = ''  # TODO
+            row[self.index(self.SUPERVISOR_DISTRICT)] = \
+                proj.field('supervisor_district',
+                           PTS.NAME,
+                           entry_predicate=pts_pred)
+            row[self.index(self.PERMIT_AUTHORITY)] = PTS.NAME
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
+                'fk', PTS.NAME, entry_predicate=pts_pred)
         elif proj.field('project_id', MOHCDPipeline.NAME) != '':
             num = proj.field('street_number', MOHCDPipeline.NAME)
             addr = proj.field('street_name', MOHCDPipeline.NAME)
