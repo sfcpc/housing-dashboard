@@ -161,8 +161,10 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
                 'fk', PPTS.NAME)
         elif proj.field('project_id', MOHCDPipeline.NAME) != '':
-            row[self.index(self.ADDRESS)] = proj.field('project_name',
-                                                       MOHCDPipeline.NAME)
+            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
+                    proj.field('street_name', MOHCDPipeline.NAME),
+                    proj.field('street_type', MOHCDPipeline.NAME),
+                    proj.field('zip_code', MOHCDPipeline.NAME))
             row[self.index(self.APPLICANT)] = \
                 proj.field('project_lead_sponsor', MOHCDPipeline.NAME)
             row[self.index(self.SUPERVISOR_DISTRICT)] = \
@@ -171,8 +173,10 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
                 'fk', MOHCDPipeline.NAME)
         elif proj.field('project_id', MOHCDInclusionary.NAME) != '':
-            row[self.index(self.ADDRESS)] = proj.field('project_name',
-                                                       MOHCDInclusionary.NAME)
+            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
+                    proj.field('street_name', MOHCDInclusionary.NAME),
+                    proj.field('street_type', MOHCDInclusionary.NAME),
+                    proj.field('zip_code', MOHCDInclusionary.NAME))
             row[self.index(self.APPLICANT)] = \
                 proj.field('project_lead_sponsor', MOHCDInclusionary.NAME)
             row[self.index(self.SUPERVISOR_DISTRICT)] = \
