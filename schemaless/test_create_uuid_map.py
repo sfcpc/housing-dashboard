@@ -475,7 +475,7 @@ def test_link_pts_records_without_ppts():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    rg.get(pts_records[0]).uuid == rg.get(pts_records[1])
+    assert rg.get(pts_records[0]).uuid == rg.get(pts_records[1]).uuid
 
 
 def test_link_pts_to_ppts_records():
