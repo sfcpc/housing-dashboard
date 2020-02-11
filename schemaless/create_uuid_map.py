@@ -67,9 +67,12 @@ class RecordGraph:
                                 children.append(child_fk)
 
                 if source == PTS.NAME:
-                    if record['permit_number'] in permit_number_to_ppts_fk:
-                        parents.extend(permit_number_to_ppts_fk[
-                            record['permit_number']])
+                    permit_number = record['permit_number']
+                    if permit_number in permit_number_to_ppts_fk:
+                        parents.extend(permit_number_to_ppts_fk[permit_number])
+                    elif permit_number in permit_number_to_pts_fk:
+                        if permit_number_to_pts_fk[permit_number][0] == fk:
+                            children.extend(permit_number_to_pts_fk[permit_number][1:])
 
                 if source == MOHCDPipeline.NAME or \
                    source == MOHCDInclusionary.NAME:
