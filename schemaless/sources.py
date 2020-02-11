@@ -137,7 +137,7 @@ class Source:
                     if line_key not in line:
                         continue
 
-                    val = line[line_key].strip()
+                    val = (line.get(line_key) or "").strip()
                     if val:
                         ret[ret_key] = val
 
