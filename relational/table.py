@@ -54,7 +54,12 @@ class NameValueTable(Table):
         return row
 
 
-def _get_mohcd_units(proj, source_override=False):
+_MOHCD_TYPES = set()
+_MOHCD_TYPES.add(MOHCDPipeline.NAME)
+_MOHCD_TYPES.add(MOHCDInclusionary.NAME)
+
+
+def _get_mohcd_units(proj, source_override=None):
     """
     Gets net new units and bmr counts from the mohcd dataset.  Prioritizes
     data from MOHCDPipeline, and falls back to MOHCDInclusionary if none
@@ -62,16 +67,19 @@ def _get_mohcd_units(proj, source_override=False):
 
     If source_override is specified, will pull numbers only from the given
     source.  Otherwise will pull from pipeline and inclusionary mohcd data.
-    Nothing technically prevents you from providing a non-mohcd source, but
-    you will probably not get useful numbers.
 
     Returns:
       A tuple of (number units, number of BMR units, source) from MOHCD, or
       None if nothing found.
+
+    Raises ValueError if a non-MOHCD source_override was provided.
     """
+    if source_override and source_override not in _MOHCD_TYPES:
+        raise ValueError('Unknown source_override %s' % source_override)
+
     sources = [source_override] if source_override else [
-        MOHCDPipeline.NAME,
-        MOHCDInclusionary.NAME]
+        MOHCDPipeline.OUTPUT_NAME,
+        MOHCDInclusionary.OUTPUT_NAME]
     net = bmr = None
     for source in sources:
         atleast_one = False
@@ -161,8 +169,13 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
                 'fk', PPTS.NAME)
         elif proj.field('project_id', MOHCDPipeline.NAME) != '':
+            num = proj.field('street_number', MOHCDPipeline.NAME)
+            addr = proj.field('street_name', MOHCDPipeline.NAME)
+            if num:
+                addr = ('% %' % (num, addr))
+
             row[self.index(self.ADDRESS)] = '%s %s, %s' % (
-                    proj.field('street_name', MOHCDPipeline.NAME),
+                    addr,
                     proj.field('street_type', MOHCDPipeline.NAME),
                     proj.field('zip_code', MOHCDPipeline.NAME))
             row[self.index(self.APPLICANT)] = \
@@ -173,8 +186,13 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
                 'fk', MOHCDPipeline.NAME)
         elif proj.field('project_id', MOHCDInclusionary.NAME) != '':
+            num = proj.field('street_number', MOHCDInclusionary.NAME)
+            addr = proj.field('street_name', MOHCDInclusionary.NAME)
+            if num:
+                addr = ('% %' % (num, addr))
+
             row[self.index(self.ADDRESS)] = '%s %s, %s' % (
-                    proj.field('street_name', MOHCDInclusionary.NAME),
+                    addr,
                     proj.field('street_type', MOHCDInclusionary.NAME),
                     proj.field('zip_code', MOHCDInclusionary.NAME))
             row[self.index(self.APPLICANT)] = \
