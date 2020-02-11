@@ -16,6 +16,7 @@ from relational.project import Entry
 from relational.project import NameValue
 from relational.project import Project
 from schemaless.create_uuid_map import RecordGraph
+from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
@@ -79,7 +80,8 @@ class Freshness:
         self._freshness_checks = {
             PPTS.NAME: self._ppts,
             PTS.NAME: self._pts,
-            MOHCDPipeline.NAME: self._mohcd,
+            MOHCDPipeline.NAME: self._mohcd_pipeline,
+            MOHCDInclusionary.NAME: self._mohcd_inclusionary,
         }
 
     def _check_and_log_good_date(self, date, source, line):
@@ -131,8 +133,11 @@ class Freshness:
     def _pts(self, line):
         self._extract_nv_date(line, PTS.NAME)
 
-    def _mohcd(self, line):
+    def _mohcd_pipeline(self, line):
         self._extract_last_updated(line, MOHCDPipeline.NAME)
+
+    def _mohcd_inclusionary(self, line):
+        self._extract_last_updated(line, MOHCDInclusionary.NAME)
 
 
 # entries_map is a dict of key, value of string=>list of Entry, where key is
