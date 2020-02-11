@@ -20,8 +20,8 @@ python3 -m schemaless.create_schemaless \
   --tco_file testdata/tco.csv \
   --mohcd_pipeline_file testdata/mohcd-pipeline.csv \
   --mohcd_inclusionary_file testdata/mohcd-inclusionary.csv \
-  --out_file testdata/schemaless-one.csv \
-  --the-date=2020-01-29
+  --the-date=2020-01-29 \
+  testdata/schemaless-one.csv
 # We read in the uuid-map file generated previously so our uuids are stable
 python3 -m schemaless.create_uuid_map \
   testdata/schemaless-one.csv \
@@ -29,9 +29,9 @@ python3 -m schemaless.create_uuid_map \
   --uuid_map_file=testdata/uuid-map-one.csv
 python3 -m schemaless.create_schemaless \
   --ppts_file testdata/ppts-two.csv \
-  --out_file testdata/schemaless-two.csv \
   --diff testdata/schemaless-one.csv \
-  --the-date=2020-01-29
+  --the-date=2020-01-29 \
+  testdata/schemaless-two.csv
 # We read in the uuid-map file generated previously so our uuids are stable
 python3 -m schemaless.create_uuid_map \
   testdata/schemaless-one.csv \
