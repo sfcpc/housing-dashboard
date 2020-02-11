@@ -229,10 +229,23 @@ def output_freshness(freshness):
 def build_projects(entries_map, recordgraph):
     """Returns a list of Project"""
     projects = []
+    bad_projects = 0
+    bad_projects_sample = queue.Queue(maxsize=10)
     for (projectid, entries) in entries_map.items():
-        projects.append(Project(projectid, entries, recordgraph))
-        if len(projects) % 100000 == 0:
-            print('Processed %s projects' % len(projects))
+        try:
+            projects.append(Project(projectid, entries, recordgraph))
+            if len(projects) % 100000 == 0:
+                print('Processed %s projects' % len(projects))
+        except ValueError as err:
+            bad_projects += 1
+            if not bad_projects_sample.full():
+                bad_projects_sample.put_nowait(err)
+
+    if bad_projects > 0:
+        print('Skipped %s projects due to problems. Samples below...' %
+              bad_projects)
+        while not bad_projects_sample.empty():
+            print('\t%s' % bad_projects_sample.get_nowait())
 
     return projects
 
