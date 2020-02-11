@@ -172,7 +172,7 @@ class ProjectFacts(Table):
             num = proj.field('street_number', MOHCDPipeline.NAME)
             addr = proj.field('street_name', MOHCDPipeline.NAME)
             if num:
-                addr = ('% %' % (num, addr))
+                addr = ('%s %s' % (num, addr))
 
             row[self.index(self.ADDRESS)] = '%s %s, %s' % (
                     addr,
@@ -189,7 +189,7 @@ class ProjectFacts(Table):
             num = proj.field('street_number', MOHCDInclusionary.NAME)
             addr = proj.field('street_name', MOHCDInclusionary.NAME)
             if num:
-                addr = ('% %' % (num, addr))
+                addr = ('%s %s' % (num, addr))
 
             row[self.index(self.ADDRESS)] = '%s %s, %s' % (
                     addr,
