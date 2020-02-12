@@ -91,6 +91,17 @@ class Address(Field):
             if not addr['state']:
                 addr['state'] = "California"
 
+        # There are a lot of addresses that look like "123 Main St 94102". This
+        # gets parsed into a dict that looks like:
+        #
+        #     {'address_line_1': '123 MAIN ST',
+        #      'address_line_2': None,
+        #      'city': None,
+        #      'state': None,
+        #      'postal_code': '94102'}
+        #
+        # We want city and state to be populated, too, so we add them in and
+        # then normalize once more to ensure it's still valid.
         try:
             addr = normalize_address_record(addr)
         except UnParseableAddressError:
