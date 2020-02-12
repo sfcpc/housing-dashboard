@@ -70,11 +70,21 @@ class RecordGraph:
                 if source == PTS.NAME:
                     permit_number = record['permit_number']
                     if permit_number in permit_number_to_ppts_fk:
+                        # If there is a PPTS record that should be the parent
+                        # record of PTS records with this permit number, we
+                        # assign that as the parent.
                         parents.extend(permit_number_to_ppts_fk[permit_number])
                     elif permit_number in permit_number_to_pts_fk:
+                        # Even if there is no PPTS record that should be the
+                        # parent of PTS records with this permit number, we need
+                        # to ensure that all PTS records with the same permit number
+                        # are assigned the same UUID.
+                        #
+                        # We do this by picking the first PTS record with the given
+                        # permit number and assigning any other records with
+                        # that permit number  as "children" of that record.
                         if permit_number_to_pts_fk[permit_number][0] == fk:
-                            children.extend(
-                                permit_number_to_pts_fk[permit_number][1:])
+                            children.extend(permit_number_to_pts_fk[permit_number][1:])
 
                 if source == MOHCDPipeline.NAME or \
                    source == MOHCDInclusionary.NAME:
