@@ -56,6 +56,7 @@ class PPTSHelper(RecordGraphBuilderHelper):
         return self._ppts_id_to_fk.get(record_id, None)
 
     def find_by_address(self, address):
+        """Find a fk by a normalized address."""
         return self._address_to_ppts_fk[address]
 
     def find_by_permit_number(self, permit_number):
@@ -96,6 +97,7 @@ class PTSHelper(RecordGraphBuilderHelper):
         return self._permit_number_to_pts_fk[permit_number]
 
     def find_by_address(self, address):
+        """Find a fk by a normalized address."""
         return self._address_to_pts_fk[address]
 
     def preprocess(self, latest_records):
