@@ -96,6 +96,13 @@ def _get_mohcd_units(proj, source_override=False):
     return (net, bmr, source) if atleast_one else None
 
 
+_valid_dbi_permit_types = set('123')
+
+
+_is_valid_dbi_type = ('permit_type',
+                      lambda x: x in _valid_dbi_permit_types)
+
+
 def _get_dbi_units(proj):
     """
     Returns:
@@ -107,16 +114,14 @@ def _get_dbi_units(proj):
     try:
         dbi_exist = int(proj.field(
             'existing_units', PTS.NAME,
-            entry_predicate=[('permit_type',
-                              lambda x: x == '1' or x == '2')]))
+            entry_predicate=[_is_valid_dbi_type]))
     except ValueError:
         pass
 
     try:
         dbi_prop = int(proj.field(
             'proposed_units', PTS.NAME,
-            entry_predicate=[('permit_type',
-                              lambda x: x == '1' or x == '2')]))
+            entry_predicate=[_is_valid_dbi_type]))
     except ValueError:
         pass
 
