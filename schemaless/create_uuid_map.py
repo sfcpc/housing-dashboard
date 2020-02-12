@@ -17,22 +17,34 @@ from schemaless.sources import source_map
 from schemaless.sources import TCO
 
 
-class RecordGraphBuilder:
-    def __init__(self, graph_class, schemaless_file, uuid_map_file):
-        self.graph_class = graph_class
-        self.schemaless_file = schemaless_file
-        self.uuid_map_file = uuid_map_file
+class RecordGraphBuilderHelper:
+    def __init__(self, graph_builder):
+        self.graph_builder = graph_builder
 
+    def preprocess(self, latest_records):
+        pass
+
+    def process(self, fk, record, parents, children):
+        pass
+
+
+class PPTSHelper(RecordGraphBuilderHelper):
+    def __init__(self, graph_builder):
+        super().__init__(graph_builder)
         self._ppts_id_to_fk = {}
         self._address_to_ppts_fk = defaultdict(list)
         self._permit_number_to_ppts_fk = defaultdict(list)
 
-        self._permit_number_to_pts_fk = defaultdict(list)
-        self._address_to_pts_fk = defaultdict(list)
+    def find_by_id(self, record_id):
+        return self._ppts_id_to_fk.get(record_id, None)
 
-        self._mohcd_id_to_fk = {}
+    def find_by_address(self, address):
+        return self._address_to_ppts_fk[address]
 
-    def _preprocess_ppts(self, latest_records):
+    def find_by_permit_number(self, permit_number):
+        return self._permit_number_to_ppts_fk[permit_number]
+
+    def preprocess(self, latest_records):
         for fk, record in latest_records.get(PPTS.NAME, {}).items():
             self._ppts_id_to_fk[record['record_id']] = fk
             if 'address_norm' in record:
@@ -42,19 +54,32 @@ class RecordGraphBuilder:
                         record['building_permit_number'].split(","):
                     self._permit_number_to_ppts_fk[permit_number].append(fk)
 
-    def _handle_ppts_record(self, fk, record, parents, children):
+    def process(self, fk, record, parents, children):
         if 'parent' in record:
             for parent in record['parent'].split(","):
-                parent_fk = self._ppts_id_to_fk.get(parent)
+                parent_fk = self.find_by_id(parent)
                 if parent_fk:
                     parents.append(parent_fk)
         if 'children' in record:
             for child in record['children'].split(","):
-                child_fk = self._ppts_id_to_fk.get(child)
+                child_fk = self.find_by_id(child)
                 if child_fk:
                     children.append(child_fk)
 
-    def _preprocess_pts(self, latest_records):
+
+class PTSHelper(RecordGraphBuilderHelper):
+    def __init__(self, graph_builder):
+        super().__init__(graph_builder)
+        self._permit_number_to_pts_fk = defaultdict(list)
+        self._address_to_pts_fk = defaultdict(list)
+
+    def find_by_building_permit_number(self, permit_number):
+        return self._permit_number_to_pts_fk[permit_number]
+
+    def find_by_address(self, address):
+        return self._address_to_pts_fk[address]
+
+    def preprocess(self, latest_records):
         for fk, record in latest_records.get(PTS.NAME, {}).items():
             if 'address_norm' in record:
                 self._address_to_pts_fk[record['address_norm']].append(fk)
@@ -62,14 +87,20 @@ class RecordGraphBuilder:
                 self._permit_number_to_pts_fk[
                     record['permit_number']].append(fk)
 
-    def _handle_pts_record(self, fk, record, parents, children):
+    def process(self, fk, record, parents, children):
         permit_number = record['permit_number']
-        if permit_number in self._permit_number_to_ppts_fk:
+
+        ppts_helper = self.graph_builder.helpers[PPTS.NAME]
+        ppts_records = ppts_helper.find_by_permit_number(permit_number)
+
+        pts_helper = self.graph_builder.helpers[PTS.NAME]
+        pts_records = pts_helper.find_by_building_permit_number(permit_number)
+        if ppts_records:
             # If there is a PPTS record that should be the parent
             # record of PTS records with this permit number, we
             # assign that as the parent.
-            parents.extend(self._permit_number_to_ppts_fk[permit_number])
-        elif permit_number in self._permit_number_to_pts_fk:
+            parents.extend(ppts_records)
+        elif pts_records and pts_records[0] == fk:
             # Even if there is no PPTS record that should be the
             # parent of PTS records with this permit number, we need
             # to ensure that all PTS records with the same permit number
@@ -78,52 +109,93 @@ class RecordGraphBuilder:
             # We do this by picking the first PTS record with the given
             # permit number and assigning any other records with
             # that permit number  as "children" of that record.
-            if self._permit_number_to_pts_fk[permit_number][0] == fk:
-                children.extend(
-                    self._permit_number_to_pts_fk[permit_number][1:])
+            children.extend(pts_records[1:])
 
-    def _preprocess_mohcd_pipeline(self, latest_records):
+
+class TCOHelper(RecordGraphBuilderHelper):
+    def process(self, fk, record, parents, children):
+        if 'building_permit_number' in record:
+            pts_helper = self.graph_builder.helpers[PTS.NAME]
+            parent_fk = pts_helper.find_by_building_permit_number(
+                record['building_permit_number'])
+            if parent_fk:
+                parents.extend(parent_fk)
+
+
+class MOHCDPipelineHelper(RecordGraphBuilderHelper):
+    def __init__(self, graph_builder):
+        super().__init__(graph_builder)
+        self._mohcd_id_to_fk = {}
+
+    def find_by_id(self, project_id):
+        return self._mohcd_id_to_fk.get(project_id, None)
+
+    def preprocess(self, latest_records):
         for fk, record in latest_records.get(MOHCDPipeline.NAME, {}).items():
             self._mohcd_id_to_fk[record['project_id']] = fk
 
-    def _handle_mohcd_pipeline_record(self, fk, record, parents, children):
+    def process(self, fk, record, parents, children):
         if 'planning_case_number' in record:
+            ppts_helper = self.graph_builder.helpers[PPTS.NAME]
             for parent in record['planning_case_number'].split(","):
-                parent_fk = self._ppts_id_to_fk.get(parent)
+                parent_fk = ppts_helper.find_by_id(parent)
                 if parent_fk:
                     parents.append(parent_fk)
 
-    def _preprocess_mohcd_inclusionary(self, latest_records):
-        pass
 
-    def _handle_mohcd_inclusionary_record(self, fk, record, parents, children):
-        self._handle_mohcd_pipeline_record(record, parents, children)
-        parent_fk = self._mohcd_id_to_fk.get(record['project_id'])
+class MOHCDInclusionaryHelper(RecordGraphBuilderHelper):
+    def __init__(self, graph_builder):
+        super().__init__(graph_builder)
+        self._mohcd_id_to_fk = {}
+
+    def find_by_id(self, project_id):
+        return self._mohcd_id_to_fk.get(project_id, None)
+
+    def preprocess(self, latest_records):
+        for fk, record in latest_records.get(MOHCDPipeline.NAME, {}).items():
+            self._mohcd_id_to_fk[record['project_id']] = fk
+
+    def process(self, fk, record, parents, children):
+        mohcd_pipeline_helper = self.graph_builder.helpers[
+            MOHCDPipeline.NAME]
+        mohcd_pipeline_helper.process(fk, record, parents, children)
+        parent_fk = mohcd_pipeline_helper.find_by_id(record['project_id'])
+        if parent_fk:
+            parents.append(parent_fk)
+        parent_fk = self.find_by_id(record['project_id'])
         if parent_fk:
             parents.append(parent_fk)
 
-    def _preprocess_bmr(self, latest_records):
-        pass
 
-    def _handle_bmr(self, fk, record, parents, children):
+class AffordableRentalPortfolioHelper(RecordGraphBuilderHelper):
+    def process(self, fk, record, parents, children):
         # TODO: There will be many matches, so we need to filter
         # on time range and record type. EG maybe only add parents
         # that are PRJs, or themselves have parents?
         if 'address_norm' in record:
+            pts_helper = self.graph_builder.helpers[PTS.NAME]
             parents.extend(
-                self._address_to_pts_fk.get(record['address_norm'], []))
+                pts_helper.find_by_address(record['address_norm']))
+            ppts_helper = self.graph_builder.helpers[PPTS.NAME]
             parents.extend(
-                self._address_to_ppts_fk.get(record['address_norm'], []))
+                ppts_helper.find_by_address(record['address_norm']))
 
-    def _preprocess_tco(self, latest_records):
-        pass
 
-    def _handle_tco(self, fk, record, parents, children):
-        if 'building_permit_number' in record:
-            parent_fk = self._permit_number_to_pts_fk.get(
-                record['building_permit_number'])
-            if parent_fk:
-                parents.extend(parent_fk)
+class RecordGraphBuilder:
+    def __init__(self, graph_class, schemaless_file, uuid_map_file):
+        self.graph_class = graph_class
+        self.schemaless_file = schemaless_file
+        self.uuid_map_file = uuid_map_file
+
+        self.helpers = {
+            PPTS.NAME: PPTSHelper(self),
+            PTS.NAME: PTSHelper(self),
+            MOHCDPipeline.NAME: MOHCDPipelineHelper(self),
+            MOHCDInclusionary.NAME: MOHCDInclusionaryHelper(self),
+            TCO.NAME: TCOHelper(self),
+            AffordableRentalPortfolio.NAME:
+                AffordableRentalPortfolioHelper(self),
+        }
 
     def build(self):
         """Build a RecordGraph from schemaless & uuid_map files."""
@@ -134,39 +206,21 @@ class RecordGraphBuilder:
         # TODO: Refactor this "pre-processing" logic?
         # Create a mapping between permit numbers and their associated PPTS
         # record (so we an ensure they are assigned the same UUID).
-        self._preprocess_ppts(latest_records)
-        self._preprocess_pts(latest_records)
-        self._preprocess_mohcd_pipeline(latest_records)
-        self._preprocess_mohcd_inclusionary(latest_records)
-        self._preprocess_bmr(latest_records)
-        self._preprocess_tco(latest_records)
+        for helper in self.helpers.values():
+            helper.preprocess(latest_records)
 
         # Read the latest values from the schemaless file to build the graph.
-        for source, source_records in latest_records.items():
+        for source_name, source_records in latest_records.items():
             for fk, record in source_records.items():
                 parents = []
                 children = []
-
-                # TODO: Refactor the source-specific logic somewhere else.
-                if source == PPTS.NAME:
-                    self._handle_ppts_record(fk, record, parents, children)
-                elif source == PTS.NAME:
-                    self._handle_pts_record(fk, record, parents, children)
-                elif source == MOHCDPipeline.NAME:
-                    self._handle_mohcd_pipeline_record(
-                        fk, record, parents, children)
-                elif source == MOHCDInclusionary.NAME:
-                    self._handle_mohcd_inclusionary_record(
-                        fk, record, parents, children)
-                elif source == AffordableRentalPortfolio.NAME:
-                    self._handle_bmr(fk, record, parents, children)
-                elif source == TCO.NAME:
-                    self._handle_tco(fk, record, parents, children)
+                self.helpers[source_name].process(
+                    fk, record, parents, children)
 
                 the_date = None
 
-                if source_map[source].DATE.field in record:
-                    the_date = source_map[source].DATE.get_value(record)
+                if source_map[source_name].DATE.field in record:
+                    the_date = source_map[source_name].DATE.get_value(record)
                 rg.add(Node(
                     record_id=fk,
                     date=the_date if the_date else date.min,
