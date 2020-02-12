@@ -25,7 +25,7 @@ ppts_2017-007883PRJ,ppts,2020-01-29,planner_phone,415-558-6263
 ppts_2017-007883PRJ,ppts,2020-01-29,market_rate_units_existing,2
 ppts_2017-007883PRJ,ppts,2020-01-29,market_rate_units_proposed,2
 ppts_2017-007883PRJ,ppts,2020-01-29,market_rate_units_net,0
-ppts_2017-007883PRJ,ppts,2020-01-29,building_permit_id,201705318009
+ppts_2017-007883PRJ,ppts,2020-01-29,building_permit_number,201705318009
 ppts_86-076,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.467313504 37.764727538, -122.467318294 37.764796091, -122.466903797 37.764814379, -122.466899007 37.764745826, -122.467313504 37.764727538)))"
 ppts_86-076,ppts,2020-01-29,record_id,86-076
 ppts_86-076,ppts,2020-01-29,date_opened,03/21/1986 12:00:00 AM +0000
@@ -264,7 +264,7 @@ ppts_2017-006969PRL,ppts,2020-01-29,description,"Interior work only; Legalize lo
 ppts_2017-006969PRL,ppts,2020-01-29,planner_name,Eiliesh Tuffy
 ppts_2017-006969PRL,ppts,2020-01-29,planner_email,eiliesh.tuffy@sfgov.org
 ppts_2017-006969PRL,ppts,2020-01-29,planner_phone,415-575-9191
-ppts_2017-006969PRL,ppts,2020-01-29,building_permit_id,201706058373
+ppts_2017-006969PRL,ppts,2020-01-29,building_permit_number,201706058373
 ppts_2007.1121V,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.390146674 37.787310971, -122.39047725 37.78704965, -122.390645676 37.787183003, -122.390312301 37.787446538, -122.389962894 37.787722742, -122.389797269 37.787587174, -122.390146674 37.787310971)))"
 ppts_2007.1121V,ppts,2020-01-29,record_id,2007.1121V
 ppts_2007.1121V,ppts,2020-01-29,date_opened,02/27/2009 12:00:00 AM +0000
@@ -493,7 +493,7 @@ ppts_2015-011205PRJ,ppts,2020-01-29,residential_sq_ft_net,0
 ppts_2015-011205PRJ,ppts,2020-01-29,affordable_units_existing,276
 ppts_2015-011205PRJ,ppts,2020-01-29,affordable_units_proposed,276
 ppts_2015-011205PRJ,ppts,2020-01-29,affordable_units_net,0
-ppts_2015-011205PRJ,ppts,2020-01-29,building_permit_id,201510301361
+ppts_2015-011205PRJ,ppts,2020-01-29,building_permit_number,201510301361
 ppts_1997.055,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.46678637 37.758794114, -122.46689862 37.758789175, -122.46690341 37.758857728, -122.466487121 37.758876043, -122.466482332 37.75880749, -122.466527327 37.75880551, -122.466613674 37.758801712, -122.466700021 37.758797913, -122.46678637 37.758794114)))"
 ppts_1997.055,ppts,2020-01-29,record_id,1997.055
 ppts_1997.055,ppts,2020-01-29,date_opened,01/16/1997 12:00:00 AM +0000
@@ -788,7 +788,7 @@ ppts_2017-006823PRJ,ppts,2020-01-29,planner_phone,415-575-9187
 ppts_2017-006823PRJ,ppts,2020-01-29,market_rate_units_existing,1
 ppts_2017-006823PRJ,ppts,2020-01-29,market_rate_units_proposed,2
 ppts_2017-006823PRJ,ppts,2020-01-29,market_rate_units_net,1
-ppts_2017-006823PRJ,ppts,2020-01-29,building_permit_id,201705237369
+ppts_2017-006823PRJ,ppts,2020-01-29,building_permit_number,201705237369
 ppts_2675PRV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466780014 37.763042601, -122.467194508 37.763024399, -122.467200255 37.763106663, -122.467205044 37.763175216, -122.46679055 37.763193418, -122.466785761 37.763124865, -122.466780014 37.763042601)))"
 ppts_2675PRV,ppts,2020-01-29,record_id,2675PRV
 ppts_2675PRV,ppts,2020-01-29,date_opened,08/06/2003 12:00:00 AM +0000
@@ -939,7 +939,7 @@ ppts_2017-015112PRL,ppts,2020-01-29,description,Replace street facing windows wi
 ppts_2017-015112PRL,ppts,2020-01-29,planner_name,Kurt Botn
 ppts_2017-015112PRL,ppts,2020-01-29,planner_email,kurt.botn@sfgov.org
 ppts_2017-015112PRL,ppts,2020-01-29,planner_phone,415-575-9092
-ppts_2017-015112PRL,ppts,2020-01-29,building_permit_id,201711284964
+ppts_2017-015112PRL,ppts,2020-01-29,building_permit_number,201711284964
 ppts_2004.0049C,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466780014 37.763042601, -122.467194508 37.763024399, -122.467200255 37.763106663, -122.467205044 37.763175216, -122.46679055 37.763193418, -122.466785761 37.763124865, -122.466780014 37.763042601)))"
 ppts_2004.0049C,ppts,2020-01-29,record_id,2004.0049C
 ppts_2004.0049C,ppts,2020-01-29,date_opened,01/13/2004 12:00:00 AM +0000
@@ -1119,7 +1119,7 @@ ppts_2016-001514PRJ,ppts,2020-01-29,residential_units_2br_net,73
 ppts_2016-001514PRJ,ppts,2020-01-29,residential_units_3br_existing,0
 ppts_2016-001514PRJ,ppts,2020-01-29,residential_units_3br_proposed,16
 ppts_2016-001514PRJ,ppts,2020-01-29,residential_units_3br_net,16
-ppts_2016-001514PRJ,ppts,2020-01-29,building_permit_id,201609218371
+ppts_2016-001514PRJ,ppts,2020-01-29,building_permit_number,201609218371
 ppts_2003.0784,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466780014 37.763042601, -122.467194508 37.763024399, -122.467200255 37.763106663, -122.467205044 37.763175216, -122.46679055 37.763193418, -122.466785761 37.763124865, -122.466780014 37.763042601)))"
 ppts_2003.0784,ppts,2020-01-29,record_id,2003.0784
 ppts_2003.0784,ppts,2020-01-29,date_opened,07/02/2003 12:00:00 AM +0000
@@ -1143,7 +1143,7 @@ ppts_2017-009677PRL,ppts,2020-01-29,description,"Replacing 2 windows (existing t
 ppts_2017-009677PRL,ppts,2020-01-29,planner_name,Laura Ajello
 ppts_2017-009677PRL,ppts,2020-01-29,planner_email,laura.ajello@sfgov.orgjavascript:Validate();
 ppts_2017-009677PRL,ppts,2020-01-29,planner_phone,415-575-9142
-ppts_2017-009677PRL,ppts,2020-01-29,building_permit_id,201707313307
+ppts_2017-009677PRL,ppts,2020-01-29,building_permit_number,201707313307
 ppts_2004.0049V,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466780014 37.763042601, -122.467194508 37.763024399, -122.467200255 37.763106663, -122.467205044 37.763175216, -122.46679055 37.763193418, -122.466785761 37.763124865, -122.466780014 37.763042601)))"
 ppts_2004.0049V,ppts,2020-01-29,record_id,2004.0049V
 ppts_2004.0049V,ppts,2020-01-29,date_opened,01/13/2004 12:00:00 AM +0000
@@ -1409,7 +1409,7 @@ ppts_2016-008581PRJ,ppts,2020-01-29,market_rate_units_net,1
 ppts_2016-008581PRJ,ppts,2020-01-29,parking_sq_ft_exist,4
 ppts_2016-008581PRJ,ppts,2020-01-29,parking_sq_ft_proposed,0
 ppts_2016-008581PRJ,ppts,2020-01-29,parking_sq_ft_net,-4
-ppts_2016-008581PRJ,ppts,2020-01-29,building_permit_id,201606109695
+ppts_2016-008581PRJ,ppts,2020-01-29,building_permit_number,201606109695
 ppts_2007.1121E_7,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.390146674 37.787310971, -122.39047725 37.78704965, -122.390645676 37.787183003, -122.390312301 37.787446538, -122.389962894 37.787722742, -122.389797269 37.787587174, -122.390146674 37.787310971)))"
 ppts_2007.1121E_7,ppts,2020-01-29,record_id,2007.1121E_7
 ppts_2007.1121E_7,ppts,2020-01-29,date_opened,09/16/2009 12:00:00 AM +0000
@@ -1431,6 +1431,56 @@ ppts_2000.351R,ppts,2020-01-29,record_type_category,GPR
 ppts_2000.351R,ppts,2020-01-29,name,1950 Mission
 ppts_2000.351R,ppts,2020-01-29,description,Quitclaim to S.F.U.S.D.  Who in turn plans to sell the property.
 ppts_2000.351R,ppts,2020-01-29,parent,2000.351
+pts_129220091307,pts,2020-01-29,permit_number,201301027105
+pts_129220091307,pts,2020-01-29,permit_type,8
+pts_129220091307,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_129220091307,pts,2020-01-29,permit_creation_date,01/02/2013
+pts_129220091307,pts,2020-01-29,block,1173
+pts_129220091307,pts,2020-01-29,lot,007
+pts_129220091307,pts,2020-01-29,street_number,40
+pts_129220091307,pts,2020-01-29,street_name,Loyola
+pts_129220091307,pts,2020-01-29,current_status,cancelled
+pts_129220091307,pts,2020-01-29,current_status_date,11/14/2016
+pts_129220091307,pts,2020-01-29,filed_date,01/02/2013
+pts_129220091307,pts,2020-01-29,issued_date,01/02/2013
+pts_129220091307,pts,2020-01-29,permit_expiration_date,12/28/2013
+pts_129220091307,pts,2020-01-29,existing_use,2 family dwelling
+pts_129220091307,pts,2020-01-29,existing_units,2
+pts_129220091307,pts,2020-01-29,proposed_use,2 family dwelling
+pts_129220091307,pts,2020-01-29,proposed_units,2
+pts_129220091307,pts,2020-01-29,existing_construction_type,5
+pts_129220091307,pts,2020-01-29,existing_construction_type_description,wood frame (5)
+pts_129220091307,pts,2020-01-29,proposed_construction_type,5
+pts_129220091307,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_129220091307,pts,2020-01-29,supervisor_district,1
+pts_129220091307,pts,2020-01-29,zipcode,94117
+pts_129220091307,pts,2020-01-29,location,"(37.77622919688215, -122.44877581253213)"
+pts_129220091307,pts,2020-01-29,record_id,129220091307
+pts_1292201488027,pts,2020-01-29,permit_number,201301027105
+pts_1292201488027,pts,2020-01-29,permit_type,8
+pts_1292201488027,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1292201488027,pts,2020-01-29,permit_creation_date,01/02/2013
+pts_1292201488027,pts,2020-01-29,block,1173
+pts_1292201488027,pts,2020-01-29,lot,007
+pts_1292201488027,pts,2020-01-29,street_number,42
+pts_1292201488027,pts,2020-01-29,street_name,Loyola
+pts_1292201488027,pts,2020-01-29,current_status,cancelled
+pts_1292201488027,pts,2020-01-29,current_status_date,11/14/2016
+pts_1292201488027,pts,2020-01-29,filed_date,01/02/2013
+pts_1292201488027,pts,2020-01-29,issued_date,01/02/2013
+pts_1292201488027,pts,2020-01-29,permit_expiration_date,12/28/2013
+pts_1292201488027,pts,2020-01-29,existing_use,2 family dwelling
+pts_1292201488027,pts,2020-01-29,existing_units,2
+pts_1292201488027,pts,2020-01-29,proposed_use,2 family dwelling
+pts_1292201488027,pts,2020-01-29,proposed_units,2
+pts_1292201488027,pts,2020-01-29,existing_construction_type,5
+pts_1292201488027,pts,2020-01-29,existing_construction_type_description,wood frame (5)
+pts_1292201488027,pts,2020-01-29,proposed_construction_type,5
+pts_1292201488027,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1292201488027,pts,2020-01-29,supervisor_district,1
+pts_1292201488027,pts,2020-01-29,zipcode,94117
+pts_1292201488027,pts,2020-01-29,location,"(37.77622919688215, -122.44877581253213)"
+pts_1292201488027,pts,2020-01-29,record_id,1292201488027
 pts_1340311497257,pts,2020-01-29,permit_number,201404304554
 pts_1340311497257,pts,2020-01-29,permit_type,1
 pts_1340311497257,pts,2020-01-29,permit_type_definition,new construction
@@ -3068,7 +3118,7 @@ ppts_2018-007274PRL,ppts,2020-01-29,description,Metal brackets for future retail
 ppts_2018-007274PRL,ppts,2020-01-29,planner_name,Heidi Kline
 ppts_2018-007274PRL,ppts,2020-01-29,planner_email,heidi.kline@sfgov.org
 ppts_2018-007274PRL,ppts,2020-01-29,planner_phone,415-575-9043
-ppts_2018-007274PRL,ppts,2020-01-29,building_permit_id,201805048308
+ppts_2018-007274PRL,ppts,2020-01-29,building_permit_number,201805048308
 ppts_2016-001514GPR,ppts,2020-01-29,status,Closed - Approved
 ppts_2016-001514GPR,ppts,2020-01-29,date_closed,06/27/2018 12:00:00 AM +0000
 ppts_8982ZAD,ppts,2020-01-29,planner_name,Ben Fu
@@ -3236,7 +3286,7 @@ ppts_2018-008884PRL,ppts,2020-01-29,description,"Interior alterations. RELOCATIO
 ppts_2018-008884PRL,ppts,2020-01-29,planner_name,Justin Greving
 ppts_2018-008884PRL,ppts,2020-01-29,planner_email,justin.greving@sfgov.org
 ppts_2018-008884PRL,ppts,2020-01-29,planner_phone,415-575-9169
-ppts_2018-008884PRL,ppts,2020-01-29,building_permit_id,201806222695
+ppts_2018-008884PRL,ppts,2020-01-29,building_permit_number,201806222695
 ppts_2018-015375ENF,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.468220711 37.779294013, -122.468332984 37.779288934, -122.468337947 37.779357479, -122.467923401 37.779376231, -122.467918438 37.779307686, -122.467961619 37.779305732, -122.468047984 37.779301826, -122.468134348 37.779297919, -122.468220711 37.779294013)))"
 ppts_2018-015375ENF,ppts,2020-01-29,record_id,2018-015375ENF
 ppts_2018-015375ENF,ppts,2020-01-29,date_opened,11/08/2018 12:00:00 AM +0000
