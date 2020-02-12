@@ -351,10 +351,30 @@ class MOHCDPipeline(Source):
     }
 
 
+class PermitAddenda(Source):
+    NAME = 'permit_addenda'
+    DATE = Date('date_issued', '%Y/%m/%d')
+    FK = PrimaryKey(NAME, 'application_number', 'addenda_number', 'step', 'station')
+    FIELDS = {
+        'APPLICATION_NUMBER': 'application_number',
+        'ADDENDA_NUMBER': 'addenda_number',
+        'STEP': 'step',
+        'STATION': 'station',
+        'ARRIVE': 'arrive',
+        'START_DATE': 'start_date',
+        'IN_HOLD': 'in_hold',
+        'OUT_HOLD': 'out_hold',
+        'FINISH_DATE': 'finish_date',
+        'PLAN_CHECKED_BY': 'plan_checked_by',
+        'HOLD_DESCRIPTION': 'hold_description',
+    }
+
+
 source_map = {
     PPTS.NAME: PPTS,
     PTS.NAME: PTS,
     TCO.NAME: TCO,
     MOHCDPipeline.NAME: MOHCDPipeline,
     MOHCDInclusionary.NAME: MOHCDInclusionary,
+    PermitAddenda.NAME: PermitAddenda
 }
