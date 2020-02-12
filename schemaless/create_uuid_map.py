@@ -22,9 +22,25 @@ class RecordGraphBuilderHelper:
         self.graph_builder = graph_builder
 
     def preprocess(self, latest_records):
+        """Set up the Helper.
+
+        Use this to populate caches of ids->fks, among other setup.
+
+        Args:
+            latest_records: The output of
+                schemaless.create_schemaless.latest_values
+        """
         pass
 
     def process(self, fk, record, parents, children):
+        """Process the given record to find parents and children.
+
+        Args:
+            fk: The PrimaryKey for this record.
+            record: The record dict (from `latest_values`)
+            parents: A list of fks. List is modified in place.
+            children: A list of fks. List is modified in place.
+        """
         pass
 
 
@@ -35,9 +51,11 @@ class PPTSHelper(RecordGraphBuilderHelper):
         self._permit_number_to_ppts_fk = defaultdict(list)
 
     def find_by_id(self, record_id):
+        """Find a fk by PPTS record_id."""
         return self._ppts_id_to_fk.get(record_id, None)
 
     def find_by_permit_number(self, permit_number):
+        """Find a fk by PTS building permit number."""
         return self._permit_number_to_ppts_fk[permit_number]
 
     def preprocess(self, latest_records):
@@ -67,6 +85,7 @@ class PTSHelper(RecordGraphBuilderHelper):
         self._permit_number_to_pts_fk = defaultdict(list)
 
     def find_by_building_permit_number(self, permit_number):
+        """Find a fk by PTS building permit number."""
         return self._permit_number_to_pts_fk[permit_number]
 
     def preprocess(self, latest_records):
@@ -116,6 +135,7 @@ class MOHCDPipelineHelper(RecordGraphBuilderHelper):
         self._mohcd_id_to_fk = {}
 
     def find_by_id(self, project_id):
+        """Find a fk by MOHCD project_id."""
         return self._mohcd_id_to_fk.get(project_id, None)
 
     def preprocess(self, latest_records):
@@ -137,6 +157,7 @@ class MOHCDInclusionaryHelper(RecordGraphBuilderHelper):
         self._mohcd_id_to_fk = {}
 
     def find_by_id(self, project_id):
+        """Find a fk by MOHCD project_id."""
         return self._mohcd_id_to_fk.get(project_id, None)
 
     def preprocess(self, latest_records):
@@ -160,11 +181,21 @@ class AffordableRentalPortfolioHelper(RecordGraphBuilderHelper):
 
 
 class RecordGraphBuilder:
+    """RecordGraphBuilder reads in files and builds a RecordGraph."""
     def __init__(self, graph_class, schemaless_file, uuid_map_file):
+        """Init the graph builder.
+
+        Args:
+            graph_class: The class of graph to build (eg `RecordGraph`).
+            schemaless_file: The path to a schemaless csv file.
+            uuid_map_file: The path to a uuid mapping csv file.
+        """
         self.graph_class = graph_class
         self.schemaless_file = schemaless_file
         self.uuid_map_file = uuid_map_file
 
+        # Helpers expose an API that enables parent/child lookups by
+        # various properties on records.
         self.helpers = {
             PPTS.NAME: PPTSHelper(self),
             PTS.NAME: PTSHelper(self),
@@ -176,14 +207,13 @@ class RecordGraphBuilder:
         }
 
     def build(self):
-        """Build a RecordGraph from schemaless & uuid_map files."""
+        """Build the graph."""
         rg = self.graph_class()
 
         latest_records = latest_values(self.schemaless_file)
 
-        # TODO: Refactor this "pre-processing" logic?
-        # Create a mapping between permit numbers and their associated PPTS
-        # record (so we an ensure they are assigned the same UUID).
+        # preprocess every record with every helper to build the necessary
+        # caches and maps.
         for helper in self.helpers.values():
             helper.preprocess(latest_records)
 
@@ -225,6 +255,14 @@ class RecordGraphBuilder:
 
 
 class RecordGraph:
+    """RecordGraph is a directed hierachy of records.
+
+    It contains many disjoint DAGs that reproduce the hierarchy of records.
+    Ideally, the root of each of those graphs is a PPTS PRJ record, but this
+    is not strictly true. PTS (Building permits) records often lack a parent
+    record in Planning's PPTS database, so the root there is just the first
+    permit we can find.
+    """
     def __init__(self):
         self._nodes = OrderedDict()
 
@@ -243,6 +281,11 @@ class RecordGraph:
                 writer.writerow([record.uuid, fk])
 
     def add(self, record):
+        """Add a record to the graph.
+
+        Args:
+            record: A `Node` object to add to the graph.
+        """
         rid = record.record_id
         if rid in self._nodes:
             # This may either be an update or adding a parent/child for an
@@ -263,6 +306,14 @@ class RecordGraph:
             self.link(record.record_id, child)
 
     def link(self, parent_record_id, child_record_id):
+        """Link a parent and child together.
+
+        Args:
+            parent_record_id: The FK of the parent record.
+            child_record_id: The FK of the child record.
+
+        If either parent or child do not exist, they are created.
+        """
         if parent_record_id not in self._nodes:
             self._nodes[parent_record_id] = Node(parent_record_id)
         if child_record_id not in self._nodes:
@@ -271,9 +322,15 @@ class RecordGraph:
         self._nodes[child_record_id].add_parent(parent_record_id)
 
     def get(self, record_id):
+        """Get a Node by FK.
+
+        Args:
+            record_id: The FK to look up.
+        """
         return self._nodes.get(record_id, None)
 
     def _resolve_parent(self, record_id):
+        """Traverse the graph to finding the root parent."""
         record = self.get(record_id)
         # Note: by not short-circuiting when a record already has a UUID, we
         # ensure that children who are reassigned to new parents always get the
@@ -301,6 +358,10 @@ class RecordGraph:
                       reverse=True)[0]
 
     def _assign_uuids(self):
+        """Assign a UUID to every Node in the graph.
+
+        All children of a parent will be assigned the UUID of the parent.
+        """
         seen = set()
         for fk, record in self._nodes.items():
             if fk in seen:
