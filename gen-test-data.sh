@@ -9,7 +9,7 @@ head -n1 data/mohcd/mohcd-pipeline-2020-01-30.csv > testdata/mohcd-pipeline.csv
 cat data/mohcd/mohcd-pipeline-2020-01-30.csv | egrep -i "(1950 mission)|(2015-011205)|(transbay)|(2011-005)|(2016-023)|(2015-014058PRJ)" >> testdata/mohcd-pipeline.csv
 
 xzcat data/pts/2020-01-24-pts-after-2013.csv.xz | head -n1 > testdata/pts.csv
-xzcat data/pts/2020-01-24-pts-after-2013.csv.xz | egrep -i "(201705318009)|(201706058373)|(201711284964)|(201801118389)|(201404304554)|(201705237369)" >> testdata/pts.csv
+xzcat data/pts/2020-01-24-pts-after-2013.csv.xz | egrep -i "(201705318009)|(201706058373)|(201711284964)|(201801118389)|(201404304554)|(201705237369)|(201301027105)" >> testdata/pts.csv
 
 head -n1 data/mohcd/mohcd-inclusionary-2020-02-05.csv > testdata/mohcd-inclusionary.csv
 cat data/mohcd/mohcd-inclusionary-2020-02-05.csv | egrep -i "(2011-005)|(2016-023)|(2015-014058PRJ)" >> testdata/mohcd-inclusionary.csv
@@ -20,8 +20,8 @@ python3 -m schemaless.create_schemaless \
   --tco_file testdata/tco.csv \
   --mohcd_pipeline_file testdata/mohcd-pipeline.csv \
   --mohcd_inclusionary_file testdata/mohcd-inclusionary.csv \
-  --out_file testdata/schemaless-one.csv \
-  --the-date=2020-01-29
+  --the-date=2020-01-29 \
+  testdata/schemaless-one.csv
 # We read in the uuid-map file generated previously so our uuids are stable
 python3 -m schemaless.create_uuid_map \
   testdata/schemaless-one.csv \
@@ -29,9 +29,9 @@ python3 -m schemaless.create_uuid_map \
   --uuid_map_file=testdata/uuid-map-one.csv
 python3 -m schemaless.create_schemaless \
   --ppts_file testdata/ppts-two.csv \
-  --out_file testdata/schemaless-two.csv \
   --diff testdata/schemaless-one.csv \
-  --the-date=2020-01-29
+  --the-date=2020-01-29 \
+  testdata/schemaless-two.csv
 # We read in the uuid-map file generated previously so our uuids are stable
 python3 -m schemaless.create_uuid_map \
   testdata/schemaless-one.csv \

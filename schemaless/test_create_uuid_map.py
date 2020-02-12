@@ -467,6 +467,17 @@ def test_ppts_child_1950_mission_just_parent():
     assert child.uuid == grandparent.uuid
 
 
+def test_link_pts_records_without_ppts():
+    pts_records = [
+        'pts_129220091307',
+        'pts_1292201488027'
+    ]
+    rg = RecordGraph.from_files(
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv')
+    assert rg.get(pts_records[0]).uuid == rg.get(pts_records[1]).uuid
+
+
 def test_link_pts_to_ppts_records():
     prj_fk = 'ppts_2017-007883PRJ'
     expected_pts_children = [
@@ -517,8 +528,8 @@ def test_mohcd_records_link_with_prj():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    verify_valid_children(rg, prj_fk, expected_ppts_children + \
-                          expected_mohcd_pipeline_children + \
+    verify_valid_children(rg, prj_fk, expected_ppts_children +
+                          expected_mohcd_pipeline_children +
                           expected_mohcd_inclusionary_children)
 
 
