@@ -99,6 +99,9 @@ class Project:
             project, as determined by our uuid mapping of fks to a uuid
         recordgraph:  a fully built record graph that contains any parent-child
             relationships for the entries.  This class will not mutate it.
+
+        Raises ValueError if the provided entries do not craete a valid
+        project.
         """
         self.id = id
         self.recordgraph = recordgraph
@@ -131,6 +134,17 @@ class Project:
             if oldest_child:
                 self.roots[oldest_child.source].append(oldest_child)
                 self.children[oldest_child.source].remove(oldest_child)
+
+        # REMOVE THIS IF WE ARE EVER DETERMINED TO GET DATA FROM PRJ-LESS
+        # RECORDS
+        if (len(self.roots) == 0 or
+                len(self.roots.get(PPTS.NAME, [])) == 0):
+            msg = 'No root PRJ record for project'
+            if len(self.roots) > 0:
+                # get an arbitrary root to extract a FK, so just get
+                # the first entry for the first root we find
+                msg = msg + (' "%s"' % list(self.roots.items())[0][1][0].fk)
+            raise ValueError(msg)
 
     def field(self, name, source, entry_predicate=None):
         """Fetches the value for a field, using some business logic.

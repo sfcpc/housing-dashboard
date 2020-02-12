@@ -48,7 +48,7 @@ class Date(Field):
         try:
             return datetime.strptime(
                 record[self.field].split(" ")[0], self.date_format).date()
-        except:
+        except ValueError:
             return None
 
     def get_value_str(self, record):
@@ -191,7 +191,7 @@ class PPTS(Source):
 
         # Unit/land use details
         'non_housing_uses': 'TODO',
-        'RELATED_BUILDING_PERMIT': 'building_permit_id',
+        'RELATED_BUILDING_PERMIT': 'building_permit_number',
         'LAND_USE_RESIDENTIAL_EXIST': 'residential_sq_ft_existing',
         'LAND_USE_RESIDENTIAL_PROP': 'residential_sq_ft_proposed',
         'LAND_USE_RESIDENTIAL_NET': 'residential_sq_ft_net',

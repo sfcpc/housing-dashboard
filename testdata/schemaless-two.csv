@@ -36,7 +36,7 @@ ppts_2017-007883PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.467561946 37.
 ppts_2017-007883PRJ,ppts,2020-01-29,planner_name,Sara Vellve
 ppts_2017-007883PRJ,ppts,2020-01-29,planner_email,sara.vellve@sfgov.org
 ppts_2017-007883PRJ,ppts,2020-01-29,planner_phone,415-558-6263
-ppts_2017-007883PRJ,ppts,2020-01-29,building_permit_id,201705318009
+ppts_2017-007883PRJ,ppts,2020-01-29,building_permit_number,201705318009
 ppts_2017-007883PRJ,ppts,2020-01-29,market_rate_units_existing,2
 ppts_2017-007883PRJ,ppts,2020-01-29,market_rate_units_proposed,2
 ppts_2017-007883PRJ,ppts,2020-01-29,market_rate_units_net,0
@@ -379,7 +379,7 @@ ppts_2017-006969PRL,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.467683034 37.
 ppts_2017-006969PRL,ppts,2020-01-29,planner_name,Eiliesh Tuffy
 ppts_2017-006969PRL,ppts,2020-01-29,planner_email,eiliesh.tuffy@sfgov.org
 ppts_2017-006969PRL,ppts,2020-01-29,planner_phone,415-575-9191
-ppts_2017-006969PRL,ppts,2020-01-29,building_permit_id,201706058373
+ppts_2017-006969PRL,ppts,2020-01-29,building_permit_number,201706058373
 ppts_2017-006969PRL,ppts,2020-01-29,address_norm,"708 10TH AVE, SAN FRANCISCO, CA, 94118"
 ppts_2007.1121V,ppts,2020-01-29,record_id,2007.1121V
 ppts_2007.1121V,ppts,2020-01-29,record_type,Variance (VAR)
@@ -632,7 +632,7 @@ ppts_2015-011205PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.403380089 37.
 ppts_2015-011205PRJ,ppts,2020-01-29,planner_name,Kate Conner
 ppts_2015-011205PRJ,ppts,2020-01-29,planner_email,kate.conner@sfgov.org
 ppts_2015-011205PRJ,ppts,2020-01-29,planner_phone,415-575-6914
-ppts_2015-011205PRJ,ppts,2020-01-29,building_permit_id,201510301361
+ppts_2015-011205PRJ,ppts,2020-01-29,building_permit_number,201510301361
 ppts_2015-011205PRJ,ppts,2020-01-29,residential_sq_ft_existing,168506
 ppts_2015-011205PRJ,ppts,2020-01-29,residential_sq_ft_proposed,168506
 ppts_2015-011205PRJ,ppts,2020-01-29,residential_sq_ft_net,0
@@ -978,7 +978,7 @@ ppts_2017-006823PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.464740365 37.
 ppts_2017-006823PRJ,ppts,2020-01-29,planner_name,Sylvia Jimenez
 ppts_2017-006823PRJ,ppts,2020-01-29,planner_email,sylvia.jimenez@sfgov.org
 ppts_2017-006823PRJ,ppts,2020-01-29,planner_phone,415-575-9187
-ppts_2017-006823PRJ,ppts,2020-01-29,building_permit_id,201705237369
+ppts_2017-006823PRJ,ppts,2020-01-29,building_permit_number,201705237369
 ppts_2017-006823PRJ,ppts,2020-01-29,market_rate_units_existing,1
 ppts_2017-006823PRJ,ppts,2020-01-29,market_rate_units_proposed,2
 ppts_2017-006823PRJ,ppts,2020-01-29,market_rate_units_net,1
@@ -1175,7 +1175,7 @@ ppts_2017-015112PRL,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.468220711 37.
 ppts_2017-015112PRL,ppts,2020-01-29,planner_name,Kurt Botn
 ppts_2017-015112PRL,ppts,2020-01-29,planner_email,kurt.botn@sfgov.org
 ppts_2017-015112PRL,ppts,2020-01-29,planner_phone,415-575-9092
-ppts_2017-015112PRL,ppts,2020-01-29,building_permit_id,201711284964
+ppts_2017-015112PRL,ppts,2020-01-29,building_permit_number,201711284964
 ppts_2017-015112PRL,ppts,2020-01-29,address_norm,"478 10TH AVE, SAN FRANCISCO, CA, 94118"
 ppts_2004.0049C,ppts,2020-01-29,record_id,2004.0049C
 ppts_2004.0049C,ppts,2020-01-29,record_type,Conditional Use Authorization (CUA)
@@ -1231,7 +1231,7 @@ ppts_2015-010665PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.433461599 37.
 ppts_2015-010665PRJ,ppts,2020-01-29,planner_name,Kate Conner
 ppts_2015-010665PRJ,ppts,2020-01-29,planner_email,kate.conner@sfgov.org
 ppts_2015-010665PRJ,ppts,2020-01-29,planner_phone,415-575-6914
-ppts_2015-010665PRJ,ppts,2020-01-29,building_permit_id,201509025917
+ppts_2015-010665PRJ,ppts,2020-01-29,building_permit_number,201509025917
 ppts_2015-010665PRJ,ppts,2020-01-29,residential_sq_ft_existing,63203
 ppts_2015-010665PRJ,ppts,2020-01-29,residential_sq_ft_proposed,36203
 ppts_2015-010665PRJ,ppts,2020-01-29,residential_sq_ft_net,-27000
@@ -1399,7 +1399,7 @@ ppts_2016-001514PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.420392255 37.
 ppts_2016-001514PRJ,ppts,2020-01-29,planner_name,Kimberly Durandet
 ppts_2016-001514PRJ,ppts,2020-01-29,planner_email,kimberly.durandet@sfgov.org
 ppts_2016-001514PRJ,ppts,2020-01-29,planner_phone,415-575-6816
-ppts_2016-001514PRJ,ppts,2020-01-29,building_permit_id,201609218371
+ppts_2016-001514PRJ,ppts,2020-01-29,building_permit_number,201609218371
 ppts_2016-001514PRJ,ppts,2020-01-29,residential_sq_ft_existing,0
 ppts_2016-001514PRJ,ppts,2020-01-29,residential_sq_ft_proposed,143320
 ppts_2016-001514PRJ,ppts,2020-01-29,residential_sq_ft_net,143320
@@ -1443,7 +1443,7 @@ ppts_2017-009677PRL,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466693195 37.
 ppts_2017-009677PRL,ppts,2020-01-29,planner_name,Laura Ajello
 ppts_2017-009677PRL,ppts,2020-01-29,planner_email,laura.ajello@sfgov.orgjavascript:Validate();
 ppts_2017-009677PRL,ppts,2020-01-29,planner_phone,415-575-9142
-ppts_2017-009677PRL,ppts,2020-01-29,building_permit_id,201707313307
+ppts_2017-009677PRL,ppts,2020-01-29,building_permit_number,201707313307
 ppts_2017-009677PRL,ppts,2020-01-29,address_norm,"1728 10TH AVE, SAN FRANCISCO, CA, 94122"
 ppts_2004.0049V,ppts,2020-01-29,record_id,2004.0049V
 ppts_2004.0049V,ppts,2020-01-29,record_type,Variance (VAR)
@@ -1744,7 +1744,7 @@ ppts_2016-008581PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466376285 37.
 ppts_2016-008581PRJ,ppts,2020-01-29,planner_name,Cathleen Campbell
 ppts_2016-008581PRJ,ppts,2020-01-29,planner_email,cathleen.campbell@sfgov.org
 ppts_2016-008581PRJ,ppts,2020-01-29,planner_phone,415-575-8732
-ppts_2016-008581PRJ,ppts,2020-01-29,building_permit_id,201606109695
+ppts_2016-008581PRJ,ppts,2020-01-29,building_permit_number,201606109695
 ppts_2016-008581PRJ,ppts,2020-01-29,residential_sq_ft_existing,4503
 ppts_2016-008581PRJ,ppts,2020-01-29,residential_sq_ft_proposed,4503
 ppts_2016-008581PRJ,ppts,2020-01-29,residential_sq_ft_net,0
@@ -1777,6 +1777,58 @@ ppts_2000.351R,ppts,2020-01-29,status,Closed
 ppts_2000.351R,ppts,2020-01-29,date_opened,04/10/2000 12:00:00 AM +0000
 ppts_2000.351R,ppts,2020-01-29,date_closed,04/25/2001 12:00:00 AM +0000
 ppts_2000.351R,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.420392255 37.765559672, -122.420495741 37.765553422, -122.420548187 37.766101109, -122.419919804 37.766139067, -122.419896549 37.76589619, -122.41989127 37.765841061, -122.419867363 37.765591378, -122.420074335 37.765578876, -122.420185282 37.765572174, -122.420392255 37.765559672)))"
+pts_129220091307,pts,2020-01-29,record_id,129220091307
+pts_129220091307,pts,2020-01-29,permit_number,201301027105
+pts_129220091307,pts,2020-01-29,permit_type,8
+pts_129220091307,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_129220091307,pts,2020-01-29,permit_creation_date,01/02/2013
+pts_129220091307,pts,2020-01-29,block,1173
+pts_129220091307,pts,2020-01-29,lot,007
+pts_129220091307,pts,2020-01-29,street_number,40
+pts_129220091307,pts,2020-01-29,street_name,Loyola
+pts_129220091307,pts,2020-01-29,zipcode,94117
+pts_129220091307,pts,2020-01-29,location,"(37.77622919688215, -122.44877581253213)"
+pts_129220091307,pts,2020-01-29,supervisor_district,1
+pts_129220091307,pts,2020-01-29,current_status,cancelled
+pts_129220091307,pts,2020-01-29,current_status_date,11/14/2016
+pts_129220091307,pts,2020-01-29,filed_date,01/02/2013
+pts_129220091307,pts,2020-01-29,issued_date,01/02/2013
+pts_129220091307,pts,2020-01-29,permit_expiration_date,12/28/2013
+pts_129220091307,pts,2020-01-29,existing_use,2 family dwelling
+pts_129220091307,pts,2020-01-29,proposed_use,2 family dwelling
+pts_129220091307,pts,2020-01-29,existing_units,2
+pts_129220091307,pts,2020-01-29,proposed_units,2
+pts_129220091307,pts,2020-01-29,existing_construction_type,5
+pts_129220091307,pts,2020-01-29,existing_construction_type_description,wood frame (5)
+pts_129220091307,pts,2020-01-29,proposed_construction_type,5
+pts_129220091307,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_129220091307,pts,2020-01-29,address_norm,"40 LOYOLA, SAN FRANCISCO, CA, 94117"
+pts_1292201488027,pts,2020-01-29,record_id,1292201488027
+pts_1292201488027,pts,2020-01-29,permit_number,201301027105
+pts_1292201488027,pts,2020-01-29,permit_type,8
+pts_1292201488027,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1292201488027,pts,2020-01-29,permit_creation_date,01/02/2013
+pts_1292201488027,pts,2020-01-29,block,1173
+pts_1292201488027,pts,2020-01-29,lot,007
+pts_1292201488027,pts,2020-01-29,street_number,42
+pts_1292201488027,pts,2020-01-29,street_name,Loyola
+pts_1292201488027,pts,2020-01-29,zipcode,94117
+pts_1292201488027,pts,2020-01-29,location,"(37.77622919688215, -122.44877581253213)"
+pts_1292201488027,pts,2020-01-29,supervisor_district,1
+pts_1292201488027,pts,2020-01-29,current_status,cancelled
+pts_1292201488027,pts,2020-01-29,current_status_date,11/14/2016
+pts_1292201488027,pts,2020-01-29,filed_date,01/02/2013
+pts_1292201488027,pts,2020-01-29,issued_date,01/02/2013
+pts_1292201488027,pts,2020-01-29,permit_expiration_date,12/28/2013
+pts_1292201488027,pts,2020-01-29,existing_use,2 family dwelling
+pts_1292201488027,pts,2020-01-29,proposed_use,2 family dwelling
+pts_1292201488027,pts,2020-01-29,existing_units,2
+pts_1292201488027,pts,2020-01-29,proposed_units,2
+pts_1292201488027,pts,2020-01-29,existing_construction_type,5
+pts_1292201488027,pts,2020-01-29,existing_construction_type_description,wood frame (5)
+pts_1292201488027,pts,2020-01-29,proposed_construction_type,5
+pts_1292201488027,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1292201488027,pts,2020-01-29,address_norm,"42 LOYOLA, SAN FRANCISCO, CA, 94117"
 pts_1339294495475,pts,2020-01-29,record_id,1339294495475
 pts_1339294495475,pts,2020-01-29,permit_number,M481548
 pts_1339294495475,pts,2020-01-29,permit_type,8
@@ -4090,7 +4142,7 @@ ppts_2018-007274PRL,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.417919582 37.
 ppts_2018-007274PRL,ppts,2020-01-29,planner_name,Heidi Kline
 ppts_2018-007274PRL,ppts,2020-01-29,planner_email,heidi.kline@sfgov.org
 ppts_2018-007274PRL,ppts,2020-01-29,planner_phone,415-575-9043
-ppts_2018-007274PRL,ppts,2020-01-29,building_permit_id,201805048308
+ppts_2018-007274PRL,ppts,2020-01-29,building_permit_number,201805048308
 ppts_2018-007274PRL,ppts,2020-01-29,address_norm,"8 10TH ST, SAN FRANCISCO, CA, 94103"
 ppts_2016-001514GPR,ppts,2020-01-29,status,Closed - Approved
 ppts_2016-001514GPR,ppts,2020-01-29,date_closed,06/27/2018 12:00:00 AM +0000
@@ -4269,7 +4321,7 @@ ppts_2018-008884PRL,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.468269885 37.
 ppts_2018-008884PRL,ppts,2020-01-29,planner_name,Justin Greving
 ppts_2018-008884PRL,ppts,2020-01-29,planner_email,justin.greving@sfgov.org
 ppts_2018-008884PRL,ppts,2020-01-29,planner_phone,415-575-9169
-ppts_2018-008884PRL,ppts,2020-01-29,building_permit_id,201806222695
+ppts_2018-008884PRL,ppts,2020-01-29,building_permit_number,201806222695
 ppts_2018-008884PRL,ppts,2020-01-29,address_norm,"218 10TH AVE, SAN FRANCISCO, CA, 94118"
 ppts_2018-015375ENF,ppts,2020-01-29,record_id,2018-015375ENF
 ppts_2018-015375ENF,ppts,2020-01-29,record_type,Enforcement (ENF)
