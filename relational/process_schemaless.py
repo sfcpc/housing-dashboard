@@ -16,6 +16,7 @@ from relational.project import Entry
 from relational.project import NameValue
 from relational.project import Project
 from schemaless.create_uuid_map import RecordGraph
+from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
@@ -53,7 +54,7 @@ TableConfig = namedtuple('TableConfig',
 config = [
     tabledef.ProjectFacts(),
     tabledef.ProjectUnitCountsFull(),
-    # TODO: ProjectStatusHistory
+    tabledef.ProjectStatusHistory(),
     tabledef.ProjectGeo(),
     tabledef.ProjectDetails(),
 ]
@@ -79,7 +80,8 @@ class Freshness:
         self._freshness_checks = {
             PPTS.NAME: self._ppts,
             PTS.NAME: self._pts,
-            MOHCDPipeline.NAME: self._mohcd,
+            MOHCDPipeline.NAME: self._mohcd_pipeline,
+            MOHCDInclusionary.NAME: self._mohcd_inclusionary,
         }
 
     def _check_and_log_good_date(self, date, source, line):
@@ -131,8 +133,11 @@ class Freshness:
     def _pts(self, line):
         self._extract_nv_date(line, PTS.NAME)
 
-    def _mohcd(self, line):
+    def _mohcd_pipeline(self, line):
         self._extract_last_updated(line, MOHCDPipeline.NAME)
+
+    def _mohcd_inclusionary(self, line):
+        self._extract_last_updated(line, MOHCDInclusionary.NAME)
 
 
 # entries_map is a dict of key, value of string=>list of Entry, where key is
@@ -224,10 +229,23 @@ def output_freshness(freshness):
 def build_projects(entries_map, recordgraph):
     """Returns a list of Project"""
     projects = []
+    bad_projects = 0
+    bad_projects_sample = queue.Queue(maxsize=10)
     for (projectid, entries) in entries_map.items():
-        projects.append(Project(projectid, entries, recordgraph))
-        if len(projects) % 100000 == 0:
-            print('Processed %s projects' % len(projects))
+        try:
+            projects.append(Project(projectid, entries, recordgraph))
+            if len(projects) % 100000 == 0:
+                print('Processed %s projects' % len(projects))
+        except ValueError as err:
+            bad_projects += 1
+            if not bad_projects_sample.full():
+                bad_projects_sample.put_nowait(err)
+
+    if bad_projects > 0:
+        print('Skipped %s projects due to problems. Samples below...' %
+              bad_projects)
+        while not bad_projects_sample.empty():
+            print('\t%s' % bad_projects_sample.get_nowait())
 
     return projects
 
