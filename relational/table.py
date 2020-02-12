@@ -271,7 +271,6 @@ class ProjectStatusHistory(Table):
     TOP_LEVEL_STATUS = 'top_level_status'
     START_DATE = 'start_date'
     END_DATE = 'end_date'
-    SEQUENTIAL = 'sequential'
     DATA_SOURCE = 'data_source'
 
     def __init__(self):
