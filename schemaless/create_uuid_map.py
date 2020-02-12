@@ -32,10 +32,14 @@ class PPTSHelper(RecordGraphBuilderHelper):
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
         self._ppts_id_to_fk = {}
+        self._address_to_ppts_fk = defaultdict(list)
         self._permit_number_to_ppts_fk = defaultdict(list)
 
     def find_by_id(self, record_id):
         return self._ppts_id_to_fk.get(record_id, None)
+
+    def find_by_address(self, address):
+        return self._address_to_ppts_fk[address]
 
     def find_by_permit_number(self, permit_number):
         return self._permit_number_to_ppts_fk[permit_number]
@@ -43,6 +47,8 @@ class PPTSHelper(RecordGraphBuilderHelper):
     def preprocess(self, latest_records):
         for fk, record in latest_records.get(PPTS.NAME, {}).items():
             self._ppts_id_to_fk[record['record_id']] = fk
+            if 'address_norm' in record:
+                self._address_to_ppts_fk[record['address_norm']].append(fk)
             if 'building_permit_number' in record:
                 for permit_number in \
                         record['building_permit_number'].split(","):
@@ -65,12 +71,18 @@ class PTSHelper(RecordGraphBuilderHelper):
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
         self._permit_number_to_pts_fk = defaultdict(list)
+        self._address_to_pts_fk = defaultdict(list)
 
     def find_by_building_permit_number(self, permit_number):
         return self._permit_number_to_pts_fk[permit_number]
 
+    def find_by_address(self, address):
+        return self._address_to_pts_fk[address]
+
     def preprocess(self, latest_records):
         for fk, record in latest_records.get(PTS.NAME, {}).items():
+            if 'address_norm' in record:
+                self._address_to_pts_fk[record['address_norm']].append(fk)
             if 'permit_number' in record:
                 self._permit_number_to_pts_fk[
                     record['permit_number']].append(fk)
@@ -156,7 +168,17 @@ class MOHCDInclusionaryHelper(RecordGraphBuilderHelper):
 
 
 class AffordableRentalPortfolioHelper(RecordGraphBuilderHelper):
-    pass
+    def process(self, fk, record, parents, children):
+        # TODO: There will be many matches, so we need to filter
+        # on time range and record type. EG maybe only add parents
+        # that are PRJs, or themselves have parents?
+        if 'address_norm' in record:
+            pts_helper = self.graph_builder.helpers[PTS.NAME]
+            parents.extend(
+                pts_helper.find_by_address(record['address_norm']))
+            ppts_helper = self.graph_builder.helpers[PPTS.NAME]
+            parents.extend(
+                ppts_helper.find_by_address(record['address_norm']))
 
 
 class RecordGraphBuilder:
