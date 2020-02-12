@@ -444,7 +444,7 @@ class MOHCDPipeline(Source):
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Affordable-Housing-Pipeline/aaxw-2cb8"  # NOQA
 
 
-class BMR(Source):
+class AffordableRentalPortfolio(Source):
     """MOHCD/OCII's affordable rental portfolio"""
     NAME = 'bmr'
     DATE = Date('year_affordability_began', '%Y')
@@ -502,5 +502,5 @@ source_map = {
     TCO.NAME: TCO,
     MOHCDPipeline.NAME: MOHCDPipeline,
     MOHCDInclusionary.NAME: MOHCDInclusionary,
-    BMR.NAME: BMR,
+    AffordableRentalPortfolio.NAME: AffordableRentalPortfolio,
 }

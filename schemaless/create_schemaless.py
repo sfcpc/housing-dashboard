@@ -17,7 +17,7 @@ import sys
 
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
-from schemaless.sources import BMR
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 from schemaless.sources import TCO
@@ -91,7 +91,7 @@ if __name__ == "__main__":
                         help='MOHCD Pipeline file', default='')
     parser.add_argument('--mohcd_inclusionary_file',
                         help='MOHCD Inclusionary file', default='')
-    parser.add_argument('--bmr_file', help='BMR file', default='')
+    parser.add_argument('--affordable_file', help='AffordableRentalPortfolio file', default='')
     parser.add_argument('out_file', help='output file for schemaless csv')
 
     parser.add_argument(
@@ -119,8 +119,8 @@ if __name__ == "__main__":
         sources.append(MOHCDPipeline(args.mohcd_pipeline_file))
     if args.mohcd_inclusionary_file:
         sources.append(MOHCDInclusionary(args.mohcd_inclusionary_file))
-    if args.bmr_file:
-        sources.append(BMR(args.bmr_file))
+    if args.affordable_file:
+        sources.append(AffordableRentalPortfolio(args.affordable_file))
 
     if len(sources) == 0:
         parser.print_help()
