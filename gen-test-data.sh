@@ -14,6 +14,9 @@ xzcat data/pts/2020-01-24-pts-after-2013.csv.xz | egrep -i "(201705318009)|(2017
 head -n1 data/mohcd/mohcd-inclusionary-2020-02-05.csv > testdata/mohcd-inclusionary.csv
 cat data/mohcd/mohcd-inclusionary-2020-02-05.csv | egrep -i "(2011-005)|(2016-023)|(2015-014058PRJ)" >> testdata/mohcd-inclusionary.csv
 
+xzcat data/pts/2020-02-11-permit-addenda-routing.csv.xz | head -n1 > testdata/permit-addenda.csv
+xzcat data/pts/2020-02-11-permit-addenda-routing.csv.xz | egrep -i "(201609218371)" >> testdata/permit-addenda.csv
+
 python3 -m schemaless.create_schemaless \
   --ppts_file testdata/ppts-one.csv \
   --pts_file testdata/pts.csv \
