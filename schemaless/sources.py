@@ -354,6 +354,7 @@ class MOHCDInclusionary(Source):
         'Supervisor District': 'supervisor_district',
         'Location': 'location',
     }
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Residential-Projects-With-Inclusionary-Requirement/nj3x-rw36"  # NOQA
 
 
 class MOHCDPipeline(Source):
