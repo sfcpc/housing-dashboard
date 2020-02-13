@@ -256,7 +256,7 @@ def output_projects(projects, config):
     lines_out = 0
     for table in config:
         if lines_out > 0:
-            print('%s total entries' % lines_out)
+            print('\t%s total entries' % lines_out)
             lines_out = 0
 
         finalfile = args.out_prefix + table.name + '.csv'
@@ -279,12 +279,13 @@ def output_projects(projects, config):
 
                     for out in output:
                         lines_out += 1
-                        if lines_out % 10000 == 0:
-                            print('%s entries to %s' % (lines_out, finalfile))
+                        if lines_out % 5000 == 0:
+                            print('\t...%s entries to %s' %
+                                  (lines_out, finalfile))
                         writer.writerow(out)
 
     if lines_out > 0:
-        print('%s total entries' % lines_out)
+        print('\t%s total entries' % lines_out)
 
 
 def build_uuid_mapping(uuid_map_file):
