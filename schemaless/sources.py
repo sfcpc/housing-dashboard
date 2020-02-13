@@ -1,7 +1,7 @@
 # Lint as: python3
 """Source class to define the interface for reading a source file."""
 from csv import DictReader
-from datetime import datetime
+from datetime import datetime, date
 from fileutils import open_file
 
 
@@ -50,17 +50,28 @@ class Date(Field):
         return self.get_value(record).isoformat()
 
 
-class Source:
+class Source():
     NAME = 'Base Class'
     FK = PrimaryKey(NAME, 'None')
     DATE = Date('None', '%m/%d/%Y')
-    FIELDS = {}
 
     def __init__(self, filepath):
         self._filepath = filepath
 
     def foreign_key(self, record):
         return self.FK.get_value(record)
+
+    def yield_records(self):
+        pass
+
+
+class DirectSource(Source):
+    """Superclass for sources where fields map directly to fields in the input
+    file."""
+
+    # Mapping of field names in the input file to the field names to be used in
+    # the records for this source.
+    FIELDS = {}
 
     def yield_records(self):
         with open_file(self._filepath,
@@ -75,7 +86,7 @@ class Source:
                        if key in self.FIELDS and val}
 
 
-class PPTS(Source):
+class PPTS(DirectSource):
     NAME = 'ppts'
     FK = PrimaryKey(NAME, 'record_id')
     DATE = Date('date_opened', '%m/%d/%Y')
@@ -169,7 +180,7 @@ class PPTS(Source):
     }
 
 
-class PTS(Source):
+class PTS(DirectSource):
     NAME = 'pts'
     FK = PrimaryKey(NAME, 'record_id')
     DATE = Date('filed_date', '%m/%d/%Y')
@@ -211,7 +222,7 @@ class PTS(Source):
     }
 
 
-class TCO(Source):
+class TCO(DirectSource):
     NAME = 'tco'
     DATE = Date('date_issued', '%Y/%m/%d')
     FK = PrimaryKey(NAME, 'building_permit_number', DATE)
@@ -224,7 +235,7 @@ class TCO(Source):
     }
 
 
-class MOHCDInclusionary(Source):
+class MOHCDInclusionary(DirectSource):
     NAME = 'mohcd_inclusionary'
     FK = PrimaryKey(NAME, 'project_id')
     FIELDS = {
@@ -269,7 +280,7 @@ class MOHCDInclusionary(Source):
     }
 
 
-class MOHCDPipeline(Source):
+class MOHCDPipeline(DirectSource):
     NAME = 'mohcd_pipeline'
     FK = PrimaryKey(NAME, 'project_id')
     FIELDS = {
@@ -351,23 +362,48 @@ class MOHCDPipeline(Source):
     }
 
 
-class PermitAddenda(Source):
-    NAME = 'permit_addenda'
-    DATE = Date('date_issued', '%Y/%m/%d')
-    FK = PrimaryKey(NAME, 'application_number', 'addenda_number', 'step', 'station')
-    FIELDS = {
-        'APPLICATION_NUMBER': 'application_number',
-        'ADDENDA_NUMBER': 'addenda_number',
-        'STEP': 'step',
-        'STATION': 'station',
-        'ARRIVE': 'arrive',
-        'START_DATE': 'start_date',
-        'IN_HOLD': 'in_hold',
-        'OUT_HOLD': 'out_hold',
-        'FINISH_DATE': 'finish_date',
-        'PLAN_CHECKED_BY': 'plan_checked_by',
-        'HOLD_DESCRIPTION': 'hold_description',
-    }
+class PermitAddendaSummary(Source):
+    '''Class for permit addenda summary data.
+
+    Note that the fields of this source do *not* necessarily map directly to
+    fields from the input file (unlike subclasses of DirectSource).
+
+    Instead, we look at all the addenda pertaining to a given permit, summarize
+    the  data into a few key fields, and output one record per permit with
+    those key fields.
+    '''
+    NAME = 'permit_addenda_summary'
+    FK = PrimaryKey(NAME, 'permit_number')
+
+    def yield_records(self):
+        '''Outputs one record per permit number with a few key fields summarizing
+        info about related addenda.'''
+        with open_file(self._filepath,
+                       mode='rt',
+                       encoding='utf-8',
+                       errors='replace') as inf:
+            reader = DictReader(inf)
+
+            permit_to_arrival = {}
+            for line in reader:
+                permit_number = line['APPLICATION_NUMBER']
+                try:
+                    arrive_date = datetime.strptime(
+                        line['ARRIVE'].split(" ")[0], '%Y/%m/%d').date()
+                except ValueError:
+                    arrive_date = date.max
+                if permit_number not in permit_to_arrival or \
+                   arrive_date < permit_to_arrival[permit_number]:
+                    permit_to_arrival[permit_number] = arrive_date
+
+            for permit_number in permit_to_arrival.keys():
+                arrive_date = permit_to_arrival[permit_number]
+                arrive_date_str = arrive_date.isoformat() \
+                    if arrive_date != date.max else ''
+                yield {
+                    'permit_number': permit_number,
+                    'earliest_addenda_arrival': arrive_date_str
+                }
 
 
 source_map = {
@@ -376,5 +412,5 @@ source_map = {
     TCO.NAME: TCO,
     MOHCDPipeline.NAME: MOHCDPipeline,
     MOHCDInclusionary.NAME: MOHCDInclusionary,
-    PermitAddenda.NAME: PermitAddenda
+    PermitAddendaSummary.NAME: PermitAddendaSummary
 }
