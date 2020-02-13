@@ -31,6 +31,13 @@ APPLICATION_NUMBER,ADDENDA_NUMBER,STEP,STATION,ARRIVE,START_DATE,IN_HOLD,OUT_HOL
 201609218371,3,3,DPW-BSM,2019/01/10,2019/01/15,2019/01/15,2019/02/08,2019/02/08,ZHOU ANDY,Approved. 2/8/19: BSM sign off on Job Card required prior to DBI final.  Subject to all conditions of BSM: #18IE-0343 & 18MSE-0776. -AZOn hold. 1/16/19:  Sign off after BLDG approval. (REF:  18IE-0343 & 18MSE-0776) -CC On hold 1/15/19. Awaiting plan checker recommendation for release. Ref: 18IE-0343 and 18MSE-0776. Please call (415)554-5810 for more information. -AZ
 201609218371,3,4,PPC,2019/02/11,2019/02/11,,,2019/02/11,MAN ALICIA,2/11/19: to CPB; am 2/5/19: To BSM; HP1/17/19: To HOLD bin pending BLDG & BSM approval; HP1/10/19: To BSM; HP10/18/18: To BLDG; HP
 201609218371,3,5,CPB,2019/02/11,2019/02/12,,,2019/02/12,CHAN AMARIS,S-3: 7 PAGES. APPROV & ISSUE BY AMARIS.
+201810233961,0,1,CPB,2018/10/24,2018/10/24,,,2018/10/24,TORRES SHIRLEY,
+201810233961,0,2,CP-ZOC,2018/10/24,2019/07/15,,,2019/07/15,CAMPBELL CATHLEEN,Approved per plans. Must maintain existing building under Planning Code Section 317 threshold.  Cathleen Campbell 7/15/19
+201810233961,0,3,BLDG,2019/07/17,2019/08/07,2019/08/12,,2019/09/12,CHEUNG JIMMY,
+201810233961,0,4,DPW-BSM,2019/08/12,2019/08/14,,,2019/09/19,THEO DEVINE DAVID,"Approved SITE Permit only. 9/19/19: ADDENDA requirement(s) for sign off:  Street Improvement (new curb cut), Bureau of Urban Forestry (tree planting).  All sidewalk applications and plans MUST be applied IN-PERSON for intake at 1155 Market St, 3rd Floor.  Download sidewalk applications at http://www.sfpublicworks.org/services/permits. Only new trees can be applied ONLINE and UPLOAD plans through http://www.sfpublicworks.org/services/permits/street-trees-planting.   Your construction addenda will be ON-HOLD until all necessary PUBLIC WORKS-BSM permits are completed or plan checker(s) and BUF could recommend sign off to the satellite office via email. - TD"
+201810233961,0,5,SFPUC,2019/08/15,2019/08/23,,,2019/08/23,GARCIA JOBEL,"Capacity Charge not applicable. Existing fixture count (gpm) in the same tier as proposed fixture count (gpm). Please note that existing meter is undersized. Meter upgrade is recommended.  Please contact SFPUC, New Installations, 525 Golden Gate Ave, 2nd floor, San Francisco, CA 94102, Telephone: (415) 551-2900 for more info. Route to PPC - 08/23/19."
+201810233961,0,9,PPC,2019/10/03,2019/10/03,,,2019/10/03,LEI MANDY,"10/3/19; to CPB; mml9/25/19: to DCP to review and restamp revised plans; cp9/20/19: to PUC to erview and restamp revised plans (then to DCP); am 9/13/19: to BSM review & stamp revised plans, then to PUC & DCP; mml8/23/19: To HOLD bin pending BLDG approval; HP8/15/19; to PUC; mml8/12/19: To BSM; HP7/17/19: To BLDG; HP7/9/19: S/R2 to DCP; HP5/7/19: S/R1 to DCP; HP"
+201810233961,0,10,CPB,2019/10/03,2019/10/15,,,2019/11/12,SONG SUSIE,11/12/19: 25 PGS.10/15/2019: SFUSD POSTED.  APPROV BY BYAN.10/7/19: WAITING FOR SFUSD FEE. SS
 201609218371,4,1,CPB,2018/10/30,2018/10/30,,,2018/10/30,GUTIERREZ NANCY,
 201609218371,4,2,PID-PC,2018/10/30,2018/12/11,,,2018/12/11,FARROW ROBERT,
 201609218371,4,4,PPC,2018/12/11,2018/12/11,,,2019/01/14,CHAN EDDIE MAN WAI,"1/14/19: to CPB;EC. 1/9/19: Missing Sheet P4-6 on one set, plans on HOLD @ DBI 2ND Floor 1660 Mission St; HP12/11/18: To PID-PC for restamp (Missing Sheet P406 on one set); HP10/30/18: To PID-PC; HP"
@@ -38,6 +45,7 @@ APPLICATION_NUMBER,ADDENDA_NUMBER,STEP,STATION,ARRIVE,START_DATE,IN_HOLD,OUT_HOL
 201609218371,4,3,PID-PC,2018/12/11,2019/01/09,,,2019/01/09,FARROW ROBERT,
 201609218371,2,10,SFFD,2018/12/26,2018/12/27,,,2018/12/27,STUMPP FRED,
 201609218371,2,8,MOD,2018/12/07,2018/12/07,,,2018/12/07,WHIPPLE JAMES,
+201810233961,0,2,CP-NP,2019/05/21,2019/05/23,2019/05/21,2019/05/23,2019/05/23,CAMPBELL CATHLEEN,Emailed cover letter on 5/21/2019 (William)Mailed 311 notice on 6/3/2019; expires 7/3/2019 (William)
 201609218371,5,1,CPB,2019/06/04,2019/06/04,,,2019/06/04,TORRES SHIRLEY,
 201609218371,5,2,SFFD,2019/06/04,2019/06/18,2019/06/24,2019/11/12,2019/11/12,ANDRAWES KAMAL,SFFD Comments have been sent to Bruce on 6/24/19SFFD Comments sent to Bruce on 9/6/19
 201609218371,5,3,PPC,2019/11/13,2019/11/13,,,2019/11/13,LEI MANDY,11/13/19: to CPB; mml6/4/19: to SFFD;EC.
@@ -51,9 +59,20 @@ APPLICATION_NUMBER,ADDENDA_NUMBER,STEP,STATION,ARRIVE,START_DATE,IN_HOLD,OUT_HOL
 201609218371,6,2,SFFD,2019/07/25,2019/08/06,2019/08/10,2019/12/09,2019/12/09,WEISS-ISHAI SAGIV,Not approved. Comments sent to Bruce Baumann By Sagiv of SFFD on 8/10/2019
 201609218371,6,3,PPC,2019/12/10,2019/12/10,,,2019/12/10,LEI MANDY,12/10/19: to CPB; mml7/25/19: to SFFD;EC.
 201609218371,6,4,CPB,2019/12/10,2019/12/11,,,2019/12/11,GUTIERREZ NANCY,12/11/2019:60 pgs-approved by ng
+201810233961,0,6,DPW-BSM,2019/09/13,2019/09/19,,,2019/09/19,THEO DEVINE DAVID,"Approved SITE Permit only. 9/19/19: ADDENDA requirement(s) for sign off:  Street Improvement (new curb cut), Bureau of Urban Forestry (tree planting).  All sidewalk applications and plans MUST be applied IN-PERSON for intake at 1155 Market St, 3rd Floor.  Download sidewalk applications at http://www.sfpublicworks.org/services/permits. Only new trees can be applied ONLINE and UPLOAD plans through http://www.sfpublicworks.org/services/permits/street-trees-planting.   Your construction addenda will be ON-HOLD until all necessary PUBLIC WORKS-BSM permits are completed or plan checker(s) and BUF could recommend sign off to the satellite office via email. - TD"
+201810233961,0,7,SFPUC,2019/09/20,2019/09/25,,,2019/09/25,GARCIA JOBEL,"RESTAMP - Capacity Charge not applicable. Existing fixture count (gpm) in the same tier as proposed fixture count (gpm). Please note that existing meter is undersized. Meter upgrade is recommended.  Please contact SFPUC, New Installations, 525 Golden Gate Ave, 2nd floor, San Francisco, CA 94102, Telephone: (415) 551-2900 for more info. Route to PPC - 09/25/19."
+201810233961,0,8,CP-ZOC,2019/09/25,2019/10/02,,,2019/10/02,CAMPBELL CATHLEEN,Restamp- No changes to original approval- Cathleen Campbell 10/2/19
+201810233961,1,1,CPB,2019/12/19,2019/12/19,,,2019/12/19,SECONDEZ GRACE,
+201810233961,1,2,BLDG,2019/12/19,2020/01/27,,,2020/01/27,,1/27/20: OTC request approved
+201810233961,1,4,DPW-BSM,,,,,,,
+201810233961,1,5,PPC,,,,,,BARTHOLOMEW IRENE,"1/27/20pm: OTC bin. ibb1/27/20: to Henry Karnilowicz; am 1/27/20: OTC approved by Robert Chun, to OTC bin; am 1/24/20: To supervisor for OTC approval/denial 2nd request; HP12/24/19: OTC denied by Anne Hu-Scope of work exceeds 1 hour. Back to BLDG; am 12/23/19: to supervisor for OTC approval/denial; am12/19/19: to BLDG;EC."
+201810233961,1,6,CPB,,,,,,,
 201609218371,8,1,CPB,2020/01/21,2020/01/21,,,2020/01/21,CHAN AMARIS,S-8: 5 PAGES.
 201609218371,8,2,BLDG,2020/01/21,,,,,ZEE HOWARD,
 201609218371,8,3,SFFD,,,,,,,
 201609218371,8,4,DPW-BSM,,,,,,,
 201609218371,8,5,PPC,,,,,,USER GSA,1/21/20: To BLDG; HP
 201609218371,8,6,CPB,,,,,,,
+201810233961,1,3,BLDG,2020/01/27,,,,,COUNTER1,
+8410366,0,0,CP-ZOC,,,,,1984/10/01,KMD,
+8410366,0,0,PAD-STR,,,,,1984/10/11,WL,

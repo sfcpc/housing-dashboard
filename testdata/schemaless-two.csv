@@ -3097,6 +3097,10 @@ mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,supervisor_district,2
 mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,location,POINT (-122.4182387 37.80560374)
 permit_addenda_summary_201609218371,permit_addenda_summary,2020-01-29,permit_number,201609218371
 permit_addenda_summary_201609218371,permit_addenda_summary,2020-01-29,earliest_addenda_arrival,2016-09-21
+permit_addenda_summary_201810233961,permit_addenda_summary,2020-01-29,permit_number,201810233961
+permit_addenda_summary_201810233961,permit_addenda_summary,2020-01-29,earliest_addenda_arrival,2018-10-24
+permit_addenda_summary_8410366,permit_addenda_summary,2020-01-29,permit_number,8410366
+permit_addenda_summary_8410366,permit_addenda_summary,2020-01-29,earliest_addenda_arrival,
 ppts_2016-001514ETM,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.420392255 37.765559672, -122.420495741 37.765553422, -122.420548187 37.766101109, -122.419919804 37.766139067, -122.419896549 37.76589619, -122.41989127 37.765841061, -122.419867363 37.765591378, -122.420074335 37.765578876, -122.420185282 37.765572174, -122.420392255 37.765559672)))"
 ppts_2016-001514ETM,ppts,2020-01-29,record_id,2016-001514ETM
 ppts_2016-001514ETM,ppts,2020-01-29,date_opened,02/25/2016 12:00:00 AM +0000
