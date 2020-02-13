@@ -376,6 +376,7 @@ class ProjectDetails(NameValueTable):
                       self.OUT_1BR,
                       self.OUT_2BR,
                       self.OUT_3BR,
+                      # No OUT_4BR because no 4br data in PPTS
                       'residential_units_micro',
                       'residential_units_sro']:
             (net, ok) = _crunch_number(field)
