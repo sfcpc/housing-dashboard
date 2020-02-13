@@ -237,6 +237,7 @@ class TCO(DirectSource):
 
 class MOHCDInclusionary(DirectSource):
     NAME = 'mohcd_inclusionary'
+    OUTPUT_NAME = NAME
     FK = PrimaryKey(NAME, 'project_id')
     FIELDS = {
         'Project ID': 'project_id',
@@ -282,6 +283,7 @@ class MOHCDInclusionary(DirectSource):
 
 class MOHCDPipeline(DirectSource):
     NAME = 'mohcd_pipeline'
+    OUTPUT_NAME = NAME
     FK = PrimaryKey(NAME, 'project_id')
     FIELDS = {
         'Project ID': 'project_id',
