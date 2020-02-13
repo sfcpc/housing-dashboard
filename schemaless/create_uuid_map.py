@@ -370,7 +370,8 @@ class RecordGraph:
         self._nodes = OrderedDict()
 
     @classmethod
-    def from_files(cls, schemaless_file, uuid_map_file, likely_match_file):
+    def from_files(cls, schemaless_file, uuid_map_file,
+                   likely_match_file=None):
         return RecordGraphBuilder(
             cls, schemaless_file, uuid_map_file, likely_match_file).build()
 
