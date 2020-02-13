@@ -258,6 +258,56 @@ def test_project_details_bedroom_info(unit_graph):
     assert _get_value_for_name(table, nvs, 'is_adu') == 'TRUE'
 
 
+def test_project_details_bedroom_info_mohcd(basic_graph):
+    d = datetime.fromisoformat('2019-01-01')
+    table = ProjectDetails()
+
+    entries1 = [
+        Entry('1',
+              PPTS.NAME,
+              [NameValue('residential_units_1br_net', '2', d)]),
+        Entry('2',
+              MOHCDPipeline.NAME,
+              [NameValue('num_1bd_units', '10', d)]),
+        Entry('3',
+              MOHCDInclusionary.NAME,
+              [NameValue('num_2bd_units', '5', d),
+               NameValue('num_3bd_units', '3', d)]),
+    ]
+    proj_pipeline = Project('uuid1', entries1, basic_graph)
+
+    entries2 = [
+        Entry('1',
+              PPTS.NAME,
+              [NameValue('residential_units_1br_net', '2', d)]),
+        Entry('2',
+              MOHCDInclusionary.NAME,
+              [NameValue('num_2bd_units', '5', d),
+               NameValue('num_3bd_units', '3', d)]),
+    ]
+    proj_inclusionary = Project('uuid2', entries2, basic_graph)
+
+    nvs = table.rows(proj_pipeline)
+    # only pull information from Pipeline regardless of Inclusionary
+    assert _get_value_for_name(
+            table,
+            nvs,
+            'residential_units_1br',
+            return_multiple=True) == ['2', '10']
+    assert _get_value_for_name(table, nvs, 'residential_units_2br') == ''
+    assert _get_value_for_name(table, nvs, 'residential_units_3br') == ''
+
+    nvs = table.rows(proj_inclusionary)
+    # pull information from Inclusionary because no other choice
+    assert _get_value_for_name(
+            table,
+            nvs,
+            'residential_units_1br',
+            return_multiple=True) == ['2']
+    assert _get_value_for_name(table, nvs, 'residential_units_2br') == '5'
+    assert _get_value_for_name(table, nvs, 'residential_units_3br') == '3'
+
+
 StatusRow = namedtuple('StatusRow',
                        ['top_level_status', 'start_date', 'end_date'])
 

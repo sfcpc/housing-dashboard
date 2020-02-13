@@ -5,6 +5,7 @@ from abc import ABC
 from abc import abstractmethod
 from datetime import date
 from datetime import datetime
+from collections import OrderedDict
 
 import re
 
@@ -56,9 +57,13 @@ class NameValueTable(Table):
         return row
 
 
-_MOHCD_TYPES = set()
-_MOHCD_TYPES.add(MOHCDPipeline.NAME)
-_MOHCD_TYPES.add(MOHCDInclusionary.NAME)
+# Using an OrderedDict here instead of dict() [which is ordered in py3.7+]
+# to be explicit that we care about ordering here.  We are using this
+# to approximate an ordered set.
+_MOHCD_TYPES = OrderedDict([
+    (MOHCDPipeline.NAME, MOHCDPipeline.OUTPUT_NAME),
+    (MOHCDInclusionary.NAME, MOHCDInclusionary.OUTPUT_NAME),
+])
 
 
 def _get_mohcd_units(proj, source_override=None):
@@ -79,9 +84,7 @@ def _get_mohcd_units(proj, source_override=None):
     if source_override and source_override not in _MOHCD_TYPES:
         raise ValueError('Unknown source_override %s' % source_override)
 
-    sources = [source_override] if source_override else [
-        MOHCDPipeline.OUTPUT_NAME,
-        MOHCDInclusionary.OUTPUT_NAME]
+    sources = [source_override] if source_override else _MOHCD_TYPES.keys()
     net = bmr = None
     for source in sources:
         atleast_one = False
@@ -338,6 +341,12 @@ class ProjectUnitCountsFull(NameValueTable):
 
 
 class ProjectDetails(NameValueTable):
+    # NOTE/TODO: expand as needed
+    OUT_1BR = 'residential_units_1br'
+    OUT_2BR = 'residential_units_2br'
+    OUT_3BR = 'residential_units_3br'
+    OUT_4BR = 'residential_units_4br'
+
     def __init__(self):
         super().__init__('project_details')
 
@@ -364,9 +373,9 @@ class ProjectDetails(NameValueTable):
                       'residential_units_adu_2br',
                       'residential_units_adu_3br',
                       'residential_units_studio',
-                      'residential_units_1br',
-                      'residential_units_2br',
-                      'residential_units_3br',
+                      self.OUT_1BR,
+                      self.OUT_2BR,
+                      self.OUT_3BR,
                       'residential_units_micro',
                       'residential_units_sro']:
             (net, ok) = _crunch_number(field)
@@ -382,6 +391,41 @@ class ProjectDetails(NameValueTable):
                                     value='TRUE' if is_adu else 'FALSE',
                                     data=PPTS.OUTPUT_NAME))
 
+    _MOHCD_BEDROOM_MAP = {
+        'num_1bd_units': OUT_1BR,
+        'num_2bd_units': OUT_2BR,
+        'num_3bd_units': OUT_3BR,
+        'num_4bd_units': OUT_4BR,
+    }
+
+    def _bedroom_info_mohcd(self, rows, proj):
+        """Populates bedroom information from MOHCD.
+
+        Only pulls data from one MOHCD source, preferring Pipeline over
+        Inclusionary.  This is because this is a matter of correctness and
+        unnecessary duplication, rather than completeness.
+        """
+        out = []
+        for (source, outsource) in _MOHCD_TYPES.items():
+            added = False
+            for (mohcdfield, outfield) in self._MOHCD_BEDROOM_MAP.items():
+                try:
+                    net = str(int(proj.field(mohcdfield, source)))
+
+                    out.append((net, outfield, outsource))
+                    added = True
+                except ValueError:
+                    pass
+
+            if added:
+                break
+
+        for datum in out:
+            rows.append(self.nv_row(proj,
+                                    name=datum[1],
+                                    value=datum[0],
+                                    data=datum[2]))
+
     def _square_feet(self, rows, proj):
         sqft = proj.field('residential_sq_ft_net', PPTS.NAME)
         if sqft != '':
@@ -394,6 +438,7 @@ class ProjectDetails(NameValueTable):
         result = []
         self._square_feet(result, proj)
         self._bedroom_info(result, proj)
+        self._bedroom_info_mohcd(result, proj)
         return result
 
 
