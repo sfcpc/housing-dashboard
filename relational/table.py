@@ -398,24 +398,26 @@ class ProjectDetails(NameValueTable):
         'num_4bd_units': OUT_4BR,
     }
 
-    def _bedroom_info_mohcd(self, rows, proj):
-        """Populates bedroom information from MOHCD.
+    def _get_mohcd_fields(self, proj, fieldmap):
+        """Extracts information from MOHCD, preferring Pipeline over
+        Inclusionary.
 
-        Only pulls data from one MOHCD source, preferring Pipeline over
-        Inclusionary.  This is because this is a matter of correctness and
-        unnecessary duplication, rather than completeness.
+        Returns:
+            A list of (name, value, source) tuples.  If there was not
+            at least one non-zero value, then the list will be empty,
+            regardless of whether the field existed in the MOHCD source.
         """
         out = []
         nonzero = False
         for (source, outsource) in _MOHCD_TYPES.items():
             added = False
-            for (mohcdfield, outfield) in self._MOHCD_BEDROOM_MAP.items():
+            for (mohcdfield, outfield) in fieldmap.items():
                 try:
                     rawnet = int(proj.field(mohcdfield, source))
                     nonzero = nonzero or rawnet != 0
                     net = str(rawnet)
 
-                    out.append((net, outfield, outsource))
+                    out.append((outfield, net, outsource))
                     added = True
                 except ValueError:
                     pass
@@ -423,12 +425,57 @@ class ProjectDetails(NameValueTable):
             if added:
                 break
 
-        if nonzero:
-            for datum in out:
-                rows.append(self.nv_row(proj,
-                                        name=datum[1],
-                                        value=datum[0],
-                                        data=datum[2]))
+        return out if nonzero else []
+
+    def _bedroom_info_mohcd(self, rows, proj):
+        """Populates bedroom information from MOHCD.
+
+        Only pulls data from one MOHCD source, preferring Pipeline over
+        Inclusionary.  This is because this is a matter of correctness and
+        unnecessary duplication, rather than completeness.
+        """
+        for datum in self._get_mohcd_fields(proj, self._MOHCD_BEDROOM_MAP):
+            rows.append(self.nv_row(proj,
+                                    name=datum[0],
+                                    value=datum[1],
+                                    data=datum[2]))
+
+    # Note that some of these fields are not expected to be in all MOHCD
+    # data sets because they have different levels of granularity; any code
+    # consuming this should be aware of that.
+    _MOHCD_AMI_FIELDS = {
+        'num_20_percent_ami_units': 'num_20_percent_ami_units',
+        'num_30_percent_ami_units': 'num_30_percent_ami_units',
+        'num_40_percent_ami_units': 'num_40_percent_ami_units',
+        'num_50_percent_ami_units': 'num_50_percent_ami_units',
+        'num_55_percent_ami_units': 'num_55_percent_ami_units',
+        'num_60_percent_ami_units': 'num_60_percent_ami_units',
+        'num_80_percent_ami_units': 'num_80_percent_ami_units',
+        'num_90_percent_ami_units': 'num_90_percent_ami_units',
+        'num_100_percent_ami_units': 'num_100_percent_ami_units',
+        'num_105_percent_ami_units': 'num_105_percent_ami_units',
+        'num_110_percent_ami_units': 'num_110_percent_ami_units',
+        'num_120_percent_ami_units': 'num_120_percent_ami_units',
+        'num_130_percent_ami_units': 'num_130_percent_ami_units',
+        'num_150_percent_ami_units': 'num_150_percent_ami_units',
+        'num_ami_undeclared_units': 'num_ami_undeclared_units',
+        'num_more_than_120_percent_ami_units':
+            'num_more_than_120_percent_ami_units',
+    }
+
+    def _ami_info_mohcd(self, rows, proj):
+        """Populates AMI information from MOHCD.
+
+        Only pulls data from one MOHCD source, preferring Pipeline over
+        Inclusionary.  This is because this is a matter of correctness and
+        unnecessary duplication, rather than completeness.
+        """
+        for datum in self._get_mohcd_fields(proj,
+                                            self._MOHCD_AMI_FIELDS):
+            rows.append(self.nv_row(proj,
+                                    name=datum[0],
+                                    value=datum[1],
+                                    data=datum[2]))
 
     def _square_feet(self, rows, proj):
         sqft = proj.field('residential_sq_ft_net', PPTS.NAME)
@@ -443,6 +490,7 @@ class ProjectDetails(NameValueTable):
         self._square_feet(result, proj)
         self._bedroom_info(result, proj)
         self._bedroom_info_mohcd(result, proj)
+        self._ami_info_mohcd(result, proj)
         return result
 
 
