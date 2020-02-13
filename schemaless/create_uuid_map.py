@@ -59,6 +59,27 @@ class RecordGraphBuilderHelper:
         pass
 
 
+class PPTSAddressLookupMixin:
+    def ppts_by_address(self, fk, record, parents, children):
+        # TODO: There will be many matches, so we need to filter
+        # on time range and record type. EG maybe only add parents
+        # that are PRJs, or themselves have parents?
+        if 'address_norm' not in record:
+            return
+        ppts_helper = self.graph_builder.helpers[PPTS.NAME]
+        parents.extend(
+            ppts_helper.find_by_address(record['address_norm']))
+
+
+class PTSAddressLookupMixin:
+    def pts_by_address(self, fk, record, parents, children):
+        if 'address_norm' not in record:
+            return
+        pts_helper = self.graph_builder.helpers[PTS.NAME]
+        parents.extend(
+            pts_helper.find_by_address(record['address_norm']))
+
+
 class PPTSHelper(RecordGraphBuilderHelper):
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
@@ -101,7 +122,7 @@ class PPTSHelper(RecordGraphBuilderHelper):
                     children.append(child_fk)
 
 
-class PTSHelper(RecordGraphBuilderHelper):
+class PTSHelper(RecordGraphBuilderHelper, PPTSAddressLookupMixin):
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
         self._permit_number_to_pts_fk = defaultdict(list)
@@ -147,8 +168,13 @@ class PTSHelper(RecordGraphBuilderHelper):
             # that permit number  as "children" of that record.
             children.extend(pts_records[1:])
 
+    def process_likely(self, fk, record, parents, children):
+        self.ppts_by_address(fk, record, parents, children)
 
-class TCOHelper(RecordGraphBuilderHelper):
+
+class TCOHelper(RecordGraphBuilderHelper,
+                PPTSAddressLookupMixin,
+                PTSAddressLookupMixin):
     def process(self, fk, record, parents, children):
         if 'building_permit_number' in record:
             pts_helper = self.graph_builder.helpers[PTS.NAME]
@@ -157,8 +183,15 @@ class TCOHelper(RecordGraphBuilderHelper):
             if parent_fk:
                 parents.extend(parent_fk)
 
+    def process_likely(self, fk, record, parents, children):
+        self.ppts_by_address(fk, record, parents, children)
+        self.pts_by_address(fk, record, parents, children)
 
-class MOHCDPipelineHelper(RecordGraphBuilderHelper):
+
+class MOHCDPipelineHelper(
+        RecordGraphBuilderHelper,
+        PPTSAddressLookupMixin,
+        PTSAddressLookupMixin):
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
         self._mohcd_id_to_fk = {}
@@ -179,8 +212,15 @@ class MOHCDPipelineHelper(RecordGraphBuilderHelper):
                 if parent_fk:
                     parents.append(parent_fk)
 
+    def process_likely(self, fk, record, parents, children):
+        self.ppts_by_address(fk, record, parents, children)
+        self.pts_by_address(fk, record, parents, children)
 
-class MOHCDInclusionaryHelper(RecordGraphBuilderHelper):
+
+class MOHCDInclusionaryHelper(
+        RecordGraphBuilderHelper,
+        PPTSAddressLookupMixin,
+        PTSAddressLookupMixin):
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
         self._mohcd_id_to_fk = {}
@@ -204,19 +244,18 @@ class MOHCDInclusionaryHelper(RecordGraphBuilderHelper):
         if parent_fk:
             parents.append(parent_fk)
 
-
-class AffordableRentalPortfolioHelper(RecordGraphBuilderHelper):
     def process_likely(self, fk, record, parents, children):
-        # TODO: There will be many matches, so we need to filter
-        # on time range and record type. EG maybe only add parents
-        # that are PRJs, or themselves have parents?
-        if 'address_norm' in record:
-            pts_helper = self.graph_builder.helpers[PTS.NAME]
-            parents.extend(
-                pts_helper.find_by_address(record['address_norm']))
-            ppts_helper = self.graph_builder.helpers[PPTS.NAME]
-            parents.extend(
-                ppts_helper.find_by_address(record['address_norm']))
+        self.ppts_by_address(fk, record, parents, children)
+        self.pts_by_address(fk, record, parents, children)
+
+
+class AffordableRentalPortfolioHelper(
+        RecordGraphBuilderHelper,
+        PPTSAddressLookupMixin,
+        PTSAddressLookupMixin):
+    def process_likely(self, fk, record, parents, children):
+        self.ppts_by_address(fk, record, parents, children)
+        self.pts_by_address(fk, record, parents, children)
 
 
 class RecordGraphBuilder:
