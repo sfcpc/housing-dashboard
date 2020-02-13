@@ -9,13 +9,13 @@ head -n1 data/mohcd/mohcd-pipeline-2020-01-30.csv > testdata/mohcd-pipeline.csv
 cat data/mohcd/mohcd-pipeline-2020-01-30.csv | egrep -i "(1950 mission)|(2015-011205)|(transbay)|(2011-005)|(2016-023)|(2015-014058PRJ)" >> testdata/mohcd-pipeline.csv
 
 xzcat data/pts/2020-01-24-pts-after-2013.csv.xz | head -n1 > testdata/pts.csv
-xzcat data/pts/2020-01-24-pts-after-2013.csv.xz | egrep -i "(201705318009)|(201706058373)|(201711284964)|(201801118389)|(201404304554)|(201705237369)|(201301027105)" >> testdata/pts.csv
+xzcat data/pts/2020-01-24-pts-after-2013.csv.xz | egrep -i "(201705318009)|(201706058373)|(201711284964)|(201801118389)|(201404304554)|(201705237369)|(201301027105)|(201609218371)" >> testdata/pts.csv
 
 head -n1 data/mohcd/mohcd-inclusionary-2020-02-05.csv > testdata/mohcd-inclusionary.csv
 cat data/mohcd/mohcd-inclusionary-2020-02-05.csv | egrep -i "(2011-005)|(2016-023)|(2015-014058PRJ)" >> testdata/mohcd-inclusionary.csv
 
-xzcat data/pts/2020-02-11-permit-addenda-routing.csv.xz | head -n1 > testdata/permit-addenda.csv
-xzcat data/pts/2020-02-11-permit-addenda-routing.csv.xz | egrep -i "(201609218371)" >> testdata/permit-addenda.csv
+xzcat data/pts/2020-02-11-permit-addenda.csv.xz | head -n1 > testdata/permit-addenda.csv
+xzcat data/pts/2020-02-11-permit-addenda.csv.xz | egrep -i "(201609218371)" >> testdata/permit-addenda.csv
 
 python3 -m schemaless.create_schemaless \
   --ppts_file testdata/ppts-one.csv \
@@ -23,6 +23,7 @@ python3 -m schemaless.create_schemaless \
   --tco_file testdata/tco.csv \
   --mohcd_pipeline_file testdata/mohcd-pipeline.csv \
   --mohcd_inclusionary_file testdata/mohcd-inclusionary.csv \
+  --permit_addenda testdata/permit-addenda.csv \
   --the-date=2020-01-29 \
   testdata/schemaless-one.csv
 # We read in the uuid-map file generated previously so our uuids are stable

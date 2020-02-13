@@ -1504,6 +1504,28 @@ pts_1340311497257,pts,2020-01-29,supervisor_district,6
 pts_1340311497257,pts,2020-01-29,zipcode,94105
 pts_1340311497257,pts,2020-01-29,location,"(37.78726010664772, -122.3962642716701)"
 pts_1340311497257,pts,2020-01-29,record_id,1340311497257
+pts_1438278158065,pts,2020-01-29,permit_number,201609218371
+pts_1438278158065,pts,2020-01-29,permit_type,1
+pts_1438278158065,pts,2020-01-29,permit_type_definition,new construction
+pts_1438278158065,pts,2020-01-29,permit_creation_date,09/21/2016
+pts_1438278158065,pts,2020-01-29,block,3554
+pts_1438278158065,pts,2020-01-29,lot,005
+pts_1438278158065,pts,2020-01-29,street_number,1950
+pts_1438278158065,pts,2020-01-29,street_name,Mission
+pts_1438278158065,pts,2020-01-29,current_status,issued
+pts_1438278158065,pts,2020-01-29,current_status_date,02/16/2018
+pts_1438278158065,pts,2020-01-29,filed_date,09/21/2016
+pts_1438278158065,pts,2020-01-29,issued_date,02/16/2018
+pts_1438278158065,pts,2020-01-29,first_construction_document_date,12/28/2018
+pts_1438278158065,pts,2020-01-29,permit_expiration_date,01/16/2024
+pts_1438278158065,pts,2020-01-29,proposed_use,apartments
+pts_1438278158065,pts,2020-01-29,proposed_units,157
+pts_1438278158065,pts,2020-01-29,proposed_construction_type,1
+pts_1438278158065,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1438278158065,pts,2020-01-29,supervisor_district,9
+pts_1438278158065,pts,2020-01-29,zipcode,94103
+pts_1438278158065,pts,2020-01-29,location,"(37.76584624555139, -122.42020777419202)"
+pts_1438278158065,pts,2020-01-29,record_id,1438278158065
 pts_1456332508585,pts,2020-01-29,permit_number,M768667
 pts_1456332508585,pts,2020-01-29,permit_type,8
 pts_1456332508585,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -3073,6 +3095,8 @@ mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_120_percent_ami_un
 mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_150_percent_ami_units,0
 mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,supervisor_district,2
 mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,location,POINT (-122.4182387 37.80560374)
+permit_addenda_summary_201609218371,permit_addenda_summary,2020-01-29,permit_number,201609218371
+permit_addenda_summary_201609218371,permit_addenda_summary,2020-01-29,earliest_addenda_arrival,2016-09-21
 ppts_2016-001514ETM,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.420392255 37.765559672, -122.420495741 37.765553422, -122.420548187 37.766101109, -122.419919804 37.766139067, -122.419896549 37.76589619, -122.41989127 37.765841061, -122.419867363 37.765591378, -122.420074335 37.765578876, -122.420185282 37.765572174, -122.420392255 37.765559672)))"
 ppts_2016-001514ETM,ppts,2020-01-29,record_id,2016-001514ETM
 ppts_2016-001514ETM,ppts,2020-01-29,date_opened,02/25/2016 12:00:00 AM +0000
