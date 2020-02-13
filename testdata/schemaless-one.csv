@@ -4057,6 +4057,7 @@ bmr_2003-030,bmr,2020-01-29,num_120_percent_ami_units,0
 bmr_2003-030,bmr,2020-01-29,num_more_than_120_percent_ami_units,0
 bmr_2003-030,bmr,2020-01-29,year_constructed,2005
 bmr_2003-030,bmr,2020-01-29,year_affordability_began,2005
+bmr_2003-030,bmr,2020-01-29,address_norm,"340-370 VALENCIA ST, SAN FRANCISCO, CA, 94103"
 bmr_2013-037,bmr,2020-01-29,project_id,2013-037
 bmr_2013-037,bmr,2020-01-29,project_name,Kennedy Towers (JFK Towers)
 bmr_2013-037,bmr,2020-01-29,street_number,2451
@@ -4093,3 +4094,4 @@ bmr_2013-037,bmr,2020-01-29,num_120_percent_ami_units,0
 bmr_2013-037,bmr,2020-01-29,num_more_than_120_percent_ami_units,0
 bmr_2013-037,bmr,2020-01-29,year_constructed,1900
 bmr_2013-037,bmr,2020-01-29,year_affordability_began,2016
+bmr_2013-037,bmr,2020-01-29,address_norm,"2451 SACRAMENTO ST, SAN FRANCISCO, CA, 94115"
