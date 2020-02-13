@@ -406,11 +406,14 @@ class ProjectDetails(NameValueTable):
         unnecessary duplication, rather than completeness.
         """
         out = []
+        nonzero = False
         for (source, outsource) in _MOHCD_TYPES.items():
             added = False
             for (mohcdfield, outfield) in self._MOHCD_BEDROOM_MAP.items():
                 try:
-                    net = str(int(proj.field(mohcdfield, source)))
+                    rawnet = int(proj.field(mohcdfield, source))
+                    nonzero = nonzero or rawnet != 0
+                    net = str(rawnet)
 
                     out.append((net, outfield, outsource))
                     added = True
@@ -420,11 +423,12 @@ class ProjectDetails(NameValueTable):
             if added:
                 break
 
-        for datum in out:
-            rows.append(self.nv_row(proj,
-                                    name=datum[1],
-                                    value=datum[0],
-                                    data=datum[2]))
+        if nonzero:
+            for datum in out:
+                rows.append(self.nv_row(proj,
+                                        name=datum[1],
+                                        value=datum[0],
+                                        data=datum[2]))
 
     def _square_feet(self, rows, proj):
         sqft = proj.field('residential_sq_ft_net', PPTS.NAME)
