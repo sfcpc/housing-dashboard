@@ -56,7 +56,12 @@ class NameValueTable(Table):
         return row
 
 
-def _get_mohcd_units(proj, source_override=False):
+_MOHCD_TYPES = set()
+_MOHCD_TYPES.add(MOHCDPipeline.NAME)
+_MOHCD_TYPES.add(MOHCDInclusionary.NAME)
+
+
+def _get_mohcd_units(proj, source_override=None):
     """
     Gets net new units and bmr counts from the mohcd dataset.  Prioritizes
     data from MOHCDPipeline, and falls back to MOHCDInclusionary if none
@@ -64,16 +69,19 @@ def _get_mohcd_units(proj, source_override=False):
 
     If source_override is specified, will pull numbers only from the given
     source.  Otherwise will pull from pipeline and inclusionary mohcd data.
-    Nothing technically prevents you from providing a non-mohcd source, but
-    you will probably not get useful numbers.
 
     Returns:
       A tuple of (number units, number of BMR units, source) from MOHCD, or
       None if nothing found.
+
+    Raises ValueError if a non-MOHCD source_override was provided.
     """
+    if source_override and source_override not in _MOHCD_TYPES:
+        raise ValueError('Unknown source_override %s' % source_override)
+
     sources = [source_override] if source_override else [
-        MOHCDPipeline.NAME,
-        MOHCDInclusionary.NAME]
+        MOHCDPipeline.OUTPUT_NAME,
+        MOHCDInclusionary.OUTPUT_NAME]
     net = bmr = None
     for source in sources:
         atleast_one = False
@@ -160,6 +168,7 @@ class ProjectFacts(Table):
         ])
 
     def _gen_facts(self, row, proj):
+        pts_pred = [('permit_type', lambda x: x == '1' or x == '2')]
         if proj.field('address', PPTS.NAME) != '':
             row[self.index(self.ADDRESS)] = proj.field('address', PPTS.NAME)
             row[self.index(self.APPLICANT)] = ''  # TODO
@@ -167,6 +176,61 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY)] = PPTS.OUTPUT_NAME
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
                 'fk', PPTS.NAME)
+        elif proj.field('permit_number',
+                        PTS.NAME,
+                        entry_predicate=pts_pred) != '':
+            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
+                    proj.field('street_number',
+                               PTS.NAME,
+                               entry_predicate=pts_pred),
+                    proj.field('street_name',
+                               PTS.NAME,
+                               entry_predicate=pts_pred),
+                    proj.field('zip_code',
+                               PTS.NAME,
+                               entry_predicate=pts_pred))
+            row[self.index(self.APPLICANT)] = ''  # TODO
+            row[self.index(self.SUPERVISOR_DISTRICT)] = \
+                proj.field('supervisor_district',
+                           PTS.NAME,
+                           entry_predicate=pts_pred)
+            row[self.index(self.PERMIT_AUTHORITY)] = PTS.NAME
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
+                'fk', PTS.NAME, entry_predicate=pts_pred)
+        elif proj.field('project_id', MOHCDPipeline.NAME) != '':
+            num = proj.field('street_number', MOHCDPipeline.NAME)
+            addr = proj.field('street_name', MOHCDPipeline.NAME)
+            if num:
+                addr = ('%s %s' % (num, addr))
+
+            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
+                    addr,
+                    proj.field('street_type', MOHCDPipeline.NAME),
+                    proj.field('zip_code', MOHCDPipeline.NAME))
+            row[self.index(self.APPLICANT)] = \
+                proj.field('project_lead_sponsor', MOHCDPipeline.NAME)
+            row[self.index(self.SUPERVISOR_DISTRICT)] = \
+                proj.field('supervisor_district', MOHCDPipeline.NAME)
+            row[self.index(self.PERMIT_AUTHORITY)] = MOHCDPipeline.NAME
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
+                'fk', MOHCDPipeline.NAME)
+        elif proj.field('project_id', MOHCDInclusionary.NAME) != '':
+            num = proj.field('street_number', MOHCDInclusionary.NAME)
+            addr = proj.field('street_name', MOHCDInclusionary.NAME)
+            if num:
+                addr = ('%s %s' % (num, addr))
+
+            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
+                    addr,
+                    proj.field('street_type', MOHCDInclusionary.NAME),
+                    proj.field('zip_code', MOHCDInclusionary.NAME))
+            row[self.index(self.APPLICANT)] = \
+                proj.field('project_lead_sponsor', MOHCDInclusionary.NAME)
+            row[self.index(self.SUPERVISOR_DISTRICT)] = \
+                proj.field('supervisor_district', MOHCDInclusionary.NAME)
+            row[self.index(self.PERMIT_AUTHORITY)] = MOHCDInclusionary.NAME
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
+                'fk', MOHCDInclusionary.NAME)
 
     def _gen_units(self, row, proj):
         mohcd = _get_mohcd_units(proj)
