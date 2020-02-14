@@ -287,7 +287,7 @@ class AffordableRentalPortfolioHelper(
 class RecordGraphBuilder:
     """RecordGraphBuilder reads in files and builds a RecordGraph."""
     def __init__(self, graph_class, schemaless_file, uuid_map_file,
-                 likely_match_file=None):
+                 find_likely_matches=False):
         """Init the graph builder.
 
         Args:
@@ -298,7 +298,8 @@ class RecordGraphBuilder:
         self.graph_class = graph_class
         self.schemaless_file = schemaless_file
         self.uuid_map_file = uuid_map_file
-        self.likely_match_file = likely_match_file
+        self.find_likely_matches = find_likely_matches
+        self.likelies = {}
 
         # Helpers expose an API that enables parent/child lookups by
         # various properties on records.
@@ -323,7 +324,6 @@ class RecordGraphBuilder:
         for helper in self.helpers.values():
             helper.preprocess(latest_records)
 
-        likelies = {}
         # Read the latest values from the schemaless file to build the graph.
         for source_name, source_records in latest_records.items():
             for fk, record in source_records.items():
@@ -333,14 +333,15 @@ class RecordGraphBuilder:
                 self.helpers[source_name].process(
                     fk, record, parents, children)
 
-                likely_parents = []
-                likely_children = []
-                self.helpers[source_name].process_likely(
-                    fk, record, likely_parents, likely_children)
-                likelies[fk] = {
-                    'parents': likely_parents,
-                    'children': likely_children,
-                }
+                if self.find_likely_matches:
+                    likely_parents = []
+                    likely_children = []
+                    self.helpers[source_name].process_likely(
+                        fk, record, likely_parents, likely_children)
+                    self.likelies[fk] = {
+                        'parents': likely_parents,
+                        'children': likely_children,
+                    }
 
                 the_date = None
 
@@ -353,19 +354,6 @@ class RecordGraphBuilder:
                     children=children,
                     uuid=None,
                 ))
-
-        if self.likely_match_file:
-            with open(self.likely_match_file, 'w') as lf:
-                writer = DictWriter(
-                    lf, fieldnames=['record_id', 'parents', 'children'])
-                writer.writeheader()
-                for fk, rec in likelies.items():
-                    if rec['parents'] or rec['children']:
-                        writer.writerow({
-                            'record_id': fk,
-                            'parents': ", ".join(rec['parents']),
-                            'children': ", ".join(rec['children']),
-                        })
         # Read existing record_id->uuid mapping from the existing schemaless
         # map and update nodes with exisitng UUIDs.
         if self.uuid_map_file != '':
@@ -382,6 +370,19 @@ class RecordGraphBuilder:
         rg._assign_uuids()
         return rg
 
+    def write_likely_matches(self, outfile):
+        with open(outfile, 'w') as lf:
+            writer = DictWriter(
+                lf, fieldnames=['record_id', 'parents', 'children'])
+            writer.writeheader()
+            for fk, rec in self.likelies.items():
+                if rec['parents'] or rec['children']:
+                    writer.writerow({
+                        'record_id': fk,
+                        'parents': ", ".join(rec['parents']),
+                        'children': ", ".join(rec['children']),
+                    })
+
 
 class RecordGraph:
     """RecordGraph is a directed hierachy of records.
@@ -397,9 +398,9 @@ class RecordGraph:
 
     @classmethod
     def from_files(cls, schemaless_file, uuid_map_file,
-                   likely_match_file=None):
+                   find_likely_matches=False):
         return RecordGraphBuilder(
-            cls, schemaless_file, uuid_map_file, likely_match_file).build()
+            cls, schemaless_file, uuid_map_file, find_likely_matches).build()
 
     def to_file(self, outfile):
         """Dump the uuid->fk map."""
@@ -565,6 +566,12 @@ if __name__ == "__main__":
     parser.add_argument('outfile', help='Output path of uuid mapping')
     args = parser.parse_args()
 
-    rg = RecordGraph.from_files(
-        args.schemaless_file, args.uuid_map_file, args.likely_match_file)
+    builder = RecordGraphBuilder(
+        RecordGraph,
+        args.schemaless_file,
+        args.uuid_map_file,
+        args.likely_match_file != "")
+    rg = builder.build()
     rg.to_file(args.outfile)
+    if args.likely_match_file:
+        rg.write_likely_matches(args.likely_match_file)
