@@ -155,8 +155,14 @@ class MOHCDInclusionaryHelper(RecordGraphBuilderHelper):
     def process(self, fk, record, parents, children):
         """Do the same thing as MOHCDPipelineHelper, plus add a MOHCDPipeline
         record as a parent."""
+        if 'planning_case_number' in record:
+            ppts_helper = self.graph_builder.helpers[PPTS.NAME]
+            for parent in record['planning_case_number'].split(","):
+                parent_fk = ppts_helper.find_by_id(parent)
+                if parent_fk:
+                    parents.append(parent_fk)
+
         mohcd_pipeline_helper = self.graph_builder.helpers[MOHCDPipeline.NAME]
-        mohcd_pipeline_helper.process(fk, record, parents, children)
         parent_fk = mohcd_pipeline_helper.find_by_id(record['project_id'])
         if parent_fk:
             parents.append(parent_fk)
