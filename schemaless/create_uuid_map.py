@@ -19,6 +19,8 @@ from schemaless.sources import TCO
 
 
 class RecordGraphBuilderHelper:
+    SOURCE = None
+
     def __init__(self, graph_builder):
         self.graph_builder = graph_builder
 
@@ -80,7 +82,17 @@ class PTSAddressLookupMixin:
             pts_helper.find_by_address(record['address_norm']))
 
 
-class PPTSHelper(RecordGraphBuilderHelper):
+class CalculatedFieldsMixin:
+    def add_calculated_fields(self, record):
+        calculated_fields = self.SOURCE.calculated_fields(record)
+        record = record.copy()
+        record.update(calculated_fields)
+        return record
+
+
+class PPTSHelper(RecordGraphBuilderHelper, CalculatedFieldsMixin):
+    SOURCE = PPTS
+
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
         self._ppts_id_to_fk = {}
@@ -102,12 +114,13 @@ class PPTSHelper(RecordGraphBuilderHelper):
     def preprocess(self, latest_records):
         for fk, record in latest_records.get(PPTS.NAME, {}).items():
             self._ppts_id_to_fk[record['record_id']] = fk
-            if 'address_norm' in record:
-                self._address_to_ppts_fk[record['address_norm']].append(fk)
             if 'building_permit_number' in record:
                 for permit_number in \
                         record['building_permit_number'].split(","):
                     self._permit_number_to_ppts_fk[permit_number].append(fk)
+            record = self.add_calculated_fields(record)
+            if 'address_norm' in record:
+                self._address_to_ppts_fk[record['address_norm']].append(fk)
 
     def process(self, fk, record, parents, children):
         if 'parent' in record:
@@ -122,7 +135,11 @@ class PPTSHelper(RecordGraphBuilderHelper):
                     children.append(child_fk)
 
 
-class PTSHelper(RecordGraphBuilderHelper, PPTSAddressLookupMixin):
+class PTSHelper(RecordGraphBuilderHelper,
+                PPTSAddressLookupMixin,
+                CalculatedFieldsMixin):
+    SOURCE = PTS
+
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
         self._permit_number_to_pts_fk = defaultdict(list)
@@ -138,11 +155,12 @@ class PTSHelper(RecordGraphBuilderHelper, PPTSAddressLookupMixin):
 
     def preprocess(self, latest_records):
         for fk, record in latest_records.get(PTS.NAME, {}).items():
-            if 'address_norm' in record:
-                self._address_to_pts_fk[record['address_norm']].append(fk)
             if 'permit_number' in record:
                 self._permit_number_to_pts_fk[
                     record['permit_number']].append(fk)
+            record = self.add_calculated_fields(record)
+            if 'address_norm' in record:
+                self._address_to_pts_fk[record['address_norm']].append(fk)
 
     def process(self, fk, record, parents, children):
         permit_number = record['permit_number']
@@ -174,7 +192,10 @@ class PTSHelper(RecordGraphBuilderHelper, PPTSAddressLookupMixin):
 
 class TCOHelper(RecordGraphBuilderHelper,
                 PPTSAddressLookupMixin,
-                PTSAddressLookupMixin):
+                PTSAddressLookupMixin,
+                CalculatedFieldsMixin):
+    SOURCE = TCO
+
     def process(self, fk, record, parents, children):
         if 'building_permit_number' in record:
             pts_helper = self.graph_builder.helpers[PTS.NAME]
@@ -184,6 +205,7 @@ class TCOHelper(RecordGraphBuilderHelper,
                 parents.extend(parent_fk)
 
     def process_likely(self, fk, record, parents, children):
+        record = self.add_calculated_fields(record)
         self.ppts_by_address(fk, record, parents, children)
         self.pts_by_address(fk, record, parents, children)
 
@@ -191,7 +213,10 @@ class TCOHelper(RecordGraphBuilderHelper,
 class MOHCDPipelineHelper(
         RecordGraphBuilderHelper,
         PPTSAddressLookupMixin,
-        PTSAddressLookupMixin):
+        PTSAddressLookupMixin,
+        CalculatedFieldsMixin):
+    SOURCE = MOHCDPipeline
+
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
         self._mohcd_id_to_fk = {}
@@ -213,6 +238,7 @@ class MOHCDPipelineHelper(
                     parents.append(parent_fk)
 
     def process_likely(self, fk, record, parents, children):
+        record = self.add_calculated_fields(record)
         self.ppts_by_address(fk, record, parents, children)
         self.pts_by_address(fk, record, parents, children)
 
@@ -220,7 +246,10 @@ class MOHCDPipelineHelper(
 class MOHCDInclusionaryHelper(
         RecordGraphBuilderHelper,
         PPTSAddressLookupMixin,
-        PTSAddressLookupMixin):
+        PTSAddressLookupMixin,
+        CalculatedFieldsMixin):
+    SOURCE = MOHCDInclusionary
+
     def process(self, fk, record, parents, children):
         """Do the same thing as MOHCDPipelineHelper, plus add a MOHCDPipeline
         record as a parent."""
@@ -237,6 +266,7 @@ class MOHCDInclusionaryHelper(
             parents.append(parent_fk)
 
     def process_likely(self, fk, record, parents, children):
+        record = self.add_calculated_fields(record)
         self.ppts_by_address(fk, record, parents, children)
         self.pts_by_address(fk, record, parents, children)
 
@@ -244,8 +274,12 @@ class MOHCDInclusionaryHelper(
 class AffordableRentalPortfolioHelper(
         RecordGraphBuilderHelper,
         PPTSAddressLookupMixin,
-        PTSAddressLookupMixin):
+        PTSAddressLookupMixin,
+        CalculatedFieldsMixin):
+    SOURCE = AffordableRentalPortfolio
+
     def process_likely(self, fk, record, parents, children):
+        record = self.add_calculated_fields(record)
         self.ppts_by_address(fk, record, parents, children)
         self.pts_by_address(fk, record, parents, children)
 

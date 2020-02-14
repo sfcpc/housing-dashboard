@@ -127,8 +127,18 @@ class Source:
     def __init__(self, filepath):
         self._filepath = filepath
 
-    def foreign_key(self, record):
-        return self.FK.get_value(record)
+    @classmethod
+    def foreign_key(cls, record):
+        return cls.FK.get_value(record)
+
+    @classmethod
+    def calculated_fields(self, record):
+        ret = {}
+        for key, field in self.COMPUTED_FIELDS.items():
+            val = field.get_value_str(record)
+            if val:
+                ret[key] = val.strip()
+        return ret
 
     def yield_records(self):
         with open_file(self._filepath,
@@ -141,10 +151,7 @@ class Source:
                 ret = {self.FIELDS[key]: val.strip()
                        for key, val in line.items()
                        if key in self.FIELDS and val}
-                for key, field in self.COMPUTED_FIELDS.items():
-                    val = field.get_value_str(ret)
-                    if val:
-                        ret[key] = val.strip()
+                ret.update(self.calculated_fields(ret))
                 yield ret
 
 
