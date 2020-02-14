@@ -10,6 +10,18 @@ ppts_1990.858S,ppts,2020-01-29,record_type_category,SUB
 ppts_1990.858S,ppts,2020-01-29,name,430 Main St+
 ppts_1990.858S,ppts,2020-01-29,description,lot line adjustment to merge two units into one unit.
 ppts_1990.858S,ppts,2020-01-29,parent,1990.858
+ppts_2002.0809E,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.423674693 37.767604327, -122.423591902 37.76760933, -122.423488412 37.767615585, -122.423391823 37.767621422, -122.423305583 37.767626633, -122.423167597 37.767634971, -122.423084806 37.767639975, -122.423002015 37.767644977, -122.422915774 37.767650189, -122.422829534 37.7676554, -122.422743293 37.767660612, -122.422639804 37.767666864, -122.422294907 37.767687704, -122.422192516 37.766618728, -122.424020727 37.76650825, -122.424039093 37.766699941, -122.42414258 37.766693687, -122.424225845 37.767562755, -122.42377222 37.767590171, -122.423741173 37.767592047, -122.423741961 37.767600262, -122.423674693 37.767604327)))"
+ppts_2002.0809E,ppts,2020-01-29,record_id,2002.0809E
+ppts_2002.0809E,ppts,2020-01-29,date_opened,07/17/2002 12:00:00 AM +0000
+ppts_2002.0809E,ppts,2020-01-29,status,Closed - CEQA Clearance Issued
+ppts_2002.0809E,ppts,2020-01-29,date_closed,09/20/2002 12:00:00 AM +0000
+ppts_2002.0809E,ppts,2020-01-29,address,"340 VALENCIA ST, SAN FRANCISCO, CA"
+ppts_2002.0809E,ppts,2020-01-29,record_type,Environmental (ENV)
+ppts_2002.0809E,ppts,2020-01-29,record_type_category,ENV
+ppts_2002.0809E,ppts,2020-01-29,name,340-370 VALENCIA ST
+ppts_2002.0809E,ppts,2020-01-29,description,"03/06/2003 Shadow Study Prop. K 
+The proposed project would demolish the 22 three-story buildings and construct 17 three story affordable housing structures containing a total of 247 units, plus community space and child care designed as a PUD with exceptions from parking and loading requirements."
+ppts_2002.0809E,ppts,2020-01-29,parent,2002.0809
 ppts_2017-007883PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.467561946 37.774389437, -122.467979775 37.77437041, -122.467984738 37.774438956, -122.467566908 37.774457981, -122.467562938 37.774403145, -122.467561946 37.774389437)))"
 ppts_2017-007883PRJ,ppts,2020-01-29,record_id,2017-007883PRJ
 ppts_2017-007883PRJ,ppts,2020-01-29,date_opened,06/22/2017 12:00:00 AM +0000
@@ -34,6 +46,19 @@ ppts_86-076,ppts,2020-01-29,date_closed,04/30/1986 12:00:00 AM +0000
 ppts_86-076,ppts,2020-01-29,record_type,Appeals (APL)
 ppts_86-076,ppts,2020-01-29,record_type_category,APL
 ppts_86-076,ppts,2020-01-29,name,1258 10TH AV
+ppts_2010.0766E,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.43353668 37.789803255, -122.433489425 37.789579538, -122.433668832 37.789556902, -122.433697625 37.789699266, -122.433701043 37.789698834, -122.433717546 37.789780436, -122.43353668 37.789803255)))"
+ppts_2010.0766E,ppts,2020-01-29,record_id,2010.0766E
+ppts_2010.0766E,ppts,2020-01-29,date_opened,08/31/2010 12:00:00 AM +0000
+ppts_2010.0766E,ppts,2020-01-29,status,Closed - CEQA Clearance Issued
+ppts_2010.0766E,ppts,2020-01-29,date_closed,10/07/2010 12:00:00 AM +0000
+ppts_2010.0766E,ppts,2020-01-29,record_type,Environmental (ENV)
+ppts_2010.0766E,ppts,2020-01-29,record_type_category,ENV
+ppts_2010.0766E,ppts,2020-01-29,name,2451 Sacramento Street
+ppts_2010.0766E,ppts,2020-01-29,description,Rezone parcel from RM-1 to Upper Fillmore Street NC District.
+ppts_2010.0766E,ppts,2020-01-29,parent,2010.0766
+ppts_2010.0766E,ppts,2020-01-29,planner_name,Jeanie Poling
+ppts_2010.0766E,ppts,2020-01-29,planner_email,jeanie.poling@sfgov.org
+ppts_2010.0766E,ppts,2020-01-29,planner_phone,415-575-9072
 ppts_8982ZAD,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.39047725 37.78704965, -122.390645676 37.787183003, -122.390312301 37.787446538, -122.390146674 37.787310971, -122.39047725 37.78704965)))"
 ppts_8982ZAD,ppts,2020-01-29,record_id,8982ZAD
 ppts_8982ZAD,ppts,2020-01-29,date_opened,06/04/2010 12:00:00 AM +0000
@@ -80,6 +105,21 @@ ppts_2004.0049E,ppts,2020-01-29,record_type_category,ENV
 ppts_2004.0049E,ppts,2020-01-29,name,1348 10TH AV
 ppts_2004.0049E,ppts,2020-01-29,description,The project proposes to demolish the structure (used for school) located at 1338 10th Avenue and to construct a new structure at the site for use by the existing elementary school. CU Authorization is requested for an increase in the elementary school use per Section 209.3(g) in the RH-2 District. A rear yard Variance is sought for new construction of the structure within the req rear yard.  A Certificate of Appropriateness is sought to renovate and repair Landmark No. 29 (The Old Firehouse).
 ppts_2004.0049E,ppts,2020-01-29,parent,2004.0049
+ppts_2002.0809F,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.423674693 37.767604327, -122.423591902 37.76760933, -122.423488412 37.767615585, -122.423391823 37.767621422, -122.423305583 37.767626633, -122.423167597 37.767634971, -122.423084806 37.767639975, -122.423002015 37.767644977, -122.422915774 37.767650189, -122.422829534 37.7676554, -122.422743293 37.767660612, -122.422639804 37.767666864, -122.422294907 37.767687704, -122.422192516 37.766618728, -122.424020727 37.76650825, -122.424039093 37.766699941, -122.42414258 37.766693687, -122.424225845 37.767562755, -122.42377222 37.767590171, -122.423741173 37.767592047, -122.423741961 37.767600262, -122.423674693 37.767604327)))"
+ppts_2002.0809F,ppts,2020-01-29,record_id,2002.0809F
+ppts_2002.0809F,ppts,2020-01-29,date_opened,01/23/2003 12:00:00 AM +0000
+ppts_2002.0809F,ppts,2020-01-29,status,Closed - Approved
+ppts_2002.0809F,ppts,2020-01-29,date_closed,04/16/2003 12:00:00 AM +0000
+ppts_2002.0809F,ppts,2020-01-29,address,"340 VALENCIA ST, SAN FRANCISCO, CA"
+ppts_2002.0809F,ppts,2020-01-29,record_type,Federal Section 106 (FED)
+ppts_2002.0809F,ppts,2020-01-29,record_type_category,FED
+ppts_2002.0809F,ppts,2020-01-29,name,340-370 VALENCIA ST
+ppts_2002.0809F,ppts,2020-01-29,description,"03/06/2003 Shadow Study Prop. K 
+The proposed project would demolish the 22 three-story buildings and construct 17 three story affordable housing structures containing a total of 247 units, plus community space and child care designed as a PUD with exceptions from parking and loading requirements."
+ppts_2002.0809F,ppts,2020-01-29,parent,2002.0809
+ppts_2002.0809F,ppts,2020-01-29,planner_name,Moses Corrette
+ppts_2002.0809F,ppts,2020-01-29,planner_email,moses.corrette@sfgov.org
+ppts_2002.0809F,ppts,2020-01-29,planner_phone,415-558-6295
 ppts_2007.1121X,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.390146674 37.787310971, -122.39047725 37.78704965, -122.390645676 37.787183003, -122.390312301 37.787446538, -122.389962894 37.787722742, -122.389797269 37.787587174, -122.390146674 37.787310971)))"
 ppts_2007.1121X,ppts,2020-01-29,record_id,2007.1121X
 ppts_2007.1121X,ppts,2020-01-29,date_opened,09/27/2007 12:00:00 AM +0000
@@ -144,6 +184,21 @@ ppts_1986.146C,ppts,2020-01-29,record_type_category,CUA
 ppts_1986.146C,ppts,2020-01-29,name,1338 10th Ave
 ppts_1986.146C,ppts,2020-01-29,description,Expansion of a school involving loss of one dwelling unit in an RH-2 district
 ppts_1986.146C,ppts,2020-01-29,parent,1986.146
+ppts_2002.0809C,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.423674693 37.767604327, -122.423591902 37.76760933, -122.423488412 37.767615585, -122.423391823 37.767621422, -122.423305583 37.767626633, -122.423167597 37.767634971, -122.423084806 37.767639975, -122.423002015 37.767644977, -122.422915774 37.767650189, -122.422829534 37.7676554, -122.422743293 37.767660612, -122.422639804 37.767666864, -122.422294907 37.767687704, -122.422192516 37.766618728, -122.424020727 37.76650825, -122.424039093 37.766699941, -122.42414258 37.766693687, -122.424225845 37.767562755, -122.42377222 37.767590171, -122.423741173 37.767592047, -122.423741961 37.767600262, -122.423674693 37.767604327)))"
+ppts_2002.0809C,ppts,2020-01-29,record_id,2002.0809C
+ppts_2002.0809C,ppts,2020-01-29,date_opened,12/05/2002 12:00:00 AM +0000
+ppts_2002.0809C,ppts,2020-01-29,status,Closed - Approved
+ppts_2002.0809C,ppts,2020-01-29,date_closed,06/26/2003 12:00:00 AM +0000
+ppts_2002.0809C,ppts,2020-01-29,address,"340 VALENCIA ST, SAN FRANCISCO, CA"
+ppts_2002.0809C,ppts,2020-01-29,record_type,Conditional Use Authorization (CUA)
+ppts_2002.0809C,ppts,2020-01-29,record_type_category,CUA
+ppts_2002.0809C,ppts,2020-01-29,name,340-370 VALENCIA ST
+ppts_2002.0809C,ppts,2020-01-29,description,"03/06/2003 Shadow Study Prop. K 
+The proposed project would demolish the 22 three-story buildings and construct 17 three story affordable housing structures containing a total of 247 units, plus community space and child care designed as a PUD with exceptions from parking and loading requirements."
+ppts_2002.0809C,ppts,2020-01-29,parent,2002.0809
+ppts_2002.0809C,ppts,2020-01-29,planner_name,Jonathan Purvis
+ppts_2002.0809C,ppts,2020-01-29,planner_email,jonathan.purvis@sfgov.org
+ppts_2002.0809C,ppts,2020-01-29,planner_phone,415-558-6354
 ppts_2016-001514CUA,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.420392255 37.765559672, -122.420495741 37.765553422, -122.420548187 37.766101109, -122.419919804 37.766139067, -122.419896549 37.76589619, -122.41989127 37.765841061, -122.419867363 37.765591378, -122.420074335 37.765578876, -122.420185282 37.765572174, -122.420392255 37.765559672)))"
 ppts_2016-001514CUA,ppts,2020-01-29,record_id,2016-001514CUA
 ppts_2016-001514CUA,ppts,2020-01-29,date_opened,09/07/2016 12:00:00 AM +0000
@@ -168,6 +223,18 @@ ppts_1997.055Q,ppts,2020-01-29,record_type_category,CND
 ppts_1997.055Q,ppts,2020-01-29,name,1578 - 10th Avenue
 ppts_1997.055Q,ppts,2020-01-29,description,Demolition of existing building and new construction of a two-family dwelling.
 ppts_1997.055Q,ppts,2020-01-29,parent,1997.055
+ppts_2017-016475ENF,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.433461599 37.789441367, -122.433489425 37.789579538, -122.43353668 37.789803255, -122.432926626 37.789880223, -122.432853514 37.7895187, -122.432938794 37.789507856, -122.433025927 37.789496774, -122.433113062 37.789485693, -122.433200197 37.789474611, -122.43328733 37.78946353, -122.433374465 37.789452449, -122.433461599 37.789441367)))"
+ppts_2017-016475ENF,ppts,2020-01-29,record_id,2017-016475ENF
+ppts_2017-016475ENF,ppts,2020-01-29,date_opened,12/18/2017 12:00:00 AM +0000
+ppts_2017-016475ENF,ppts,2020-01-29,status,Submitted
+ppts_2017-016475ENF,ppts,2020-01-29,address,2451 SACRAMENTO ST 94115
+ppts_2017-016475ENF,ppts,2020-01-29,record_type,Enforcement (ENF)
+ppts_2017-016475ENF,ppts,2020-01-29,record_type_category,ENF
+ppts_2017-016475ENF,ppts,2020-01-29,name,2451 Sacramento St
+ppts_2017-016475ENF,ppts,2020-01-29,description,"JFK Memorial Building - Apt 601. Asked to move out of apt to another apt and to move back. Didn't do stuff they should do. Dust still on the ceiling and still dealing with Lead paint; Paratransit cannot pick up because don't have parking spot. Didn't have the courtesy to respect occupant. Dust come in from window during construction. At end of my rope. Want to know the number of the report on the number.  / Illegal work occurring on property on roof, walls, and electrical. The illegal work is creating unsafe living environment for senior with cancer. DBI Complaint 201727904"
+ppts_2017-016475ENF,ppts,2020-01-29,planner_name,Josephine Chen
+ppts_2017-016475ENF,ppts,2020-01-29,planner_email,josephine.chen@sfgov.org
+ppts_2017-016475ENF,ppts,2020-01-29,planner_phone,415-575-9199
 ppts_09-053,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.390146674 37.787310971, -122.39047725 37.78704965, -122.390645676 37.787183003, -122.390312301 37.787446538, -122.389962894 37.787722742, -122.389797269 37.787587174, -122.390146674 37.787310971)))"
 ppts_09-053,ppts,2020-01-29,record_id,09-053
 ppts_09-053,ppts,2020-01-29,date_opened,05/29/2009 12:00:00 AM +0000
@@ -188,6 +255,30 @@ ppts_2007.1121K,ppts,2020-01-29,record_type_category,SHD
 ppts_2007.1121K,ppts,2020-01-29,name,429 BEALE ST
 ppts_2007.1121K,ppts,2020-01-29,description,"Demolition of existing structures, construction of a new 8 story 84 foot building with 113 dwelling units and 57 parking spaces"
 ppts_2007.1121K,ppts,2020-01-29,parent,2007.1121
+ppts_2016-015839PRV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.43353668 37.789803255, -122.433489425 37.789579538, -122.433668832 37.789556902, -122.433697625 37.789699266, -122.433701043 37.789698834, -122.433717546 37.789780436, -122.43353668 37.789803255)))"
+ppts_2016-015839PRV,ppts,2020-01-29,record_id,2016-015839PRV
+ppts_2016-015839PRV,ppts,2020-01-29,date_opened,12/12/2016 12:00:00 AM +0000
+ppts_2016-015839PRV,ppts,2020-01-29,status,Closed - Informational
+ppts_2016-015839PRV,ppts,2020-01-29,date_closed,01/11/2017 12:00:00 AM +0000
+ppts_2016-015839PRV,ppts,2020-01-29,address,2451 Sacramento ST 94115
+ppts_2016-015839PRV,ppts,2020-01-29,record_type,Project Review Meetings (PRV)
+ppts_2016-015839PRV,ppts,2020-01-29,record_type_category,PRV
+ppts_2016-015839PRV,ppts,2020-01-29,name,2451 Sacramento Street
+ppts_2016-015839PRV,ppts,2020-01-29,description,"Sacramento Street (0636/037); Project Review meeting to discuss a new, 4-story, 7-unit residential building with basement parking."
+ppts_2016-015839PRV,ppts,2020-01-29,planner_name,Christopher May
+ppts_2016-015839PRV,ppts,2020-01-29,planner_email,christopher.may@sfgov.org
+ppts_2016-015839PRV,ppts,2020-01-29,planner_phone,415-575-9087
+ppts_2002.0809,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.423674693 37.767604327, -122.423591902 37.76760933, -122.423488412 37.767615585, -122.423391823 37.767621422, -122.423305583 37.767626633, -122.423167597 37.767634971, -122.423084806 37.767639975, -122.423002015 37.767644977, -122.422915774 37.767650189, -122.422829534 37.7676554, -122.422743293 37.767660612, -122.422639804 37.767666864, -122.422294907 37.767687704, -122.422192516 37.766618728, -122.424020727 37.76650825, -122.424039093 37.766699941, -122.42414258 37.766693687, -122.424225845 37.767562755, -122.42377222 37.767590171, -122.423741173 37.767592047, -122.423741961 37.767600262, -122.423674693 37.767604327)))"
+ppts_2002.0809,ppts,2020-01-29,record_id,2002.0809
+ppts_2002.0809,ppts,2020-01-29,date_opened,07/17/2002 12:00:00 AM +0000
+ppts_2002.0809,ppts,2020-01-29,status,Closed
+ppts_2002.0809,ppts,2020-01-29,address,"340 VALENCIA ST, SAN FRANCISCO, CA"
+ppts_2002.0809,ppts,2020-01-29,record_type,Project Profile (PRJ)
+ppts_2002.0809,ppts,2020-01-29,record_type_category,PRJ
+ppts_2002.0809,ppts,2020-01-29,name,340-370 VALENCIA ST
+ppts_2002.0809,ppts,2020-01-29,description,"03/06/2003 Shadow Study Prop. K 
+The proposed project would demolish the 22 three-story buildings and construct 17 three story affordable housing structures containing a total of 247 units, plus community space and child care designed as a PUD with exceptions from parking and loading requirements."
+ppts_2002.0809,ppts,2020-01-29,children,"2002.0809C,2002.0809E,2002.0809F,2002.0809K"
 ppts_6559PRV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.390146674 37.787310971, -122.39047725 37.78704965, -122.390645676 37.787183003, -122.390312301 37.787446538, -122.389962894 37.787722742, -122.389797269 37.787587174, -122.390146674 37.787310971)))"
 ppts_6559PRV,ppts,2020-01-29,record_id,6559PRV
 ppts_6559PRV,ppts,2020-01-29,date_opened,05/10/2007 12:00:00 AM +0000
@@ -333,6 +424,18 @@ ppts_2015-014058PRJ,ppts,2020-01-29,planner_name,06/04/2007 12:00:00 AM +0000
 ppts_2015-014058PRJ,ppts,2020-01-29,planner_email,Closed
 ppts_2015-014058PRJ,ppts,2020-01-29,planner_phone,05/09/2016 12:00:00 AM +0000
 ppts_2015-014058PRJ,ppts,2020-01-29,is_adu,415-575-6914
+ppts_2002.0809K,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.423674693 37.767604327, -122.423591902 37.76760933, -122.423488412 37.767615585, -122.423391823 37.767621422, -122.423305583 37.767626633, -122.423167597 37.767634971, -122.423084806 37.767639975, -122.423002015 37.767644977, -122.422915774 37.767650189, -122.422829534 37.7676554, -122.422743293 37.767660612, -122.422639804 37.767666864, -122.422294907 37.767687704, -122.422192516 37.766618728, -122.424020727 37.76650825, -122.424039093 37.766699941, -122.42414258 37.766693687, -122.424225845 37.767562755, -122.42377222 37.767590171, -122.423741173 37.767592047, -122.423741961 37.767600262, -122.423674693 37.767604327)))"
+ppts_2002.0809K,ppts,2020-01-29,record_id,2002.0809K
+ppts_2002.0809K,ppts,2020-01-29,date_opened,03/06/2003 12:00:00 AM +0000
+ppts_2002.0809K,ppts,2020-01-29,status,Closed
+ppts_2002.0809K,ppts,2020-01-29,date_closed,03/17/2003 12:00:00 AM +0000
+ppts_2002.0809K,ppts,2020-01-29,address,"340 VALENCIA ST, SAN FRANCISCO, CA"
+ppts_2002.0809K,ppts,2020-01-29,record_type,Shadow Study (SHD)
+ppts_2002.0809K,ppts,2020-01-29,record_type_category,SHD
+ppts_2002.0809K,ppts,2020-01-29,name,340-370 VALENCIA ST
+ppts_2002.0809K,ppts,2020-01-29,description,"03/06/2003 Shadow Study Prop. K 
+The proposed project would demolish the 22 three-story buildings and construct 17 three story affordable housing structures containing a total of 247 units, plus community space and child care designed as a PUD with exceptions from parking and loading requirements."
+ppts_2002.0809K,ppts,2020-01-29,parent,2002.0809
 ppts_2015-004681PRL,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.417919582 37.775981011, -122.41779697 37.776077885, -122.417453754 37.776349056, -122.417025525 37.776007513, -122.416927898 37.775929647, -122.416854678 37.775871248, -122.416769255 37.775803116, -122.416583973 37.775655337, -122.416828954 37.7754614, -122.416865702 37.775432309, -122.416780279 37.775364177, -122.416872894 37.775290249, -122.417091738 37.775464796, -122.417156729 37.775413457, -122.41729831 37.775524434, -122.417322834 37.775505061, -122.417919582 37.775981011)))"
 ppts_2015-004681PRL,ppts,2020-01-29,record_id,2015-004681PRL
 ppts_2015-004681PRL,ppts,2020-01-29,date_opened,04/14/2015 12:00:00 AM +0000
@@ -551,6 +654,19 @@ ppts_2016-015522ENF,ppts,2020-01-29,description,running an illegal business with
 ppts_2016-015522ENF,ppts,2020-01-29,planner_name,Dario Jones
 ppts_2016-015522ENF,ppts,2020-01-29,planner_email,dario.jones@sfgov.org
 ppts_2016-015522ENF,ppts,2020-01-29,planner_phone,415-558-6477
+ppts_2008.1021S,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.432926626 37.789880223, -122.432853514 37.7895187, -122.432938794 37.789507856, -122.433025927 37.789496774, -122.433113062 37.789485693, -122.433200197 37.789474611, -122.43328733 37.78946353, -122.433374465 37.789452449, -122.433461599 37.789441367, -122.433489425 37.789579538, -122.433668832 37.789556902, -122.433697625 37.789699266, -122.433701043 37.789698834, -122.433717546 37.789780436, -122.43353668 37.789803255, -122.432926626 37.789880223)))"
+ppts_2008.1021S,ppts,2020-01-29,record_id,2008.1021S
+ppts_2008.1021S,ppts,2020-01-29,date_opened,08/07/2008 12:00:00 AM +0000
+ppts_2008.1021S,ppts,2020-01-29,status,Closed - Approved
+ppts_2008.1021S,ppts,2020-01-29,date_closed,09/12/2008 12:00:00 AM +0000
+ppts_2008.1021S,ppts,2020-01-29,record_type,Subdivision-REF (SUB)
+ppts_2008.1021S,ppts,2020-01-29,record_type_category,SUB
+ppts_2008.1021S,ppts,2020-01-29,name,2435 - 2451 SACRAMENTO ST
+ppts_2008.1021S,ppts,2020-01-29,description,2 lot subdivisions
+ppts_2008.1021S,ppts,2020-01-29,parent,2008.1021
+ppts_2008.1021S,ppts,2020-01-29,planner_name,Christine Silva
+ppts_2008.1021S,ppts,2020-01-29,planner_email,christine.lamorena@sfgov.org
+ppts_2008.1021S,ppts,2020-01-29,planner_phone,415-575-9085
 ppts_863PRV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.467194508 37.763024399, -122.467200255 37.763106663, -122.466785761 37.763124865, -122.466780014 37.763042601, -122.467194508 37.763024399)))"
 ppts_863PRV,ppts,2020-01-29,record_id,863PRV
 ppts_863PRV,ppts,2020-01-29,date_opened,09/04/2001 12:00:00 AM +0000
@@ -654,6 +770,19 @@ ppts_2007.0023C,ppts,2020-01-29,parent,2007.0023
 ppts_2007.0023C,ppts,2020-01-29,planner_name,Jonas Ionin
 ppts_2007.0023C,ppts,2020-01-29,planner_email,jonas.ionin@sfgov.org
 ppts_2007.0023C,ppts,2020-01-29,planner_phone,415-558-6309
+ppts_2016-011207ZAV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.433461599 37.789441367, -122.433489425 37.789579538, -122.43353668 37.789803255, -122.432926626 37.789880223, -122.432853514 37.7895187, -122.432938794 37.789507856, -122.433025927 37.789496774, -122.433113062 37.789485693, -122.433200197 37.789474611, -122.43328733 37.78946353, -122.433374465 37.789452449, -122.433461599 37.789441367)))"
+ppts_2016-011207ZAV,ppts,2020-01-29,record_id,2016-011207ZAV
+ppts_2016-011207ZAV,ppts,2020-01-29,date_opened,08/30/2016 12:00:00 AM +0000
+ppts_2016-011207ZAV,ppts,2020-01-29,status,Closed - Issued
+ppts_2016-011207ZAV,ppts,2020-01-29,date_closed,09/01/2016 12:00:00 AM +0000
+ppts_2016-011207ZAV,ppts,2020-01-29,address,2451 SACRAMENTO ST 94115
+ppts_2016-011207ZAV,ppts,2020-01-29,record_type,Zoning Administrator Verification Letter (ZAV)
+ppts_2016-011207ZAV,ppts,2020-01-29,record_type_category,ZAV
+ppts_2016-011207ZAV,ppts,2020-01-29,name,2451 Sacramento Street - ZAV Request
+ppts_2016-011207ZAV,ppts,2020-01-29,description,Request for Zoning Verification Letter
+ppts_2016-011207ZAV,ppts,2020-01-29,planner_name,Eugenio Salcedo
+ppts_2016-011207ZAV,ppts,2020-01-29,planner_email,Eugenio.Salcedo@sfgov.org
+ppts_2016-011207ZAV,ppts,2020-01-29,planner_phone,415-575-9139
 ppts_1997.055D,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.46678637 37.758794114, -122.46689862 37.758789175, -122.46690341 37.758857728, -122.466487121 37.758876043, -122.466482332 37.75880749, -122.466527327 37.75880551, -122.466613674 37.758801712, -122.466700021 37.758797913, -122.46678637 37.758794114)))"
 ppts_1997.055D,ppts,2020-01-29,record_id,1997.055D
 ppts_1997.055D,ppts,2020-01-29,date_opened,01/16/1997 12:00:00 AM +0000
@@ -789,6 +918,19 @@ ppts_2017-006823PRJ,ppts,2020-01-29,market_rate_units_existing,1
 ppts_2017-006823PRJ,ppts,2020-01-29,market_rate_units_proposed,2
 ppts_2017-006823PRJ,ppts,2020-01-29,market_rate_units_net,1
 ppts_2017-006823PRJ,ppts,2020-01-29,building_permit_number,201705237369
+ppts_1592PRV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.423674693 37.767604327, -122.423591902 37.76760933, -122.423488412 37.767615585, -122.423391823 37.767621422, -122.423305583 37.767626633, -122.423167597 37.767634971, -122.423084806 37.767639975, -122.423002015 37.767644977, -122.422915774 37.767650189, -122.422829534 37.7676554, -122.422743293 37.767660612, -122.422639804 37.767666864, -122.422294907 37.767687704, -122.422192516 37.766618728, -122.424020727 37.76650825, -122.424039093 37.766699941, -122.42414258 37.766693687, -122.424225845 37.767562755, -122.42377222 37.767590171, -122.423741173 37.767592047, -122.423741961 37.767600262, -122.423674693 37.767604327)))"
+ppts_1592PRV,ppts,2020-01-29,record_id,1592PRV
+ppts_1592PRV,ppts,2020-01-29,date_opened,06/19/2002 12:00:00 AM +0000
+ppts_1592PRV,ppts,2020-01-29,status,Closed - Informational
+ppts_1592PRV,ppts,2020-01-29,date_closed,06/26/2002 12:00:00 AM +0000
+ppts_1592PRV,ppts,2020-01-29,address,"340 VALENCIA ST, SAN FRANCISCO, CA"
+ppts_1592PRV,ppts,2020-01-29,record_type,Project Review Meetings (PRV)
+ppts_1592PRV,ppts,2020-01-29,record_type_category,PRV
+ppts_1592PRV,ppts,2020-01-29,name,340-370 Valencia Street.  Discuss Valencia Gardens HOPE VI development.
+ppts_1592PRV,ppts,2020-01-29,description,340-370 Valencia Street.  Discuss Valencia Gardens HOPE VI development.
+ppts_1592PRV,ppts,2020-01-29,planner_name,Jonathan Purvis
+ppts_1592PRV,ppts,2020-01-29,planner_email,jonathan.purvis@sfgov.org
+ppts_1592PRV,ppts,2020-01-29,planner_phone,415-558-6354
 ppts_2675PRV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466780014 37.763042601, -122.467194508 37.763024399, -122.467200255 37.763106663, -122.467205044 37.763175216, -122.46679055 37.763193418, -122.466785761 37.763124865, -122.466780014 37.763042601)))"
 ppts_2675PRV,ppts,2020-01-29,record_id,2675PRV
 ppts_2675PRV,ppts,2020-01-29,date_opened,08/06/2003 12:00:00 AM +0000
@@ -815,6 +957,15 @@ ppts_2014-002033ENV,ppts,2020-01-29,parent,2014-002033PRJ
 ppts_2014-002033ENV,ppts,2020-01-29,planner_name,Michael Li
 ppts_2014-002033ENV,ppts,2020-01-29,planner_email,Michael.J.Li@sfgov.org
 ppts_2014-002033ENV,ppts,2020-01-29,planner_phone,415-575-9107
+ppts_2010.0766,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.43353668 37.789803255, -122.433489425 37.789579538, -122.433668832 37.789556902, -122.433697625 37.789699266, -122.433701043 37.789698834, -122.433717546 37.789780436, -122.43353668 37.789803255)))"
+ppts_2010.0766,ppts,2020-01-29,record_id,2010.0766
+ppts_2010.0766,ppts,2020-01-29,date_opened,08/31/2010 12:00:00 AM +0000
+ppts_2010.0766,ppts,2020-01-29,status,Closed
+ppts_2010.0766,ppts,2020-01-29,record_type,Project Profile (PRJ)
+ppts_2010.0766,ppts,2020-01-29,record_type_category,PRJ
+ppts_2010.0766,ppts,2020-01-29,name,2451 Sacramento Street
+ppts_2010.0766,ppts,2020-01-29,description,Rezone parcel from RM-1 to Upper Fillmore Street NC District.
+ppts_2010.0766,ppts,2020-01-29,children,"2010.0766E,2010.0766Z"
 ppts_1998.176Q,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.467668506 37.77592553, -122.468087639 37.775906444, -122.4680926 37.77597499, -122.467673468 37.775994074, -122.467668506 37.77592553)))"
 ppts_1998.176Q,ppts,2020-01-29,record_id,1998.176Q
 ppts_1998.176Q,ppts,2020-01-29,date_opened,03/17/1998 12:00:00 AM +0000
@@ -891,6 +1042,15 @@ ppts_2008.1186E,ppts,2020-01-29,parent,2008.1186
 ppts_2008.1186E,ppts,2020-01-29,planner_name,Brett Bollinger
 ppts_2008.1186E,ppts,2020-01-29,planner_email,brett.bollinger@sfgov.org
 ppts_2008.1186E,ppts,2020-01-29,planner_phone,415-575-9024
+ppts_2008.1021,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.432926626 37.789880223, -122.432853514 37.7895187, -122.432938794 37.789507856, -122.433025927 37.789496774, -122.433113062 37.789485693, -122.433200197 37.789474611, -122.43328733 37.78946353, -122.433374465 37.789452449, -122.433461599 37.789441367, -122.433489425 37.789579538, -122.433668832 37.789556902, -122.433697625 37.789699266, -122.433701043 37.789698834, -122.433717546 37.789780436, -122.43353668 37.789803255, -122.432926626 37.789880223)))"
+ppts_2008.1021,ppts,2020-01-29,record_id,2008.1021
+ppts_2008.1021,ppts,2020-01-29,date_opened,08/07/2008 12:00:00 AM +0000
+ppts_2008.1021,ppts,2020-01-29,status,Closed
+ppts_2008.1021,ppts,2020-01-29,record_type,Project Profile (PRJ)
+ppts_2008.1021,ppts,2020-01-29,record_type_category,PRJ
+ppts_2008.1021,ppts,2020-01-29,name,2435 - 2451 SACRAMENTO ST
+ppts_2008.1021,ppts,2020-01-29,description,2 lot subdivisions
+ppts_2008.1021,ppts,2020-01-29,children,2008.1021S
 ppts_2018-001074PRV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.39047725 37.78704965, -122.390645676 37.787183003, -122.390312301 37.787446538, -122.390146674 37.787310971, -122.39047725 37.78704965)))"
 ppts_2018-001074PRV,ppts,2020-01-29,record_id,2018-001074PRV
 ppts_2018-001074PRV,ppts,2020-01-29,date_opened,01/18/2018 12:00:00 AM +0000
@@ -977,6 +1137,39 @@ ppts_2017-004109MIS,ppts,2020-01-29,description,Crown Castle ROW WTS Facility: I
 ppts_2017-004109MIS,ppts,2020-01-29,planner_name,Stephanie Skangos
 ppts_2017-004109MIS,ppts,2020-01-29,planner_email,Stephanie.Skangos@sfgov.org
 ppts_2017-004109MIS,ppts,2020-01-29,planner_phone,415-575-8731
+ppts_2015-010665PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.433461599 37.789441367, -122.433489425 37.789579538, -122.43353668 37.789803255, -122.432926626 37.789880223, -122.432853514 37.7895187, -122.432938794 37.789507856, -122.433025927 37.789496774, -122.433113062 37.789485693, -122.433200197 37.789474611, -122.43328733 37.78946353, -122.433374465 37.789452449, -122.433461599 37.789441367)))"
+ppts_2015-010665PRJ,ppts,2020-01-29,record_id,2015-010665PRJ
+ppts_2015-010665PRJ,ppts,2020-01-29,date_opened,08/19/2015 12:00:00 AM +0000
+ppts_2015-010665PRJ,ppts,2020-01-29,status,Closed
+ppts_2015-010665PRJ,ppts,2020-01-29,date_closed,12/23/2015 12:00:00 AM +0000
+ppts_2015-010665PRJ,ppts,2020-01-29,address,2451 SACRAMENTO ST 94115
+ppts_2015-010665PRJ,ppts,2020-01-29,record_type,Project Profile (PRJ)
+ppts_2015-010665PRJ,ppts,2020-01-29,record_type_category,PRJ
+ppts_2015-010665PRJ,ppts,2020-01-29,name,2451 SACRAMENTO ST
+ppts_2015-010665PRJ,ppts,2020-01-29,description,"The proposal includes a one-story rear horizontal addition at the ground floor of an existing 98-unit 100% affordable housing project, which encroaches into the required rear yard. The proposed 17'-0"" deep addition encroaches into the required rear yard. This project is part of the Citys RAD (Rental Assistance Demonstration) Program."
+ppts_2015-010665PRJ,ppts,2020-01-29,children,2015-010665VAR
+ppts_2015-010665PRJ,ppts,2020-01-29,planner_name,Kate Conner
+ppts_2015-010665PRJ,ppts,2020-01-29,planner_email,kate.conner@sfgov.org
+ppts_2015-010665PRJ,ppts,2020-01-29,planner_phone,415-575-6914
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_sq_ft_existing,63203
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_sq_ft_proposed,36203
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_sq_ft_net,-27000
+ppts_2015-010665PRJ,ppts,2020-01-29,affordable_units_existing,98
+ppts_2015-010665PRJ,ppts,2020-01-29,affordable_units_proposed,98
+ppts_2015-010665PRJ,ppts,2020-01-29,affordable_units_net,0
+ppts_2015-010665PRJ,ppts,2020-01-29,parking_sq_ft_exist,4
+ppts_2015-010665PRJ,ppts,2020-01-29,parking_sq_ft_proposed,3
+ppts_2015-010665PRJ,ppts,2020-01-29,parking_sq_ft_net,-1
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_units_studio_existing,76
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_units_studio_proposed,76
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_units_studio_net,0
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_units_1br_existing,21
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_units_1br_proposed,21
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_units_1br_net,0
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_units_2br_existing,1
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_units_2br_proposed,1
+ppts_2015-010665PRJ,ppts,2020-01-29,residential_units_2br_net,0
+ppts_2015-010665PRJ,ppts,2020-01-29,building_permit_number,201509025917
 ppts_2016-001514ENV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.420392255 37.765559672, -122.420495741 37.765553422, -122.420548187 37.766101109, -122.419919804 37.766139067, -122.419896549 37.76589619, -122.41989127 37.765841061, -122.419867363 37.765591378, -122.420074335 37.765578876, -122.420185282 37.765572174, -122.420392255 37.765559672)))"
 ppts_2016-001514ENV,ppts,2020-01-29,record_id,2016-001514ENV
 ppts_2016-001514ENV,ppts,2020-01-29,date_opened,02/24/2016 12:00:00 AM +0000
@@ -1062,6 +1255,20 @@ ppts_1997.115,ppts,2020-01-29,record_type_category,PRJ
 ppts_1997.115,ppts,2020-01-29,name,2150 AND 2168 10th AV
 ppts_1997.115,ppts,2020-01-29,description,Merge Lots 12 and 13.
 ppts_1997.115,ppts,2020-01-29,children,1997.115E
+ppts_2015-010665VAR,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.433461599 37.789441367, -122.433489425 37.789579538, -122.43353668 37.789803255, -122.432926626 37.789880223, -122.432853514 37.7895187, -122.432938794 37.789507856, -122.433025927 37.789496774, -122.433113062 37.789485693, -122.433200197 37.789474611, -122.43328733 37.78946353, -122.433374465 37.789452449, -122.433461599 37.789441367)))"
+ppts_2015-010665VAR,ppts,2020-01-29,record_id,2015-010665VAR
+ppts_2015-010665VAR,ppts,2020-01-29,date_opened,08/19/2015 12:00:00 AM +0000
+ppts_2015-010665VAR,ppts,2020-01-29,status,Closed - Approved
+ppts_2015-010665VAR,ppts,2020-01-29,date_closed,12/09/2015 12:00:00 AM +0000
+ppts_2015-010665VAR,ppts,2020-01-29,address,2451 SACRAMENTO ST 94115
+ppts_2015-010665VAR,ppts,2020-01-29,record_type,Variance (VAR)
+ppts_2015-010665VAR,ppts,2020-01-29,record_type_category,VAR
+ppts_2015-010665VAR,ppts,2020-01-29,name,2451 SACRAMENTO ST
+ppts_2015-010665VAR,ppts,2020-01-29,description,To allow a variance from rear yard and open space requirements for the community room addition in the rear yard.
+ppts_2015-010665VAR,ppts,2020-01-29,parent,2015-010665PRJ
+ppts_2015-010665VAR,ppts,2020-01-29,planner_name,Kate Conner
+ppts_2015-010665VAR,ppts,2020-01-29,planner_email,kate.conner@sfgov.org
+ppts_2015-010665VAR,ppts,2020-01-29,planner_phone,415-575-6914
 ppts_2015-014058VAR,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.424440899 37.798016091, -122.424516106 37.798388965, -122.424177333 37.798432032, -122.424101931 37.798059181, -122.424440899 37.798016091)))"
 ppts_2015-014058VAR,ppts,2020-01-29,record_id,2015-014058VAR
 ppts_2015-014058VAR,ppts,2020-01-29,date_opened,11/02/2017 12:00:00 AM +0000
@@ -1244,6 +1451,18 @@ ppts_EE73.195,ppts,2020-01-29,record_type,Environmental
 ppts_EE73.195,ppts,2020-01-29,record_type_category,ENV
 ppts_EE73.195,ppts,2020-01-29,name,1258 10th Ave
 ppts_EE73.195,ppts,2020-01-29,description,6 Unit Apartment Building
+ppts_8922PRV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.43353668 37.789803255, -122.433489425 37.789579538, -122.433668832 37.789556902, -122.433697625 37.789699266, -122.433701043 37.789698834, -122.433717546 37.789780436, -122.43353668 37.789803255)))"
+ppts_8922PRV,ppts,2020-01-29,record_id,8922PRV
+ppts_8922PRV,ppts,2020-01-29,date_opened,05/03/2010 12:00:00 AM +0000
+ppts_8922PRV,ppts,2020-01-29,status,Closed - Informational
+ppts_8922PRV,ppts,2020-01-29,date_closed,06/02/2010 12:00:00 AM +0000
+ppts_8922PRV,ppts,2020-01-29,record_type,Project Review Meetings (PRV)
+ppts_8922PRV,ppts,2020-01-29,record_type_category,PRV
+ppts_8922PRV,ppts,2020-01-29,name,2451 Sacramento St (0636/037); Project Review Meeting for an empty lot to be rezoned.  Applicant requests for an Environmental Pla
+ppts_8922PRV,ppts,2020-01-29,description,2451 Sacramento St (0636/037); Project Review Meeting for an empty lot to be rezoned.  Applicant requests for an Environmental Planner; also requesting for David Lindsay.  Fee was paid in March 2010.
+ppts_8922PRV,ppts,2020-01-29,planner_name,Glenn Cabreros
+ppts_8922PRV,ppts,2020-01-29,planner_email,glenn.cabreros@sfgov.org
+ppts_8922PRV,ppts,2020-01-29,planner_phone,415-558-6169
 ppts_2014-002033PPA,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.390146674 37.787310971, -122.39047725 37.78704965, -122.390645676 37.787183003, -122.390312301 37.787446538, -122.389962894 37.787722742, -122.389797269 37.787587174, -122.390146674 37.787310971)))"
 ppts_2014-002033PPA,ppts,2020-01-29,record_id,2014-002033PPA
 ppts_2014-002033PPA,ppts,2020-01-29,date_opened,11/24/2014 12:00:00 AM +0000
@@ -1282,6 +1501,19 @@ ppts_2018-000948PRJ,ppts,2020-01-29,children,2018-000948CUA
 ppts_2018-000948PRJ,ppts,2020-01-29,planner_name,Seema Adina
 ppts_2018-000948PRJ,ppts,2020-01-29,planner_email,seema.adina@sfgov.org
 ppts_2018-000948PRJ,ppts,2020-01-29,planner_phone,415-575-8722
+ppts_2010.0766Z,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.43353668 37.789803255, -122.433489425 37.789579538, -122.433668832 37.789556902, -122.433697625 37.789699266, -122.433701043 37.789698834, -122.433717546 37.789780436, -122.43353668 37.789803255)))"
+ppts_2010.0766Z,ppts,2020-01-29,record_id,2010.0766Z
+ppts_2010.0766Z,ppts,2020-01-29,date_opened,10/12/2010 12:00:00 AM +0000
+ppts_2010.0766Z,ppts,2020-01-29,status,Closed
+ppts_2010.0766Z,ppts,2020-01-29,date_closed,11/02/2011 12:00:00 AM +0000
+ppts_2010.0766Z,ppts,2020-01-29,record_type,Zoning Map Amendment-LEG (MAP)
+ppts_2010.0766Z,ppts,2020-01-29,record_type_category,MAP
+ppts_2010.0766Z,ppts,2020-01-29,name,2451 Sacramento Street
+ppts_2010.0766Z,ppts,2020-01-29,description,Rezone parcel from RM-1 to Upper Fillmore Street NC District.
+ppts_2010.0766Z,ppts,2020-01-29,parent,2010.0766
+ppts_2010.0766Z,ppts,2020-01-29,planner_name,Glenn Cabreros
+ppts_2010.0766Z,ppts,2020-01-29,planner_email,glenn.cabreros@sfgov.org
+ppts_2010.0766Z,ppts,2020-01-29,planner_phone,415-558-6169
 ppts_2007.1121E_5,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.390146674 37.787310971, -122.39047725 37.78704965, -122.390645676 37.787183003, -122.390312301 37.787446538, -122.389962894 37.787722742, -122.389797269 37.787587174, -122.390146674 37.787310971)))"
 ppts_2007.1121E_5,ppts,2020-01-29,record_id,2007.1121E_5
 ppts_2007.1121E_5,ppts,2020-01-29,date_opened,06/02/2009 12:00:00 AM +0000
@@ -1481,6 +1713,22 @@ pts_1292201488027,pts,2020-01-29,supervisor_district,1
 pts_1292201488027,pts,2020-01-29,zipcode,94117
 pts_1292201488027,pts,2020-01-29,location,"(37.77622919688215, -122.44877581253213)"
 pts_1292201488027,pts,2020-01-29,record_id,1292201488027
+pts_1339294495475,pts,2020-01-29,permit_number,M481548
+pts_1339294495475,pts,2020-01-29,permit_type,8
+pts_1339294495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1339294495475,pts,2020-01-29,permit_creation_date,04/21/2014
+pts_1339294495475,pts,2020-01-29,block,0636
+pts_1339294495475,pts,2020-01-29,lot,038
+pts_1339294495475,pts,2020-01-29,street_number,2451
+pts_1339294495475,pts,2020-01-29,street_name,Sacramento
+pts_1339294495475,pts,2020-01-29,current_status,issued
+pts_1339294495475,pts,2020-01-29,current_status_date,04/21/2014
+pts_1339294495475,pts,2020-01-29,filed_date,04/21/2014
+pts_1339294495475,pts,2020-01-29,issued_date,04/21/2014
+pts_1339294495475,pts,2020-01-29,supervisor_district,2
+pts_1339294495475,pts,2020-01-29,zipcode,94115
+pts_1339294495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1339294495475,pts,2020-01-29,record_id,1339294495475
 pts_1340311497257,pts,2020-01-29,permit_number,201404304554
 pts_1340311497257,pts,2020-01-29,permit_type,1
 pts_1340311497257,pts,2020-01-29,permit_type_definition,new construction
@@ -1504,6 +1752,117 @@ pts_1340311497257,pts,2020-01-29,supervisor_district,6
 pts_1340311497257,pts,2020-01-29,zipcode,94105
 pts_1340311497257,pts,2020-01-29,location,"(37.78726010664772, -122.3962642716701)"
 pts_1340311497257,pts,2020-01-29,record_id,1340311497257
+pts_1394290495475,pts,2020-01-29,permit_number,201509025917
+pts_1394290495475,pts,2020-01-29,permit_type,3
+pts_1394290495475,pts,2020-01-29,permit_type_definition,additions alterations or repairs
+pts_1394290495475,pts,2020-01-29,permit_creation_date,09/02/2015
+pts_1394290495475,pts,2020-01-29,block,0636
+pts_1394290495475,pts,2020-01-29,lot,038
+pts_1394290495475,pts,2020-01-29,street_number,2451
+pts_1394290495475,pts,2020-01-29,street_name,Sacramento
+pts_1394290495475,pts,2020-01-29,current_status,complete
+pts_1394290495475,pts,2020-01-29,current_status_date,12/12/2018
+pts_1394290495475,pts,2020-01-29,filed_date,09/02/2015
+pts_1394290495475,pts,2020-01-29,issued_date,05/13/2016
+pts_1394290495475,pts,2020-01-29,completed_date,12/12/2018
+pts_1394290495475,pts,2020-01-29,first_construction_document_date,10/04/2016
+pts_1394290495475,pts,2020-01-29,permit_expiration_date,04/12/2022
+pts_1394290495475,pts,2020-01-29,existing_use,apartments
+pts_1394290495475,pts,2020-01-29,existing_units,98
+pts_1394290495475,pts,2020-01-29,proposed_use,apartments
+pts_1394290495475,pts,2020-01-29,proposed_units,98
+pts_1394290495475,pts,2020-01-29,existing_construction_type,1
+pts_1394290495475,pts,2020-01-29,existing_construction_type_description,constr type 1
+pts_1394290495475,pts,2020-01-29,proposed_construction_type,1
+pts_1394290495475,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1394290495475,pts,2020-01-29,supervisor_district,2
+pts_1394290495475,pts,2020-01-29,zipcode,94115
+pts_1394290495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1394290495475,pts,2020-01-29,record_id,1394290495475
+pts_1441752495475,pts,2020-01-29,permit_number,M732207
+pts_1441752495475,pts,2020-01-29,permit_type,8
+pts_1441752495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1441752495475,pts,2020-01-29,permit_creation_date,10/21/2016
+pts_1441752495475,pts,2020-01-29,block,0636
+pts_1441752495475,pts,2020-01-29,lot,038
+pts_1441752495475,pts,2020-01-29,street_number,2451
+pts_1441752495475,pts,2020-01-29,street_name,Sacramento
+pts_1441752495475,pts,2020-01-29,current_status,issued
+pts_1441752495475,pts,2020-01-29,current_status_date,10/21/2016
+pts_1441752495475,pts,2020-01-29,filed_date,10/21/2016
+pts_1441752495475,pts,2020-01-29,issued_date,10/21/2016
+pts_1441752495475,pts,2020-01-29,supervisor_district,2
+pts_1441752495475,pts,2020-01-29,zipcode,94115
+pts_1441752495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1441752495475,pts,2020-01-29,record_id,1441752495475
+pts_1445018495475,pts,2020-01-29,permit_number,201611213191
+pts_1445018495475,pts,2020-01-29,permit_type,8
+pts_1445018495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1445018495475,pts,2020-01-29,permit_creation_date,11/21/2016
+pts_1445018495475,pts,2020-01-29,block,0636
+pts_1445018495475,pts,2020-01-29,lot,038
+pts_1445018495475,pts,2020-01-29,street_number,2451
+pts_1445018495475,pts,2020-01-29,street_name,Sacramento
+pts_1445018495475,pts,2020-01-29,current_status,complete
+pts_1445018495475,pts,2020-01-29,current_status_date,10/17/2018
+pts_1445018495475,pts,2020-01-29,filed_date,11/21/2016
+pts_1445018495475,pts,2020-01-29,issued_date,11/21/2016
+pts_1445018495475,pts,2020-01-29,completed_date,10/17/2018
+pts_1445018495475,pts,2020-01-29,permit_expiration_date,11/16/2017
+pts_1445018495475,pts,2020-01-29,existing_use,office
+pts_1445018495475,pts,2020-01-29,existing_units,98
+pts_1445018495475,pts,2020-01-29,proposed_use,office
+pts_1445018495475,pts,2020-01-29,proposed_units,98
+pts_1445018495475,pts,2020-01-29,existing_construction_type,1
+pts_1445018495475,pts,2020-01-29,existing_construction_type_description,constr type 1
+pts_1445018495475,pts,2020-01-29,proposed_construction_type,1
+pts_1445018495475,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1445018495475,pts,2020-01-29,supervisor_district,2
+pts_1445018495475,pts,2020-01-29,zipcode,94115
+pts_1445018495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1445018495475,pts,2020-01-29,record_id,1445018495475
+pts_1449998495475,pts,2020-01-29,permit_number,M753711
+pts_1449998495475,pts,2020-01-29,permit_type,8
+pts_1449998495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1449998495475,pts,2020-01-29,permit_creation_date,01/11/2017
+pts_1449998495475,pts,2020-01-29,block,0636
+pts_1449998495475,pts,2020-01-29,lot,038
+pts_1449998495475,pts,2020-01-29,street_number,2451
+pts_1449998495475,pts,2020-01-29,street_name,Sacramento
+pts_1449998495475,pts,2020-01-29,current_status,issued
+pts_1449998495475,pts,2020-01-29,current_status_date,01/11/2017
+pts_1449998495475,pts,2020-01-29,filed_date,01/11/2017
+pts_1449998495475,pts,2020-01-29,issued_date,01/11/2017
+pts_1449998495475,pts,2020-01-29,supervisor_district,2
+pts_1449998495475,pts,2020-01-29,zipcode,94115
+pts_1449998495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1449998495475,pts,2020-01-29,record_id,1449998495475
+pts_1456042495475,pts,2020-01-29,permit_number,201703141381
+pts_1456042495475,pts,2020-01-29,permit_type,3
+pts_1456042495475,pts,2020-01-29,permit_type_definition,additions alterations or repairs
+pts_1456042495475,pts,2020-01-29,permit_creation_date,03/14/2017
+pts_1456042495475,pts,2020-01-29,block,0636
+pts_1456042495475,pts,2020-01-29,lot,038
+pts_1456042495475,pts,2020-01-29,street_number,2451
+pts_1456042495475,pts,2020-01-29,street_name,Sacramento
+pts_1456042495475,pts,2020-01-29,current_status,complete
+pts_1456042495475,pts,2020-01-29,current_status_date,10/01/2018
+pts_1456042495475,pts,2020-01-29,filed_date,03/14/2017
+pts_1456042495475,pts,2020-01-29,issued_date,04/21/2017
+pts_1456042495475,pts,2020-01-29,completed_date,10/01/2018
+pts_1456042495475,pts,2020-01-29,permit_expiration_date,04/05/2020
+pts_1456042495475,pts,2020-01-29,existing_use,apartments
+pts_1456042495475,pts,2020-01-29,existing_units,98
+pts_1456042495475,pts,2020-01-29,proposed_use,apartments
+pts_1456042495475,pts,2020-01-29,proposed_units,98
+pts_1456042495475,pts,2020-01-29,existing_construction_type,2
+pts_1456042495475,pts,2020-01-29,existing_construction_type_description,constr type 2
+pts_1456042495475,pts,2020-01-29,proposed_construction_type,2
+pts_1456042495475,pts,2020-01-29,proposed_construction_type_description,constr type 2
+pts_1456042495475,pts,2020-01-29,supervisor_district,2
+pts_1456042495475,pts,2020-01-29,zipcode,94115
+pts_1456042495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1456042495475,pts,2020-01-29,record_id,1456042495475
 pts_1456332508585,pts,2020-01-29,permit_number,M768667
 pts_1456332508585,pts,2020-01-29,permit_type,8
 pts_1456332508585,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -1542,6 +1901,21 @@ pts_1457141501292,pts,2020-01-29,supervisor_district,6
 pts_1457141501292,pts,2020-01-29,zipcode,94105
 pts_1457141501292,pts,2020-01-29,location,"(37.78726010664772, -122.3962642716701)"
 pts_1457141501292,pts,2020-01-29,record_id,1457141501292
+pts_1463224495475,pts,2020-01-29,permit_number,M786127
+pts_1463224495475,pts,2020-01-29,permit_type,8
+pts_1463224495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1463224495475,pts,2020-01-29,permit_creation_date,05/16/2017
+pts_1463224495475,pts,2020-01-29,block,0636
+pts_1463224495475,pts,2020-01-29,lot,038
+pts_1463224495475,pts,2020-01-29,street_number,2451
+pts_1463224495475,pts,2020-01-29,street_name,Sacramento
+pts_1463224495475,pts,2020-01-29,current_status,filed
+pts_1463224495475,pts,2020-01-29,current_status_date,05/16/2017
+pts_1463224495475,pts,2020-01-29,filed_date,05/16/2017
+pts_1463224495475,pts,2020-01-29,supervisor_district,2
+pts_1463224495475,pts,2020-01-29,zipcode,94115
+pts_1463224495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1463224495475,pts,2020-01-29,record_id,1463224495475
 pts_1464175214172,pts,2020-01-29,permit_number,201705237369
 pts_1464175214172,pts,2020-01-29,permit_type,3
 pts_1464175214172,pts,2020-01-29,permit_type_definition,additions alterations or repairs
@@ -1644,6 +2018,32 @@ pts_1465082390978,pts,2020-01-29,supervisor_district,1
 pts_1465082390978,pts,2020-01-29,zipcode,94118
 pts_1465082390978,pts,2020-01-29,location,"(37.77441419689401, -122.46777334148037)"
 pts_1465082390978,pts,2020-01-29,record_id,1465082390978
+pts_1465252495475,pts,2020-01-29,permit_number,201706018145
+pts_1465252495475,pts,2020-01-29,permit_type,8
+pts_1465252495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1465252495475,pts,2020-01-29,permit_creation_date,06/01/2017
+pts_1465252495475,pts,2020-01-29,block,0636
+pts_1465252495475,pts,2020-01-29,lot,038
+pts_1465252495475,pts,2020-01-29,street_number,2451
+pts_1465252495475,pts,2020-01-29,street_name,Sacramento
+pts_1465252495475,pts,2020-01-29,current_status,complete
+pts_1465252495475,pts,2020-01-29,current_status_date,10/10/2018
+pts_1465252495475,pts,2020-01-29,filed_date,06/01/2017
+pts_1465252495475,pts,2020-01-29,issued_date,06/01/2017
+pts_1465252495475,pts,2020-01-29,completed_date,10/10/2018
+pts_1465252495475,pts,2020-01-29,permit_expiration_date,05/27/2018
+pts_1465252495475,pts,2020-01-29,existing_use,apartments
+pts_1465252495475,pts,2020-01-29,existing_units,98
+pts_1465252495475,pts,2020-01-29,proposed_use,apartments
+pts_1465252495475,pts,2020-01-29,proposed_units,98
+pts_1465252495475,pts,2020-01-29,existing_construction_type,1
+pts_1465252495475,pts,2020-01-29,existing_construction_type_description,constr type 1
+pts_1465252495475,pts,2020-01-29,proposed_construction_type,1
+pts_1465252495475,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1465252495475,pts,2020-01-29,supervisor_district,2
+pts_1465252495475,pts,2020-01-29,zipcode,94115
+pts_1465252495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1465252495475,pts,2020-01-29,record_id,1465252495475
 pts_1465580423638,pts,2020-01-29,permit_number,201706058373
 pts_1465580423638,pts,2020-01-29,permit_type,8
 pts_1465580423638,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -1670,6 +2070,22 @@ pts_1465580423638,pts,2020-01-29,supervisor_district,1
 pts_1465580423638,pts,2020-01-29,zipcode,94118
 pts_1465580423638,pts,2020-01-29,location,"(37.774892048568525, -122.4678512526563)"
 pts_1465580423638,pts,2020-01-29,record_id,1465580423638
+pts_1467549495475,pts,2020-01-29,permit_number,M799388
+pts_1467549495475,pts,2020-01-29,permit_type,8
+pts_1467549495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1467549495475,pts,2020-01-29,permit_creation_date,06/20/2017
+pts_1467549495475,pts,2020-01-29,block,0636
+pts_1467549495475,pts,2020-01-29,lot,038
+pts_1467549495475,pts,2020-01-29,street_number,2451
+pts_1467549495475,pts,2020-01-29,street_name,Sacramento
+pts_1467549495475,pts,2020-01-29,current_status,issued
+pts_1467549495475,pts,2020-01-29,current_status_date,06/20/2017
+pts_1467549495475,pts,2020-01-29,filed_date,06/20/2017
+pts_1467549495475,pts,2020-01-29,issued_date,06/20/2017
+pts_1467549495475,pts,2020-01-29,supervisor_district,2
+pts_1467549495475,pts,2020-01-29,zipcode,94115
+pts_1467549495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1467549495475,pts,2020-01-29,record_id,1467549495475
 pts_1471234501292,pts,2020-01-29,permit_number,201707202444
 pts_1471234501292,pts,2020-01-29,permit_type,8
 pts_1471234501292,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -1693,6 +2109,64 @@ pts_1471234501292,pts,2020-01-29,supervisor_district,6
 pts_1471234501292,pts,2020-01-29,zipcode,94105
 pts_1471234501292,pts,2020-01-29,location,"(37.78726010664772, -122.3962642716701)"
 pts_1471234501292,pts,2020-01-29,record_id,1471234501292
+pts_1472547495475,pts,2020-01-29,permit_number,M814787
+pts_1472547495475,pts,2020-01-29,permit_type,8
+pts_1472547495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1472547495475,pts,2020-01-29,permit_creation_date,07/31/2017
+pts_1472547495475,pts,2020-01-29,block,0636
+pts_1472547495475,pts,2020-01-29,lot,038
+pts_1472547495475,pts,2020-01-29,street_number,2451
+pts_1472547495475,pts,2020-01-29,street_name,Sacramento
+pts_1472547495475,pts,2020-01-29,current_status,issued
+pts_1472547495475,pts,2020-01-29,current_status_date,07/31/2017
+pts_1472547495475,pts,2020-01-29,filed_date,07/31/2017
+pts_1472547495475,pts,2020-01-29,issued_date,07/31/2017
+pts_1472547495475,pts,2020-01-29,supervisor_district,2
+pts_1472547495475,pts,2020-01-29,zipcode,94115
+pts_1472547495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1472547495475,pts,2020-01-29,record_id,1472547495475
+pts_1472804495475,pts,2020-01-29,permit_number,201708013535
+pts_1472804495475,pts,2020-01-29,permit_type,8
+pts_1472804495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1472804495475,pts,2020-01-29,permit_creation_date,08/01/2017
+pts_1472804495475,pts,2020-01-29,block,0636
+pts_1472804495475,pts,2020-01-29,lot,038
+pts_1472804495475,pts,2020-01-29,street_number,2451
+pts_1472804495475,pts,2020-01-29,street_name,Sacramento
+pts_1472804495475,pts,2020-01-29,current_status,complete
+pts_1472804495475,pts,2020-01-29,current_status_date,11/13/2018
+pts_1472804495475,pts,2020-01-29,filed_date,08/01/2017
+pts_1472804495475,pts,2020-01-29,issued_date,08/01/2017
+pts_1472804495475,pts,2020-01-29,completed_date,11/13/2018
+pts_1472804495475,pts,2020-01-29,permit_expiration_date,07/27/2018
+pts_1472804495475,pts,2020-01-29,existing_use,apartments
+pts_1472804495475,pts,2020-01-29,existing_units,98
+pts_1472804495475,pts,2020-01-29,proposed_use,apartments
+pts_1472804495475,pts,2020-01-29,proposed_units,98
+pts_1472804495475,pts,2020-01-29,existing_construction_type,1
+pts_1472804495475,pts,2020-01-29,existing_construction_type_description,constr type 1
+pts_1472804495475,pts,2020-01-29,proposed_construction_type,1
+pts_1472804495475,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1472804495475,pts,2020-01-29,supervisor_district,2
+pts_1472804495475,pts,2020-01-29,zipcode,94115
+pts_1472804495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1472804495475,pts,2020-01-29,record_id,1472804495475
+pts_1484460495475,pts,2020-01-29,permit_number,M847367
+pts_1484460495475,pts,2020-01-29,permit_type,8
+pts_1484460495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1484460495475,pts,2020-01-29,permit_creation_date,10/24/2017
+pts_1484460495475,pts,2020-01-29,block,0636
+pts_1484460495475,pts,2020-01-29,lot,038
+pts_1484460495475,pts,2020-01-29,street_number,2451
+pts_1484460495475,pts,2020-01-29,street_name,Sacramento
+pts_1484460495475,pts,2020-01-29,current_status,issued
+pts_1484460495475,pts,2020-01-29,current_status_date,11/14/2017
+pts_1484460495475,pts,2020-01-29,filed_date,10/24/2017
+pts_1484460495475,pts,2020-01-29,issued_date,11/14/2017
+pts_1484460495475,pts,2020-01-29,supervisor_district,2
+pts_1484460495475,pts,2020-01-29,zipcode,94115
+pts_1484460495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1484460495475,pts,2020-01-29,record_id,1484460495475
 pts_1488546103268,pts,2020-01-29,permit_number,201711284964
 pts_1488546103268,pts,2020-01-29,permit_type,8
 pts_1488546103268,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -1745,6 +2219,32 @@ pts_1488557475859,pts,2020-01-29,supervisor_district,1
 pts_1488557475859,pts,2020-01-29,zipcode,94118
 pts_1488557475859,pts,2020-01-29,location,"(37.779332583627614, -122.46812819228221)"
 pts_1488557475859,pts,2020-01-29,record_id,1488557475859
+pts_1491389495475,pts,2020-01-29,permit_number,201712207036
+pts_1491389495475,pts,2020-01-29,permit_type,8
+pts_1491389495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1491389495475,pts,2020-01-29,permit_creation_date,12/20/2017
+pts_1491389495475,pts,2020-01-29,block,0636
+pts_1491389495475,pts,2020-01-29,lot,038
+pts_1491389495475,pts,2020-01-29,street_number,2451
+pts_1491389495475,pts,2020-01-29,street_name,Sacramento
+pts_1491389495475,pts,2020-01-29,current_status,complete
+pts_1491389495475,pts,2020-01-29,current_status_date,11/07/2018
+pts_1491389495475,pts,2020-01-29,filed_date,12/20/2017
+pts_1491389495475,pts,2020-01-29,issued_date,01/04/2018
+pts_1491389495475,pts,2020-01-29,completed_date,11/07/2018
+pts_1491389495475,pts,2020-01-29,permit_expiration_date,12/30/2018
+pts_1491389495475,pts,2020-01-29,existing_use,apartments
+pts_1491389495475,pts,2020-01-29,existing_units,98
+pts_1491389495475,pts,2020-01-29,proposed_use,apartments
+pts_1491389495475,pts,2020-01-29,proposed_units,98
+pts_1491389495475,pts,2020-01-29,existing_construction_type,1
+pts_1491389495475,pts,2020-01-29,existing_construction_type_description,constr type 1
+pts_1491389495475,pts,2020-01-29,proposed_construction_type,1
+pts_1491389495475,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1491389495475,pts,2020-01-29,supervisor_district,2
+pts_1491389495475,pts,2020-01-29,zipcode,94115
+pts_1491389495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1491389495475,pts,2020-01-29,record_id,1491389495475
 pts_1493240480621,pts,2020-01-29,permit_number,201801118389
 pts_1493240480621,pts,2020-01-29,permit_type,8
 pts_1493240480621,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -1770,6 +2270,188 @@ pts_1493240480621,pts,2020-01-29,supervisor_district,6
 pts_1493240480621,pts,2020-01-29,zipcode,94105
 pts_1493240480621,pts,2020-01-29,location,"(37.788500666571075, -122.39668202248991)"
 pts_1493240480621,pts,2020-01-29,record_id,1493240480621
+pts_1498390495475,pts,2020-01-29,permit_number,M893628
+pts_1498390495475,pts,2020-01-29,permit_type,8
+pts_1498390495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1498390495475,pts,2020-01-29,permit_creation_date,02/26/2018
+pts_1498390495475,pts,2020-01-29,block,0636
+pts_1498390495475,pts,2020-01-29,lot,038
+pts_1498390495475,pts,2020-01-29,street_number,2451
+pts_1498390495475,pts,2020-01-29,street_name,Sacramento
+pts_1498390495475,pts,2020-01-29,current_status,issued
+pts_1498390495475,pts,2020-01-29,current_status_date,02/26/2018
+pts_1498390495475,pts,2020-01-29,filed_date,02/26/2018
+pts_1498390495475,pts,2020-01-29,issued_date,02/26/2018
+pts_1498390495475,pts,2020-01-29,supervisor_district,2
+pts_1498390495475,pts,2020-01-29,zipcode,94115
+pts_1498390495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1498390495475,pts,2020-01-29,record_id,1498390495475
+pts_1511538495475,pts,2020-01-29,permit_number,M937707
+pts_1511538495475,pts,2020-01-29,permit_type,8
+pts_1511538495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1511538495475,pts,2020-01-29,permit_creation_date,06/12/2018
+pts_1511538495475,pts,2020-01-29,block,0636
+pts_1511538495475,pts,2020-01-29,lot,038
+pts_1511538495475,pts,2020-01-29,street_number,2451
+pts_1511538495475,pts,2020-01-29,street_name,Sacramento
+pts_1511538495475,pts,2020-01-29,current_status,issued
+pts_1511538495475,pts,2020-01-29,current_status_date,06/12/2018
+pts_1511538495475,pts,2020-01-29,filed_date,06/12/2018
+pts_1511538495475,pts,2020-01-29,issued_date,06/12/2018
+pts_1511538495475,pts,2020-01-29,supervisor_district,2
+pts_1511538495475,pts,2020-01-29,zipcode,94115
+pts_1511538495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1511538495475,pts,2020-01-29,record_id,1511538495475
+pts_1512753495475,pts,2020-01-29,permit_number,201806202460
+pts_1512753495475,pts,2020-01-29,permit_type,3
+pts_1512753495475,pts,2020-01-29,permit_type_definition,additions alterations or repairs
+pts_1512753495475,pts,2020-01-29,permit_creation_date,06/20/2018
+pts_1512753495475,pts,2020-01-29,block,0636
+pts_1512753495475,pts,2020-01-29,lot,038
+pts_1512753495475,pts,2020-01-29,street_number,2451
+pts_1512753495475,pts,2020-01-29,street_name,Sacramento
+pts_1512753495475,pts,2020-01-29,current_status,complete
+pts_1512753495475,pts,2020-01-29,current_status_date,11/06/2018
+pts_1512753495475,pts,2020-01-29,filed_date,06/20/2018
+pts_1512753495475,pts,2020-01-29,issued_date,07/20/2018
+pts_1512753495475,pts,2020-01-29,completed_date,11/06/2018
+pts_1512753495475,pts,2020-01-29,permit_expiration_date,07/15/2019
+pts_1512753495475,pts,2020-01-29,existing_use,apartments
+pts_1512753495475,pts,2020-01-29,existing_units,98
+pts_1512753495475,pts,2020-01-29,proposed_use,apartments
+pts_1512753495475,pts,2020-01-29,proposed_units,98
+pts_1512753495475,pts,2020-01-29,existing_construction_type,1
+pts_1512753495475,pts,2020-01-29,existing_construction_type_description,constr type 1
+pts_1512753495475,pts,2020-01-29,proposed_construction_type,1
+pts_1512753495475,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1512753495475,pts,2020-01-29,supervisor_district,2
+pts_1512753495475,pts,2020-01-29,zipcode,94115
+pts_1512753495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1512753495475,pts,2020-01-29,record_id,1512753495475
+pts_1512755495475,pts,2020-01-29,permit_number,201806202461
+pts_1512755495475,pts,2020-01-29,permit_type,3
+pts_1512755495475,pts,2020-01-29,permit_type_definition,additions alterations or repairs
+pts_1512755495475,pts,2020-01-29,permit_creation_date,06/20/2018
+pts_1512755495475,pts,2020-01-29,block,0636
+pts_1512755495475,pts,2020-01-29,lot,038
+pts_1512755495475,pts,2020-01-29,street_number,2451
+pts_1512755495475,pts,2020-01-29,street_name,Sacramento
+pts_1512755495475,pts,2020-01-29,current_status,complete
+pts_1512755495475,pts,2020-01-29,current_status_date,10/09/2018
+pts_1512755495475,pts,2020-01-29,filed_date,06/20/2018
+pts_1512755495475,pts,2020-01-29,issued_date,07/20/2018
+pts_1512755495475,pts,2020-01-29,completed_date,10/09/2018
+pts_1512755495475,pts,2020-01-29,permit_expiration_date,07/15/2019
+pts_1512755495475,pts,2020-01-29,existing_use,apartments
+pts_1512755495475,pts,2020-01-29,existing_units,98
+pts_1512755495475,pts,2020-01-29,proposed_use,apartments
+pts_1512755495475,pts,2020-01-29,proposed_units,98
+pts_1512755495475,pts,2020-01-29,existing_construction_type,1
+pts_1512755495475,pts,2020-01-29,existing_construction_type_description,constr type 1
+pts_1512755495475,pts,2020-01-29,proposed_construction_type,1
+pts_1512755495475,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1512755495475,pts,2020-01-29,supervisor_district,2
+pts_1512755495475,pts,2020-01-29,zipcode,94115
+pts_1512755495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1512755495475,pts,2020-01-29,record_id,1512755495475
+pts_1515268495475,pts,2020-01-29,permit_number,201807114271
+pts_1515268495475,pts,2020-01-29,permit_type,3
+pts_1515268495475,pts,2020-01-29,permit_type_definition,additions alterations or repairs
+pts_1515268495475,pts,2020-01-29,permit_creation_date,07/11/2018
+pts_1515268495475,pts,2020-01-29,block,0636
+pts_1515268495475,pts,2020-01-29,lot,038
+pts_1515268495475,pts,2020-01-29,street_number,2451
+pts_1515268495475,pts,2020-01-29,street_name,Sacramento
+pts_1515268495475,pts,2020-01-29,current_status,issued
+pts_1515268495475,pts,2020-01-29,current_status_date,11/02/2018
+pts_1515268495475,pts,2020-01-29,filed_date,07/11/2018
+pts_1515268495475,pts,2020-01-29,issued_date,11/02/2018
+pts_1515268495475,pts,2020-01-29,permit_expiration_date,10/28/2019
+pts_1515268495475,pts,2020-01-29,existing_use,apartments
+pts_1515268495475,pts,2020-01-29,existing_units,98
+pts_1515268495475,pts,2020-01-29,proposed_use,apartments
+pts_1515268495475,pts,2020-01-29,proposed_units,98
+pts_1515268495475,pts,2020-01-29,existing_construction_type,1
+pts_1515268495475,pts,2020-01-29,existing_construction_type_description,constr type 1
+pts_1515268495475,pts,2020-01-29,proposed_construction_type,1
+pts_1515268495475,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1515268495475,pts,2020-01-29,supervisor_district,2
+pts_1515268495475,pts,2020-01-29,zipcode,94115
+pts_1515268495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1515268495475,pts,2020-01-29,record_id,1515268495475
+pts_1518849495475,pts,2020-01-29,permit_number,M961847
+pts_1518849495475,pts,2020-01-29,permit_type,8
+pts_1518849495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1518849495475,pts,2020-01-29,permit_creation_date,08/08/2018
+pts_1518849495475,pts,2020-01-29,block,0636
+pts_1518849495475,pts,2020-01-29,lot,038
+pts_1518849495475,pts,2020-01-29,street_number,2451
+pts_1518849495475,pts,2020-01-29,street_name,Sacramento
+pts_1518849495475,pts,2020-01-29,current_status,filed
+pts_1518849495475,pts,2020-01-29,current_status_date,08/08/2018
+pts_1518849495475,pts,2020-01-29,filed_date,08/08/2018
+pts_1518849495475,pts,2020-01-29,supervisor_district,2
+pts_1518849495475,pts,2020-01-29,zipcode,94115
+pts_1518849495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1518849495475,pts,2020-01-29,record_id,1518849495475
+pts_1518883495475,pts,2020-01-29,permit_number,M962047
+pts_1518883495475,pts,2020-01-29,permit_type,8
+pts_1518883495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1518883495475,pts,2020-01-29,permit_creation_date,08/08/2018
+pts_1518883495475,pts,2020-01-29,block,0636
+pts_1518883495475,pts,2020-01-29,lot,038
+pts_1518883495475,pts,2020-01-29,street_number,2451
+pts_1518883495475,pts,2020-01-29,street_name,Sacramento
+pts_1518883495475,pts,2020-01-29,current_status,issued
+pts_1518883495475,pts,2020-01-29,current_status_date,08/08/2018
+pts_1518883495475,pts,2020-01-29,filed_date,08/08/2018
+pts_1518883495475,pts,2020-01-29,issued_date,08/08/2018
+pts_1518883495475,pts,2020-01-29,supervisor_district,2
+pts_1518883495475,pts,2020-01-29,zipcode,94115
+pts_1518883495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1518883495475,pts,2020-01-29,record_id,1518883495475
+pts_1522204495475,pts,2020-01-29,permit_number,201809059112
+pts_1522204495475,pts,2020-01-29,permit_type,8
+pts_1522204495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1522204495475,pts,2020-01-29,permit_creation_date,09/05/2018
+pts_1522204495475,pts,2020-01-29,block,0636
+pts_1522204495475,pts,2020-01-29,lot,038
+pts_1522204495475,pts,2020-01-29,street_number,2451
+pts_1522204495475,pts,2020-01-29,street_name,Sacramento
+pts_1522204495475,pts,2020-01-29,current_status,complete
+pts_1522204495475,pts,2020-01-29,current_status_date,11/05/2018
+pts_1522204495475,pts,2020-01-29,filed_date,09/05/2018
+pts_1522204495475,pts,2020-01-29,issued_date,09/05/2018
+pts_1522204495475,pts,2020-01-29,completed_date,11/05/2018
+pts_1522204495475,pts,2020-01-29,permit_expiration_date,08/31/2019
+pts_1522204495475,pts,2020-01-29,existing_use,apartments
+pts_1522204495475,pts,2020-01-29,existing_units,98
+pts_1522204495475,pts,2020-01-29,proposed_use,apartments
+pts_1522204495475,pts,2020-01-29,proposed_units,98
+pts_1522204495475,pts,2020-01-29,existing_construction_type,1
+pts_1522204495475,pts,2020-01-29,existing_construction_type_description,constr type 1
+pts_1522204495475,pts,2020-01-29,proposed_construction_type,1
+pts_1522204495475,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1522204495475,pts,2020-01-29,supervisor_district,2
+pts_1522204495475,pts,2020-01-29,zipcode,94115
+pts_1522204495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1522204495475,pts,2020-01-29,record_id,1522204495475
+pts_1523328495475,pts,2020-01-29,permit_number,M978027
+pts_1523328495475,pts,2020-01-29,permit_type,8
+pts_1523328495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1523328495475,pts,2020-01-29,permit_creation_date,09/12/2018
+pts_1523328495475,pts,2020-01-29,block,0636
+pts_1523328495475,pts,2020-01-29,lot,038
+pts_1523328495475,pts,2020-01-29,street_number,2451
+pts_1523328495475,pts,2020-01-29,street_name,Sacramento
+pts_1523328495475,pts,2020-01-29,current_status,issued
+pts_1523328495475,pts,2020-01-29,current_status_date,09/12/2018
+pts_1523328495475,pts,2020-01-29,filed_date,09/12/2018
+pts_1523328495475,pts,2020-01-29,issued_date,09/12/2018
+pts_1523328495475,pts,2020-01-29,supervisor_district,2
+pts_1523328495475,pts,2020-01-29,zipcode,94115
+pts_1523328495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1523328495475,pts,2020-01-29,record_id,1523328495475
 pts_1549264108606,pts,2020-01-29,permit_number,201904198487
 pts_1549264108606,pts,2020-01-29,permit_type,8
 pts_1549264108606,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -1795,6 +2477,22 @@ pts_1549264108606,pts,2020-01-29,supervisor_district,1
 pts_1549264108606,pts,2020-01-29,zipcode,94118
 pts_1549264108606,pts,2020-01-29,location,"(37.77441419689401, -122.46777334148037)"
 pts_1549264108606,pts,2020-01-29,record_id,1549264108606
+pts_1577511495475,pts,2020-01-29,permit_number,M1171027
+pts_1577511495475,pts,2020-01-29,permit_type,8
+pts_1577511495475,pts,2020-01-29,permit_type_definition,otc alterations permit
+pts_1577511495475,pts,2020-01-29,permit_creation_date,11/27/2019
+pts_1577511495475,pts,2020-01-29,block,0636
+pts_1577511495475,pts,2020-01-29,lot,038
+pts_1577511495475,pts,2020-01-29,street_number,2451
+pts_1577511495475,pts,2020-01-29,street_name,Sacramento
+pts_1577511495475,pts,2020-01-29,current_status,issued
+pts_1577511495475,pts,2020-01-29,current_status_date,11/27/2019
+pts_1577511495475,pts,2020-01-29,filed_date,11/27/2019
+pts_1577511495475,pts,2020-01-29,issued_date,11/27/2019
+pts_1577511495475,pts,2020-01-29,supervisor_district,2
+pts_1577511495475,pts,2020-01-29,zipcode,94115
+pts_1577511495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
+pts_1577511495475,pts,2020-01-29,record_id,1577511495475
 tco_201404304554_2018-01-11,tco,2020-01-29,building_permit_number,201404304554
 tco_201404304554_2018-01-11,tco,2020-01-29,address,41 Tehama Street
 tco_201404304554_2018-01-11,tco,2020-01-29,date_issued,2018/01/11
@@ -3073,3 +3771,75 @@ mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_120_percent_ami_un
 mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_150_percent_ami_units,0
 mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,supervisor_district,2
 mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,location,POINT (-122.4182387 37.80560374)
+bmr_2003-030,bmr,2020-01-29,project_id,2003-030
+bmr_2003-030,bmr,2020-01-29,project_name,Valencia Gardens
+bmr_2003-030,bmr,2020-01-29,street_number,340-370
+bmr_2003-030,bmr,2020-01-29,street_name,Valencia
+bmr_2003-030,bmr,2020-01-29,street_type,St
+bmr_2003-030,bmr,2020-01-29,zip_code,94103
+bmr_2003-030,bmr,2020-01-29,supervisor_district,8
+bmr_2003-030,bmr,2020-01-29,project_sponsor,Mission Housing Development Corporation
+bmr_2003-030,bmr,2020-01-29,total_units,260
+bmr_2003-030,bmr,2020-01-29,total_beds,0
+bmr_2003-030,bmr,2020-01-29,total_affordable_units,259
+bmr_2003-030,bmr,2020-01-29,total_affordable_beds,0
+bmr_2003-030,bmr,2020-01-29,num_sro_units,0
+bmr_2003-030,bmr,2020-01-29,num_studio_units,0
+bmr_2003-030,bmr,2020-01-29,num_1bd_units,60
+bmr_2003-030,bmr,2020-01-29,num_2bd_units,97
+bmr_2003-030,bmr,2020-01-29,num_3bd_units,88
+bmr_2003-030,bmr,2020-01-29,num_4bd_units,14
+bmr_2003-030,bmr,2020-01-29,num_5_plus_bd_units,0
+bmr_2003-030,bmr,2020-01-29,num_family_units,217
+bmr_2003-030,bmr,2020-01-29,num_senior_units,42
+bmr_2003-030,bmr,2020-01-29,num_tay_units,0
+bmr_2003-030,bmr,2020-01-29,num_homeless_units,0
+bmr_2003-030,bmr,2020-01-29,num_losp_units,0
+bmr_2003-030,bmr,2020-01-29,num_disabled_units,0
+bmr_2003-030,bmr,2020-01-29,num_20_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,num_30_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,num_40_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,num_50_percent_ami_units,51
+bmr_2003-030,bmr,2020-01-29,num_60_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,num_80_percent_ami_units,208
+bmr_2003-030,bmr,2020-01-29,num_120_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,num_more_than_120_percent_ami_units,0
+bmr_2003-030,bmr,2020-01-29,year_constructed,2005
+bmr_2003-030,bmr,2020-01-29,year_affordability_began,2005
+bmr_2003-030,bmr,2020-01-29,location,POINT (-122.4232025 37.77)
+bmr_2013-037,bmr,2020-01-29,project_id,2013-037
+bmr_2013-037,bmr,2020-01-29,project_name,Kennedy Towers (JFK Towers)
+bmr_2013-037,bmr,2020-01-29,street_number,2451
+bmr_2013-037,bmr,2020-01-29,street_name,Sacramento
+bmr_2013-037,bmr,2020-01-29,street_type,St
+bmr_2013-037,bmr,2020-01-29,zip_code,94115
+bmr_2013-037,bmr,2020-01-29,supervisor_district,2
+bmr_2013-037,bmr,2020-01-29,project_sponsor,Mercy Housing California
+bmr_2013-037,bmr,2020-01-29,total_units,98
+bmr_2013-037,bmr,2020-01-29,total_beds,0
+bmr_2013-037,bmr,2020-01-29,total_affordable_units,97
+bmr_2013-037,bmr,2020-01-29,total_affordable_beds,0
+bmr_2013-037,bmr,2020-01-29,num_sro_units,0
+bmr_2013-037,bmr,2020-01-29,num_studio_units,76
+bmr_2013-037,bmr,2020-01-29,num_1bd_units,20
+bmr_2013-037,bmr,2020-01-29,num_2bd_units,1
+bmr_2013-037,bmr,2020-01-29,num_3bd_units,0
+bmr_2013-037,bmr,2020-01-29,num_4bd_units,0
+bmr_2013-037,bmr,2020-01-29,num_5_plus_bd_units,0
+bmr_2013-037,bmr,2020-01-29,num_family_units,0
+bmr_2013-037,bmr,2020-01-29,num_senior_units,97
+bmr_2013-037,bmr,2020-01-29,num_tay_units,0
+bmr_2013-037,bmr,2020-01-29,num_homeless_units,0
+bmr_2013-037,bmr,2020-01-29,num_losp_units,0
+bmr_2013-037,bmr,2020-01-29,num_disabled_units,97
+bmr_2013-037,bmr,2020-01-29,num_20_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_30_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_40_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_50_percent_ami_units,97
+bmr_2013-037,bmr,2020-01-29,num_60_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_80_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_120_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,num_more_than_120_percent_ami_units,0
+bmr_2013-037,bmr,2020-01-29,year_constructed,1900
+bmr_2013-037,bmr,2020-01-29,year_affordability_began,2016
+bmr_2013-037,bmr,2020-01-29,location,POINT (-122.43319449999998 37.79)

@@ -9,6 +9,7 @@ import shutil
 from schemaless.create_schemaless import dump_and_diff
 from schemaless.create_schemaless import just_dump
 from schemaless.create_schemaless import latest_values
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
@@ -80,7 +81,8 @@ def test_just_dump(tmpdir):
          PTS('testdata/pts.csv'),
          TCO('testdata/tco.csv'),
          MOHCDPipeline('testdata/mohcd-pipeline.csv'),
-         MOHCDInclusionary('testdata/mohcd-inclusionary.csv')],
+         MOHCDInclusionary('testdata/mohcd-inclusionary.csv'),
+         AffordableRentalPortfolio('testdata/bmr.csv')],
         outfile,
         the_date=TESTDATA_GEN_DATE)
     assert filecmp.cmp('testdata/schemaless-one.csv', outfile)
