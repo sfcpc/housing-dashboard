@@ -545,31 +545,6 @@ def test_mohcd_records_link_without_prj():
                           expected_mohcd_inclusionary_children)
 
 
-def test_bmr():
-    kennedy_towers = "bmr_2013-037"
-    # TODO(#76): This parent is actually wrong. The record starts after the
-    # BMRs are available, and we should actually have no parents.
-    parent = 'ppts_2017-016475ENF'
-    expected_children = [
-        kennedy_towers,
-    ]
-    rg = RecordGraph.from_files(
-        'testdata/schemaless-one.csv',
-        'testdata/uuid-map-one.csv')
-    verify_valid_children(rg, parent, expected_children)
-    verify_valid_children(rg, kennedy_towers, [])
-    parents = set([
-        'ppts_2015-010665PRJ',
-        'ppts_2015-010665VAR',
-        'ppts_2016-011207ZAV',
-        'ppts_2016-015839PRV',
-        'ppts_2017-016475ENF',
-    ])
-    # TODO(#76) This might actually be wrong. Should we restrict parents to
-    # only a resonable time range?
-    assert rg.get(kennedy_towers).parents == parents
-
-
 def verify_valid_children(rg, parent_fk, expected_child_fks):
     parent = rg.get(parent_fk)
     assert len(parent.children) == len(expected_child_fks)
