@@ -122,6 +122,7 @@ class Source:
     FK = PrimaryKey(NAME, 'None')
     DATE = Date('None', '%m/%d/%Y')
     FIELDS = {}
+    COMPUTED_FIELDS = {}
 
     def __init__(self, filepath):
         self._filepath = filepath
@@ -137,22 +138,10 @@ class Source:
             reader = DictReader(inf)
 
             for line in reader:
-                calc_fields = {}
-                ret = {}
-                for line_key, ret_key in self.FIELDS.items():
-                    # save calculated Fields for later
-                    if isinstance(ret_key, Field):
-                        calc_fields[line_key] = ret_key
-                        continue
-
-                    if line_key not in line:
-                        continue
-
-                    val = (line.get(line_key) or "").strip()
-                    if val:
-                        ret[ret_key] = val
-
-                for key, field in calc_fields.items():
+                ret = {self.FIELDS[key]: val.strip()
+                       for key, val in line.items()
+                       if key in self.FIELDS and val}
+                for key, field in self.COMPUTED_FIELDS.items():
                     val = field.get_value_str(ret)
                     if val:
                         ret[key] = val.strip()
