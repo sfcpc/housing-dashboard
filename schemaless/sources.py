@@ -4,6 +4,11 @@ from csv import DictReader
 from datetime import datetime, date
 from fileutils import open_file
 
+from scourgify.exceptions import IncompleteAddressError
+from scourgify.exceptions import UnParseableAddressError
+from scourgify.normalize import format_address_record
+from scourgify.normalize import normalize_address_record
+
 
 class Field:
     def get_value(self, record):
@@ -50,7 +55,69 @@ class Date(Field):
         return self.get_value(record).isoformat()
 
 
-class Source():
+class Address(Field):
+    def __init__(self, *fields):
+        self.fields = fields
+
+    def __str__(self):
+        return " ".join(self.fields)
+
+    def get_value(self, record):
+        vals = []
+        for field in self.fields:
+            if isinstance(field, Field):
+                vals.append(field.get_value_str(record))
+            else:
+                vals.append(record.get(field, ""))
+        addr_str = " ".join(vals).strip().title()
+        if not addr_str:
+            return ""
+        try:
+            addr = normalize_address_record(addr_str)
+        except UnParseableAddressError:
+            print("WARN1: Unparseable: %s" % addr_str)
+            return ""
+        else:
+            if not addr['postal_code']:
+                # We need this to normalize again, and we can't guess it
+                try:
+                    return format_address_record(addr)
+                except IncompleteAddressError:
+                    print("WARN2: Unable to format address %s" % addr)
+                    return ""
+
+            if not addr['city']:
+                addr['city'] = "San Francisco"
+            if not addr['state']:
+                addr['state'] = "California"
+
+        # There are a lot of addresses that look like "123 Main St 94102". This
+        # gets parsed into a dict that looks like:
+        #
+        #     {'address_line_1': '123 MAIN ST',
+        #      'address_line_2': None,
+        #      'city': None,
+        #      'state': None,
+        #      'postal_code': '94102'}
+        #
+        # We want city and state to be populated, too, so we add them in and
+        # then normalize once more to ensure it's still valid.
+        try:
+            addr = normalize_address_record(addr)
+        except UnParseableAddressError:
+            print("WARN3: Unparseable: %s" % addr)
+            return ""
+        else:
+            try:
+                return format_address_record(addr)
+            except IncompleteAddressError:
+                print("WARN4: Unable to parse address %s" % addr_str)
+                print(addr)
+                return ""
+        return ""
+
+
+class Source:
     NAME = 'Base Class'
     FK = PrimaryKey(NAME, 'None')
     DATE = Date('None', '%m/%d/%Y')
@@ -64,6 +131,9 @@ class Source():
     def yield_records(self):
         pass
 
+    def field_names(self):
+        pass
+
 
 class DirectSource(Source):
     """Superclass for sources where fields map directly to fields in the input
@@ -72,6 +142,10 @@ class DirectSource(Source):
     # Mapping of field names in the input file to the field names to be used in
     # the records for this source.
     FIELDS = {}
+    COMPUTED_FIELDS = {}
+
+    def field_names(self):
+        return set(self.FIELDS.values())
 
     def yield_records(self):
         with open_file(self._filepath,
@@ -81,9 +155,14 @@ class DirectSource(Source):
             reader = DictReader(inf)
 
             for line in reader:
-                yield {self.FIELDS[key]: val.strip()
+                ret = {self.FIELDS[key]: val.strip()
                        for key, val in line.items()
                        if key in self.FIELDS and val}
+                for key, field in self.COMPUTED_FIELDS.items():
+                    val = field.get_value_str(ret)
+                    if val:
+                        ret[key] = val.strip()
+                yield ret
 
 
 class PPTS(DirectSource):
@@ -178,6 +257,10 @@ class PPTS(DirectSource):
         'RESIDENTIAL_MICRO_PROP': 'residential_units_micro_proposed',
         'RESIDENTIAL_MICRO_NET': 'residential_units_micro_net',
     }
+    COMPUTED_FIELDS = {
+        'address_norm': Address('address'),
+    }
+    DATA_SF = "https://data.sfgov.org/dataset/PPTS-Records_data/kgai-svwy"
 
 
 class PTS(DirectSource):
@@ -220,6 +303,18 @@ class PTS(DirectSource):
         'Proposed Construction Type Description':
         'proposed_construction_type_description',
     }
+    COMPUTED_FIELDS = {
+        'address_norm': Address(
+            'street_number',
+            'street_number_suffix',
+            'street_name',
+            'street_name_suffix',
+            'unit',
+            'unit_suffix',
+            'zipcode',
+        ),
+    }
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9"  # NOQA
 
 
 class TCO(DirectSource):
@@ -229,10 +324,15 @@ class TCO(DirectSource):
     FIELDS = {
         'Building Permit Application Number': 'building_permit_number',
         'Building Address': 'address',
+        'address_norm': Address('address'),
         'Date Issued': 'date_issued',
         'Document Type': 'building_permit_type',
         'Number of Units Certified': 'num_units',
     }
+    COMPUTED_FIELDS = {
+        'address_norm': Address('address'),
+    }
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Dwelling-Unit-Completion-Counts-by-Building-Permit/j67f-aayr"  # NOQA
 
 
 class MOHCDInclusionary(DirectSource):
@@ -279,6 +379,7 @@ class MOHCDInclusionary(DirectSource):
         'Supervisor District': 'supervisor_district',
         'Location': 'location',
     }
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Residential-Projects-With-Inclusionary-Requirement/nj3x-rw36"  # NOQA
 
 
 class MOHCDPipeline(DirectSource):
@@ -293,7 +394,6 @@ class MOHCDPipeline(DirectSource):
         'Street Name': 'street_name',
         'Street Type': 'street_type',
         'Zip Code': 'zip_code',
-        # TODO: How can we synthesize fields? eg add an 'address' field
         'Supervisor District': 'supervisor_district',
         'Location': 'location',  # This is a POINT()
         'Project Lead Sponsor': 'project_lead_sponsor',
@@ -362,6 +462,69 @@ class MOHCDPipeline(DirectSource):
         # 'Latitude': 'latitude',
         # 'Longitude': 'longitude',
     }
+    COMPUTED_FIELDS = {
+        'address_norm': Address(
+            'street_number',
+            'street_name',
+            'street_type',
+            'zip_code',
+        ),
+    }
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Affordable-Housing-Pipeline/aaxw-2cb8"  # NOQA
+
+
+class AffordableRentalPortfolio(DirectSource):
+    """MOHCD/OCII's affordable rental portfolio"""
+    NAME = 'bmr'
+    DATE = Date('year_affordability_began', '%Y')
+    FK = PrimaryKey(NAME, 'project_id')
+    FIELDS = {
+        'Project ID': 'project_id',
+        'Project Name': 'project_name',
+        'Street Number': 'street_number',
+        'Street Name': 'street_name',
+        'Street Type': 'street_type',
+        'Zip Code': 'zip_code',
+        'Location': 'location',
+        'Supervisor District': 'supervisor_district',
+        'Project Sponsor': 'project_sponsor',
+        'Total Units': 'total_units',
+        'Total Beds': 'total_beds',
+        'Affordable Units': 'total_affordable_units',
+        'Affordable Beds': 'total_affordable_beds',
+        'Single Room Occupancy Units': 'num_sro_units',
+        'Studio Units': 'num_studio_units',
+        '1bd Units': 'num_1bd_units',
+        '2bd Units': 'num_2bd_units',
+        '3bd Units': 'num_3bd_units',
+        '4bd Units': 'num_4bd_units',
+        '5+ bd Units': 'num_5_plus_bd_units',
+        'Family Units': 'num_family_units',
+        'Senior Units': 'num_senior_units',
+        'TAY Units': 'num_tay_units',
+        'Homeless Units': 'num_homeless_units',
+        'LOSP Units': 'num_losp_units',
+        'Disabled Units': 'num_disabled_units',
+        '20% AMI': 'num_20_percent_ami_units',
+        '30% AMI': 'num_30_percent_ami_units',
+        '40% AMI': 'num_40_percent_ami_units',
+        '50% AMI': 'num_50_percent_ami_units',
+        '60% AMI': 'num_60_percent_ami_units',
+        '80% AMI': 'num_80_percent_ami_units',
+        '120% AMI': 'num_120_percent_ami_units',
+        'More than 120% AMI': 'num_more_than_120_percent_ami_units',
+        'Year Building Constructed': 'year_constructed',
+        'Year Affordability Began': 'year_affordability_began',
+    }
+    COMPUTED_FIELDS = {
+        'address_norm': Address(
+            'street_number'
+            'street_name',
+            'street_type',
+            'zip_code',
+        ),
+    }
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Mayor-s-Office-of-Housing-and-Community-Developmen/9rdx-httc"  # NOQA
 
 
 class PermitAddendaSummary(Source):
@@ -376,6 +539,14 @@ class PermitAddendaSummary(Source):
     '''
     NAME = 'permit_addenda_summary'
     FK = PrimaryKey(NAME, 'permit_number')
+
+    FIELDS = [
+        'permit_number',
+        'earliest_addenda_arrival'
+    ]
+
+    def field_names(self):
+        return self.FIELDS
 
     def yield_records(self):
         '''Outputs one record per permit number with a few key fields summarizing
@@ -402,10 +573,8 @@ class PermitAddendaSummary(Source):
                 arrive_date = permit_to_arrival[permit_number]
                 arrive_date_str = arrive_date.isoformat() \
                     if arrive_date != date.max else ''
-                yield {
-                    'permit_number': permit_number,
-                    'earliest_addenda_arrival': arrive_date_str
-                }
+                values = [permit_number, arrive_date_str]
+                yield dict(zip(self.FIELDS, values))
 
 
 source_map = {
@@ -414,5 +583,6 @@ source_map = {
     TCO.NAME: TCO,
     MOHCDPipeline.NAME: MOHCDPipeline,
     MOHCDInclusionary.NAME: MOHCDInclusionary,
-    PermitAddendaSummary.NAME: PermitAddendaSummary
+    PermitAddendaSummary.NAME: PermitAddendaSummary,
+    AffordableRentalPortfolio.NAME: AffordableRentalPortfolio,
 }
