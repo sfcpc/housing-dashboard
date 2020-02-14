@@ -221,26 +221,18 @@ class MOHCDInclusionaryHelper(
         RecordGraphBuilderHelper,
         PPTSAddressLookupMixin,
         PTSAddressLookupMixin):
-    def __init__(self, graph_builder):
-        super().__init__(graph_builder)
-        self._mohcd_id_to_fk = {}
-
-    def find_by_id(self, project_id):
-        """Find a fk by MOHCD project_id."""
-        return self._mohcd_id_to_fk.get(project_id, None)
-
-    def preprocess(self, latest_records):
-        for fk, record in latest_records.get(MOHCDPipeline.NAME, {}).items():
-            self._mohcd_id_to_fk[record['project_id']] = fk
-
     def process(self, fk, record, parents, children):
-        mohcd_pipeline_helper = self.graph_builder.helpers[
-            MOHCDPipeline.NAME]
-        mohcd_pipeline_helper.process(fk, record, parents, children)
+        """Do the same thing as MOHCDPipelineHelper, plus add a MOHCDPipeline
+        record as a parent."""
+        if 'planning_case_number' in record:
+            ppts_helper = self.graph_builder.helpers[PPTS.NAME]
+            for parent in record['planning_case_number'].split(","):
+                parent_fk = ppts_helper.find_by_id(parent)
+                if parent_fk:
+                    parents.append(parent_fk)
+
+        mohcd_pipeline_helper = self.graph_builder.helpers[MOHCDPipeline.NAME]
         parent_fk = mohcd_pipeline_helper.find_by_id(record['project_id'])
-        if parent_fk:
-            parents.append(parent_fk)
-        parent_fk = self.find_by_id(record['project_id'])
         if parent_fk:
             parents.append(parent_fk)
 
