@@ -314,7 +314,6 @@ class TCO(Source):
     FIELDS = {
         'Building Permit Application Number': 'building_permit_number',
         'Building Address': 'address',
-        'address_norm': Address('address'),
         'Date Issued': 'date_issued',
         'Document Type': 'building_permit_type',
         'Number of Units Certified': 'num_units',
@@ -368,6 +367,14 @@ class MOHCDInclusionary(Source):
         '150% AMI': 'num_150_percent_ami_units',
         'Supervisor District': 'supervisor_district',
         'Location': 'location',
+    }
+    COMPUTED_FIELDS = {
+        'address_norm': Address(
+            'street_number',
+            'street_name',
+            'street_type',
+            'zip_code',
+        ),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Residential-Projects-With-Inclusionary-Requirement/nj3x-rw36"  # NOQA
 
