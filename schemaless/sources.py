@@ -177,7 +177,6 @@ class PPTS(Source):
         'date_closed': 'date_closed',
         # Location details
         'address': 'address',
-        'address_norm': Address('address'),
         'the_geom': 'the_geom',
 
         # Developer and Planner
@@ -252,6 +251,9 @@ class PPTS(Source):
         'RESIDENTIAL_MICRO_PROP': 'residential_units_micro_proposed',
         'RESIDENTIAL_MICRO_NET': 'residential_units_micro_net',
     }
+    COMPUTED_FIELDS = {
+        'address_norm': Address('address'),
+    }
     DATA_SF = "https://data.sfgov.org/dataset/PPTS-Records_data/kgai-svwy"
 
 
@@ -275,15 +277,6 @@ class PTS(Source):
         'Unit': 'unit',
         'Unit Suffix': 'unit_suffix',
         'Zipcode': 'zipcode',
-        'address_norm': Address(
-            'street_number',
-            'street_number_suffix',
-            'street_name',
-            'street_name_suffix',
-            'unit',
-            'unit_suffix',
-            'zipcode',
-        ),
         'Location': 'location',
         'Supervisor District': 'supervisor_district',
         'Current Status': 'current_status',
@@ -304,6 +297,17 @@ class PTS(Source):
         'Proposed Construction Type Description':
         'proposed_construction_type_description',
     }
+    COMPUTED_FIELDS = {
+        'address_norm': Address(
+            'street_number',
+            'street_number_suffix',
+            'street_name',
+            'street_name_suffix',
+            'unit',
+            'unit_suffix',
+            'zipcode',
+        ),
+    }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9"  # NOQA
 
 
@@ -318,6 +322,9 @@ class TCO(Source):
         'Date Issued': 'date_issued',
         'Document Type': 'building_permit_type',
         'Number of Units Certified': 'num_units',
+    }
+    COMPUTED_FIELDS = {
+        'address_norm': Address('address'),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Dwelling-Unit-Completion-Counts-by-Building-Permit/j67f-aayr"  # NOQA
 
@@ -379,12 +386,6 @@ class MOHCDPipeline(Source):
         'Street Name': 'street_name',
         'Street Type': 'street_type',
         'Zip Code': 'zip_code',
-        'address_norm': Address(
-            'street_number',
-            'street_name',
-            'street_type',
-            'zip_code',
-        ),
         'Supervisor District': 'supervisor_district',
         'Location': 'location',  # This is a POINT()
         'Project Lead Sponsor': 'project_lead_sponsor',
@@ -453,6 +454,14 @@ class MOHCDPipeline(Source):
         # 'Latitude': 'latitude',
         # 'Longitude': 'longitude',
     }
+    COMPUTED_FIELDS = {
+        'address_norm': Address(
+            'street_number',
+            'street_name',
+            'street_type',
+            'zip_code',
+        ),
+    }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Affordable-Housing-Pipeline/aaxw-2cb8"  # NOQA
 
 
@@ -468,12 +477,6 @@ class AffordableRentalPortfolio(Source):
         'Street Name': 'street_name',
         'Street Type': 'street_type',
         'Zip Code': 'zip_code',
-        'address_norm': Address(
-            'street_number'
-            'street_name',
-            'street_type',
-            'zip_code',
-        ),
         'Location': 'location',
         'Supervisor District': 'supervisor_district',
         'Project Sponsor': 'project_sponsor',
@@ -504,6 +507,14 @@ class AffordableRentalPortfolio(Source):
         'More than 120% AMI': 'num_more_than_120_percent_ami_units',
         'Year Building Constructed': 'year_constructed',
         'Year Affordability Began': 'year_affordability_began',
+    }
+    COMPUTED_FIELDS = {
+        'address_norm': Address(
+            'street_number'
+            'street_name',
+            'street_type',
+            'zip_code',
+        ),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Mayor-s-Office-of-Housing-and-Community-Developmen/9rdx-httc"  # NOQA
 
