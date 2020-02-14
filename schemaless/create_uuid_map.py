@@ -153,8 +153,9 @@ class MOHCDPipelineHelper(RecordGraphBuilderHelper):
 
 class MOHCDInclusionaryHelper(RecordGraphBuilderHelper):
     def process(self, fk, record, parents, children):
-        mohcd_pipeline_helper = self.graph_builder.helpers[
-            MOHCDPipeline.NAME]
+        """Do the same thing as MOHCDPipelineHelper, plus add a MOHCDPipeline
+        record as a parent."""
+        mohcd_pipeline_helper = self.graph_builder.helpers[MOHCDPipeline.NAME]
         mohcd_pipeline_helper.process(fk, record, parents, children)
         parent_fk = mohcd_pipeline_helper.find_by_id(record['project_id'])
         if parent_fk:
