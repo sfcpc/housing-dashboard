@@ -1,7 +1,8 @@
 # Lint as: python3
 """Source class to define the interface for reading a source file."""
 from csv import DictReader
-from datetime import datetime, date
+from datetime import date
+from datetime import datetime
 from fileutils import open_file
 
 from scourgify.exceptions import IncompleteAddressError
@@ -566,15 +567,17 @@ class PermitAddendaSummary(Source):
                 except ValueError:
                     arrive_date = date.max
                 if permit_number not in permit_to_arrival or \
-                   arrive_date < permit_to_arrival[permit_number]:
+                        arrive_date < permit_to_arrival[permit_number]:
                     permit_to_arrival[permit_number] = arrive_date
 
             for permit_number in permit_to_arrival.keys():
                 arrive_date = permit_to_arrival[permit_number]
                 arrive_date_str = arrive_date.isoformat() \
                     if arrive_date != date.max else ''
-                values = [permit_number, arrive_date_str]
-                yield dict(zip(self.FIELDS, values))
+                yield {
+                    'permit_number': permit_number,
+                    'earliest_addenda_arrival': arrive_date_str
+                }
 
 
 source_map = {
