@@ -63,7 +63,20 @@ class RecordGraphBuilderHelper:
 
 
 class PPTSAddressLookupMixin:
+    """Mixin to look up PPTS records by normalized address."""
     def ppts_by_address(self, fk, record, parents, children):
+        """Find PPTS parents for `record` that match its address.
+
+        This will not add fks to parents or children if they already
+        share a UUID.
+
+        Args:
+            fk: The PrimaryKey for this record.
+            record: The record dict (from `latest_values`). Expects
+                    `address_norm` to exist in the dict.
+            parents: A list of fks. List is modified in place.
+            children: A list of fks. List is modified in place.
+        """
         # TODO: There will be many matches, so we need to filter
         # on time range and record type. EG maybe only add parents
         # that are PRJs, or themselves have parents?
@@ -75,7 +88,17 @@ class PPTSAddressLookupMixin:
 
 
 class PTSAddressLookupMixin:
+    """Mixin to look up PTS records by normalized address."""
     def pts_by_address(self, fk, record, parents, children):
+        """Find PTS parents for `record` that match its address.
+
+        Args:
+            fk: The PrimaryKey for this record.
+            record: The record dict (from `latest_values`). Expects
+                    `address_norm` to exist in the dict.
+            parents: A list of fks. List is modified in place.
+            children: A list of fks. List is modified in place.
+        """
         if 'address_norm' not in record:
             return
         pts_helper = self.graph_builder.helpers[PTS.NAME]
@@ -84,6 +107,7 @@ class PTSAddressLookupMixin:
 
 
 class CalculatedFieldsMixin:
+    """Mixin to add all calculated fields for a source into the record."""
     def add_calculated_fields(self, record):
         calculated_fields = self.SOURCE.calculated_fields(record)
         record = record.copy()
