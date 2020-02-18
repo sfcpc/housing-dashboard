@@ -636,4 +636,4 @@ if __name__ == "__main__":
     rg = builder.build()
     rg.to_file(args.outfile)
     if args.likely_match_file:
-        rg.write_likely_matches(args.likely_match_file)
+        builder.write_likely_matches(args.likely_match_file)
