@@ -120,22 +120,42 @@ def _get_dbi_units(proj):
     """
     Returns:
       Net new units from DBI, only if it could be sourced from a new
-      construction permit.  None if no data from DBI.
+      construction permit or addition.  None if no data from DBI.
     """
     dbi_exist = 0
     dbi_prop = 0
     try:
-        dbi_exist = int(proj.field(
-            'existing_units', PTS.NAME,
-            entry_predicate=[_is_valid_dbi_type]))
+        fk_entries = proj.fields('existing_units',
+                                 PTS.NAME,
+                                 entry_predicate=[_is_valid_dbi_type])
+        for (fk, entries) in fk_entries.items():
+            latest = (None, datetime.min)
+            for entry in entries:
+                entry_latest = entry.get_latest('existing_units')
+                if entry_latest[1] > latest[1]:
+                    latest = entry_latest
+
+            if latest[0]:
+                dbi_exist += int(latest[0])
     except ValueError:
+        dbi_exist = 0
         pass
 
     try:
-        dbi_prop = int(proj.field(
-            'proposed_units', PTS.NAME,
-            entry_predicate=[_is_valid_dbi_type]))
+        fk_entries = proj.fields('proposed_units',
+                                 PTS.NAME,
+                                 entry_predicate=[_is_valid_dbi_type])
+        for (fk, entries) in fk_entries.items():
+            latest = (None, datetime.min)
+            for entry in entries:
+                entry_latest = entry.get_latest('proposed_units')
+                if entry_latest[1] > latest[1]:
+                    latest = entry_latest
+
+            if latest[0]:
+                dbi_prop += int(latest[0])
     except ValueError:
+        dbi_prop = 0
         pass
 
     if dbi_prop:

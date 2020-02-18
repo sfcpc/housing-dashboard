@@ -61,6 +61,7 @@ def basic_graph():
     rg.add(Node(record_id='2', parents=['1']))
     rg.add(Node(record_id='3', parents=['1']))
     rg.add(Node(record_id='4', parents=['1']))
+    rg.add(Node(record_id='5', parents=['1']))
     return rg
 
 
@@ -133,6 +134,26 @@ def test_table_project_facts_units(basic_graph):
     # Gets from PTS because permit_type 3 is also valid
     assert _get_value_for_row(table, fields, 'net_num_units') == '7'
 
+    entries7 = [
+        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('2',
+              PTS.NAME,
+              [NameValue('permit_type', '2', d),
+               NameValue('proposed_units', '7', d)]),
+        Entry('3',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('proposed_units', '8', d)]),
+        Entry('3',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('proposed_units', '8', d)]),
+    ]
+    proj_multiple_pts = Project('uuid1', entries7, basic_graph)
+    fields = table.rows(proj_multiple_pts)
+    # sum up across PTS entries, ignore duplicates
+    assert _get_value_for_row(table, fields, 'net_num_units') == '15'
+
 
 def test_table_project_facts_units_mohcd(basic_graph):
     d = datetime.fromisoformat('2019-01-01')
@@ -204,19 +225,29 @@ def test_table_project_units_full_count(basic_graph):
               [NameValue('permit_type', '1', d),
                NameValue('existing_units', '7', d),
                NameValue('proposed_units', '5', d)]),
+        Entry('2',  # Ignore duplicates from PTS
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('existing_units', '7', d),
+               NameValue('proposed_units', '5', d)]),
         Entry('3',
               MOHCDPipeline.NAME,
               [NameValue('total_project_units', '7', d)]),
         Entry('4',
               MOHCDInclusionary.NAME,
               [NameValue('total_affordable_units', '5', d)]),
+        Entry('5',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('existing_units', '6', d),
+               NameValue('proposed_units', '5', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
     nvs = table.rows(proj_normal)
     net_num_units = _get_value_for_name(table, nvs, 'net_num_units',
                                         return_multiple=True)
     assert len(net_num_units) == 4
-    assert net_num_units[0] == '-2'
+    assert net_num_units[0] == '-3'
     assert net_num_units[1] == '0'
     assert net_num_units[2] == '7'
     assert net_num_units[3] == '10'
