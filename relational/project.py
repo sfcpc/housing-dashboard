@@ -146,6 +146,31 @@ class Project:
                 msg = msg + (' "%s"' % list(self.roots.items())[0][1][0].fk)
             raise ValueError(msg)
 
+    def fields(self, name, source):
+        """Similar to field() but fetches all values for a given field name
+        instead of just trying to pick one.
+
+        Unlike field(), returns Entries, where each Entry is one that has a
+        value for the given name.
+
+        Returns:
+            a dict mapping a foreign key to all related Entries.
+        """
+        result = {}
+        for parent in self.roots.get(source, []):
+            if parent.get_latest(name):
+                if parent.fk not in result:
+                    result[parent.fk] = []
+                result[parent.fk].append(parent)
+
+        for child in self.children.get(source, []):
+            if child.get_latest(name):
+                if child.fk not in result:
+                    result[child.fk] = []
+                result[child.fk].append(child)
+
+        return result
+
     def field(self, name, source, entry_predicate=None):
         """Fetches the value for a field, using some business logic.
 

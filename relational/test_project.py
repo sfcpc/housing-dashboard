@@ -65,6 +65,14 @@ def rootless_graph():
     return rg
 
 
+def test_project_fields(basic_entries, basic_graph):
+    proj = Project('uuid-0001', basic_entries, basic_graph)
+    entries = proj.fields('num_units_bmr', 'ppts')
+    assert len(entries) == 2
+    assert '1' in entries
+    assert '2' in entries
+
+
 def test_project_simple_case(basic_entries, basic_graph):
     proj = Project('uuid-0001', basic_entries, basic_graph)
     assert len(proj.roots) == 1
