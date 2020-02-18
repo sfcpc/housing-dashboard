@@ -405,6 +405,39 @@ def test_project_details_ami_info_mohcd(basic_graph):
                                'num_more_than_120_percent_ami_units') == '3'
 
 
+def test_project_details_is_100pct_affordable_mohcd(basic_graph):
+    d = datetime.fromisoformat('2019-01-01')
+    table = ProjectDetails()
+
+    entries1 = [
+        Entry('1',
+              PPTS.NAME,
+              [NameValue('residential_units_1br_net', '2', d)]),
+        Entry('2',
+              MOHCDPipeline.NAME,
+              [NameValue('total_project_units', '10', d),
+               NameValue('total_affordable_units', '10', d)]),
+    ]
+    proj_yes = Project('uuid1', entries1, basic_graph)
+
+    nvs = table.rows(proj_yes)
+    assert _get_value_for_name(table, nvs, 'is_100pct_affordable') == 'TRUE'
+
+    entries2 = [
+        Entry('1',
+              PPTS.NAME,
+              [NameValue('residential_units_1br_net', '2', d)]),
+        Entry('2',
+              MOHCDPipeline.NAME,
+              [NameValue('total_project_units', '4', d),
+               NameValue('total_affordable_units', '3', d)]),
+    ]
+    proj_nope = Project('uuid2', entries2, basic_graph)
+
+    nvs = table.rows(proj_nope)
+    assert _get_value_for_name(table, nvs, 'is_100pct_affordable') == 'FALSE'
+
+
 StatusRow = namedtuple('StatusRow',
                        ['top_level_status', 'start_date', 'end_date'])
 
