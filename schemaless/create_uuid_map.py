@@ -211,6 +211,7 @@ class PTSHelper(RecordGraphBuilderHelper,
             children.extend(pts_records[1:])
 
     def process_likely(self, fk, record, parents, children):
+        record = self.add_calculated_fields(record)
         self.ppts_by_address(fk, record, parents, children)
 
 
