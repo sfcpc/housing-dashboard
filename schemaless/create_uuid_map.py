@@ -83,8 +83,7 @@ class PPTSAddressLookupMixin:
         if 'address_norm' not in record:
             return
         ppts_helper = self.graph_builder.helpers[PPTS.NAME]
-        parents.extend(
-            ppts_helper.find_by_address(record['address_norm']))
+        parents.extend(ppts_helper.find_by_address(record['address_norm']))
 
 
 class PTSAddressLookupMixin:
