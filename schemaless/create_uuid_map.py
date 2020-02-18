@@ -319,7 +319,7 @@ class PermitAddendaSummaryHelper(RecordGraphBuilderHelper):
 class RecordGraphBuilder:
     """RecordGraphBuilder reads in files and builds a RecordGraph."""
     def __init__(self, graph_class, schemaless_file, uuid_map_file,
-                 find_likely_matches=False):
+                 find_likely_matches=False, exclude_known_likely_matches=True):
         """Init the graph builder.
 
         Args:
@@ -331,6 +331,7 @@ class RecordGraphBuilder:
         self.schemaless_file = schemaless_file
         self.uuid_map_file = uuid_map_file
         self.find_likely_matches = find_likely_matches
+        self.exclude_known_likely_matches = exclude_known_likely_matches
         self.likelies = {}
 
         # Helpers expose an API that enables parent/child lookups by
@@ -366,17 +367,6 @@ class RecordGraphBuilder:
 
                 self.helpers[source_name].process(
                     fk, record, parents, children)
-
-                if self.find_likely_matches:
-                    likely_parents = []
-                    likely_children = []
-                    self.helpers[source_name].process_likely(
-                        fk, record, likely_parents, likely_children)
-                    self.likelies[fk] = {
-                        'parents': likely_parents,
-                        'children': likely_children,
-                    }
-
                 the_date = None
 
                 if source_map[source_name].DATE.field in record:
@@ -402,6 +392,36 @@ class RecordGraphBuilder:
 
         # Resolve all parent UUIDs and generate new UUIDs
         rg._assign_uuids()
+
+        if not self.find_likely_matches:
+            return rg
+
+        # Now find likely matches
+        for source_name, source_records in latest_records.items():
+            for fk, record in source_records.items():
+                likely_parents = []
+                likely_children = []
+                self.helpers[source_name].process_likely(
+                    fk, record, likely_parents, likely_children)
+
+                if self.exclude_known_likely_matches:
+                    # Now that we have all likely parents, remove parents
+                    # with an explicit or implied link
+                    my_uuid = rg.get(fk).uuid
+                    parents = []
+                    children = []
+                    for parent in likely_parents:
+                        if rg.get(parent).uuid == my_uuid:
+                            continue
+                        parents.append(parent)
+                else:
+                    parents = likely_parents
+                    children = likely_children
+                self.likelies[fk] = {
+                    'parents': parents,
+                    'children': children,
+                }
+
         return rg
 
     def write_likely_matches(self, outfile):
@@ -431,10 +451,18 @@ class RecordGraph:
         self._nodes = OrderedDict()
 
     @classmethod
-    def from_files(cls, schemaless_file, uuid_map_file,
-                   find_likely_matches=False):
+    def from_files(cls,
+                   schemaless_file,
+                   uuid_map_file,
+                   find_likely_matches=False,
+                   exclude_known_likely_matches=True):
         return RecordGraphBuilder(
-            cls, schemaless_file, uuid_map_file, find_likely_matches).build()
+            cls,
+            schemaless_file,
+            uuid_map_file,
+            find_likely_matches,
+            exclude_known_likely_matches
+        ).build()
 
     def to_file(self, outfile):
         """Dump the uuid->fk map."""
