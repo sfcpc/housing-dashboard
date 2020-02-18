@@ -1779,6 +1779,28 @@ pts_1394290495475,pts,2020-01-29,supervisor_district,2
 pts_1394290495475,pts,2020-01-29,zipcode,94115
 pts_1394290495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
 pts_1394290495475,pts,2020-01-29,record_id,1394290495475
+pts_1438278158065,pts,2020-01-29,permit_number,201609218371
+pts_1438278158065,pts,2020-01-29,permit_type,1
+pts_1438278158065,pts,2020-01-29,permit_type_definition,new construction
+pts_1438278158065,pts,2020-01-29,permit_creation_date,09/21/2016
+pts_1438278158065,pts,2020-01-29,block,3554
+pts_1438278158065,pts,2020-01-29,lot,005
+pts_1438278158065,pts,2020-01-29,street_number,1950
+pts_1438278158065,pts,2020-01-29,street_name,Mission
+pts_1438278158065,pts,2020-01-29,current_status,issued
+pts_1438278158065,pts,2020-01-29,current_status_date,02/16/2018
+pts_1438278158065,pts,2020-01-29,filed_date,09/21/2016
+pts_1438278158065,pts,2020-01-29,issued_date,02/16/2018
+pts_1438278158065,pts,2020-01-29,first_construction_document_date,12/28/2018
+pts_1438278158065,pts,2020-01-29,permit_expiration_date,01/16/2024
+pts_1438278158065,pts,2020-01-29,proposed_use,apartments
+pts_1438278158065,pts,2020-01-29,proposed_units,157
+pts_1438278158065,pts,2020-01-29,proposed_construction_type,1
+pts_1438278158065,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1438278158065,pts,2020-01-29,supervisor_district,9
+pts_1438278158065,pts,2020-01-29,zipcode,94103
+pts_1438278158065,pts,2020-01-29,location,"(37.76584624555139, -122.42020777419202)"
+pts_1438278158065,pts,2020-01-29,record_id,1438278158065
 pts_1441752495475,pts,2020-01-29,permit_number,M732207
 pts_1441752495475,pts,2020-01-29,permit_type,8
 pts_1441752495475,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -3771,6 +3793,12 @@ mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_120_percent_ami_un
 mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,num_150_percent_ami_units,0
 mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,supervisor_district,2
 mohcd_inclusionary_2011-005,mohcd_inclusionary,2020-01-29,location,POINT (-122.4182387 37.80560374)
+permit_addenda_summary_201609218371,permit_addenda_summary,2020-01-29,permit_number,201609218371
+permit_addenda_summary_201609218371,permit_addenda_summary,2020-01-29,earliest_addenda_arrival,2016-09-21
+permit_addenda_summary_201810233961,permit_addenda_summary,2020-01-29,permit_number,201810233961
+permit_addenda_summary_201810233961,permit_addenda_summary,2020-01-29,earliest_addenda_arrival,2018-10-24
+permit_addenda_summary_8410366,permit_addenda_summary,2020-01-29,permit_number,8410366
+permit_addenda_summary_8410366,permit_addenda_summary,2020-01-29,earliest_addenda_arrival,
 bmr_2003-030,bmr,2020-01-29,project_id,2003-030
 bmr_2003-030,bmr,2020-01-29,project_name,Valencia Gardens
 bmr_2003-030,bmr,2020-01-29,street_number,340-370

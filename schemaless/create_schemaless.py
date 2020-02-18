@@ -17,6 +17,7 @@ import sys
 
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
@@ -34,7 +35,7 @@ def just_dump(sources, outfile, the_date=None):
             last_updated = the_date.isoformat()
 
         for source in sources:
-            valid_keys = set(source.FIELDS.values())
+            valid_keys = source.field_names()
             for line in source.yield_records():
                 fk = source.foreign_key(line)
                 for (key, val) in line.items():
@@ -99,6 +100,8 @@ if __name__ == "__main__":
                         help='MOHCD Inclusionary file', default='')
     parser.add_argument('--affordable_file',
                         help='AffordableRentalPortfolio file', default='')
+    parser.add_argument('--permit_addenda_file',
+                        help='Permit Addenda file', default='')
     parser.add_argument('out_file', help='output file for schemaless csv')
 
     parser.add_argument(
@@ -126,6 +129,8 @@ if __name__ == "__main__":
         sources.append(MOHCDPipeline(args.mohcd_pipeline_file))
     if args.mohcd_inclusionary_file:
         sources.append(MOHCDInclusionary(args.mohcd_inclusionary_file))
+    if args.permit_addenda_file:
+        sources.append(PermitAddendaSummary(args.permit_addenda_file))
     if args.affordable_file:
         sources.append(AffordableRentalPortfolio(args.affordable_file))
 

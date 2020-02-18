@@ -441,6 +441,7 @@ def test_ppts_child_1950_mission():
         'ppts_2016-001514ENV',
     ]
     expected_pts_children = [
+        'pts_1438278158065',
     ]
     expected_mohcd_children = [
         'mohcd_pipeline_2013-046',
@@ -448,9 +449,16 @@ def test_ppts_child_1950_mission():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
+
+    # Verify that the PRJ has the expected children
     verify_valid_children(rg, prj_fk, expected_ppts_children
                           + expected_pts_children
                           + expected_mohcd_children)
+
+    # Verify that the building permit has the expected
+    # child addenda.
+    verify_valid_children(rg, 'pts_1438278158065',
+                          ['permit_addenda_summary_201609218371'])
 
 
 def test_ppts_child_1950_mission_just_parent():

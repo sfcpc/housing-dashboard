@@ -12,6 +12,7 @@ from schemaless.create_schemaless import latest_values
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 from schemaless.sources import source_map
@@ -251,8 +252,6 @@ class MOHCDInclusionaryHelper(
     SOURCE = MOHCDInclusionary
 
     def process(self, fk, record, parents, children):
-        """Do the same thing as MOHCDPipelineHelper, plus add a MOHCDPipeline
-        record as a parent."""
         if 'planning_case_number' in record:
             ppts_helper = self.graph_builder.helpers[PPTS.NAME]
             for parent in record['planning_case_number'].split(","):
@@ -284,6 +283,15 @@ class AffordableRentalPortfolioHelper(
         self.pts_by_address(fk, record, parents, children)
 
 
+class PermitAddendaSummaryHelper(RecordGraphBuilderHelper):
+    def process(self, fk, record, parents, children):
+        pts_helper = self.graph_builder.helpers[PTS.NAME]
+        parent_fks = pts_helper.find_by_building_permit_number(
+            record['permit_number'])
+        if parent_fks:
+            parents.extend(parent_fks)
+
+
 class RecordGraphBuilder:
     """RecordGraphBuilder reads in files and builds a RecordGraph."""
     def __init__(self, graph_class, schemaless_file, uuid_map_file,
@@ -311,6 +319,8 @@ class RecordGraphBuilder:
             TCO.NAME: TCOHelper(self),
             AffordableRentalPortfolio.NAME:
                 AffordableRentalPortfolioHelper(self),
+            PermitAddendaSummary.NAME:
+                PermitAddendaSummaryHelper(self),
         }
 
     def build(self):

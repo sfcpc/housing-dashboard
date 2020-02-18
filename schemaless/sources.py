@@ -1,6 +1,7 @@
 # Lint as: python3
 """Source class to define the interface for reading a source file."""
 from csv import DictReader
+from datetime import date
 from datetime import datetime
 from fileutils import open_file
 
@@ -121,8 +122,6 @@ class Source:
     NAME = 'Base Class'
     FK = PrimaryKey(NAME, 'None')
     DATE = Date('None', '%m/%d/%Y')
-    FIELDS = {}
-    COMPUTED_FIELDS = {}
 
     def __init__(self, filepath):
         self._filepath = filepath
@@ -141,6 +140,25 @@ class Source:
         return ret
 
     def yield_records(self):
+        pass
+
+    def field_names(self):
+        pass
+
+
+class DirectSource(Source):
+    """Superclass for sources where fields map directly to fields in the input
+    file."""
+
+    # Mapping of field names in the input file to the field names to be used in
+    # the records for this source.
+    FIELDS = {}
+    COMPUTED_FIELDS = {}
+
+    def field_names(self):
+        return set(self.FIELDS.values())
+
+    def yield_records(self):
         with open_file(self._filepath,
                        mode='rt',
                        encoding='utf-8',
@@ -155,7 +173,7 @@ class Source:
                 yield ret
 
 
-class PPTS(Source):
+class PPTS(DirectSource):
     NAME = 'ppts'
     FK = PrimaryKey(NAME, 'record_id')
     DATE = Date('date_opened', '%m/%d/%Y')
@@ -253,7 +271,7 @@ class PPTS(Source):
     DATA_SF = "https://data.sfgov.org/dataset/PPTS-Records_data/kgai-svwy"
 
 
-class PTS(Source):
+class PTS(DirectSource):
     NAME = 'pts'
     FK = PrimaryKey(NAME, 'record_id')
     DATE = Date('filed_date', '%m/%d/%Y')
@@ -307,7 +325,7 @@ class PTS(Source):
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9"  # NOQA
 
 
-class TCO(Source):
+class TCO(DirectSource):
     NAME = 'tco'
     DATE = Date('date_issued', '%Y/%m/%d')
     FK = PrimaryKey(NAME, 'building_permit_number', DATE)
@@ -324,7 +342,7 @@ class TCO(Source):
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Dwelling-Unit-Completion-Counts-by-Building-Permit/j67f-aayr"  # NOQA
 
 
-class MOHCDInclusionary(Source):
+class MOHCDInclusionary(DirectSource):
     NAME = 'mohcd_inclusionary'
     OUTPUT_NAME = NAME
     FK = PrimaryKey(NAME, 'project_id')
@@ -379,7 +397,7 @@ class MOHCDInclusionary(Source):
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Residential-Projects-With-Inclusionary-Requirement/nj3x-rw36"  # NOQA
 
 
-class MOHCDPipeline(Source):
+class MOHCDPipeline(DirectSource):
     NAME = 'mohcd_pipeline'
     OUTPUT_NAME = NAME
     FK = PrimaryKey(NAME, 'project_id')
@@ -470,7 +488,7 @@ class MOHCDPipeline(Source):
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Affordable-Housing-Pipeline/aaxw-2cb8"  # NOQA
 
 
-class AffordableRentalPortfolio(Source):
+class AffordableRentalPortfolio(DirectSource):
     """MOHCD/OCII's affordable rental portfolio"""
     NAME = 'bmr'
     DATE = Date('year_affordability_began', '%Y')
@@ -524,11 +542,64 @@ class AffordableRentalPortfolio(Source):
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Mayor-s-Office-of-Housing-and-Community-Developmen/9rdx-httc"  # NOQA
 
 
+class PermitAddendaSummary(Source):
+    '''Class for permit addenda summary data.
+
+    Note that the fields of this source do *not* necessarily map directly to
+    fields from the input file (unlike subclasses of DirectSource).
+
+    Instead, we look at all the addenda pertaining to a given permit, summarize
+    the  data into a few key fields, and output one record per permit with
+    those key fields.
+    '''
+    NAME = 'permit_addenda_summary'
+    FK = PrimaryKey(NAME, 'permit_number')
+
+    FIELDS = [
+        'permit_number',
+        'earliest_addenda_arrival'
+    ]
+
+    def field_names(self):
+        return self.FIELDS
+
+    def yield_records(self):
+        '''Outputs one record per permit number with a few key fields summarizing
+        info about related addenda.'''
+        with open_file(self._filepath,
+                       mode='rt',
+                       encoding='utf-8',
+                       errors='replace') as inf:
+            reader = DictReader(inf)
+
+            permit_to_arrival = {}
+            for line in reader:
+                permit_number = line['APPLICATION_NUMBER']
+                try:
+                    arrive_date = datetime.strptime(
+                        line['ARRIVE'].split(" ")[0], '%Y/%m/%d').date()
+                except ValueError:
+                    arrive_date = date.max
+                if permit_number not in permit_to_arrival or \
+                        arrive_date < permit_to_arrival[permit_number]:
+                    permit_to_arrival[permit_number] = arrive_date
+
+            for permit_number in permit_to_arrival.keys():
+                arrive_date = permit_to_arrival[permit_number]
+                arrive_date_str = arrive_date.isoformat() \
+                    if arrive_date != date.max else ''
+                yield {
+                    'permit_number': permit_number,
+                    'earliest_addenda_arrival': arrive_date_str
+                }
+
+
 source_map = {
     PPTS.NAME: PPTS,
     PTS.NAME: PTS,
     TCO.NAME: TCO,
     MOHCDPipeline.NAME: MOHCDPipeline,
     MOHCDInclusionary.NAME: MOHCDInclusionary,
+    PermitAddendaSummary.NAME: PermitAddendaSummary,
     AffordableRentalPortfolio.NAME: AffordableRentalPortfolio,
 }

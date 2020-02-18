@@ -12,6 +12,7 @@ from schemaless.create_schemaless import latest_values
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
 from schemaless.sources import TCO
@@ -82,6 +83,7 @@ def test_just_dump(tmpdir):
          TCO('testdata/tco.csv'),
          MOHCDPipeline('testdata/mohcd-pipeline.csv'),
          MOHCDInclusionary('testdata/mohcd-inclusionary.csv'),
+         PermitAddendaSummary('testdata/permit-addenda.csv'),
          AffordableRentalPortfolio('testdata/bmr.csv')],
         outfile,
         the_date=TESTDATA_GEN_DATE)

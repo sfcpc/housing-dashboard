@@ -35,20 +35,23 @@ def test_table_project_facts_atleast_one_measure():
         assert table._atleast_one_measure(row) == test.want
 
 
+def _get_value_for_row(table, rows, name, return_multiple=False):
+    if len(rows) > 1:
+        raise ValueError('_get_value_for_row expected a one-row result')
+    return rows[0][table.index(name)]
+
+
 def _get_value_for_name(table, rows, name, return_multiple=False):
-    if len(rows) == 1:
-        return rows[0][table.index(name)]
-    elif len(rows) > 1:
-        result = []
-        for row in rows:
-            row_name = row[table.index(table.NAME)]
-            if row_name == name:
-                row_value = row[table.index(table.VALUE)]
-                if return_multiple:
-                    result.append(row_value)
-                else:
-                    return row_value
-        return '' if not return_multiple else sorted(result, key=int)
+    result = []
+    for row in rows:
+        row_name = row[table.index(table.NAME)]
+        if row_name == name:
+            row_value = row[table.index(table.VALUE)]
+            if return_multiple:
+                result.append(row_value)
+            else:
+                return row_value
+    return '' if not return_multiple else sorted(result, key=int)
 
 
 @pytest.fixture
@@ -76,7 +79,7 @@ def test_table_project_facts_units(basic_graph):
     proj_normal = Project('uuid1', entries1, basic_graph)
     fields = table.rows(proj_normal)
     # Gets from PTS because it's present
-    assert _get_value_for_name(table, fields, 'net_num_units') == '-2'
+    assert _get_value_for_row(table, fields, 'net_num_units') == '-2'
 
     entries2 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
@@ -85,7 +88,7 @@ def test_table_project_facts_units(basic_graph):
     proj_no_permit_type = Project('uuid1', entries2, basic_graph)
     fields = table.rows(proj_no_permit_type)
     # Gets from PPTS because PTS data is incomplete (no permit type)
-    assert _get_value_for_name(table, fields, 'net_num_units') == '10'
+    assert _get_value_for_row(table, fields, 'net_num_units') == '10'
 
     entries3 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
@@ -96,7 +99,7 @@ def test_table_project_facts_units(basic_graph):
     fields = table.rows(proj_missing_proposed_units)
     # Gets from PPTS because PTS data is incomplete (proper permit type, no
     # proposed)
-    assert _get_value_for_name(table, fields, 'net_num_units') == '10'
+    assert _get_value_for_row(table, fields, 'net_num_units') == '10'
 
     entries4 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
@@ -108,7 +111,7 @@ def test_table_project_facts_units(basic_graph):
     proj_missing_existing = Project('uuid1', entries4, basic_graph)
     fields = table.rows(proj_missing_existing)
     # Gets from PTS because we can infer with just proposed
-    assert _get_value_for_name(table, fields, 'net_num_units') == '7'
+    assert _get_value_for_row(table, fields, 'net_num_units') == '7'
 
     entries5 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
@@ -116,7 +119,7 @@ def test_table_project_facts_units(basic_graph):
     proj_ppts_only = Project('uuid1', entries5, basic_graph)
     fields = table.rows(proj_ppts_only)
     # Gets from PPTS because no other choice
-    assert _get_value_for_name(table, fields, 'net_num_units') == '10'
+    assert _get_value_for_row(table, fields, 'net_num_units') == '10'
 
     entries6 = [
         Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
@@ -128,7 +131,7 @@ def test_table_project_facts_units(basic_graph):
     proj_missing_existing = Project('uuid1', entries6, basic_graph)
     fields = table.rows(proj_missing_existing)
     # Gets from PTS because permit_type 3 is also valid
-    assert _get_value_for_name(table, fields, 'net_num_units') == '7'
+    assert _get_value_for_row(table, fields, 'net_num_units') == '7'
 
 
 def test_table_project_facts_units_mohcd(basic_graph):
@@ -149,11 +152,11 @@ def test_table_project_facts_units_mohcd(basic_graph):
     proj_normal = Project('uuid1', entries1, basic_graph)
     fields = table.rows(proj_normal)
     # Gets from Pipeline because it has higher priority over Inclusionary
-    assert _get_value_for_name(table, fields, 'net_num_units') == '7'
-    assert _get_value_for_name(table, fields, 'net_num_units_bmr') == '1'
-    assert _get_value_for_name(table, fields, 'net_num_units_data') == \
+    assert _get_value_for_row(table, fields, 'net_num_units') == '7'
+    assert _get_value_for_row(table, fields, 'net_num_units_bmr') == '1'
+    assert _get_value_for_row(table, fields, 'net_num_units_data') == \
         MOHCDPipeline.NAME
-    assert _get_value_for_name(table, fields, 'net_num_units_bmr_data') == \
+    assert _get_value_for_row(table, fields, 'net_num_units_bmr_data') == \
         MOHCDPipeline.NAME
 
     entries2 = [
@@ -166,11 +169,11 @@ def test_table_project_facts_units_mohcd(basic_graph):
     proj_incl = Project('uuid1', entries2, basic_graph)
     fields = table.rows(proj_incl)
     # Gets from Inclusionary because no other choice
-    assert _get_value_for_name(table, fields, 'net_num_units') == '6'
-    assert _get_value_for_name(table, fields, 'net_num_units_bmr') == '2'
-    assert _get_value_for_name(table, fields, 'net_num_units_data') == \
+    assert _get_value_for_row(table, fields, 'net_num_units') == '6'
+    assert _get_value_for_row(table, fields, 'net_num_units_bmr') == '2'
+    assert _get_value_for_row(table, fields, 'net_num_units_data') == \
         MOHCDInclusionary.NAME
-    assert _get_value_for_name(table, fields, 'net_num_units_bmr_data') == \
+    assert _get_value_for_row(table, fields, 'net_num_units_bmr_data') == \
         MOHCDInclusionary.NAME
 
     entries3 = [
@@ -186,8 +189,8 @@ def test_table_project_facts_units_mohcd(basic_graph):
     fields = table.rows(proj_bad)
     # No totally complete data set, but go with what Pipeline has (don't
     # combine)
-    assert _get_value_for_name(table, fields, 'net_num_units') == '7'
-    assert _get_value_for_name(table, fields, 'net_num_units_bmr') == '0'
+    assert _get_value_for_row(table, fields, 'net_num_units') == '7'
+    assert _get_value_for_row(table, fields, 'net_num_units_bmr') == '0'
 
 
 def test_table_project_units_full_count(basic_graph):
@@ -256,6 +259,119 @@ def test_project_details_bedroom_info(unit_graph):
     nvs = table.rows(proj_adu)
     assert _get_value_for_name(table, nvs, 'residential_units_adu_1br') == '1'
     assert _get_value_for_name(table, nvs, 'is_adu') == 'TRUE'
+
+
+def test_project_details_bedroom_info_mohcd(basic_graph):
+    d = datetime.fromisoformat('2019-01-01')
+    table = ProjectDetails()
+
+    entries1 = [
+        Entry('1',
+              PPTS.NAME,
+              [NameValue('residential_units_1br_net', '2', d)]),
+        Entry('2',
+              MOHCDPipeline.NAME,
+              [NameValue('num_1bd_units', '10', d)]),
+        Entry('3',
+              MOHCDInclusionary.NAME,
+              [NameValue('num_2bd_units', '5', d),
+               NameValue('num_3bd_units', '3', d)]),
+    ]
+    proj_pipeline = Project('uuid1', entries1, basic_graph)
+
+    entries2 = [
+        Entry('1',
+              PPTS.NAME,
+              [NameValue('residential_units_1br_net', '2', d)]),
+        Entry('2',
+              MOHCDInclusionary.NAME,
+              [NameValue('num_2bd_units', '5', d),
+               NameValue('num_3bd_units', '3', d)]),
+    ]
+    proj_inclusionary = Project('uuid2', entries2, basic_graph)
+
+    entries3 = [
+        Entry('1',
+              PPTS.NAME,
+              []),
+        Entry('2',
+              MOHCDInclusionary.NAME,
+              [NameValue('num_2bd_units', '0', d)]),
+    ]
+    proj_no_nonzero = Project('uuid3', entries3, basic_graph)
+
+    nvs = table.rows(proj_pipeline)
+    # only pull information from Pipeline regardless of Inclusionary
+    assert _get_value_for_name(
+            table,
+            nvs,
+            'residential_units_1br',
+            return_multiple=True) == ['2', '10']
+    assert _get_value_for_name(table, nvs, 'residential_units_2br') == ''
+    assert _get_value_for_name(table, nvs, 'residential_units_3br') == ''
+
+    nvs = table.rows(proj_inclusionary)
+    # pull information from Inclusionary because no other choice
+    assert _get_value_for_name(
+            table,
+            nvs,
+            'residential_units_1br',
+            return_multiple=True) == ['2']
+    assert _get_value_for_name(table, nvs, 'residential_units_2br') == '5'
+    assert _get_value_for_name(table, nvs, 'residential_units_3br') == '3'
+
+    nvs = table.rows(proj_no_nonzero)
+    # has to have at least one non-zero bedroom count to emit information
+    assert _get_value_for_name(table, nvs, 'residential_units_2br') == ''
+
+
+def test_project_details_ami_info_mohcd(basic_graph):
+    d = datetime.fromisoformat('2019-01-01')
+    table = ProjectDetails()
+
+    entries1 = [
+        Entry('1',
+              PPTS.NAME,
+              [NameValue('residential_units_1br_net', '2', d)]),
+        Entry('2',
+              MOHCDPipeline.NAME,
+              [NameValue('num_20_percent_ami_units', '10', d)]),
+        Entry('3',
+              MOHCDInclusionary.NAME,
+              [NameValue('num_20_percent_ami_units', '5', d),
+               NameValue('num_more_than_120_percent_ami_units', '3', d)]),
+    ]
+    proj_pipeline = Project('uuid1', entries1, basic_graph)
+
+    entries2 = [
+        Entry('1',
+              PPTS.NAME,
+              [NameValue('residential_units_1br_net', '2', d)]),
+        Entry('2',
+              MOHCDInclusionary.NAME,
+              [NameValue('num_20_percent_ami_units', '5', d),
+               NameValue('num_more_than_120_percent_ami_units', '3', d)]),
+    ]
+    proj_inclusionary = Project('uuid2', entries2, basic_graph)
+
+    nvs = table.rows(proj_pipeline)
+    # only pull information from Pipeline regardless of Inclusionary
+    assert _get_value_for_name(table, nvs, 'num_20_percent_ami_units') == '10'
+    assert _get_value_for_name(table,
+                               nvs,
+                               'num_more_than_120_percent_ami_units') == ''
+
+    nvs = table.rows(proj_inclusionary)
+    # pull information from Inclusionary because no other choice
+    assert _get_value_for_name(
+            table,
+            nvs,
+            'residential_units_1br',
+            return_multiple=True) == ['2']
+    assert _get_value_for_name(table, nvs, 'num_20_percent_ami_units') == '5'
+    assert _get_value_for_name(table,
+                               nvs,
+                               'num_more_than_120_percent_ami_units') == '3'
 
 
 StatusRow = namedtuple('StatusRow',
