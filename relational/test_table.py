@@ -16,8 +16,10 @@ from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
+from schemaless.sources import TCO
 
 
 def test_table_project_facts_atleast_one_measure():
@@ -299,6 +301,29 @@ def test_table_project_units_full_count(basic_graph):
     assert net_num_bmr[0] == '0'
     assert net_num_bmr[1] == '5'
 
+    entries2 = [
+        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('2',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('existing_units', '7', d),
+               NameValue('proposed_units', '14', d)]),
+        Entry('3',
+              TCO.NAME,
+              [NameValue('num_units', '2', d)]),
+        Entry('4',
+              TCO.NAME,
+              [NameValue('num_units', '4', d)]),
+    ]
+    proj_tco = Project('uuid1', entries2, basic_graph)
+    nvs = table.rows(proj_tco)
+    net_num_units = _get_value_for_name(table, nvs, 'net_num_units',
+                                        return_multiple=True)
+    assert len(net_num_units) == 3
+    assert net_num_units[0] == '6'
+    assert net_num_units[1] == '7'
+    assert net_num_units[2] == '10'
+
 
 @pytest.fixture
 def unit_graph():
@@ -331,6 +356,25 @@ def test_project_details_bedroom_info(unit_graph):
     nvs = table.rows(proj_adu)
     assert _get_value_for_name(table, nvs, 'residential_units_adu_1br') == '1'
     assert _get_value_for_name(table, nvs, 'is_adu') == 'TRUE'
+
+
+def test_project_details_permit_addenda_summary(basic_graph):
+    d = datetime.fromisoformat('2019-01-01')
+    table = ProjectDetails()
+
+    entries1 = [
+        Entry('1',
+              PPTS.NAME,
+              [NameValue('residential_units_1br_net', '2', d)]),
+        Entry('2',
+              PermitAddendaSummary.NAME,
+              [NameValue('permit_number', 'xyz', d),
+               NameValue('earliest_addenda_arrival', '2015-01-01', d)]),
+    ]
+    proj_normal = Project('uuid1', entries1, basic_graph)
+    nvs = table.rows(proj_normal)
+    assert _get_value_for_name(table, nvs, 'earliest_addenda_arrival') == \
+        '2015-01-01'
 
 
 def test_project_details_bedroom_info_mohcd(basic_graph):
