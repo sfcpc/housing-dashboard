@@ -58,6 +58,12 @@ def _get_value_for_name(table, rows, name, return_multiple=False):
 
 
 @pytest.fixture
+def d():
+    """A default date to use for entries"""
+    return datetime.fromisoformat('2019-01-01')
+
+
+@pytest.fixture
 def basic_graph():
     rg = RecordGraph()
     rg.add(Node(record_id='1'))
@@ -198,11 +204,6 @@ def test_table_project_facts_units(basic_graph):
             'Failed "%s"' % test.name
 
 
-@pytest.fixture
-def d():
-    return datetime.fromisoformat('2019-01-01')
-
-
 def test_table_project_facts_units_ppts_bmr(basic_graph, d):
     table = ProjectFacts()
 
@@ -260,8 +261,7 @@ def test_table_project_facts_units_ppts_bmr(basic_graph, d):
                                       name) == wantvalue, test.name
 
 
-def test_table_project_facts_units_mohcd(basic_graph):
-    d = datetime.fromisoformat('2019-01-01')
+def test_table_project_facts_units_mohcd(basic_graph, d):
     table = ProjectFacts()
 
     entries1 = [
@@ -319,8 +319,7 @@ def test_table_project_facts_units_mohcd(basic_graph):
     assert _get_value_for_row(table, fields, 'net_num_units_bmr') == '0'
 
 
-def test_table_project_units_full_count(basic_graph):
-    d = datetime.fromisoformat('2019-01-01')
+def test_table_project_units_full_count(basic_graph, d):
     table = ProjectUnitCountsFull()
 
     entries1 = [
@@ -371,8 +370,7 @@ def unit_graph():
     return rg
 
 
-def test_project_details_bedroom_info(unit_graph):
-    d = datetime.fromisoformat('2019-01-01')
+def test_project_details_bedroom_info(unit_graph, d):
     table = ProjectDetails()
 
     entries1 = [
@@ -397,8 +395,7 @@ def test_project_details_bedroom_info(unit_graph):
     assert _get_value_for_name(table, nvs, 'is_adu') == 'TRUE'
 
 
-def test_project_details_bedroom_info_mohcd(basic_graph):
-    d = datetime.fromisoformat('2019-01-01')
+def test_project_details_bedroom_info_mohcd(basic_graph, d):
     table = ProjectDetails()
 
     entries1 = [
@@ -461,8 +458,7 @@ def test_project_details_bedroom_info_mohcd(basic_graph):
     assert _get_value_for_name(table, nvs, 'residential_units_2br') == ''
 
 
-def test_project_details_ami_info_mohcd(basic_graph):
-    d = datetime.fromisoformat('2019-01-01')
+def test_project_details_ami_info_mohcd(basic_graph, d):
     table = ProjectDetails()
 
     entries1 = [
@@ -510,8 +506,7 @@ def test_project_details_ami_info_mohcd(basic_graph):
                                'num_more_than_120_percent_ami_units') == '3'
 
 
-def test_project_details_is_100pct_affordable_mohcd(basic_graph):
-    d = datetime.fromisoformat('2019-01-01')
+def test_project_details_is_100pct_affordable_mohcd(basic_graph, d):
     table = ProjectDetails()
 
     tests = [
@@ -600,8 +595,7 @@ def child_parent_graph():
     return rg
 
 
-def test_project_status_history_predevelopment(child_parent_graph):
-    d = datetime.fromisoformat('2019-01-01')
+def test_project_status_history_predevelopment(child_parent_graph, d):
     table = ProjectStatusHistory()
 
     entries1 = [
@@ -646,8 +640,7 @@ def test_project_status_history_predevelopment(child_parent_graph):
     assert status_rows[1].end_date == ''
 
 
-def test_project_status_history_filed_for_entitlements(child_parent_graph):
-    d = datetime.fromisoformat('2019-01-01')
+def test_project_status_history_filed_for_entitlements(child_parent_graph, d):
     table = ProjectStatusHistory()
 
     entries1 = [
@@ -686,8 +679,7 @@ def test_project_status_history_filed_for_entitlements(child_parent_graph):
     assert status_rows[0].end_date == ''
 
 
-def test_project_status_history_entitled(child_parent_graph):
-    d = datetime.fromisoformat('2019-01-01')
+def test_project_status_history_entitled(child_parent_graph, d):
     table = ProjectStatusHistory()
 
     entries1 = [
