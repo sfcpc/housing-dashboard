@@ -183,16 +183,19 @@ def _get_tco_units(proj):
       from existing permits). None if no data in TCO.
     """
     num_tco_units = 0
-    tco_units_added = False
-    for root in proj.roots[TCO.NAME]:
-        num_tco_units += int(root.get_latest('num_units')[0])
-        tco_units_added = True
+    try:
+        fk_entries = proj.fields('num_units', TCO.NAME)
+        for (_, entries) in fk_entries.items():
+            # Add up all units, even if there are dupe foreign keys
+            for entry in entries:
+                entry_latest = entry.get_latest('num_units')
+                if entry_latest[0]:
+                    num_tco_units += int(entry_latest[0])
+    except ValueError:
+        num_tco_units = 0
+        pass
 
-    for child in proj.children[TCO.NAME]:
-        num_tco_units += int(child.get_latest('num_units')[0])
-        tco_units_added = True
-
-    return num_tco_units if tco_units_added else None
+    return num_tco_units if num_tco_units else None
 
 
 class ProjectFacts(Table):
