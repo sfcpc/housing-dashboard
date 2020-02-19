@@ -264,59 +264,78 @@ def test_table_project_facts_units_ppts_bmr(basic_graph, d):
 def test_table_project_facts_units_mohcd(basic_graph, d):
     table = ProjectFacts()
 
-    entries1 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2',
-              MOHCDPipeline.NAME,
-              [NameValue('total_project_units', '7', d),
-               NameValue('total_affordable_units', '1', d)]),
-        Entry('3',
-              MOHCDInclusionary.NAME,
-              [NameValue('total_project_units', '6', d),
-               NameValue('total_affordable_units', '2', d)]),
+    tests = [
+        EntriesTestRow(
+            name='get from pipeline because high priority over inclusionary',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('total_project_units', '7', d),
+                       NameValue('total_affordable_units', '1', d)]),
+                Entry('3',
+                      MOHCDInclusionary.NAME,
+                      [NameValue('total_project_units', '6', d),
+                       NameValue('total_affordable_units', '2', d)]),
+            ],
+            want={
+                'net_num_units': '7',
+                'net_num_units_bmr': '1',
+                'net_num_units_data': MOHCDPipeline.NAME,
+                'net_num_units_bmr_data': MOHCDPipeline.NAME,
+            },
+        ),
+        EntriesTestRow(
+            name='get from inclusionary because no other choice',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('3',
+                      MOHCDInclusionary.NAME,
+                      [NameValue('total_project_units', '6', d),
+                       NameValue('total_affordable_units', '2', d)]),
+            ],
+            want={
+                'net_num_units': '6',
+                'net_num_units_bmr': '2',
+                'net_num_units_data': MOHCDInclusionary.NAME,
+                'net_num_units_bmr_data': MOHCDInclusionary.NAME,
+            },
+        ),
+        EntriesTestRow(
+            name='no complete data set, but go with pipeline (do not merge '
+                 'datasets)',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('total_project_units', '7', d)]),
+                Entry('3',
+                      MOHCDInclusionary.NAME,
+                      [NameValue('total_affordable_units', '2', d)]),
+            ],
+            want={
+                'net_num_units': '7',
+                'net_num_units_bmr': '0',
+                'net_num_units_data': MOHCDPipeline.NAME,
+                'net_num_units_bmr_data': MOHCDPipeline.NAME,
+            },
+        ),
     ]
-    proj_normal = Project('uuid1', entries1, basic_graph)
-    fields = table.rows(proj_normal)
-    # Gets from Pipeline because it has higher priority over Inclusionary
-    assert _get_value_for_row(table, fields, 'net_num_units') == '7'
-    assert _get_value_for_row(table, fields, 'net_num_units_bmr') == '1'
-    assert _get_value_for_row(table, fields, 'net_num_units_data') == \
-        MOHCDPipeline.NAME
-    assert _get_value_for_row(table, fields, 'net_num_units_bmr_data') == \
-        MOHCDPipeline.NAME
 
-    entries2 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('3',
-              MOHCDInclusionary.NAME,
-              [NameValue('total_project_units', '6', d),
-               NameValue('total_affordable_units', '2', d)]),
-    ]
-    proj_incl = Project('uuid1', entries2, basic_graph)
-    fields = table.rows(proj_incl)
-    # Gets from Inclusionary because no other choice
-    assert _get_value_for_row(table, fields, 'net_num_units') == '6'
-    assert _get_value_for_row(table, fields, 'net_num_units_bmr') == '2'
-    assert _get_value_for_row(table, fields, 'net_num_units_data') == \
-        MOHCDInclusionary.NAME
-    assert _get_value_for_row(table, fields, 'net_num_units_bmr_data') == \
-        MOHCDInclusionary.NAME
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
 
-    entries3 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2',
-              MOHCDPipeline.NAME,
-              [NameValue('total_project_units', '7', d)]),
-        Entry('3',
-              MOHCDInclusionary.NAME,
-              [NameValue('total_affordable_units', '2', d)]),
-    ]
-    proj_bad = Project('uuid1', entries3, basic_graph)
-    fields = table.rows(proj_bad)
-    # No totally complete data set, but go with what Pipeline has (don't
-    # combine)
-    assert _get_value_for_row(table, fields, 'net_num_units') == '7'
-    assert _get_value_for_row(table, fields, 'net_num_units_bmr') == '0'
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_row(table,
+                                      fields,
+                                      name) == wantvalue, test.name
 
 
 def test_table_project_units_full_count(basic_graph, d):
