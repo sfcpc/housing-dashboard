@@ -5,8 +5,7 @@ from datetime import date
 from datetime import datetime
 from fileutils import open_file
 
-from scourgify.exceptions import IncompleteAddressError
-from scourgify.exceptions import UnParseableAddressError
+from scourgify.exceptions import AddressNormalizationError
 from scourgify.normalize import format_address_record
 from scourgify.normalize import normalize_address_record
 
@@ -73,9 +72,10 @@ class Address(Field):
         addr_str = " ".join(vals).strip().title()
         if not addr_str:
             return ""
+
         try:
             addr = normalize_address_record(addr_str)
-        except UnParseableAddressError:
+        except AddressNormalizationError:
             print("WARN1: Unparseable: %s" % addr_str)
             return ""
         else:
@@ -83,7 +83,7 @@ class Address(Field):
                 # We need this to normalize again, and we can't guess it
                 try:
                     return format_address_record(addr)
-                except IncompleteAddressError:
+                except AddressNormalizationError:
                     print("WARN2: Unable to format address %s" % addr)
                     return ""
 
@@ -105,13 +105,13 @@ class Address(Field):
         # then normalize once more to ensure it's still valid.
         try:
             addr = normalize_address_record(addr)
-        except UnParseableAddressError:
+        except AddressNormalizationError:
             print("WARN3: Unparseable: %s" % addr)
             return ""
         else:
             try:
                 return format_address_record(addr)
-            except IncompleteAddressError:
+            except AddressNormalizationError:
                 print("WARN4: Unable to parse address %s" % addr_str)
                 print(addr)
                 return ""
@@ -126,8 +126,18 @@ class Source:
     def __init__(self, filepath):
         self._filepath = filepath
 
-    def foreign_key(self, record):
-        return self.FK.get_value(record)
+    @classmethod
+    def foreign_key(cls, record):
+        return cls.FK.get_value(record)
+
+    @classmethod
+    def calculated_fields(self, record):
+        ret = {}
+        for key, field in self.COMPUTED_FIELDS.items():
+            val = field.get_value_str(record)
+            if val:
+                ret[key] = val.strip()
+        return ret
 
     def yield_records(self):
         pass
@@ -159,10 +169,7 @@ class DirectSource(Source):
                 ret = {self.FIELDS[key]: val.strip()
                        for key, val in line.items()
                        if key in self.FIELDS and val}
-                for key, field in self.COMPUTED_FIELDS.items():
-                    val = field.get_value_str(ret)
-                    if val:
-                        ret[key] = val.strip()
+                ret.update(self.calculated_fields(ret))
                 yield ret
 
 
@@ -325,7 +332,6 @@ class TCO(DirectSource):
     FIELDS = {
         'Building Permit Application Number': 'building_permit_number',
         'Building Address': 'address',
-        'address_norm': Address('address'),
         'Date Issued': 'date_issued',
         'Document Type': 'building_permit_type',
         'Number of Units Certified': 'num_units',
@@ -379,6 +385,14 @@ class MOHCDInclusionary(DirectSource):
         '150% AMI': 'num_150_percent_ami_units',
         'Supervisor District': 'supervisor_district',
         'Location': 'location',
+    }
+    COMPUTED_FIELDS = {
+        'address_norm': Address(
+            'street_number',
+            'street_name',
+            'street_type',
+            'zip_code',
+        ),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Residential-Projects-With-Inclusionary-Requirement/nj3x-rw36"  # NOQA
 
@@ -520,7 +534,7 @@ class AffordableRentalPortfolio(DirectSource):
     }
     COMPUTED_FIELDS = {
         'address_norm': Address(
-            'street_number'
+            'street_number',
             'street_name',
             'street_type',
             'zip_code',

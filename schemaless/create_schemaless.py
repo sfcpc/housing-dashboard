@@ -98,10 +98,10 @@ if __name__ == "__main__":
                         help='MOHCD Pipeline file', default='')
     parser.add_argument('--mohcd_inclusionary_file',
                         help='MOHCD Inclusionary file', default='')
+    parser.add_argument('--affordable_file',
+                        help='AffordableRentalPortfolio file', default='')
     parser.add_argument('--permit_addenda_file',
                         help='Permit Addenda file', default='')
-    parser.add_argument(
-        '--affordable_file', help='AffordableRentalPortfolio file', default='')
     parser.add_argument('out_file', help='output file for schemaless csv')
 
     parser.add_argument(

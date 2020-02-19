@@ -92,7 +92,7 @@ def test_project_simple_case(basic_entries, basic_graph):
     assert proj.field('num_square_feet',
                       PPTS.NAME,
                       entry_predicate=[('residential_units_1br',
-                                        lambda x: True)]) == '2300'
+                                        lambda x: x != '')]) == '2300'
 
     # nothing because the predicate value doesn't match
     assert proj.field('num_square_feet',
