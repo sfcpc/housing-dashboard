@@ -13,6 +13,7 @@ from relational.table import ProjectStatusHistory
 from relational.table import ProjectUnitCountsFull
 from schemaless.create_uuid_map import Node
 from schemaless.create_uuid_map import RecordGraph
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
@@ -65,115 +66,124 @@ def basic_graph():
     return rg
 
 
+TestEntriesRow = namedtuple('TestEntriesRow', ['name', 'entries', 'want'])
+
+
 def test_table_project_facts_units(basic_graph):
     d = datetime.fromisoformat('2019-01-01')
     table = ProjectFacts()
 
-    TestRow = namedtuple('TestRow', ['name', 'entries', 'want_units'])
-
     tests = [
-        TestRow(name='simple test',
-                entries=[
-                    Entry('1',
-                          PPTS.NAME,
-                          [NameValue('market_rate_units_net', '10', d)]),
-                    Entry('2',
-                          PTS.NAME,
-                          [NameValue('permit_type', '1', d),
-                           NameValue('existing_units', '7', d),
-                           NameValue('proposed_units', '5', d)]),
-                ],
-                want_units='-2'),
-        TestRow(name='get from PPTS because PTS data is incomplete',
-                entries=[
-                    Entry('1',
-                          PPTS.NAME,
-                          [NameValue('market_rate_units_net', '10', d)]),
-                    Entry('2',
-                          PTS.NAME,
-                          [NameValue('proposed_units', '7', d)]),
-                ],
-                want_units='10'),
-        TestRow(name='get from PPTS because PTS data has no proposed units',
-                entries=[
-                    Entry('1',
-                          PPTS.NAME,
-                          [NameValue('market_rate_units_net', '10', d)]),
-                    Entry('2',
-                          PTS.NAME,
-                          [NameValue('permit_type', '1', d),
-                           NameValue('existing_units', '7', d)]),
-                ],
-                want_units='10'),
-        TestRow(name='get from PTS because we can infer from just proposed',
-                entries=[
-                    Entry('1',
-                          PPTS.NAME,
-                          [NameValue('market_rate_units_net', '10', d)]),
-                    Entry('2',
-                          PTS.NAME,
-                          [NameValue('permit_type', '1', d),
-                           NameValue('proposed_units', '7', d)]),
-                ],
-                want_units='7'),
-        TestRow(name='get from PPTS because no other choice',
-                entries=[
-                    Entry('1',
-                          PPTS.NAME,
-                          [NameValue('market_rate_units_net', '10', d)]),
-                ],
-                want_units='10'),
-        TestRow(name='get from PTS because permit_type 3 is also valid',
-                entries=[
-                    Entry('1',
-                          PPTS.NAME,
-                          [NameValue('market_rate_units_net', '10', d)]),
-                    Entry('2',
-                          PTS.NAME,
-                          [NameValue('permit_type', '3', d),
-                           NameValue('proposed_units', '7', d)]),
-                ],
-                want_units='7'),
-        TestRow(name='sum up across PTS records, ignoring dupes',
-                entries=[
-                    Entry('1',
-                          PPTS.NAME,
-                          [NameValue('market_rate_units_net', '10', d)]),
-                    Entry('2',
-                          PTS.NAME,
-                          [NameValue('permit_type', '2', d),
-                           NameValue('proposed_units', '7', d)]),
-                    Entry('3',
-                          PTS.NAME,
-                          [NameValue('permit_type', '1', d),
-                           NameValue('proposed_units', '8', d)]),
-                    Entry('3',
-                          PTS.NAME,
-                          [NameValue('permit_type', '1', d),
-                           NameValue('proposed_units', '8', d)]),
-                ],
-                want_units='15'),
-        TestRow(name='sum up across PTS records, ignoring withdrawn/cancelled',
-                entries=[
-                    Entry('1',
-                          PPTS.NAME,
-                          [NameValue('market_rate_units_net', '10', d)]),
-                    Entry('2',
-                          PTS.NAME,
-                          [NameValue('permit_type', '2', d),
-                           NameValue('proposed_units', '7', d)]),
-                    Entry('3',
-                          PTS.NAME,
-                          [NameValue('current_status', 'withdrawn', d),
-                           NameValue('permit_type', '1', d),
-                           NameValue('proposed_units', '8', d)]),
-                    Entry('4',
-                          PTS.NAME,
-                          [NameValue('current_status', 'cancelled', d),
-                           NameValue('permit_type', '1', d),
-                           NameValue('proposed_units', '8', d)]),
-                ],
-                want_units='7'),
+        TestEntriesRow(
+            name='simple test',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '1', d),
+                       NameValue('existing_units', '7', d),
+                       NameValue('proposed_units', '5', d)]),
+            ],
+            want='-2'),
+        TestEntriesRow(
+            name='get from PPTS because PTS data is incomplete',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('proposed_units', '7', d)]),
+            ],
+            want='10'),
+        TestEntriesRow(
+            name='get from PPTS because PTS data has no proposed units',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '1', d),
+                       NameValue('existing_units', '7', d)]),
+            ],
+            want='10'),
+        TestEntriesRow(
+            name='get from PTS because we can infer from just proposed',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '7', d)]),
+            ],
+            want='7'),
+        TestEntriesRow(
+            name='get from PPTS because no other choice',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+            ],
+            want='10'),
+        TestEntriesRow(
+            name='get from PTS because permit_type 3 is also valid',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '3', d),
+                       NameValue('proposed_units', '7', d)]),
+            ],
+            want='7'),
+        TestEntriesRow(
+            name='sum up across PTS records, ignoring dupes',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('proposed_units', '7', d)]),
+                Entry('3',
+                      PTS.NAME,
+                      [NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '8', d)]),
+                Entry('3',
+                      PTS.NAME,
+                      [NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '8', d)]),
+            ],
+            want='15'),
+        TestEntriesRow(
+            name='sum up across PTS records, ignoring withdrawn/cancelled',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('proposed_units', '7', d)]),
+                Entry('3',
+                      PTS.NAME,
+                      [NameValue('current_status', 'withdrawn', d),
+                       NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '8', d)]),
+                Entry('4',
+                      PTS.NAME,
+                      [NameValue('current_status', 'cancelled', d),
+                       NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '8', d)]),
+            ],
+            want='7'),
     ]
 
     for test in tests:
@@ -182,7 +192,7 @@ def test_table_project_facts_units(basic_graph):
 
         assert _get_value_for_row(table,
                                   fields,
-                                  'net_num_units') == test.want_units, \
+                                  'net_num_units') == test.want, \
             'Failed "%s"' % test.name
 
 
@@ -434,6 +444,71 @@ def test_project_details_ami_info_mohcd(basic_graph):
     assert _get_value_for_name(table,
                                nvs,
                                'num_more_than_120_percent_ami_units') == '3'
+
+
+def test_project_details_is_100pct_affordable_mohcd(basic_graph):
+    d = datetime.fromisoformat('2019-01-01')
+    table = ProjectDetails()
+
+    tests = [
+        TestEntriesRow(
+            name='true case',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('total_project_units', '10', d),
+                       NameValue('total_affordable_units', '10', d)]),
+            ],
+            want='TRUE'),
+        TestEntriesRow(
+            name='false case',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('total_project_units', '4', d),
+                       NameValue('total_affordable_units', '3', d)]),
+            ],
+            want='FALSE'),
+        TestEntriesRow(
+            name='pull from affordable rental portfolio',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      AffordableRentalPortfolio.NAME,
+                      [NameValue('total_project_units', '4', d),
+                       NameValue('total_affordable_units', '4', d)]),
+            ],
+            want='TRUE'),
+        TestEntriesRow(
+            name='ignore zero-valued projects',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      AffordableRentalPortfolio.NAME,
+                      [NameValue('total_project_units', '0', d),
+                       NameValue('total_affordable_units', '0', d)]),
+            ],
+            want=''),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        nvs = table.rows(proj)
+
+        assert _get_value_for_name(table,
+                                   nvs,
+                                   'is_100pct_affordable') == test.want, \
+            'Failed "%s"' % test.name
 
 
 StatusRow = namedtuple('StatusRow',

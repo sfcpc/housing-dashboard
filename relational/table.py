@@ -9,6 +9,7 @@ from collections import OrderedDict
 
 import re
 
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
@@ -63,6 +64,7 @@ class NameValueTable(Table):
 _MOHCD_TYPES = OrderedDict([
     (MOHCDPipeline.NAME, MOHCDPipeline.OUTPUT_NAME),
     (MOHCDInclusionary.NAME, MOHCDInclusionary.OUTPUT_NAME),
+    (AffordableRentalPortfolio.NAME, AffordableRentalPortfolio.OUTPUT_NAME),
 ])
 
 
@@ -431,6 +433,9 @@ class ProjectDetails(NameValueTable):
         """Extracts information from MOHCD, preferring Pipeline over
         Inclusionary.
 
+        fieldmap: a dict of the mohcd field name to an output field name
+        to use in the returned tuple.
+
         Returns:
             A list of (name, value, source) tuples.  If there was not
             at least one non-zero value, then the list will be empty,
@@ -506,6 +511,31 @@ class ProjectDetails(NameValueTable):
                                     value=datum[1],
                                     data=datum[2]))
 
+    _IS_100_AFFORDABLE_FIELDMAP = {
+        'total_project_units': 'total_project_units',
+        'total_affordable_units': 'total_affordable_units',
+    }
+
+    def _is_100_affordable(self, rows, proj):
+        """Populates whether a project is 100% affordable, at least insofar
+        as we can tell from MOHCD data.
+        """
+        units = _get_mohcd_units(proj, MOHCDPipeline.NAME)
+        if units and units[0] > 0:
+            rows.append(self.nv_row(
+                proj,
+                name='is_100pct_affordable',
+                value='TRUE' if units[0] == units[1] else 'FALSE',
+                data=MOHCDPipeline.OUTPUT_NAME))
+        else:
+            units = _get_mohcd_units(proj, AffordableRentalPortfolio.NAME)
+            if units and units[0] > 0:
+                rows.append(self.nv_row(
+                        proj,
+                        name='is_100pct_affordable',
+                        value='TRUE',
+                        data=AffordableRentalPortfolio.OUTPUT_NAME))
+
     def _square_feet(self, rows, proj):
         sqft = proj.field('residential_sq_ft_net', PPTS.NAME)
         if sqft != '':
@@ -520,6 +550,7 @@ class ProjectDetails(NameValueTable):
         self._bedroom_info(result, proj)
         self._bedroom_info_mohcd(result, proj)
         self._ami_info_mohcd(result, proj)
+        self._is_100_affordable(result, proj)
         return result
 
 
