@@ -134,7 +134,7 @@ def test_table_project_facts_units(basic_graph):
                            NameValue('proposed_units', '7', d)]),
                 ],
                 want_units='7'),
-        TestRow(name='sum up acros PTS records, ignoring dupes',
+        TestRow(name='sum up across PTS records, ignoring dupes',
                 entries=[
                     Entry('1',
                           PPTS.NAME,
@@ -153,6 +153,27 @@ def test_table_project_facts_units(basic_graph):
                            NameValue('proposed_units', '8', d)]),
                 ],
                 want_units='15'),
+        TestRow(name='sum up across PTS records, ignoring withdrawn/cancelled',
+                entries=[
+                    Entry('1',
+                          PPTS.NAME,
+                          [NameValue('market_rate_units_net', '10', d)]),
+                    Entry('2',
+                          PTS.NAME,
+                          [NameValue('permit_type', '2', d),
+                           NameValue('proposed_units', '7', d)]),
+                    Entry('3',
+                          PTS.NAME,
+                          [NameValue('current_status', 'withdrawn', d),
+                           NameValue('permit_type', '1', d),
+                           NameValue('proposed_units', '8', d)]),
+                    Entry('4',
+                          PTS.NAME,
+                          [NameValue('current_status', 'cancelled', d),
+                           NameValue('permit_type', '1', d),
+                           NameValue('proposed_units', '8', d)]),
+                ],
+                want_units='7'),
     ]
 
     for test in tests:

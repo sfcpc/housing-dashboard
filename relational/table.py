@@ -111,13 +111,13 @@ def _get_mohcd_units(proj, source_override=None):
 
 _valid_dbi_permit_types = set('123')
 
-_valid_dbi_statuses = set(['cancelled', 'withdrawn'])
+_invalid_dbi_statuses = set(['cancelled', 'withdrawn'])
 
 
 _is_valid_dbi_entry = [('permit_type',
                         lambda x: x in _valid_dbi_permit_types),
                        ('current_status',
-                        lambda x: x == '' or x in _valid_dbi_statuses)]
+                        lambda x: x == '' or x not in _invalid_dbi_statuses)]
 
 
 def _get_dbi_units(proj):

@@ -151,7 +151,7 @@ class Project:
             for pred in entry_predicate:
                 e = entry.get_latest(pred[0])
                 valid_entry = ((e is not None and pred[1](e[0])) or
-                               pred[1](''))
+                               (e is None and pred[1]('')))
                 if not valid_entry:
                     return False
         return True
