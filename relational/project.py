@@ -146,6 +146,43 @@ class Project:
                 msg = msg + (' "%s"' % list(self.roots.items())[0][1][0].fk)
             raise ValueError(msg)
 
+    def _test_entry_predicate(self, entry, entry_predicate):
+        if entry_predicate:
+            for pred in entry_predicate:
+                e = entry.get_latest(pred[0])
+                valid_entry = ((e is not None and pred[1](e[0])) or
+                               (e is None and pred[1]('')))
+                if not valid_entry:
+                    return False
+        return True
+
+    def fields(self, name, source, entry_predicate=None):
+        """Similar to field() but fetches all values for a given field name
+        instead of just trying to pick one.
+
+        Unlike field(), returns Entries, where each Entry is one that has a
+        value for the given name.
+
+        Returns:
+            a dict mapping a foreign key to all related Entries.
+        """
+        result = {}
+        for parent in self.roots.get(source, []):
+            if (self._test_entry_predicate(parent, entry_predicate) and
+                    parent.get_latest(name)):
+                if parent.fk not in result:
+                    result[parent.fk] = []
+                result[parent.fk].append(parent)
+
+        for child in self.children.get(source, []):
+            if (self._test_entry_predicate(child, entry_predicate) and
+                    child.get_latest(name)):
+                if child.fk not in result:
+                    result[child.fk] = []
+                result[child.fk].append(child)
+
+        return result
+
     def field(self, name, source, entry_predicate=None):
         """Fetches the value for a field, using some business logic.
 
@@ -172,27 +209,20 @@ class Project:
 
         parents = self.roots[source]
 
-        def _test_predicates(entry):
-            nonlocal entry_predicate
-
-            if entry_predicate:
-                for pred in entry_predicate:
-                    e = entry.get_latest(pred[0])
-                    valid_entry = e is not None and pred[1](e[0])
-                    if not valid_entry:
-                        return False
-            return True
-
         if len(parents) > 0:
             for parent in parents:
                 val = parent.get_latest(name)
-                if val and val[1] > result[1] and _test_predicates(parent):
+                if (val and
+                        val[1] > result[1] and
+                        self._test_entry_predicate(parent, entry_predicate)):
                     result = val
 
         if source != PPTS.NAME or result[0] is None:
             for child in self.children[source]:
                 val = child.get_latest(name)
-                if val and val[1] > result[1] and _test_predicates(child):
+                if (val and
+                        val[1] > result[1] and
+                        self._test_entry_predicate(child, entry_predicate)):
                     result = val
 
         return result[0] if result[0] else ''

@@ -493,6 +493,7 @@ class AffordableRentalPortfolio(DirectSource):
     NAME = 'bmr'
     DATE = Date('year_affordability_began', '%Y')
     FK = PrimaryKey(NAME, 'project_id')
+    OUTPUT_NAME = NAME
     FIELDS = {
         'Project ID': 'project_id',
         'Project Name': 'project_name',

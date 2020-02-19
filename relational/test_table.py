@@ -13,6 +13,7 @@ from relational.table import ProjectStatusHistory
 from relational.table import ProjectUnitCountsFull
 from schemaless.create_uuid_map import Node
 from schemaless.create_uuid_map import RecordGraph
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PPTS
@@ -63,77 +64,138 @@ def basic_graph():
     rg.add(Node(record_id='2', parents=['1']))
     rg.add(Node(record_id='3', parents=['1']))
     rg.add(Node(record_id='4', parents=['1']))
+    rg.add(Node(record_id='5', parents=['1']))
     return rg
+
+
+TestEntriesRow = namedtuple('TestEntriesRow', ['name', 'entries', 'want'])
 
 
 def test_table_project_facts_units(basic_graph):
     d = datetime.fromisoformat('2019-01-01')
     table = ProjectFacts()
 
-    entries1 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2',
-              PTS.NAME,
-              [NameValue('permit_type', '1', d),
-               NameValue('existing_units', '7', d),
-               NameValue('proposed_units', '5', d)]),
+    tests = [
+        TestEntriesRow(
+            name='simple test',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '1', d),
+                       NameValue('existing_units', '7', d),
+                       NameValue('proposed_units', '5', d)]),
+            ],
+            want='-2'),
+        TestEntriesRow(
+            name='get from PPTS because PTS data is incomplete',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('proposed_units', '7', d)]),
+            ],
+            want='10'),
+        TestEntriesRow(
+            name='get from PPTS because PTS data has no proposed units',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '1', d),
+                       NameValue('existing_units', '7', d)]),
+            ],
+            want='10'),
+        TestEntriesRow(
+            name='get from PTS because we can infer from just proposed',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '7', d)]),
+            ],
+            want='7'),
+        TestEntriesRow(
+            name='get from PPTS because no other choice',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+            ],
+            want='10'),
+        TestEntriesRow(
+            name='get from PTS because permit_type 3 is also valid',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '3', d),
+                       NameValue('proposed_units', '7', d)]),
+            ],
+            want='7'),
+        TestEntriesRow(
+            name='sum up across PTS records, ignoring dupes',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('proposed_units', '7', d)]),
+                Entry('3',
+                      PTS.NAME,
+                      [NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '8', d)]),
+                Entry('3',
+                      PTS.NAME,
+                      [NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '8', d)]),
+            ],
+            want='15'),
+        TestEntriesRow(
+            name='sum up across PTS records, ignoring withdrawn/cancelled',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('proposed_units', '7', d)]),
+                Entry('3',
+                      PTS.NAME,
+                      [NameValue('current_status', 'withdrawn', d),
+                       NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '8', d)]),
+                Entry('4',
+                      PTS.NAME,
+                      [NameValue('current_status', 'cancelled', d),
+                       NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '8', d)]),
+            ],
+            want='7'),
     ]
-    proj_normal = Project('uuid1', entries1, basic_graph)
-    fields = table.rows(proj_normal)
-    # Gets from PTS because it's present
-    assert _get_value_for_row(table, fields, 'net_num_units') == '-2'
 
-    entries2 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2', PTS.NAME, [NameValue('proposed_units', '7', d)]),
-    ]
-    proj_no_permit_type = Project('uuid1', entries2, basic_graph)
-    fields = table.rows(proj_no_permit_type)
-    # Gets from PPTS because PTS data is incomplete (no permit type)
-    assert _get_value_for_row(table, fields, 'net_num_units') == '10'
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
 
-    entries3 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2', PTS.NAME, [NameValue('permit_type', '1', d),
-                              NameValue('existing_units', '7', d)]),
-    ]
-    proj_missing_proposed_units = Project('uuid1', entries3, basic_graph)
-    fields = table.rows(proj_missing_proposed_units)
-    # Gets from PPTS because PTS data is incomplete (proper permit type, no
-    # proposed)
-    assert _get_value_for_row(table, fields, 'net_num_units') == '10'
-
-    entries4 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2',
-              PTS.NAME,
-              [NameValue('permit_type', '1', d),
-               NameValue('proposed_units', '7', d)]),
-    ]
-    proj_missing_existing = Project('uuid1', entries4, basic_graph)
-    fields = table.rows(proj_missing_existing)
-    # Gets from PTS because we can infer with just proposed
-    assert _get_value_for_row(table, fields, 'net_num_units') == '7'
-
-    entries5 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-    ]
-    proj_ppts_only = Project('uuid1', entries5, basic_graph)
-    fields = table.rows(proj_ppts_only)
-    # Gets from PPTS because no other choice
-    assert _get_value_for_row(table, fields, 'net_num_units') == '10'
-
-    entries6 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
-        Entry('2',
-              PTS.NAME,
-              [NameValue('permit_type', '3', d),
-               NameValue('proposed_units', '7', d)]),
-    ]
-    proj_missing_existing = Project('uuid1', entries6, basic_graph)
-    fields = table.rows(proj_missing_existing)
-    # Gets from PTS because permit_type 3 is also valid
-    assert _get_value_for_row(table, fields, 'net_num_units') == '7'
+        assert _get_value_for_row(table,
+                                  fields,
+                                  'net_num_units') == test.want, \
+            'Failed "%s"' % test.name
 
 
 def test_table_project_facts_units_mohcd(basic_graph):
@@ -206,19 +268,29 @@ def test_table_project_units_full_count(basic_graph):
               [NameValue('permit_type', '1', d),
                NameValue('existing_units', '7', d),
                NameValue('proposed_units', '5', d)]),
+        Entry('2',  # Ignore duplicates from PTS
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('existing_units', '7', d),
+               NameValue('proposed_units', '5', d)]),
         Entry('3',
               MOHCDPipeline.NAME,
               [NameValue('total_project_units', '7', d)]),
         Entry('4',
               MOHCDInclusionary.NAME,
               [NameValue('total_affordable_units', '5', d)]),
+        Entry('5',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('existing_units', '6', d),
+               NameValue('proposed_units', '5', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
     nvs = table.rows(proj_normal)
     net_num_units = _get_value_for_name(table, nvs, 'net_num_units',
                                         return_multiple=True)
     assert len(net_num_units) == 4
-    assert net_num_units[0] == '-2'
+    assert net_num_units[0] == '-3'
     assert net_num_units[1] == '0'
     assert net_num_units[2] == '7'
     assert net_num_units[3] == '10'
@@ -374,6 +446,71 @@ def test_project_details_ami_info_mohcd(basic_graph):
     assert _get_value_for_name(table,
                                nvs,
                                'num_more_than_120_percent_ami_units') == '3'
+
+
+def test_project_details_is_100pct_affordable_mohcd(basic_graph):
+    d = datetime.fromisoformat('2019-01-01')
+    table = ProjectDetails()
+
+    tests = [
+        TestEntriesRow(
+            name='true case',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('total_project_units', '10', d),
+                       NameValue('total_affordable_units', '10', d)]),
+            ],
+            want='TRUE'),
+        TestEntriesRow(
+            name='false case',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('total_project_units', '4', d),
+                       NameValue('total_affordable_units', '3', d)]),
+            ],
+            want='FALSE'),
+        TestEntriesRow(
+            name='pull from affordable rental portfolio',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      AffordableRentalPortfolio.NAME,
+                      [NameValue('total_project_units', '4', d),
+                       NameValue('total_affordable_units', '4', d)]),
+            ],
+            want='TRUE'),
+        TestEntriesRow(
+            name='ignore zero-valued projects',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      AffordableRentalPortfolio.NAME,
+                      [NameValue('total_project_units', '0', d),
+                       NameValue('total_affordable_units', '0', d)]),
+            ],
+            want=''),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        nvs = table.rows(proj)
+
+        assert _get_value_for_name(table,
+                                   nvs,
+                                   'is_100pct_affordable') == test.want, \
+            'Failed "%s"' % test.name
 
 
 StatusRow = namedtuple('StatusRow',
