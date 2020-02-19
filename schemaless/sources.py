@@ -4,10 +4,15 @@ from csv import DictReader
 from datetime import date
 from datetime import datetime
 from fileutils import open_file
+import logging
 
 from scourgify.exceptions import AddressNormalizationError
 from scourgify.normalize import format_address_record
 from scourgify.normalize import normalize_address_record
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.ERROR)
 
 
 class Field:
@@ -76,7 +81,7 @@ class Address(Field):
         try:
             addr = normalize_address_record(addr_str)
         except AddressNormalizationError:
-            print("WARN1: Unparseable: %s" % addr_str)
+            logger.warn("Unparseable: %s", addr_str)
             return ""
         else:
             if not addr['postal_code']:
@@ -84,7 +89,7 @@ class Address(Field):
                 try:
                     return format_address_record(addr)
                 except AddressNormalizationError:
-                    print("WARN2: Unable to format address %s" % addr)
+                    logger.warn("Unable to format address %s", addr)
                     return ""
 
             if not addr['city']:
@@ -106,14 +111,14 @@ class Address(Field):
         try:
             addr = normalize_address_record(addr)
         except AddressNormalizationError:
-            print("WARN3: Unparseable: %s" % addr)
+            logger.warn("Unparseable: %s", addr)
             return ""
         else:
             try:
                 return format_address_record(addr)
             except AddressNormalizationError:
-                print("WARN4: Unable to parse address %s" % addr_str)
-                print(addr)
+                logger.warn("WARN4: Unable to parse address %s for %s",
+                            addr, addr_str)
                 return ""
         return ""
 
