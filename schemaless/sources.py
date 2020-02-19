@@ -139,10 +139,11 @@ class Source:
                 ret[key] = val.strip()
         return ret
 
-    def yield_records(self):
+    @classmethod
+    def field_names(cls):
         pass
 
-    def field_names(self):
+    def yield_records(self):
         pass
 
 
@@ -155,8 +156,9 @@ class DirectSource(Source):
     FIELDS = {}
     COMPUTED_FIELDS = {}
 
-    def field_names(self):
-        return set(self.FIELDS.values())
+    @classmethod
+    def field_names(cls):
+        return set(cls.FIELDS.values())
 
     def yield_records(self):
         with open_file(self._filepath,
@@ -560,8 +562,9 @@ class PermitAddendaSummary(Source):
         'earliest_addenda_arrival'
     ]
 
-    def field_names(self):
-        return self.FIELDS
+    @classmethod
+    def field_names(cls):
+        return cls.FIELDS
 
     def yield_records(self):
         '''Outputs one record per permit number with a few key fields summarizing
