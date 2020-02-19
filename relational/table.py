@@ -111,31 +111,59 @@ def _get_mohcd_units(proj, source_override=None):
 
 _valid_dbi_permit_types = set('123')
 
+_invalid_dbi_statuses = set(['cancelled', 'withdrawn'])
 
-_is_valid_dbi_type = ('permit_type',
-                      lambda x: x in _valid_dbi_permit_types)
+
+_is_valid_dbi_entry = [('permit_type',
+                        lambda x: x in _valid_dbi_permit_types),
+                       ('current_status',
+                        lambda x: x == '' or x not in _invalid_dbi_statuses)]
 
 
 def _get_dbi_units(proj):
     """
     Returns:
       Net new units from DBI, only if it could be sourced from a new
-      construction permit.  None if no data from DBI.
+      construction permit or addition.  None if no data from DBI.
     """
     dbi_exist = 0
     dbi_prop = 0
     try:
-        dbi_exist = int(proj.field(
-            'existing_units', PTS.NAME,
-            entry_predicate=[_is_valid_dbi_type]))
+        fk_entries = proj.fields('existing_units',
+                                 PTS.NAME,
+                                 entry_predicate=_is_valid_dbi_entry)
+        for (fk, entries) in fk_entries.items():
+            latest = (None, datetime.min)
+            # If we have multiple entries for the same foreign key,
+            # de-dupe by selecting the most recent one.
+            for entry in entries:
+                entry_latest = entry.get_latest('existing_units')
+                if entry_latest[1] > latest[1]:
+                    latest = entry_latest
+
+            if latest[0]:
+                dbi_exist += int(latest[0])
     except ValueError:
+        dbi_exist = 0
         pass
 
     try:
-        dbi_prop = int(proj.field(
-            'proposed_units', PTS.NAME,
-            entry_predicate=[_is_valid_dbi_type]))
+        fk_entries = proj.fields('proposed_units',
+                                 PTS.NAME,
+                                 entry_predicate=_is_valid_dbi_entry)
+        for (fk, entries) in fk_entries.items():
+            latest = (None, datetime.min)
+            # If we have multiple entries for the same foreign key,
+            # de-dupe by selecting the most recent one.
+            for entry in entries:
+                entry_latest = entry.get_latest('proposed_units')
+                if entry_latest[1] > latest[1]:
+                    latest = entry_latest
+
+            if latest[0]:
+                dbi_prop += int(latest[0])
     except ValueError:
+        dbi_prop = 0
         pass
 
     if dbi_prop:
