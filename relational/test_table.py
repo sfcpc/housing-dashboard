@@ -367,19 +367,24 @@ def test_table_project_units_full_count(basic_graph, d):
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
     nvs = table.rows(proj_normal)
-    net_num_units = _get_value_for_name(table, nvs, 'net_num_units',
-                                        return_multiple=True)
+    net_num_units = _get_value_for_name(
+        table, nvs, 'net_num_units', return_multiple=True)
     assert len(net_num_units) == 4
     assert net_num_units[0] == '-3'
     assert net_num_units[1] == '0'
     assert net_num_units[2] == '7'
     assert net_num_units[3] == '10'
 
-    net_num_bmr = _get_value_for_name(table, nvs, 'net_num_units_bmr',
-                                      return_multiple=True)
+    net_num_bmr = _get_value_for_name(
+        table, nvs, 'net_num_units_bmr', return_multiple=True)
     assert len(net_num_bmr) == 2  # only inferrable data is in MOHCD
     assert net_num_bmr[0] == '0'
     assert net_num_bmr[1] == '5'
+
+    # No estimated units go into the table
+    net_est_num_bmr = _get_value_for_name(
+        table, nvs, 'net_estimated_num_units_bmr', return_multiple=True)
+    assert len(net_est_num_bmr) == 0
 
 
 @pytest.fixture
