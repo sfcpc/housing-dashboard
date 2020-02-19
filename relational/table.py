@@ -10,11 +10,14 @@ from collections import OrderedDict
 import math
 import re
 
+from schemaless.sources import source_map
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
+from schemaless.sources import TCO
 
 
 class Table(ABC):
@@ -175,6 +178,28 @@ def _get_dbi_units(proj):
     return None
 
 
+def _get_tco_units(proj):
+    """
+    Returns:
+      Net new units from TCO dataset (summation number of all unit numbers
+      from existing permits). None if no data in TCO.
+    """
+    num_tco_units = 0
+    try:
+        fk_entries = proj.fields('num_units', TCO.NAME)
+        for (_, entries) in fk_entries.items():
+            # Add up all units, even if there are dupe foreign keys
+            for entry in entries:
+                entry_latest = entry.get_latest('num_units')
+                if entry_latest[0]:
+                    num_tco_units += int(entry_latest[0])
+    except ValueError:
+        num_tco_units = 0
+        pass
+
+    return num_tco_units if num_tco_units else None
+
+
 class ProjectFacts(Table):
     ADDRESS = 'address'
     APPLICANT = 'applicant'
@@ -235,40 +260,32 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY)] = PTS.NAME
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
                 'fk', PTS.NAME, entry_predicate=pts_pred)
-        elif proj.field('project_id', MOHCDPipeline.NAME) != '':
-            num = proj.field('street_number', MOHCDPipeline.NAME)
-            addr = proj.field('street_name', MOHCDPipeline.NAME)
-            if num:
-                addr = ('%s %s' % (num, addr))
+        else:
+            for mohcd in _MOHCD_TYPES.keys():
+                if proj.field('project_id', mohcd) == '':
+                    continue
 
-            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
-                    addr,
-                    proj.field('street_type', MOHCDPipeline.NAME),
-                    proj.field('zip_code', MOHCDPipeline.NAME))
-            row[self.index(self.APPLICANT)] = \
-                proj.field('project_lead_sponsor', MOHCDPipeline.NAME)
-            row[self.index(self.SUPERVISOR_DISTRICT)] = \
-                proj.field('supervisor_district', MOHCDPipeline.NAME)
-            row[self.index(self.PERMIT_AUTHORITY)] = MOHCDPipeline.NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', MOHCDPipeline.NAME)
-        elif proj.field('project_id', MOHCDInclusionary.NAME) != '':
-            num = proj.field('street_number', MOHCDInclusionary.NAME)
-            addr = proj.field('street_name', MOHCDInclusionary.NAME)
-            if num:
-                addr = ('%s %s' % (num, addr))
+                num = proj.field('street_number', mohcd)
+                addr = proj.field('street_name', mohcd)
+                if num:
+                    addr = ('%s %s' % (num, addr))
 
-            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
-                    addr,
-                    proj.field('street_type', MOHCDInclusionary.NAME),
-                    proj.field('zip_code', MOHCDInclusionary.NAME))
-            row[self.index(self.APPLICANT)] = \
-                proj.field('project_lead_sponsor', MOHCDInclusionary.NAME)
-            row[self.index(self.SUPERVISOR_DISTRICT)] = \
-                proj.field('supervisor_district', MOHCDInclusionary.NAME)
-            row[self.index(self.PERMIT_AUTHORITY)] = MOHCDInclusionary.NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', MOHCDInclusionary.NAME)
+                row[self.index(self.ADDRESS)] = '%s %s, %s' % (
+                        addr,
+                        proj.field('street_type', mohcd),
+                        proj.field('zip_code', mohcd))
+                sponsor = proj.field('project_lead_sponsor', mohcd)
+                if not sponsor:
+                    sponsor = proj.field('project_sponsor', mohcd)
+                row[self.index(self.APPLICANT)] = sponsor
+
+                row[self.index(self.SUPERVISOR_DISTRICT)] = \
+                    proj.field('supervisor_district', mohcd)
+
+                row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
+                    'fk', mohcd)
+                row[self.index(self.PERMIT_AUTHORITY)] = \
+                    source_map[mohcd].DEPARTMENT
 
     def _estimate_bmr(self, net):
         """Estimates the BMR we project a project to have.
@@ -387,6 +404,13 @@ class ProjectUnitCountsFull(NameValueTable):
                                     name='net_num_units',
                                     value=str(dbi_net),
                                     data=PTS.OUTPUT_NAME))
+
+        tco_net = _get_tco_units(proj)
+        if tco_net is not None:
+            rows.append(self.nv_row(proj,
+                                    name='net_num_units',
+                                    value=str(tco_net),
+                                    data=TCO.OUTPUT_NAME))
 
         for source_override in [MOHCDPipeline.NAME, MOHCDInclusionary.NAME]:
             mohcd = _get_mohcd_units(proj, source_override=source_override)
@@ -593,6 +617,15 @@ class ProjectDetails(NameValueTable):
                         data=mohcdout))
                 break
 
+    def _earliest_addenda_arrival(self, rows, proj):
+        date = proj.field('earliest_addenda_arrival',
+                          PermitAddendaSummary.NAME)
+        if date:
+            rows.append(self.nv_row(proj,
+                                    name='earliest_addenda_arrival',
+                                    value=date,
+                                    data=PermitAddendaSummary.OUTPUT_NAME))
+
     def rows(self, proj):
         result = []
         self._square_feet(result, proj)
@@ -601,6 +634,7 @@ class ProjectDetails(NameValueTable):
         self._ami_info_mohcd(result, proj)
         self._is_100_affordable(result, proj)
         self._onsite_or_feeout(result, proj)
+        self._earliest_addenda_arrival(result, proj)
         return result
 
 
