@@ -198,6 +198,68 @@ def test_table_project_facts_units(basic_graph):
             'Failed "%s"' % test.name
 
 
+@pytest.fixture
+def d():
+    return datetime.fromisoformat('2019-01-01')
+
+
+def test_table_project_facts_units_ppts_bmr(basic_graph, d):
+    table = ProjectFacts()
+
+    tests = [
+        TestEntriesRow(
+            name='simple bmr calculation',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '20', d),
+                       NameValue('affordable_units_net', '10', d)]),
+            ],
+            want={'net_num_units_bmr': '10',
+                  'net_estimated_num_units_bmr': ''},
+        ),
+        TestEntriesRow(
+            name='estimated bmr calculation for medium project',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '20', d)]),
+            ],
+            want={'net_num_units_bmr': '',
+                  'net_estimated_num_units_bmr': '4'},
+        ),
+        TestEntriesRow(
+            name='estimated bmr calculation for large project',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '30', d)]),
+            ],
+            want={'net_num_units_bmr': '',
+                  'net_estimated_num_units_bmr': '9'},
+        ),
+        TestEntriesRow(
+            name='estimated bmr calculation for small project',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('market_rate_units_net', '5', d)]),
+            ],
+            want={'net_num_units_bmr': '',
+                  'net_estimated_num_units_bmr': '0'},
+        ),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
+
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_row(table,
+                                      fields,
+                                      name) == wantvalue, test.name
+
+
 def test_table_project_facts_units_mohcd(basic_graph):
     d = datetime.fromisoformat('2019-01-01')
     table = ProjectFacts()
