@@ -12,8 +12,10 @@ import re
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import PPTS
 from schemaless.sources import PTS
+from schemaless.sources import TCO
 
 
 class Table(ABC):
@@ -172,6 +174,28 @@ def _get_dbi_units(proj):
         return dbi_prop - dbi_exist
 
     return None
+
+
+def _get_tco_units(proj):
+    """
+    Returns:
+      Net new units from TCO dataset (summation number of all unit numbers
+      from existing permits). None if no data in TCO.
+    """
+    num_tco_units = 0
+    try:
+        fk_entries = proj.fields('num_units', TCO.NAME)
+        for (_, entries) in fk_entries.items():
+            # Add up all units, even if there are dupe foreign keys
+            for entry in entries:
+                entry_latest = entry.get_latest('num_units')
+                if entry_latest[0]:
+                    num_tco_units += int(entry_latest[0])
+    except ValueError:
+        num_tco_units = 0
+        pass
+
+    return num_tco_units if num_tco_units else None
 
 
 class ProjectFacts(Table):
@@ -350,6 +374,13 @@ class ProjectUnitCountsFull(NameValueTable):
                                     name='net_num_units',
                                     value=str(dbi_net),
                                     data=PTS.OUTPUT_NAME))
+
+        tco_net = _get_tco_units(proj)
+        if tco_net is not None:
+            rows.append(self.nv_row(proj,
+                                    name='net_num_units',
+                                    value=str(tco_net),
+                                    data=TCO.OUTPUT_NAME))
 
         for source_override in [MOHCDPipeline.NAME, MOHCDInclusionary.NAME]:
             mohcd = _get_mohcd_units(proj, source_override=source_override)
@@ -544,6 +575,15 @@ class ProjectDetails(NameValueTable):
                                     value=sqft,
                                     data=PPTS.OUTPUT_NAME))
 
+    def _earliest_addenda_arrival(self, rows, proj):
+        date = proj.field('earliest_addenda_arrival',
+                          PermitAddendaSummary.NAME)
+        if date:
+            rows.append(self.nv_row(proj,
+                                    name='earliest_addenda_arrival',
+                                    value=date,
+                                    data=PermitAddendaSummary.OUTPUT_NAME))
+
     def rows(self, proj):
         result = []
         self._square_feet(result, proj)
@@ -551,6 +591,7 @@ class ProjectDetails(NameValueTable):
         self._bedroom_info_mohcd(result, proj)
         self._ami_info_mohcd(result, proj)
         self._is_100_affordable(result, proj)
+        self._earliest_addenda_arrival(result, proj)
         return result
 
 

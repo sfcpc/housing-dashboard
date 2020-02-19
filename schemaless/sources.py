@@ -327,6 +327,7 @@ class PTS(DirectSource):
 
 class TCO(DirectSource):
     NAME = 'tco'
+    OUTPUT_NAME = NAME
     DATE = Date('date_issued', '%Y/%m/%d')
     FK = PrimaryKey(NAME, 'building_permit_number', DATE)
     FIELDS = {
@@ -554,6 +555,7 @@ class PermitAddendaSummary(Source):
     those key fields.
     '''
     NAME = 'permit_addenda_summary'
+    OUTPUT_NAME = NAME
     FK = PrimaryKey(NAME, 'permit_number')
 
     FIELDS = [
