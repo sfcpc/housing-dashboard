@@ -637,6 +637,48 @@ def test_project_details_is_100pct_affordable_mohcd(basic_graph, d):
             'Failed "%s"' % test.name
 
 
+def test_project_details_section_415(basic_graph, d):
+    table = ProjectDetails()
+
+    tests = [
+        EntriesTestRow(
+            name='simple case',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('section_415_declaration',
+                                 'Exempt project',
+                                 d)]),
+            ],
+            want='Exempt project'),
+        EntriesTestRow(
+            name='unset case',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('total_project_units', '4', d),
+                       NameValue('total_affordable_units', '3', d)]),
+            ],
+            want=''),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        nvs = table.rows(proj)
+
+        assert _get_value_for_name(
+                table,
+                nvs,
+                'inclusionary_housing_program_status') == test.want, \
+            'Failed "%s"' % test.name
+
+
 StatusRow = namedtuple('StatusRow',
                        ['top_level_status', 'start_date', 'end_date'])
 

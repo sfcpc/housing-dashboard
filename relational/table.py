@@ -605,6 +605,18 @@ class ProjectDetails(NameValueTable):
                                     value=sqft,
                                     data=PPTS.OUTPUT_NAME))
 
+    def _onsite_or_feeout(self, rows, proj):
+        for (mohcdin, mohcdout) in _MOHCD_TYPES.items():
+            s415 = proj.field('section_415_declaration', mohcdin)
+
+            if s415 != '':
+                rows.append(self.nv_row(
+                        proj,
+                        name='inclusionary_housing_program_status',
+                        value=s415,
+                        data=mohcdout))
+                break
+
     def _earliest_addenda_arrival(self, rows, proj):
         date = proj.field('earliest_addenda_arrival',
                           PermitAddendaSummary.NAME)
@@ -621,6 +633,7 @@ class ProjectDetails(NameValueTable):
         self._bedroom_info_mohcd(result, proj)
         self._ami_info_mohcd(result, proj)
         self._is_100_affordable(result, proj)
+        self._onsite_or_feeout(result, proj)
         self._earliest_addenda_arrival(result, proj)
         return result
 
