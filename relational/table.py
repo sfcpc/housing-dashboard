@@ -513,7 +513,7 @@ class ProjectDetails(NameValueTable):
         as we can tell from MOHCD data.
         """
         units = _get_mohcd_units(proj, MOHCDPipeline.NAME)
-        if units:
+        if units and units[0] > 0:
             rows.append(self.nv_row(
                 proj,
                 name='is_100pct_affordable',
@@ -521,7 +521,7 @@ class ProjectDetails(NameValueTable):
                 data=MOHCDPipeline.OUTPUT_NAME))
         else:
             units = _get_mohcd_units(proj, AffordableRentalPortfolio.NAME)
-            if units:
+            if units and units[0] > 0:
                 rows.append(self.nv_row(
                         proj,
                         name='is_100pct_affordable',
