@@ -24,14 +24,16 @@ def test_table_project_facts_atleast_one_measure():
 
     RowTest = namedtuple('RowTest', ['input', 'want'])
     tests = [
-        RowTest(['', ''], False),  # empty row
-        RowTest(['', '0'], True),  # zero different from empty
-        RowTest(['1', '2'], True),  # normal full row
+        RowTest(['', '', ''], False),  # empty row
+        RowTest(['', '0', ''], True),  # zero different from empty
+        RowTest(['1', '2', ''], True),  # normal full row
+        RowTest(['', '', '1'], True),  # estimated field
     ]
     for test in tests:
         row = [''] * len(table.header())
         row[table.index(table.NET_NUM_UNITS)] = test.input[0]
         row[table.index(table.NET_NUM_UNITS_BMR)] = test.input[1]
+        row[table.index(table.NET_EST_NUM_UNITS_BMR)] = test.input[2]
         assert table._atleast_one_measure(row) == test.want
 
 

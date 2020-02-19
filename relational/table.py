@@ -7,6 +7,7 @@ from datetime import date
 from datetime import datetime
 from collections import OrderedDict
 
+import math
 import re
 
 from schemaless.sources import MOHCDInclusionary
@@ -154,6 +155,8 @@ class ProjectFacts(Table):
     NET_NUM_UNITS_DATA = 'net_num_units_data'
     NET_NUM_UNITS_BMR = 'net_num_units_bmr'
     NET_NUM_UNITS_BMR_DATA = 'net_num_units_bmr_data'
+    NET_EST_NUM_UNITS_BMR = 'net_estimated_num_units_bmr'
+    NET_EST_NUM_UNITS_BMR_DATA = 'net_estimated_num_units_bmr_data'
 
     SEEN_IDS = set()
 
@@ -168,6 +171,8 @@ class ProjectFacts(Table):
             self.NET_NUM_UNITS_DATA,
             self.NET_NUM_UNITS_BMR,
             self.NET_NUM_UNITS_BMR_DATA,
+            self.NET_EST_NUM_UNITS_BMR,
+            self.NET_EST_NUM_UNITS_BMR_DATA,
         ])
 
     def _gen_facts(self, row, proj):
@@ -235,6 +240,31 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
                 'fk', MOHCDInclusionary.NAME)
 
+    def _estimate_bmr(self, net):
+        """Estimates the BMR we project a project to have.
+
+        This exists because currently all/most projects in ppts have nothing
+        specified for their affordable unit counts, but we can provide
+        a rough estimate of what we expect the project to have when it gets
+        entitled.
+
+        net: a (string) net unit count
+
+        Returns: a non-empty string
+        """
+        # TODO: this logic can get pretty complicated if needed, but right
+        # now this is just a basic "floor" number that leans on the side of
+        # undercounting.
+        net = int(net)
+        if net < 10:
+            return '0'
+        else:
+            # based on the inclusionary affordable housing program as of 2019
+            if net < 25:
+                return str(math.floor(.2 * net))
+            else:
+                return str(math.floor(.3 * net))
+
     def _gen_units(self, row, proj):
         mohcd = _get_mohcd_units(proj)
         if mohcd is not None:
@@ -245,6 +275,7 @@ class ProjectFacts(Table):
             row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = source
         else:
             dbi_net = _get_dbi_units(proj)
+            net = dbi_net
             if dbi_net is not None:
                 row[self.index(self.NET_NUM_UNITS)] = str(dbi_net)
                 row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
@@ -256,13 +287,19 @@ class ProjectFacts(Table):
                     PPTS.OUTPUT_NAME if net else ''
 
             bmr_net = proj.field('affordable_units_net', PPTS.NAME)
-            row[self.index(self.NET_NUM_UNITS_BMR)] = bmr_net
-            row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = \
-                PPTS.OUTPUT_NAME if bmr_net else ''
+            if bmr_net != '':
+                row[self.index(self.NET_NUM_UNITS_BMR)] = bmr_net
+                row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = PPTS.OUTPUT_NAME
+            elif net != '':
+                row[self.index(self.NET_EST_NUM_UNITS_BMR)] = \
+                    self._estimate_bmr(net)
+                row[self.index(self.NET_EST_NUM_UNITS_BMR_DATA)] = \
+                    PPTS.OUTPUT_NAME
 
     def _atleast_one_measure(self, row):
         return (row[self.index(self.NET_NUM_UNITS)] != '' or
-                row[self.index(self.NET_NUM_UNITS_BMR)] != '')
+                row[self.index(self.NET_NUM_UNITS_BMR)] != '' or
+                row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '')
 
     def rows(self, proj):
         row = [''] * len(self.header())
