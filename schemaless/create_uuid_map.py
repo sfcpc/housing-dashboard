@@ -3,6 +3,7 @@ from collections import defaultdict
 from collections import OrderedDict
 import csv
 from csv import DictReader
+from csv import DictWriter
 import uuid
 
 from datetime import date
@@ -19,6 +20,8 @@ from schemaless.sources import TCO
 
 
 class RecordGraphBuilderHelper:
+    SOURCE = None
+
     def __init__(self, graph_builder):
         self.graph_builder = graph_builder
 
@@ -44,16 +47,89 @@ class RecordGraphBuilderHelper:
         """
         pass
 
+    def process_likely(self, fk, record, parents, children):
+        """Process the given record to find *likely* parents and children.
 
-class PPTSHelper(RecordGraphBuilderHelper):
+        This is for handling records without explicit parent/child ID links.
+        For example, matching by address, blocklot, or geometry.
+
+        Args:
+            fk: The PrimaryKey for this record.
+            record: The record dict (from `latest_values`)
+            parents: A list of fks. List is modified in place.
+            children: A list of fks. List is modified in place.
+        """
+        pass
+
+
+class PPTSAddressLookupMixin:
+    """Mixin to look up PPTS records by normalized address."""
+    def ppts_by_address(self, fk, record, parents, children):
+        """Find PPTS parents for `record` that match its address.
+
+        This will not add fks to parents or children if they already
+        share a UUID.
+
+        Args:
+            fk: The PrimaryKey for this record.
+            record: The record dict (from `latest_values`). Expects
+                    `address_norm` to exist in the dict.
+            parents: A list of fks. List is modified in place.
+            children: A list of fks. List is modified in place.
+        """
+        # TODO: There will be many matches, so we need to filter
+        # on time range and record type. EG maybe only add parents
+        # that are PRJs, or themselves have parents?
+        if 'address_norm' not in record:
+            return
+        ppts_helper = self.graph_builder.helpers[PPTS.NAME]
+        parents.extend(ppts_helper.find_by_address(record['address_norm']))
+
+
+class PTSAddressLookupMixin:
+    """Mixin to look up PTS records by normalized address."""
+    def pts_by_address(self, fk, record, parents, children):
+        """Find PTS parents for `record` that match its address.
+
+        Args:
+            fk: The PrimaryKey for this record.
+            record: The record dict (from `latest_values`). Expects
+                    `address_norm` to exist in the dict.
+            parents: A list of fks. List is modified in place.
+            children: A list of fks. List is modified in place.
+        """
+        if 'address_norm' not in record:
+            return
+        pts_helper = self.graph_builder.helpers[PTS.NAME]
+        parents.extend(
+            pts_helper.find_by_address(record['address_norm']))
+
+
+class CalculatedFieldsMixin:
+    """Mixin to add all calculated fields for a source into the record."""
+    def add_calculated_fields(self, record):
+        calculated_fields = self.SOURCE.calculated_fields(record)
+        record = record.copy()
+        record.update(calculated_fields)
+        return record
+
+
+class PPTSHelper(RecordGraphBuilderHelper, CalculatedFieldsMixin):
+    SOURCE = PPTS
+
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
         self._ppts_id_to_fk = {}
+        self._address_to_ppts_fk = defaultdict(list)
         self._permit_number_to_ppts_fk = defaultdict(list)
 
     def find_by_id(self, record_id):
         """Find a fk by PPTS record_id."""
         return self._ppts_id_to_fk.get(record_id, None)
+
+    def find_by_address(self, address):
+        """Find a fk by a normalized address."""
+        return self._address_to_ppts_fk[address]
 
     def find_by_permit_number(self, permit_number):
         """Find a fk by PTS building permit number."""
@@ -66,6 +142,9 @@ class PPTSHelper(RecordGraphBuilderHelper):
                 for permit_number in \
                         record['building_permit_number'].split(","):
                     self._permit_number_to_ppts_fk[permit_number].append(fk)
+            record = self.add_calculated_fields(record)
+            if 'address_norm' in record:
+                self._address_to_ppts_fk[record['address_norm']].append(fk)
 
     def process(self, fk, record, parents, children):
         if 'parent' in record:
@@ -80,20 +159,32 @@ class PPTSHelper(RecordGraphBuilderHelper):
                     children.append(child_fk)
 
 
-class PTSHelper(RecordGraphBuilderHelper):
+class PTSHelper(RecordGraphBuilderHelper,
+                PPTSAddressLookupMixin,
+                CalculatedFieldsMixin):
+    SOURCE = PTS
+
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
         self._permit_number_to_pts_fk = defaultdict(list)
+        self._address_to_pts_fk = defaultdict(list)
 
     def find_by_building_permit_number(self, permit_number):
         """Find a fk by PTS building permit number."""
         return self._permit_number_to_pts_fk[permit_number]
+
+    def find_by_address(self, address):
+        """Find a fk by a normalized address."""
+        return self._address_to_pts_fk[address]
 
     def preprocess(self, latest_records):
         for fk, record in latest_records.get(PTS.NAME, {}).items():
             if 'permit_number' in record:
                 self._permit_number_to_pts_fk[
                     record['permit_number']].append(fk)
+            record = self.add_calculated_fields(record)
+            if 'address_norm' in record:
+                self._address_to_pts_fk[record['address_norm']].append(fk)
 
     def process(self, fk, record, parents, children):
         permit_number = record['permit_number']
@@ -119,8 +210,17 @@ class PTSHelper(RecordGraphBuilderHelper):
             # that permit number  as "children" of that record.
             children.extend(pts_records[1:])
 
+    def process_likely(self, fk, record, parents, children):
+        record = self.add_calculated_fields(record)
+        self.ppts_by_address(fk, record, parents, children)
 
-class TCOHelper(RecordGraphBuilderHelper):
+
+class TCOHelper(RecordGraphBuilderHelper,
+                PPTSAddressLookupMixin,
+                PTSAddressLookupMixin,
+                CalculatedFieldsMixin):
+    SOURCE = TCO
+
     def process(self, fk, record, parents, children):
         if 'building_permit_number' in record:
             pts_helper = self.graph_builder.helpers[PTS.NAME]
@@ -129,8 +229,19 @@ class TCOHelper(RecordGraphBuilderHelper):
             if parent_fk:
                 parents.extend(parent_fk)
 
+    def process_likely(self, fk, record, parents, children):
+        record = self.add_calculated_fields(record)
+        self.ppts_by_address(fk, record, parents, children)
+        self.pts_by_address(fk, record, parents, children)
 
-class MOHCDPipelineHelper(RecordGraphBuilderHelper):
+
+class MOHCDPipelineHelper(
+        RecordGraphBuilderHelper,
+        PPTSAddressLookupMixin,
+        PTSAddressLookupMixin,
+        CalculatedFieldsMixin):
+    SOURCE = MOHCDPipeline
+
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
         self._mohcd_id_to_fk = {}
@@ -151,8 +262,19 @@ class MOHCDPipelineHelper(RecordGraphBuilderHelper):
                 if parent_fk:
                     parents.append(parent_fk)
 
+    def process_likely(self, fk, record, parents, children):
+        record = self.add_calculated_fields(record)
+        self.ppts_by_address(fk, record, parents, children)
+        self.pts_by_address(fk, record, parents, children)
 
-class MOHCDInclusionaryHelper(RecordGraphBuilderHelper):
+
+class MOHCDInclusionaryHelper(
+        RecordGraphBuilderHelper,
+        PPTSAddressLookupMixin,
+        PTSAddressLookupMixin,
+        CalculatedFieldsMixin):
+    SOURCE = MOHCDInclusionary
+
     def process(self, fk, record, parents, children):
         if 'planning_case_number' in record:
             ppts_helper = self.graph_builder.helpers[PPTS.NAME]
@@ -166,9 +288,23 @@ class MOHCDInclusionaryHelper(RecordGraphBuilderHelper):
         if parent_fk:
             parents.append(parent_fk)
 
+    def process_likely(self, fk, record, parents, children):
+        record = self.add_calculated_fields(record)
+        self.ppts_by_address(fk, record, parents, children)
+        self.pts_by_address(fk, record, parents, children)
 
-class AffordableRentalPortfolioHelper(RecordGraphBuilderHelper):
-    pass
+
+class AffordableRentalPortfolioHelper(
+        RecordGraphBuilderHelper,
+        PPTSAddressLookupMixin,
+        PTSAddressLookupMixin,
+        CalculatedFieldsMixin):
+    SOURCE = AffordableRentalPortfolio
+
+    def process_likely(self, fk, record, parents, children):
+        record = self.add_calculated_fields(record)
+        self.ppts_by_address(fk, record, parents, children)
+        self.pts_by_address(fk, record, parents, children)
 
 
 class PermitAddendaSummaryHelper(RecordGraphBuilderHelper):
@@ -182,7 +318,8 @@ class PermitAddendaSummaryHelper(RecordGraphBuilderHelper):
 
 class RecordGraphBuilder:
     """RecordGraphBuilder reads in files and builds a RecordGraph."""
-    def __init__(self, graph_class, schemaless_file, uuid_map_file):
+    def __init__(self, graph_class, schemaless_file, uuid_map_file,
+                 find_likely_matches=False, exclude_known_likely_matches=True):
         """Init the graph builder.
 
         Args:
@@ -193,6 +330,9 @@ class RecordGraphBuilder:
         self.graph_class = graph_class
         self.schemaless_file = schemaless_file
         self.uuid_map_file = uuid_map_file
+        self.find_likely_matches = find_likely_matches
+        self.exclude_known_likely_matches = exclude_known_likely_matches
+        self.likelies = {}
 
         # Helpers expose an API that enables parent/child lookups by
         # various properties on records.
@@ -224,9 +364,9 @@ class RecordGraphBuilder:
             for fk, record in source_records.items():
                 parents = []
                 children = []
+
                 self.helpers[source_name].process(
                     fk, record, parents, children)
-
                 the_date = None
 
                 if source_map[source_name].DATE.field in record:
@@ -238,7 +378,6 @@ class RecordGraphBuilder:
                     children=children,
                     uuid=None,
                 ))
-
         # Read existing record_id->uuid mapping from the existing schemaless
         # map and update nodes with exisitng UUIDs.
         if self.uuid_map_file != '':
@@ -253,7 +392,50 @@ class RecordGraphBuilder:
 
         # Resolve all parent UUIDs and generate new UUIDs
         rg._assign_uuids()
+
+        if not self.find_likely_matches:
+            return rg
+
+        # Now find likely matches
+        for source_name, source_records in latest_records.items():
+            for fk, record in source_records.items():
+                likely_parents = []
+                likely_children = []
+                self.helpers[source_name].process_likely(
+                    fk, record, likely_parents, likely_children)
+
+                if self.exclude_known_likely_matches:
+                    # Now that we have all likely parents, remove parents
+                    # with an explicit or implied link
+                    my_uuid = rg.get(fk).uuid
+                    parents = []
+                    children = []
+                    for parent in likely_parents:
+                        if rg.get(parent).uuid == my_uuid:
+                            continue
+                        parents.append(parent)
+                else:
+                    parents = likely_parents
+                    children = likely_children
+                self.likelies[fk] = {
+                    'parents': parents,
+                    'children': children,
+                }
+
         return rg
+
+    def write_likely_matches(self, outfile):
+        with open(outfile, 'w') as lf:
+            writer = DictWriter(
+                lf, fieldnames=['record_id', 'parents', 'children'])
+            writer.writeheader()
+            for fk, rec in self.likelies.items():
+                if rec['parents'] or rec['children']:
+                    writer.writerow({
+                        'record_id': fk,
+                        'parents': ", ".join(rec['parents']),
+                        'children': ", ".join(rec['children']),
+                    })
 
 
 class RecordGraph:
@@ -269,8 +451,18 @@ class RecordGraph:
         self._nodes = OrderedDict()
 
     @classmethod
-    def from_files(cls, schemaless_file, uuid_map_file):
-        return RecordGraphBuilder(cls, schemaless_file, uuid_map_file).build()
+    def from_files(cls,
+                   schemaless_file,
+                   uuid_map_file,
+                   find_likely_matches=False,
+                   exclude_known_likely_matches=True):
+        return RecordGraphBuilder(
+            cls,
+            schemaless_file,
+            uuid_map_file,
+            find_likely_matches,
+            exclude_known_likely_matches
+        ).build()
 
     def to_file(self, outfile):
         """Dump the uuid->fk map."""
@@ -426,11 +618,22 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('schemaless_file', help='Schemaless csv file')
     parser.add_argument(
-            '--uuid_map_file',
-            help='UUID mapping file',
-            default='')
+        '--uuid_map_file',
+        help='UUID mapping file',
+        default='')
+    parser.add_argument(
+        '--likely_match_file',
+        help='File to write likely parent/child matches to.',
+        default='')
     parser.add_argument('outfile', help='Output path of uuid mapping')
     args = parser.parse_args()
 
-    rg = RecordGraph.from_files(args.schemaless_file, args.uuid_map_file)
+    builder = RecordGraphBuilder(
+        RecordGraph,
+        args.schemaless_file,
+        args.uuid_map_file,
+        args.likely_match_file != "")
+    rg = builder.build()
     rg.to_file(args.outfile)
+    if args.likely_match_file:
+        builder.write_likely_matches(args.likely_match_file)
