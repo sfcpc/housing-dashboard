@@ -9,6 +9,7 @@ from collections import OrderedDict
 
 import re
 
+from schemaless.sources import source_map
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
@@ -254,40 +255,32 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY)] = PTS.NAME
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
                 'fk', PTS.NAME, entry_predicate=pts_pred)
-        elif proj.field('project_id', MOHCDPipeline.NAME) != '':
-            num = proj.field('street_number', MOHCDPipeline.NAME)
-            addr = proj.field('street_name', MOHCDPipeline.NAME)
-            if num:
-                addr = ('%s %s' % (num, addr))
+        else:
+            for mohcd in _MOHCD_TYPES.keys():
+                if proj.field('project_id', mohcd) == '':
+                    continue
 
-            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
-                    addr,
-                    proj.field('street_type', MOHCDPipeline.NAME),
-                    proj.field('zip_code', MOHCDPipeline.NAME))
-            row[self.index(self.APPLICANT)] = \
-                proj.field('project_lead_sponsor', MOHCDPipeline.NAME)
-            row[self.index(self.SUPERVISOR_DISTRICT)] = \
-                proj.field('supervisor_district', MOHCDPipeline.NAME)
-            row[self.index(self.PERMIT_AUTHORITY)] = MOHCDPipeline.NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', MOHCDPipeline.NAME)
-        elif proj.field('project_id', MOHCDInclusionary.NAME) != '':
-            num = proj.field('street_number', MOHCDInclusionary.NAME)
-            addr = proj.field('street_name', MOHCDInclusionary.NAME)
-            if num:
-                addr = ('%s %s' % (num, addr))
+                num = proj.field('street_number', mohcd)
+                addr = proj.field('street_name', mohcd)
+                if num:
+                    addr = ('%s %s' % (num, addr))
 
-            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
-                    addr,
-                    proj.field('street_type', MOHCDInclusionary.NAME),
-                    proj.field('zip_code', MOHCDInclusionary.NAME))
-            row[self.index(self.APPLICANT)] = \
-                proj.field('project_lead_sponsor', MOHCDInclusionary.NAME)
-            row[self.index(self.SUPERVISOR_DISTRICT)] = \
-                proj.field('supervisor_district', MOHCDInclusionary.NAME)
-            row[self.index(self.PERMIT_AUTHORITY)] = MOHCDInclusionary.NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', MOHCDInclusionary.NAME)
+                row[self.index(self.ADDRESS)] = '%s %s, %s' % (
+                        addr,
+                        proj.field('street_type', mohcd),
+                        proj.field('zip_code', mohcd))
+                sponsor = proj.field('project_lead_sponsor', mohcd)
+                if not sponsor:
+                    sponsor = proj.field('project_sponsor', mohcd)
+                row[self.index(self.APPLICANT)] = sponsor
+
+                row[self.index(self.SUPERVISOR_DISTRICT)] = \
+                    proj.field('supervisor_district', mohcd)
+
+                row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
+                    'fk', mohcd)
+                row[self.index(self.PERMIT_AUTHORITY)] = \
+                    source_map[mohcd].DEPARTMENT
 
     def _gen_units(self, row, proj):
         mohcd = _get_mohcd_units(proj)
