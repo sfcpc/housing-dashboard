@@ -68,7 +68,7 @@ def basic_graph():
     return rg
 
 
-TestEntriesRow = namedtuple('TestEntriesRow', ['name', 'entries', 'want'])
+EntriesTestRow = namedtuple('EntriesTestRow', ['name', 'entries', 'want'])
 
 
 def test_table_project_facts_units(basic_graph):
@@ -76,7 +76,7 @@ def test_table_project_facts_units(basic_graph):
     table = ProjectFacts()
 
     tests = [
-        TestEntriesRow(
+        EntriesTestRow(
             name='simple test',
             entries=[
                 Entry('1',
@@ -89,7 +89,7 @@ def test_table_project_facts_units(basic_graph):
                        NameValue('proposed_units', '5', d)]),
             ],
             want='-2'),
-        TestEntriesRow(
+        EntriesTestRow(
             name='get from PPTS because PTS data is incomplete',
             entries=[
                 Entry('1',
@@ -100,7 +100,7 @@ def test_table_project_facts_units(basic_graph):
                       [NameValue('proposed_units', '7', d)]),
             ],
             want='10'),
-        TestEntriesRow(
+        EntriesTestRow(
             name='get from PPTS because PTS data has no proposed units',
             entries=[
                 Entry('1',
@@ -112,7 +112,7 @@ def test_table_project_facts_units(basic_graph):
                        NameValue('existing_units', '7', d)]),
             ],
             want='10'),
-        TestEntriesRow(
+        EntriesTestRow(
             name='get from PTS because we can infer from just proposed',
             entries=[
                 Entry('1',
@@ -124,7 +124,7 @@ def test_table_project_facts_units(basic_graph):
                        NameValue('proposed_units', '7', d)]),
             ],
             want='7'),
-        TestEntriesRow(
+        EntriesTestRow(
             name='get from PPTS because no other choice',
             entries=[
                 Entry('1',
@@ -132,7 +132,7 @@ def test_table_project_facts_units(basic_graph):
                       [NameValue('market_rate_units_net', '10', d)]),
             ],
             want='10'),
-        TestEntriesRow(
+        EntriesTestRow(
             name='get from PTS because permit_type 3 is also valid',
             entries=[
                 Entry('1',
@@ -144,7 +144,7 @@ def test_table_project_facts_units(basic_graph):
                        NameValue('proposed_units', '7', d)]),
             ],
             want='7'),
-        TestEntriesRow(
+        EntriesTestRow(
             name='sum up across PTS records, ignoring dupes',
             entries=[
                 Entry('1',
@@ -164,7 +164,7 @@ def test_table_project_facts_units(basic_graph):
                        NameValue('proposed_units', '8', d)]),
             ],
             want='15'),
-        TestEntriesRow(
+        EntriesTestRow(
             name='sum up across PTS records, ignoring withdrawn/cancelled',
             entries=[
                 Entry('1',
@@ -207,7 +207,7 @@ def test_table_project_facts_units_ppts_bmr(basic_graph, d):
     table = ProjectFacts()
 
     tests = [
-        TestEntriesRow(
+        EntriesTestRow(
             name='simple bmr calculation',
             entries=[
                 Entry('1',
@@ -218,7 +218,7 @@ def test_table_project_facts_units_ppts_bmr(basic_graph, d):
             want={'net_num_units_bmr': '10',
                   'net_estimated_num_units_bmr': ''},
         ),
-        TestEntriesRow(
+        EntriesTestRow(
             name='estimated bmr calculation for medium project',
             entries=[
                 Entry('1',
@@ -228,7 +228,7 @@ def test_table_project_facts_units_ppts_bmr(basic_graph, d):
             want={'net_num_units_bmr': '',
                   'net_estimated_num_units_bmr': '4'},
         ),
-        TestEntriesRow(
+        EntriesTestRow(
             name='estimated bmr calculation for large project',
             entries=[
                 Entry('1',
@@ -238,7 +238,7 @@ def test_table_project_facts_units_ppts_bmr(basic_graph, d):
             want={'net_num_units_bmr': '',
                   'net_estimated_num_units_bmr': '9'},
         ),
-        TestEntriesRow(
+        EntriesTestRow(
             name='estimated bmr calculation for small project',
             entries=[
                 Entry('1',
@@ -515,7 +515,7 @@ def test_project_details_is_100pct_affordable_mohcd(basic_graph):
     table = ProjectDetails()
 
     tests = [
-        TestEntriesRow(
+        EntriesTestRow(
             name='true case',
             entries=[
                 Entry('1',
@@ -527,7 +527,7 @@ def test_project_details_is_100pct_affordable_mohcd(basic_graph):
                        NameValue('total_affordable_units', '10', d)]),
             ],
             want='TRUE'),
-        TestEntriesRow(
+        EntriesTestRow(
             name='false case',
             entries=[
                 Entry('1',
@@ -539,7 +539,7 @@ def test_project_details_is_100pct_affordable_mohcd(basic_graph):
                        NameValue('total_affordable_units', '3', d)]),
             ],
             want='FALSE'),
-        TestEntriesRow(
+        EntriesTestRow(
             name='pull from affordable rental portfolio',
             entries=[
                 Entry('1',
@@ -551,7 +551,7 @@ def test_project_details_is_100pct_affordable_mohcd(basic_graph):
                        NameValue('total_affordable_units', '4', d)]),
             ],
             want='TRUE'),
-        TestEntriesRow(
+        EntriesTestRow(
             name='ignore zero-valued projects',
             entries=[
                 Entry('1',
