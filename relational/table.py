@@ -111,9 +111,13 @@ def _get_mohcd_units(proj, source_override=None):
 
 _valid_dbi_permit_types = set('123')
 
+_valid_dbi_statuses = set(['cancelled', 'withdrawn'])
 
-_is_valid_dbi_type = ('permit_type',
-                      lambda x: x in _valid_dbi_permit_types)
+
+_is_valid_dbi_entry = [('permit_type',
+                        lambda x: x in _valid_dbi_permit_types),
+                       ('current_status',
+                        lambda x: x == '' or x in _valid_dbi_statuses)]
 
 
 def _get_dbi_units(proj):
@@ -127,7 +131,7 @@ def _get_dbi_units(proj):
     try:
         fk_entries = proj.fields('existing_units',
                                  PTS.NAME,
-                                 entry_predicate=[_is_valid_dbi_type])
+                                 entry_predicate=_is_valid_dbi_entry)
         for (fk, entries) in fk_entries.items():
             latest = (None, datetime.min)
             # If we have multiple entries for the same foreign key,
@@ -146,7 +150,7 @@ def _get_dbi_units(proj):
     try:
         fk_entries = proj.fields('proposed_units',
                                  PTS.NAME,
-                                 entry_predicate=[_is_valid_dbi_type])
+                                 entry_predicate=_is_valid_dbi_entry)
         for (fk, entries) in fk_entries.items():
             latest = (None, datetime.min)
             # If we have multiple entries for the same foreign key,
