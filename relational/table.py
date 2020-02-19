@@ -130,6 +130,8 @@ def _get_dbi_units(proj):
                                  entry_predicate=[_is_valid_dbi_type])
         for (fk, entries) in fk_entries.items():
             latest = (None, datetime.min)
+            # If we have multiple entries for the same foreign key,
+            # de-dupe by selecting the most recent one.
             for entry in entries:
                 entry_latest = entry.get_latest('existing_units')
                 if entry_latest[1] > latest[1]:
@@ -147,6 +149,8 @@ def _get_dbi_units(proj):
                                  entry_predicate=[_is_valid_dbi_type])
         for (fk, entries) in fk_entries.items():
             latest = (None, datetime.min)
+            # If we have multiple entries for the same foreign key,
+            # de-dupe by selecting the most recent one.
             for entry in entries:
                 entry_latest = entry.get_latest('proposed_units')
                 if entry_latest[1] > latest[1]:
