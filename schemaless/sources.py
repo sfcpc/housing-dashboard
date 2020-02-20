@@ -5,7 +5,7 @@ from datetime import date
 from datetime import datetime
 from fileutils import open_file
 
-from schemaless.create_mapblklot_map import MapblklotGenerator
+from schemaless.mapblklot_generator import MapblklotGenerator
 from scourgify.exceptions import AddressNormalizationError
 from scourgify.normalize import format_address_record
 from scourgify.normalize import normalize_address_record

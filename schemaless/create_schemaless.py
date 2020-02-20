@@ -15,7 +15,7 @@ from datetime import datetime
 import shutil
 import sys
 
-from schemaless.create_mapblklot_map import MapblklotGenerator
+from schemaless.mapblklot_generator import MapblklotGenerator
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary

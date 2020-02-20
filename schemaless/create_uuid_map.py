@@ -10,7 +10,7 @@ import uuid
 
 from datetime import date
 from fileutils import open_file
-from schemaless.create_mapblklot_map import MapblklotGenerator
+from schemaless.mapblklot_generator import MapblklotGenerator
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
