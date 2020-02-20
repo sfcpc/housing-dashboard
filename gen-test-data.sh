@@ -29,23 +29,27 @@ python3 -m schemaless.create_schemaless \
   --permit_addenda testdata/permit-addenda.csv \
   --affordable_file testdata/affordable-rental-portfolio.csv \
   --the-date=2020-01-29 \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   testdata/schemaless-one.csv
 # We read in the uuid-map file generated previously so our uuids are stable
 python3 -m schemaless.create_uuid_map \
   testdata/schemaless-one.csv \
   testdata/uuid-map-one.csv \
   --likely_match_file=testdata/likelies-one.csv \
-  --uuid_map_file=testdata/uuid-map-one.csv
+  --uuid_map_file=testdata/uuid-map-one.csv \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz
 python3 -m schemaless.create_schemaless \
   --ppts_file testdata/ppts-two.csv \
   --diff testdata/schemaless-one.csv \
   --the-date=2020-01-29 \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   testdata/schemaless-two.csv
 # We read in the uuid-map file generated previously so our uuids are stable
 python3 -m schemaless.create_uuid_map \
   testdata/schemaless-one.csv \
   testdata/uuid-map-two.csv \
   --likely_match_file=testdata/likelies-two.csv \
-  --uuid_map_file=testdata/uuid-map-two.csv
+  --uuid_map_file=testdata/uuid-map-two.csv \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz
   # Note: When adding new records, use uuid-map-one so new UUIDs are persisted
   # --uuid_map_file=testdata/uuid-map-one.csv
