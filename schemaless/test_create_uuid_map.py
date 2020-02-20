@@ -432,13 +432,13 @@ def test_assign_uuids_uuid_reassign_parent(graph_uuid_reassign_parent):
 
 
 # Tests below use the data in the 'testdata' directory
-def test_ppts_child_1950_mission():
+def test_planning_child_1950_mission():
     # All children of 1950 Mission's PRJ should be accounted for
-    prj_fk = 'ppts_2016-001514PRJ'
-    expected_ppts_children = [
-        'ppts_2016-001514PPA',
-        'ppts_2016-001514CUA',
-        'ppts_2016-001514ENV',
+    prj_fk = 'planning_2016-001514PRJ'
+    expected_planning_children = [
+        'planning_2016-001514PPA',
+        'planning_2016-001514CUA',
+        'planning_2016-001514ENV',
     ]
     expected_pts_children = [
         'pts_1438278158065',
@@ -451,7 +451,7 @@ def test_ppts_child_1950_mission():
         'testdata/uuid-map-one.csv')
 
     # Verify that the PRJ has the expected children
-    verify_valid_children(rg, prj_fk, expected_ppts_children
+    verify_valid_children(rg, prj_fk, expected_planning_children
                           + expected_pts_children
                           + expected_mohcd_children)
 
@@ -461,13 +461,13 @@ def test_ppts_child_1950_mission():
                           ['permit_addenda_summary_201609218371'])
 
 
-def test_ppts_child_1950_mission_just_parent():
+def test_planning_child_1950_mission_just_parent():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    child = rg.get('ppts_2016-001514GPR')
-    parent = rg.get('ppts_2016-001514PPA')
-    grandparent = rg.get('ppts_2016-001514PRJ')
+    child = rg.get('planning_2016-001514GPR')
+    parent = rg.get('planning_2016-001514PPA')
+    grandparent = rg.get('planning_2016-001514PRJ')
     assert len(child.parents) == 1
     assert child.record_id in parent.children
     assert parent.record_id in child.parents
@@ -475,7 +475,7 @@ def test_ppts_child_1950_mission_just_parent():
     assert child.uuid == grandparent.uuid
 
 
-def test_link_pts_records_without_ppts():
+def test_link_pts_records_without_planning():
     pts_records = [
         'pts_129220091307',
         'pts_1292201488027'
@@ -486,8 +486,8 @@ def test_link_pts_records_without_ppts():
     assert rg.get(pts_records[0]).uuid == rg.get(pts_records[1]).uuid
 
 
-def test_link_pts_to_ppts_records():
-    prj_fk = 'ppts_2017-007883PRJ'
+def test_link_pts_to_planning_records():
+    prj_fk = 'planning_2017-007883PRJ'
     expected_pts_children = [
         'pts_1465081108606',
         'pts_1465082390978'
@@ -496,7 +496,7 @@ def test_link_pts_to_ppts_records():
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
     verify_valid_children(rg, prj_fk, expected_pts_children)
-    prj_fk = 'ppts_2017-006969PRL'
+    prj_fk = 'planning_2017-006969PRL'
     expected_pts_children = [
         'pts_1465580423638',
     ]
@@ -504,7 +504,7 @@ def test_link_pts_to_ppts_records():
 
 
 def test_tco_link():
-    prj_fk = 'ppts_2017-006823PRJ'
+    prj_fk = 'planning_2017-006823PRJ'
     expected_pts_children = [
         'pts_1492183510316', 'pts_1464175214172'
     ]
@@ -520,12 +520,12 @@ def test_tco_link():
 
 
 def test_mohcd_records_link_with_prj():
-    prj_fk = 'ppts_2015-014058PRJ'
-    expected_ppts_children = [
-        'ppts_2015-014058CUA',
-        'ppts_2015-014058ENV',
-        'ppts_2015-014058VAR',
-        'ppts_2015-014058TDM',
+    prj_fk = 'planning_2015-014058PRJ'
+    expected_planning_children = [
+        'planning_2015-014058CUA',
+        'planning_2015-014058ENV',
+        'planning_2015-014058VAR',
+        'planning_2015-014058TDM',
     ]
     expected_mohcd_pipeline_children = [
         'mohcd_pipeline_2017-034'
@@ -536,7 +536,7 @@ def test_mohcd_records_link_with_prj():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    verify_valid_children(rg, prj_fk, expected_ppts_children +
+    verify_valid_children(rg, prj_fk, expected_planning_children +
                           expected_mohcd_pipeline_children +
                           expected_mohcd_inclusionary_children)
 

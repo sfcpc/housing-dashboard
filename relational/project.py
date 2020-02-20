@@ -10,7 +10,7 @@ from collections import defaultdict
 from collections import namedtuple
 from datetime import datetime
 
-from schemaless.sources import PPTS
+from schemaless.sources import Planning
 
 
 NameValue = namedtuple('NameValue',
@@ -138,7 +138,7 @@ class Project:
         # REMOVE THIS IF WE ARE EVER DETERMINED TO GET DATA FROM PRJ-LESS
         # RECORDS
         if (len(self.roots) == 0 or
-                len(self.roots.get(PPTS.NAME, [])) == 0):
+                len(self.roots.get(Planning.NAME, [])) == 0):
             msg = 'No root PRJ record for project'
             if len(self.roots) > 0:
                 # get an arbitrary root to extract a FK, so just get
@@ -160,9 +160,9 @@ class Project:
         The process of getting a field:
           * Start with root project.
             * If multiple roots, choose one with latest update time.
-          * If source != PPTS, then descend to children.
+          * If source != Planning, then descend to children.
             * If multiple children, choose one with latest update time.
-          * If source == PPTS, then only descend to children if None found on
+          * If source == Planning, then only descend to children if None found on
             root.
 
         Returns:
@@ -189,7 +189,7 @@ class Project:
                 if val and val[1] > result[1] and _test_predicates(parent):
                     result = val
 
-        if source != PPTS.NAME or result[0] is None:
+        if source != Planning.NAME or result[0] is None:
             for child in self.children[source]:
                 val = child.get_latest(name)
                 if val and val[1] > result[1] and _test_predicates(child):

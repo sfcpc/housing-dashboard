@@ -8,7 +8,7 @@ from relational.project import NameValue
 from relational.project import Project
 from schemaless.create_uuid_map import Node
 from schemaless.create_uuid_map import RecordGraph
-from schemaless.sources import PPTS
+from schemaless.sources import Planning
 
 
 @pytest.fixture
@@ -72,29 +72,29 @@ def test_project_simple_case(basic_entries, basic_graph):
     assert proj.roots['ppts'][0].fk == '1'
 
     # only source data from the parent even if present in child
-    assert proj.field('num_units_bmr', PPTS.NAME) == '22'
+    assert proj.field('num_units_bmr', Planning.NAME) == '22'
 
     # pull data from the child since not present on the parent
-    assert proj.field('residential_units_1br', PPTS.NAME) == '1'
+    assert proj.field('residential_units_1br', Planning.NAME) == '1'
 
     # pull data from the latest child
-    assert proj.field('num_square_feet', PPTS.NAME) == '2100'
+    assert proj.field('num_square_feet', Planning.NAME) == '2100'
 
     # pull data from an earlier child because of the predicate
     assert proj.field('num_square_feet',
-                      PPTS.NAME,
+                      Planning.NAME,
                       entry_predicate=[('residential_units_1br',
                                         lambda x: True)]) == '2300'
 
     # nothing because the predicate value doesn't match
     assert proj.field('num_square_feet',
-                      PPTS.NAME,
+                      Planning.NAME,
                       entry_predicate=[('residential_units_1br',
                                         lambda x: x == '2')]) == ''
 
     # pull data from the earlier child because the predicate value DOES match
     assert proj.field('num_square_feet',
-                      PPTS.NAME,
+                      Planning.NAME,
                       entry_predicate=[('residential_units_1br',
                                         lambda x: x == '1')]) == '2300'
 
@@ -108,7 +108,7 @@ def test_project_no_main_record(basic_entries, rootless_graph):
     assert proj.roots['ppts'][0].fk == '2'
 
     # pull data from oldest child, which got upgraded to be main
-    assert proj.field('num_square_feet', PPTS.NAME) == '2300'
+    assert proj.field('num_square_feet', Planning.NAME) == '2300'
 
 
 def test_project_ppts_and_pts(multi_source_entries, basic_graph):

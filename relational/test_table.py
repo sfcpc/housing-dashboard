@@ -15,7 +15,7 @@ from schemaless.create_uuid_map import Node
 from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
-from schemaless.sources import PPTS
+from schemaless.sources import Planning
 from schemaless.sources import PTS
 
 
@@ -69,7 +69,7 @@ def test_table_project_facts_units(basic_graph):
     table = ProjectFacts()
 
     entries1 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
         Entry('2',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
@@ -82,27 +82,27 @@ def test_table_project_facts_units(basic_graph):
     assert _get_value_for_row(table, fields, 'net_num_units') == '-2'
 
     entries2 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
         Entry('2', PTS.NAME, [NameValue('proposed_units', '7', d)]),
     ]
     proj_no_permit_type = Project('uuid1', entries2, basic_graph)
     fields = table.rows(proj_no_permit_type)
-    # Gets from PPTS because PTS data is incomplete (no permit type)
+    # Gets from Planning because PTS data is incomplete (no permit type)
     assert _get_value_for_row(table, fields, 'net_num_units') == '10'
 
     entries3 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
         Entry('2', PTS.NAME, [NameValue('permit_type', '1', d),
                               NameValue('existing_units', '7', d)]),
     ]
     proj_missing_proposed_units = Project('uuid1', entries3, basic_graph)
     fields = table.rows(proj_missing_proposed_units)
-    # Gets from PPTS because PTS data is incomplete (proper permit type, no
+    # Gets from Planning because PTS data is incomplete (proper permit type, no
     # proposed)
     assert _get_value_for_row(table, fields, 'net_num_units') == '10'
 
     entries4 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
         Entry('2',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
@@ -114,15 +114,15 @@ def test_table_project_facts_units(basic_graph):
     assert _get_value_for_row(table, fields, 'net_num_units') == '7'
 
     entries5 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
     ]
     proj_ppts_only = Project('uuid1', entries5, basic_graph)
     fields = table.rows(proj_ppts_only)
-    # Gets from PPTS because no other choice
+    # Gets from Planning because no other choice
     assert _get_value_for_row(table, fields, 'net_num_units') == '10'
 
     entries6 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
         Entry('2',
               PTS.NAME,
               [NameValue('permit_type', '3', d),
@@ -139,7 +139,7 @@ def test_table_project_facts_units_mohcd(basic_graph):
     table = ProjectFacts()
 
     entries1 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
         Entry('2',
               MOHCDPipeline.NAME,
               [NameValue('total_project_units', '7', d),
@@ -160,7 +160,7 @@ def test_table_project_facts_units_mohcd(basic_graph):
         MOHCDPipeline.NAME
 
     entries2 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
         Entry('3',
               MOHCDInclusionary.NAME,
               [NameValue('total_project_units', '6', d),
@@ -177,7 +177,7 @@ def test_table_project_facts_units_mohcd(basic_graph):
         MOHCDInclusionary.NAME
 
     entries3 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
         Entry('2',
               MOHCDPipeline.NAME,
               [NameValue('total_project_units', '7', d)]),
@@ -198,7 +198,7 @@ def test_table_project_units_full_count(basic_graph):
     table = ProjectUnitCountsFull()
 
     entries1 = [
-        Entry('1', PPTS.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
         Entry('2',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
@@ -241,14 +241,14 @@ def test_project_details_bedroom_info(unit_graph):
 
     entries1 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('residential_units_1br_net', '10', d)]),
     ]
     proj_normal = Project('uuid1', entries1, unit_graph)
 
     entries2 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('residential_units_adu_1br_net', '1', d)]),
     ]
     proj_adu = Project('uuid2', entries2, unit_graph)
@@ -267,7 +267,7 @@ def test_project_details_bedroom_info_mohcd(basic_graph):
 
     entries1 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('residential_units_1br_net', '2', d)]),
         Entry('2',
               MOHCDPipeline.NAME,
@@ -281,7 +281,7 @@ def test_project_details_bedroom_info_mohcd(basic_graph):
 
     entries2 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('residential_units_1br_net', '2', d)]),
         Entry('2',
               MOHCDInclusionary.NAME,
@@ -292,7 +292,7 @@ def test_project_details_bedroom_info_mohcd(basic_graph):
 
     entries3 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               []),
         Entry('2',
               MOHCDInclusionary.NAME,
@@ -331,7 +331,7 @@ def test_project_details_ami_info_mohcd(basic_graph):
 
     entries1 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('residential_units_1br_net', '2', d)]),
         Entry('2',
               MOHCDPipeline.NAME,
@@ -345,7 +345,7 @@ def test_project_details_ami_info_mohcd(basic_graph):
 
     entries2 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('residential_units_1br_net', '2', d)]),
         Entry('2',
               MOHCDInclusionary.NAME,
@@ -405,7 +405,7 @@ def test_project_status_history_predevelopment(child_parent_graph):
 
     entries1 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'PRJ', d),
                NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d)]),
     ]
@@ -417,16 +417,16 @@ def test_project_status_history_predevelopment(child_parent_graph):
 
     entries2 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'PRJ', d),
                NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d)]),
         Entry('2',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'PPA', d),
                NameValue('date_opened', '10/18/2018 12:00:00 AM +0000', d)]),
         # ENT's don't matter for pre-development open date but do for end_date
         Entry('3',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'CUA', d),
                NameValue('date_opened', '11/25/2018 12:00:00 AM +0000', d)])
     ]
@@ -451,26 +451,26 @@ def test_project_status_history_filed_for_entitlements(child_parent_graph):
 
     entries1 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'PRJ', d),
                NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d)]),
         Entry('2',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'CUA', d),
                NameValue('date_opened', '11/25/2018 12:00:00 AM +0000', d)]),
         # Ignore any ENT records that don't have oldest open date
         Entry('3',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'ENV', d),
                NameValue('date_opened', '11/28/2018 12:00:00 AM +0000', d)]),
         # Ignore any non-ENT records
         Entry('4',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'ABC', d),
                NameValue('date_opened', '11/30/2018 12:00:00 AM +0000', d)]),
         # Ignore any record not part of the PRJ
         Entry('5',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'VAR', d),
                NameValue('date_opened', '11/01/2018 12:00:00 AM +0000', d)]),
     ]
@@ -491,33 +491,33 @@ def test_project_status_history_entitled(child_parent_graph):
 
     entries1 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'PRJ', d),
                NameValue('status', 'Accepted', d),
                NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d)]),
         # Ignore any ENT records that don't have newest closed date
         Entry('2',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'CUA', d),
                NameValue('status', 'Closed - CEQA', d),
                NameValue('date_opened', '11/25/2018 12:00:00 AM +0000', d),
                NameValue('date_closed', '3/27/2019 12:00:00 AM +0000', d)]),
         Entry('3',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'VAR', d),
                NameValue('status', 'Closed - XYZ', d),
                NameValue('date_opened', '11/28/2018 12:00:00 AM +0000', d),
                NameValue('date_closed', '4/15/2019 12:00:00 AM +0000', d)]),
         # Ignore any non-ENT records
         Entry('4',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'ABC', d),
                NameValue('status', 'closed', d),
                NameValue('date_opened', '11/30/2018 12:00:00 AM +0000', d),
                NameValue('date_closed', '5/20/2019 12:00:00 AM +0000', d)]),
         # Ignore any record not part of the PRJ
         Entry('5',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'ENV', d),
                NameValue('status', 'Closed', d),
                NameValue('date_opened', '11/01/2018 12:00:00 AM +0000', d),
@@ -538,24 +538,24 @@ def test_project_status_history_entitled(child_parent_graph):
 
     entries2 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'PRJ', d),
                NameValue('status', 'Accepted', d),
                NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d)]),
         # ENT is still open, project is not entitlded
         Entry('2',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'CUA', d),
                NameValue('status', 'Accepted', d),
                NameValue('date_opened', '11/25/2018 12:00:00 AM +0000', d)]),
         Entry('3',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'VAR', d),
                NameValue('status', 'Closed - XYZ', d),
                NameValue('date_opened', '11/28/2018 12:00:00 AM +0000', d),
                NameValue('date_closed', '4/15/2019 12:00:00 AM +0000', d)]),
         Entry('4',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'PPA', d),
                NameValue('date_opened', '10/18/2018 12:00:00 AM +0000', d),
                NameValue('date_closed', '1/1/2019 12:00:00 AM +0000', d)]),
@@ -574,13 +574,13 @@ def test_project_status_history_entitled(child_parent_graph):
 
     entries3 = [
         Entry('1',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'PRJ', d),
                NameValue('status', 'Closed', d),
                NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d),
                NameValue('date_closed', '4/15/2019 12:00:00 AM +0000', d)]),
         Entry('2',
-              PPTS.NAME,
+              Planning.NAME,
               [NameValue('record_type_category', 'VAR', d),
                NameValue('status', 'Closed - XYZ', d),
                NameValue('date_opened', '11/28/2018 12:00:00 AM +0000', d)]),

@@ -18,7 +18,7 @@ from relational.project import Project
 from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
-from schemaless.sources import PPTS
+from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import source_map
 
@@ -62,7 +62,7 @@ config = [
 
 class Freshness:
     _FIELD_SETS = {
-        PPTS.NAME: set(['date_opened', 'date_closed']),
+        Planning.NAME: set(['date_opened', 'date_closed']),
         PTS.NAME: set([
             'completed_date',
             'current_status_date',
@@ -78,7 +78,7 @@ class Freshness:
         self.bad_dates = 0
         self.bad_dates_sample = {}
         self._freshness_checks = {
-            PPTS.NAME: self._ppts,
+            Planning.NAME: self._planning,
             PTS.NAME: self._pts,
             MOHCDPipeline.NAME: self._mohcd_pipeline,
             MOHCDInclusionary.NAME: self._mohcd_inclusionary,
@@ -127,8 +127,8 @@ class Freshness:
             print('Warning: unknown source for '
                   'data freshness: %s, skipping' % line['source'])
 
-    def _ppts(self, line):
-        self._extract_nv_date(line, PPTS.NAME)
+    def _planning(self, line):
+        self._extract_nv_date(line, Planning.NAME)
 
     def _pts(self, line):
         self._extract_nv_date(line, PTS.NAME)

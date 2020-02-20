@@ -5,7 +5,7 @@ from collections import namedtuple
 from relational.process_schemaless import Freshness
 from relational.process_schemaless import is_seen_id
 from schemaless.sources import MOHCDPipeline
-from schemaless.sources import PPTS
+from schemaless.sources import Planning
 from schemaless.sources import PTS
 
 
@@ -16,17 +16,17 @@ def test_freshness():
 
     lines = []
     lines.append({
-        'source': PPTS.NAME,
+        'source': Planning.NAME,
         'name': 'date_opened',
         'value': '01/01/2000',
     })
     lines.append({
-        'source': PPTS.NAME,
+        'source': Planning.NAME,
         'name': 'date_opened',
         'value': '01/01/2010',
     })
     lines.append({
-        'source': PPTS.NAME,
+        'source': Planning.NAME,
         'name': 'date_opened',
         'value': '01/01/2020',
     })
@@ -50,7 +50,7 @@ def test_freshness():
 
     # ignored, in the future
     lines.append({
-        'source': PPTS.NAME,
+        'source': Planning.NAME,
         'name': 'date_opened',
         'value': datetime.max.strftime('%m/%d/%Y'),
     })
@@ -74,7 +74,7 @@ def test_freshness():
     for line in lines:
         fresh.update_freshness(line)
 
-    assert fresh.freshness[PPTS.NAME] == newer
+    assert fresh.freshness[Planning.NAME] == newer
     assert fresh.freshness[PTS.NAME] == pts
     assert fresh.freshness[MOHCDPipeline.NAME] == mohcd
     assert 'bamboozle' not in fresh.freshness

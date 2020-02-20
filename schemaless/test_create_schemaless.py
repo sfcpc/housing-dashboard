@@ -13,7 +13,7 @@ from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
-from schemaless.sources import PPTS
+from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import TCO
 
@@ -40,45 +40,45 @@ def test_latest_values_update(tmpdir):
     # Note: tmpdir is a built-in pytest fixture that makes a temp dir
     sf = tmpdir.join("schemaless.csv")
     shutil.copyfile('testdata/schemaless-one.csv', sf)
-    fk = 'ppts_2016-001514PRJ'  # 1950 Mission St
+    fk = 'planning_2016-001514PRJ'  # 1950 Mission St
     aff_key = 'affordable_units_proposed'
 
     latest = latest_values(sf)
-    assert latest[PPTS.NAME][fk][aff_key] == '157'
+    assert latest[Planning.NAME][fk][aff_key] == '157'
 
     # Change the units
     with open(sf, 'a') as outf:
         writer = csv.writer(outf)
         writer.writerow(
-            [fk, 'ppts', date.today().isoformat(),
+            [fk, 'planning', date.today().isoformat(),
              'affordable_units_proposed', '700'])
     latest = latest_values(sf)
-    assert latest[PPTS.NAME][fk][aff_key] == '700'
+    assert latest[Planning.NAME][fk][aff_key] == '700'
 
     # Change the units again
     with open(sf, 'a') as outf:
         writer = csv.writer(outf)
         writer.writerow(
-            [fk, 'ppts', date.today().isoformat(),
+            [fk, 'planning', date.today().isoformat(),
              'affordable_units_proposed', '100'])
     latest = latest_values(sf)
-    assert latest[PPTS.NAME][fk][aff_key] == '100'
+    assert latest[Planning.NAME][fk][aff_key] == '100'
 
 
 def test_latest_values_no_collision():
     """Ensure we're not overwriting values for unrelated projects."""
     latest = latest_values('testdata/schemaless-one.csv')
-    assert latest[PPTS.NAME][
-            'ppts_2016-008581PRJ']['market_rate_units_proposed'] \
-        != latest[PPTS.NAME][
-            'ppts_2017-007883PRJ']['market_rate_units_proposed']
+    assert latest[Planning.NAME][
+            'planning_2016-008581PRJ']['market_rate_units_proposed'] \
+        != latest[Planning.NAME][
+            'planning_2017-007883PRJ']['market_rate_units_proposed']
 
 
 def test_just_dump(tmpdir):
     """Ensure dumping produces the expected result."""
     outfile = tmpdir.join("schemaless.csv")
     just_dump(
-        [PPTS('testdata/ppts-one.csv'),
+        [Planning('testdata/planning-one.csv'),
          PTS('testdata/pts.csv'),
          TCO('testdata/tco.csv'),
          MOHCDPipeline('testdata/mohcd-pipeline.csv'),
@@ -94,7 +94,7 @@ def test_dump_and_diff(tmpdir):
     """Ensure dumping produces the expected result."""
     outfile = tmpdir.join("schemaless.csv")
     dump_and_diff(
-        [PPTS('testdata/ppts-two.csv')],
+        [Planning('testdata/planning-two.csv')],
         outfile,
         'testdata/schemaless-one.csv',
         the_date=TESTDATA_GEN_DATE)
