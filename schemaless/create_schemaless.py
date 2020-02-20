@@ -15,11 +15,11 @@ from datetime import datetime
 import shutil
 import sys
 
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
-from schemaless.sources import AffordableRentalPortfolio
-from schemaless.sources import PPTS
+from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import TCO
 
@@ -91,7 +91,7 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--ppts_file', help='PPTS file', default='')
+    parser.add_argument('--planning_file', help='Planning file', default='')
     parser.add_argument('--pts_file', help='PTS file', default='')
     parser.add_argument('--tco_file', help='TCO file', default='')
     parser.add_argument('--mohcd_pipeline_file',
@@ -119,8 +119,8 @@ if __name__ == "__main__":
     if args.the_date:
         the_date = datetime.strptime(args.the_date, "%Y-%m-%d").date()
     sources = []
-    if args.ppts_file:
-        sources.append(PPTS(args.ppts_file))
+    if args.planning_file:
+        sources.append(Planning(args.planning_file))
     if args.pts_file:
         sources.append(PTS(args.pts_file))
     if args.tco_file:
