@@ -10,7 +10,6 @@ from collections import OrderedDict
 import math
 import re
 
-from schemaless.sources import source_map
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
@@ -237,8 +236,7 @@ class ProjectFacts(Table):
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = ''  # TODO
             row[self.index(self.PERMIT_AUTHORITY)] = PPTS.OUTPUT_NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', PPTS.NAME)
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(PPTS.NAME)
         elif proj.field('permit_number',
                         PTS.NAME,
                         entry_predicate=pts_pred) != '':
@@ -258,8 +256,8 @@ class ProjectFacts(Table):
                            PTS.NAME,
                            entry_predicate=pts_pred)
             row[self.index(self.PERMIT_AUTHORITY)] = PTS.NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', PTS.NAME, entry_predicate=pts_pred)
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(
+                    PTS.NAME, entry_predicate=pts_pred)
         else:
             for mohcd in _MOHCD_TYPES.keys():
                 if proj.field('project_id', mohcd) == '':
@@ -282,10 +280,8 @@ class ProjectFacts(Table):
                 row[self.index(self.SUPERVISOR_DISTRICT)] = \
                     proj.field('supervisor_district', mohcd)
 
-                row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                    'fk', mohcd)
-                row[self.index(self.PERMIT_AUTHORITY)] = \
-                    source_map[mohcd].DEPARTMENT
+                row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(mohcd)
+                row[self.index(self.PERMIT_AUTHORITY)] = 'mohcd'  # TODO
 
     def _estimate_bmr(self, net):
         """Estimates the BMR we project a project to have.

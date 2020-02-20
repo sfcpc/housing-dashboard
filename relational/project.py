@@ -156,6 +156,38 @@ class Project:
                     return False
         return True
 
+    def fk(self, source, entry_predicate=None):
+        """Similar to field() but specifically for fetching the foreign key
+        for an entry, since the approach varies by source and we already store
+        fk separately.
+
+        Unlike field, we prefer sticking to root entries, and only descend
+        if we don't find anything from the source at the root.  We also prefer
+        the oldest entry, not the newest entry, using that as the most
+        authoritative source.
+
+        Returns:
+            string (an empty string if no value found)
+        """
+        result = (None, datetime.max)
+
+        for parent in self.roots.get(source, []):
+            val = (parent.fk, parent.oldest_name_value())
+            if (val and
+                    val[1] < result[1] and
+                    self._test_entry_predicate(parent, entry_predicate)):
+                result = val
+
+        if not result[0]:
+            for child in self.children.get(source, []):
+                val = (child.fk, child.oldest_name_value())
+                if (val and
+                        val[1] < result[1] and
+                        self._test_entry_predicate(child, entry_predicate)):
+                    result = val
+
+        return result[0] if result[0] else ''
+
     def fields(self, name, source, entry_predicate=None):
         """Similar to field() but fetches all values for a given field name
         instead of just trying to pick one.
