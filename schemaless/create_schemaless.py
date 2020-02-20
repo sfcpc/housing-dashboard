@@ -15,6 +15,7 @@ from datetime import datetime
 import shutil
 import sys
 
+from schemaless.create_mapblklot_map import MapblklotGenerator
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
@@ -113,11 +114,16 @@ if __name__ == "__main__":
         help=('Date this script was run, optional, defaults to today. '
               'YYYY-MM-DD'),
         default='')
+    parser.add_argument('--parcel_data_file')
     args = parser.parse_args()
 
     the_date = None
     if args.the_date:
         the_date = datetime.strptime(args.the_date, "%Y-%m-%d").date()
+
+    if args.parcel_data_file:
+        MapblklotGenerator(args.parcel_data_file)
+
     sources = []
     if args.ppts_file:
         sources.append(PPTS(args.ppts_file))

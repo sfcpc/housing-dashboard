@@ -4,10 +4,13 @@ from collections import OrderedDict
 import csv
 from csv import DictReader
 from csv import DictWriter
+import pandas as pd
+
 import uuid
 
 from datetime import date
 from fileutils import open_file
+from schemaless.create_mapblklot_map import MapblklotGenerator
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
@@ -163,11 +166,16 @@ class PTSHelper(RecordGraphBuilderHelper,
                 PPTSAddressLookupMixin,
                 CalculatedFieldsMixin):
     SOURCE = PTS
+    PERMIT_GROUPING_ATTRS = ['mapblklot', 'filed_date', 'proposed_use']
 
     def __init__(self, graph_builder):
         super().__init__(graph_builder)
+
         self._permit_number_to_pts_fk = defaultdict(list)
         self._address_to_pts_fk = defaultdict(list)
+
+        # Maps "root" permits with their associated child permits.
+        self._permit_groupings = defaultdict(list)
 
     def find_by_building_permit_number(self, permit_number):
         """Find a fk by PTS building permit number."""
@@ -178,6 +186,7 @@ class PTSHelper(RecordGraphBuilderHelper,
         return self._address_to_pts_fk[address]
 
     def preprocess(self, latest_records):
+        groupable_records = {}
         for fk, record in latest_records.get(PTS.NAME, {}).items():
             if 'permit_number' in record:
                 self._permit_number_to_pts_fk[
@@ -186,29 +195,45 @@ class PTSHelper(RecordGraphBuilderHelper,
             if 'address_norm' in record:
                 self._address_to_pts_fk[record['address_norm']].append(fk)
 
+            if set(PTSHelper.PERMIT_GROUPING_ATTRS).issubset(record.keys()):
+                groupable_records[fk] = record
+        self.permit_groupings = self.compute_permit_groupings(groupable_records)
+        print(self.permit_groupings)
+
+    def compute_permit_groupings(self, groupable_records):
+        groupable_records_df = pd.DataFrame(groupable_records.values())
+        groupable_records_df['fk'] = groupable_records.keys()
+
+        permit_groupings_df = groupable_records_df.groupby(PTSHelper.PERMIT_GROUPING_ATTRS)
+        permit_groupings = {}
+        for _, group in permit_groupings_df:
+            group_fks = group['fk'].tolist()
+            permit_groupings[group_fks[0]] = group_fks[1:]
+        return permit_groupings
+
     def process(self, fk, record, parents, children):
+        # Make sure that the permit is linked to other permits in its "group".
+        if fk in self.permit_groupings.keys():
+            children.extend(self.permit_groupings[fk])
+
+        # Make sure that the permit is linked to other permits with the same
+        # permit number.
         permit_number = record['permit_number']
-
-        ppts_helper = self.graph_builder.helpers[PPTS.NAME]
-        ppts_records = ppts_helper.find_by_permit_number(permit_number)
-
         pts_helper = self.graph_builder.helpers[PTS.NAME]
-        pts_records = pts_helper.find_by_building_permit_number(permit_number)
-        if ppts_records:
+        pts_records_with_permit_no = pts_helper.find_by_building_permit_number(permit_number)
+
+        if pts_records_with_permit_no and pts_records_with_permit_no[0] != fk and pts_records_with_permit_no[0] not in children:
+            parents.append(pts_records_with_permit_no[0])
+
+        # Make sure that the permit is linked to any parent PPTS records.
+        ppts_helper = self.graph_builder.helpers[PPTS.NAME]
+        parent_ppts_records = ppts_helper.find_by_permit_number(permit_number)
+
+        if parent_ppts_records:
             # If there is a PPTS record that should be the parent
             # record of PTS records with this permit number, we
             # assign that as the parent.
-            parents.extend(ppts_records)
-        elif pts_records and pts_records[0] == fk:
-            # Even if there is no PPTS record that should be the
-            # parent of PTS records with this permit number, we need
-            # to ensure that all PTS records with the same permit number
-            # are assigned the same UUID.
-            #
-            # We do this by picking the first PTS record with the given
-            # permit number and assigning any other records with
-            # that permit number  as "children" of that record.
-            children.extend(pts_records[1:])
+            parents.extend(parent_ppts_records)
 
     def process_likely(self, fk, record, parents, children):
         record = self.add_calculated_fields(record)
@@ -318,7 +343,8 @@ class PermitAddendaSummaryHelper(RecordGraphBuilderHelper):
 
 class RecordGraphBuilder:
     """RecordGraphBuilder reads in files and builds a RecordGraph."""
-    def __init__(self, graph_class, schemaless_file, uuid_map_file,
+
+    def __init__(self, graph_class, schemaless_file, uuid_map_file, parcel_data_file,
                  find_likely_matches=False, exclude_known_likely_matches=True):
         """Init the graph builder.
 
@@ -626,14 +652,21 @@ if __name__ == "__main__":
         help='File to write likely parent/child matches to.',
         default='')
     parser.add_argument('outfile', help='Output path of uuid mapping')
+    parser.add_argument('--parcel_data_file')
+
     args = parser.parse_args()
+
+    if args.parcel_data_file:
+        MapblklotGenerator(args.parcel_data_file)
 
     builder = RecordGraphBuilder(
         RecordGraph,
         args.schemaless_file,
         args.uuid_map_file,
+        args.parcel_data_file,
         args.likely_match_file != "")
     rg = builder.build()
+
     rg.to_file(args.outfile)
     if args.likely_match_file:
         builder.write_likely_matches(args.likely_match_file)
