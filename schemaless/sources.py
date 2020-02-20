@@ -36,6 +36,23 @@ class PrimaryKey(Field):
         return "_".join([self.prefix] + vals)
 
 
+class Concat(Field):
+    def __init__(self, *fields):
+        self.fields = fields
+
+    def __str__(self):
+        return "Concat(%s)" % ", ".join(self.fields)
+
+    def get_value(self, record):
+        vals = []
+        for field in self.fields:
+            if isinstance(field, Field):
+                vals.append(field.get_value_str(record))
+            else:
+                vals.append(record.get(field))
+        return "_".join(vals)
+
+
 class Date(Field):
     def __init__(self, field, date_format):
         self.field = field
@@ -173,100 +190,147 @@ class DirectSource(Source):
                 yield ret
 
 
-class PPTS(DirectSource):
-    NAME = 'ppts'
-    FK = PrimaryKey(NAME, 'record_id')
+class Planning(DirectSource):
+    NAME = 'planning'
+    FK = PrimaryKey(NAME, 'RECORD_ID')
     DATE = Date('date_opened', '%m/%d/%Y')
     OUTPUT_NAME = 'planning'
     FIELDS = {
-        'record_id': 'record_id',
-        'record_type': 'record_type',
-        'record_type_category': 'record_type_category',
-        'record_name': 'name',
-        'description': 'description',
-        'parent': 'parent',
-        'children': 'children',
-        'record_status': 'status',
-        'date_opened': 'date_opened',
-        'date_closed': 'date_closed',
-        # Location details
-        'address': 'address',
-        'the_geom': 'the_geom',
+        'RECORD_ID': 'record_id',
+        'RECORD_TYPE': 'record_type',
+        'RECORD_STATUS': 'status',
+        'CLASS': 'class',
+        'PROJECT_NAME': 'name',
+        'PROJECT_ADDRESS': 'address',
+        'DESCRIPTION': 'description',
 
-        # Developer and Planner
-        'developer_name': 'TODO',
-        'planner_name': 'planner_name',
-        'planner_email': 'planner_email',
-        'planner_phone': 'planner_phone',
+        # Location
+        'BLOCK': 'block',
+        'LOT': 'lot',
+        'MAPBLOCKLOT': 'mapblocklot',
+        'SUPERVISOR_DISTRICT': 'supervisor_district',
+        # TODO: the_geom
 
-        # Child record details
-        'incentives': 'TODO',
-        'ppa_submitted': 'TODO',
-        'ppa_letter_issued': 'TODO',
-        'prj_submitted': 'TODO',
-        'nia_issued': 'TODO',
-        'application_accepted': 'TODO',
-        'pcl_issued': 'TODO',
-        'project_desc_stable': 'TODO',
-        'env_review_type': 'TODO',
-        'first_hearing': 'TODO',
-        'final_hearing': 'TODO',
-        'entitlements_issued': 'TODO',
+        # Related records
+        'PARENT_ID': 'parent',
+        # TODO: children?
+        'RELATED_BUILDING_PERMIT': 'building_permits',
 
-        # Unit/land use details
-        'non_housing_uses': 'TODO',
-        'RELATED_BUILDING_PERMIT': 'building_permit_number',
-        'LAND_USE_RESIDENTIAL_EXIST': 'residential_sq_ft_existing',
-        'LAND_USE_RESIDENTIAL_PROP': 'residential_sq_ft_proposed',
-        'LAND_USE_RESIDENTIAL_NET': 'residential_sq_ft_net',
-        'ADU': 'is_adu',  # TOOD: Normalize this bool? True == "CHECKED"
-        'PRJ_FEATURE_AFFORDABLE_EXIST': 'affordable_units_existing',
-        'PRJ_FEATURE_AFFORDABLE_PROP': 'affordable_units_proposed',
-        'PRJ_FEATURE_AFFORDABLE_NET': 'affordable_units_net',
-        'PRJ_FEATURE_MARKET_RATE_EXIST': 'market_rate_units_existing',
-        'PRJ_FEATURE_MARKET_RATE_PROP': 'market_rate_units_proposed',
-        'PRJ_FEATURE_MARKET_RATE_NET': 'market_rate_units_net',
-        'PRJ_FEATURE_PARKING_EXIST': 'parking_sq_ft_exist',
-        'PRJ_FEATURE_PARKING_PROP': 'parking_sq_ft_proposed',
-        'PRJ_FEATURE_PARKING_NET': 'parking_sq_ft_net',
-        'RESIDENTIAL_STUDIO_EXIST': 'residential_units_studio_existing',
-        'RESIDENTIAL_STUDIO_PROP': 'residential_units_studio_proposed',
-        'RESIDENTIAL_STUDIO_NET': 'residential_units_studio_net',
-        'RESIDENTIAL_1BR_EXIST': 'residential_units_1br_existing',
-        'RESIDENTIAL_1BR_PROP': 'residential_units_1br_proposed',
-        'RESIDENTIAL_1BR_NET': 'residential_units_1br_net',
-        'RESIDENTIAL_2BR_EXIST': 'residential_units_2br_existing',
-        'RESIDENTIAL_2BR_PROP': 'residential_units_2br_proposed',
-        'RESIDENTIAL_2BR_NET': 'residential_units_2br_net',
-        'RESIDENTIAL_3BR_EXIST': 'residential_units_3br_existing',
-        'RESIDENTIAL_3BR_PROP': 'residential_units_3br_proposed',
-        'RESIDENTIAL_3BR_NET': 'residential_units_3br_net',
-        'RESIDENTIAL_ADU_STUDIO_EXIST':
-        'residential_units_adu_studio_existing',  # NOQA
-        'RESIDENTIAL_ADU_STUDIO_PROP': 'residential_units_adu_studio_proposed',
-        'RESIDENTIAL_ADU_STUDIO_NET': 'residential_units_adu_studio_net',
-        'RESIDENTIAL_ADU_STUDIO_AREA': 'residential_sq_ft_adu_studio',
-        'RESIDENTIAL_ADU_1BR_EXIST': 'residential_units_adu_1br_existing',
-        'RESIDENTIAL_ADU_1BR_PROP': 'residential_units_adu_1br_proposed',
-        'RESIDENTIAL_ADU_1BR_NET': 'residential_units_adu_1br_net',
-        'RESIDENTIAL_ADU_1BR_AREA': 'residential_sq_ft_adu_1br',
-        'RESIDENTIAL_ADU_2BR_EXIST': 'residential_units_adu_2br_existing',
-        'RESIDENTIAL_ADU_2BR_PROP': 'residential_units_adu_2br_proposed',
-        'RESIDENTIAL_ADU_2BR_NET': 'residential_units_adu_2br_net',
-        'RESIDENTIAL_ADU_2BR_AREA': 'residential_sq_ft_adu_2br',
-        'RESIDENTIAL_ADU_3BR_EXIST': 'residential_units_adu_3br_existing',
-        'RESIDENTIAL_ADU_3BR_PROP': 'residential_units_adu_3br_proposed',
-        'RESIDENTIAL_ADU_3BR_NET': 'residential_units_adu_3br_net',
-        'RESIDENTIAL_ADU_3BR_AREA': 'residential_sq_ft_adu_3br',
-        'RESIDENTIAL_SRO_EXIST': 'residential_units_sro_existing',
-        'RESIDENTIAL_SRO_PROP': 'residential_units_sro_proposed',
-        'RESIDENTIAL_SRO_NET': 'residential_units_sro_net',
-        'RESIDENTIAL_MICRO_EXIST': 'residential_units_micro_existing',
-        'RESIDENTIAL_MICRO_PROP': 'residential_units_micro_proposed',
-        'RESIDENTIAL_MICRO_NET': 'residential_units_micro_net',
+        # Dates
+        'OPEN_DATE': 'date_opened',
+        'CLOSE_DATE': 'date_closed',
+        'DATE_APPLICATION_SUBMITTED': 'date_application_submitted',
+        'DATE_ENTITLEMENTS_APPROVED': 'date_entitlements_approved',
+        'DATE_PPA_SUBMITTED': 'date_ppa_submitted',
+        'DATE_APPLICATION_ACCEPTED': 'date_application_accepted',
+        'DATE_PPA_LETTER_ISSUED': 'date_ppa_letter_issued',
+        'DATE_NIA_ISSUED': 'date_nia_issued',
+        'DATE_PLAN_CHECK_LETTER_ISSUED': 'date_plan_check_letter_issued',
+        'DATE_PROJECT_DESC_STABLE': 'date_project_desc_stable',
+        'DATE_OF_FIRST_HEARING': 'date_of_first_hearing',
+        'DATE_OF_FINAL_HEARING': 'date_of_final_hearing',
+
+        # Developer and planner
+        'DEVELOPER_NAME': 'developer_name',
+        'DEVELOPER_ORG': 'developer_org',
+        'ASSIGNED_TO_PLANNER': 'assigned_to_planner',
+        'PLANNER_FIRST_NAME': 'planner_first_name',
+        'PLANNER_LAST_NAME': 'planner_last_name',
+        'PLANNER_EMAIL': 'planner_email',
+        'PLANNER_PHONE': 'planner_phone',
+
+        'ENVIRONMENTAL_REVIEW_TYPE': 'environmental_review_type',
+        'CHANGE_OF_USE': 'change_of_use',
+        'ADDITIONS': 'additions',
+        'NEW_CONSTRUCTION': 'new_construction',
+        'LEG_ZONE_CHANGE': 'leg_zone_change',
+
+        # Incentives/Bonuses
+        'SB35': 'sb35',
+        'SB330': 'sb330',
+        'AB2162': 'ab2162',
+        'HOUSING_SUSTAINABILITY_DIST': 'housing_sustainability_dist',
+        'HOMESF': 'homesf',
+        'STATE_DENSITY_BONUS_ANALYZED': 'state_density_bonus_analyzed',
+        'STATE_DENSITY_BONUS_INDIVIDUAL': 'state_density_bonus_individual',
+        'BASE_DENSITY': 'base_density',
+        'BONUS_DENSITY': 'bonus_density',
+
+        # Unit info
+        'SENIOR': 'senior',
+        'AFFORDABLE_UNITS': 'affordable_units',
+        'STUDENT': 'student',
+        'INCLUSIONARY': 'inclusionary',
+        'ADU': 'adu',
+        'LEGALIZATION': 'legalization',
+        'CHANGE_OF_DWELLING_UNITS': 'change_of_dwelling_units',
+
+        'NUMBER_OF_UNITS': 'number_of_units',
+        'NUMBER_OF_MARKET_RATE_UNITS': 'number_of_market_rate_units',
+        'NUMBER_OF_AFFORDABLE_UNITS': 'number_of_affordable_units',
+
+        'RENTAL_UNITS': 'rental_units',
+        'OWNERSHIP_UNITS': 'ownership_units',
+        'UNKOWN_UNITS': 'unkown_units',
+
+        'INCLUSIONARY_PERCENT': 'inclusionary_percent',
+        'AHBP_100_PERCENT_AFFORDABLE': 'ahbp_100_percent_affordable',
+
+        'RESIDENTIAL_EXIST': 'residential_exist',
+        'RESIDENTIAL_PROP': 'residential_prop',
+        'RESIDENTIAL_STUDIO_EXIST': 'residential_studio_exist',
+        'RESIDENTIAL_STUDIO_PROP': 'residential_studio_prop',
+        'RESIDENTIAL_1BR_EXIST': 'residential_1br_exist',
+        'RESIDENTIAL_1BR_PROP': 'residential_1br_prop',
+        'RESIDENTIAL_2BR_EXIST': 'residential_2br_exist',
+        'RESIDENTIAL_2BR_PROP': 'residential_2br_prop',
+        'RESIDENTIAL_3BR_EXIST': 'residential_3br_exist',
+        'RESIDENTIAL_3BR_PROP': 'residential_3br_prop',
+        # ADU is an accessory dwelling unit (aka casita aka granny flat)
+        'RESIDENTIAL_ADU_STUDIO_EXIST': 'residential_adu_studio_exist',
+        'RESIDENTIAL_ADU_STUDIO_PROP': 'residential_adu_studio_prop',
+        'RESIDENTIAL_ADU_1BR_EXIST': 'residential_adu_1br_exist',
+        'RESIDENTIAL_ADU_1BR_PROP': 'residential_adu_1br_prop',
+        'RESIDENTIAL_ADU_2BR_EXIST': 'residential_adu_2br_exist',
+        'RESIDENTIAL_ADU_2BR_PROP': 'residential_adu_2br_prop',
+        'RESIDENTIAL_ADU_3BR_EXIST': 'residential_adu_3br_exist',
+        'RESIDENTIAL_ADU_3BR_PROP': 'residential_adu_3br_prop',
+        # GH is a group home
+        'RESIDENTIAL_GH_ROOMS_EXIST': 'residential_gh_rooms_exist',
+        'RESIDENTIAL_GH_ROOMS_PROP': 'residential_gh_rooms_prop',
+        'RESIDENTIAL_GH_BEDS_EXIST': 'residential_gh_beds_exist',
+        'RESIDENTIAL_GH_BEDS_PROP': 'residential_gh_beds_prop',
+        # SRO is a single-room occupancy
+        'RESIDENTIAL_SRO_EXIST': 'residential_sro_exist',
+        'RESIDENTIAL_SRO_PROP': 'residential_sro_prop',
+        # Micro is a micro-unit (typically 200sq.ft. and fewer)
+        'RESIDENTIAL_MICRO_EXIST': 'residential_micro_exist',
+        'RESIDENTIAL_MICRO_PROP': 'residential_micro_prop',
+
+        # Other info about the property, not relevant to the dashboard but
+        # possibly interesting for third parties.
+        'PARKING_SPACES_EXIST': 'parking_spaces_exist',
+        'PARKING_SPACES_PROP': 'parking_spaces_prop',
+        'CAR_SHARE_SPACES_EXIST': 'car_share_spaces_exist',
+        'CAR_SHARE_SPACES_PROP': 'car_share_spaces_prop',
+        'PARKING_GSF_EXIST': 'parking_gsf_exist',
+        'PARKING_GSF_PROP': 'parking_gsf_prop',
+        'RETAIL_COMMERCIAL_EXIST': 'retail_commercial_exist',
+        'RETAIL_COMMERCIAL_PROP': 'retail_commercial_prop',
+        'OFFICE_EXIST': 'office_exist',
+        'OFFICE_PROP': 'office_prop',
+        'INDUSTRIAL_PDR_EXIST': 'industrial_pdr_exist',
+        'INDUSTRIAL_PDR_PROP': 'industrial_pdr_prop',
+        'MEDICAL_EXIST': 'medical_exist',
+        'MEDICAL_PROP': 'medical_prop',
+        'VISITOR_EXIST': 'visitor_exist',
+        'VISITOR_PROP': 'visitor_prop',
+        'CIE_EXIST': 'cie_exist',
+        'CIE_PROP': 'cie_prop',
     }
     COMPUTED_FIELDS = {
         'address_norm': Address('address'),
+        'blocklot': Concat('block', 'lot'),
     }
     DATA_SF = "https://data.sfgov.org/dataset/PPTS-Records_data/kgai-svwy"
 
@@ -595,7 +659,7 @@ class PermitAddendaSummary(Source):
 
 
 source_map = {
-    PPTS.NAME: PPTS,
+    Planning.NAME: Planning,
     PTS.NAME: PTS,
     TCO.NAME: TCO,
     MOHCDPipeline.NAME: MOHCDPipeline,
