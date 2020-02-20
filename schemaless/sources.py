@@ -47,9 +47,11 @@ class Concat(Field):
         vals = []
         for field in self.fields:
             if isinstance(field, Field):
-                vals.append(field.get_value_str(record))
+                val = field.get_value_str(record)
             else:
-                vals.append(record.get(field))
+                val = record.get(field)
+            if val:
+                vals.append(val)
         return "_".join(vals)
 
 
@@ -192,7 +194,7 @@ class DirectSource(Source):
 
 class Planning(DirectSource):
     NAME = 'planning'
-    FK = PrimaryKey(NAME, 'RECORD_ID')
+    FK = PrimaryKey(NAME, 'record_id')
     DATE = Date('date_opened', '%m/%d/%Y')
     OUTPUT_NAME = 'planning'
     FIELDS = {
