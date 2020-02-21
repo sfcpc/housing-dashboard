@@ -318,22 +318,33 @@ class ProjectFacts(Table):
             row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = source
         else:
             dbi_net = _get_dbi_units(proj)
+            ppts_net = proj.field('market_rate_units_net', PPTS.NAME)
             net = dbi_net
-            if dbi_net is not None:
+            # PTS may have an explicitly set 0 unit count for projects
+            # that have no business dealing with housing (possible with
+            # permit type 3 in particular), so we only emit a 0-count
+            # PTS unit count if we had an explicit non-0 PPTS unit
+            # count (therefore indicating a housing-related project that
+            # lost its housing somehow).
+            if (dbi_net is not None
+                    and (dbi_net != 0 or ppts_net)):
                 row[self.index(self.NET_NUM_UNITS)] = str(dbi_net)
                 row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
             else:
                 # TODO: how to handle cases where prop - existing != net ?
-                net = proj.field('market_rate_units_net', PPTS.NAME)
-                row[self.index(self.NET_NUM_UNITS)] = net
-                row[self.index(self.NET_NUM_UNITS_DATA)] = \
-                    PPTS.OUTPUT_NAME if net else ''
+                try:
+                    net = int(ppts_net)
+                    row[self.index(self.NET_NUM_UNITS)] = ppts_net
+                    row[self.index(self.NET_NUM_UNITS_DATA)] = PPTS.OUTPUT_NAME
+                except ValueError:
+                    net = None
+                    pass
 
             bmr_net = proj.field('affordable_units_net', PPTS.NAME)
             if bmr_net != '':
                 row[self.index(self.NET_NUM_UNITS_BMR)] = bmr_net
                 row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = PPTS.OUTPUT_NAME
-            elif net != '':
+            elif net is not None:
                 row[self.index(self.NET_EST_NUM_UNITS_BMR)] = \
                     self._estimate_bmr(net)
                 row[self.index(self.NET_EST_NUM_UNITS_BMR_DATA)] = \
