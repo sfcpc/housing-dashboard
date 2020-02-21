@@ -65,7 +65,7 @@ class Mapblklot(Field):
 
     def get_value(self, record):
         if self.mapblklot:
-            return self.mapblklot
+          return record[self.mapblklot]
 
         mapblklot_generator = MapblklotGenerator.get_instance()
         if mapblklot_generator:

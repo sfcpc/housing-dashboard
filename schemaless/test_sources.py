@@ -1,7 +1,23 @@
 # Lint as: python3
 #
 from schemaless.sources import PermitAddendaSummary
+from schemaless.sources import Mapblklot
+from schemaless.mapblklot_generator import MapblklotGenerator
 
+def test_mapblklot_field():
+    MapblklotGenerator('data/assessor/2020-02-18-parcels.csv.xz')
+
+    record = {'blklot': '3514098'}
+    mapblklot = Mapblklot(blklot='blklot')
+    assert(mapblklot.get_value(record) == '3514045')
+
+    record = {'block': '3514', 'lot': '098'}
+    mapblklot = Mapblklot(block='block', lot='lot')
+    assert(mapblklot.get_value(record) == '3514045')
+
+    record = {'mapblklot': 'foo'}
+    mapblklot = Mapblklot(mapblklot='mapblklot')
+    assert(mapblklot.get_value(record) == 'foo')
 
 def test_permit_addenda_yield_records():
     ''' Checks that addenda summary source correctly summarizes details
