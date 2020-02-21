@@ -321,8 +321,9 @@ class ProjectFacts(Table):
             ppts_net = proj.field('market_rate_units_net', PPTS.NAME)
             net = dbi_net
             # PTS may have an explicitly set 0 unit count for projects
-            # that have no business dealing with housing, so we only emit
-            # a 0-count PTS unit count if we had an explicit non-0 PPTS unit
+            # that have no business dealing with housing (possible with
+            # permit type 3 in particular), so we only emit a 0-count
+            # PTS unit count if we had an explicit non-0 PPTS unit
             # count (therefore indicating a housing-related project that
             # lost its housing somehow).
             if (dbi_net is not None
