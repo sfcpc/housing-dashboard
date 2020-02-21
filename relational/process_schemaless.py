@@ -141,7 +141,7 @@ class Freshness:
         self._extract_nv_date(line, PTS.NAME)
 
     def _tco(self, line):
-        self._extract_nv_date(line, TCO.NAME)
+        self._extract_nv_date(line, TCO.NAME, timeformat='%Y/%m/%d')
 
     def _mohcd_pipeline(self, line):
         self._extract_last_updated(line, MOHCDPipeline.NAME)

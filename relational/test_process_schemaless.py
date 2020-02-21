@@ -48,12 +48,12 @@ def test_freshness():
     lines.append({
         'source': TCO.NAME,
         'name': 'date_issued',
-        'value': '02/05/2020',
+        'value': '2020/02/05',
     })
     lines.append({
         'source': TCO.NAME,
         'name': 'date_issued',
-        'value': '02/10/2020',
+        'value': '2020/02/10',
     })
 
     # ignored because the field isn't permitted
@@ -65,7 +65,7 @@ def test_freshness():
     lines.append({
         'source': TCO.NAME,
         'name': 'arbitrary',
-        'value': '05/02/2020',
+        'value': '2020/05/02',
     })
 
     # ignored, in the future
