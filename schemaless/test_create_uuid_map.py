@@ -486,6 +486,23 @@ def test_link_pts_records_without_ppts():
     assert rg.get(pts_records[0]).uuid == rg.get(pts_records[1]).uuid
 
 
+def test_link_permits_in_same_group():
+    pts_records = [
+        'pts_1572972516074', # permit no: 201910225142
+        'pts_1572988516074', # permit no: 201910225150
+        'pts_1572991516074', # permit no: 201910225151
+        'pts_1572992516074', # permit no: 201910225152
+        'pts_1572996516074', # permit no: 201910225153
+        'pts_1573002516074', # permit no: 201910225154
+        'pts_1573004516074', # permit no: 201910225155
+    ]
+    rg = RecordGraph.from_files(
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv')
+    for record in pts_records[1:]:
+        assert rg.get(pts_records[0]).uuid == rg.get(record).uuid
+
+
 def test_link_pts_to_ppts_records():
     prj_fk = 'ppts_2017-007883PRJ'
     expected_pts_children = [
@@ -505,18 +522,19 @@ def test_link_pts_to_ppts_records():
 
 def test_tco_link():
     prj_fk = 'ppts_2017-006823PRJ'
-    expected_pts_children = [
-        'pts_1492183510316', 'pts_1464175214172'
-    ]
-    expected_tco_children = [
-        'tco_201705237369_2018-05-01'
-    ]
+
+    # Note both of these have the same permit number.
+    pts_fk_1 = 'pts_1492183510316'
+    pts_fk_2 = 'pts_1464175214172'
+
+    tco_fk = 'tco_201705237369_2018-05-01'
+
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    verify_valid_children(rg, prj_fk, expected_pts_children)
-    for pts in expected_pts_children:
-        verify_valid_children(rg, pts, expected_tco_children)
+    verify_valid_children(rg, prj_fk, [pts_fk_1, pts_fk_2])
+    verify_valid_children(rg, pts_fk_1, [tco_fk])
+    verify_valid_children(rg, pts_fk_2, [pts_fk_1, tco_fk])
 
 
 def test_mohcd_records_link_with_prj():

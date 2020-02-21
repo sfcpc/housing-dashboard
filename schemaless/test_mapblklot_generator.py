@@ -6,14 +6,16 @@ TODO(ipalanisamy): DO NOT SUBMIT without a detailed description of test_mapblklo
 
 from schemaless.mapblklot_generator import MapblklotGenerator
 
-def test_one_instance():
+def test_behavior_before_instantiation():
     assert(MapblklotGenerator.get_instance() == None)
+
+def test_one_instance():
     MapblklotGenerator('data/assessor/2020-02-18-parcels.csv.xz')
 
     instance = MapblklotGenerator.get_instance()
     assert(instance != None)
     # Make sure that subsequent calls to get the instance returns the same
-    # underlying instance. 
+    # underlying instance.
     assert(instance == MapblklotGenerator.get_instance())
 
     # Make sure that even if someone tries to reinitialize the generator, the
