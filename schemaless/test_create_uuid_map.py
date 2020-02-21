@@ -483,10 +483,13 @@ def test_link_pts_records_without_ppts():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    assert rg.get(pts_records[0]).uuid == rg.get(pts_records[1]).uuid
+    verify_records_linked(rg, pts_records)
 
 
-def test_link_permits_in_same_group():
+def test_link_pts_records_in_same_group():
+    # The following pts records have the same 'mapblklot', 'filed_date', and
+    # 'proposed_use', and therefore belong to the same grouping. Thus, they must
+    # all be assigned the same UUID.
     pts_records = [
         'pts_1572972516074', # permit no: 201910225142
         'pts_1572988516074', # permit no: 201910225150
@@ -499,8 +502,7 @@ def test_link_permits_in_same_group():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    for record in pts_records[1:]:
-        assert rg.get(pts_records[0]).uuid == rg.get(record).uuid
+    verify_records_linked(rg, pts_records)
 
 
 def test_link_pts_to_ppts_records():
@@ -579,3 +581,8 @@ def verify_valid_children(rg, parent_fk, expected_child_fks):
         child = rg.get(child_fk)
         assert child.uuid == parent.uuid
         assert parent_fk in child.parents
+
+def verify_records_linked(rg, fks):
+   for fk in fks[1:]:
+        assert rg.get(fks[0]).uuid == rg.get(fk).uuid
+
