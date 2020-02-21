@@ -1,9 +1,9 @@
 #!/bin/bash
 xzcat data/ppts/2018-04-24-ppts.csv.xz | head -n1 > testdata/ppts-one.csv
-xzcat data/ppts/2018-04-24-ppts.csv.xz | egrep -i "(1950 mission)|(8 10th)|(429 beale)|(430 main)|(2015-011205)|(201404304554)|(201705237369)|(2015-014058PRJ)|((340 Valencia)|(2002.0809))|(2451 Sacramento)" >> testdata/ppts-one.csv
+xzcat data/ppts/2018-04-24-ppts.csv.xz | egrep -i "(1950 mission)|(8 10th)|(429 beale)|(430 main)|(2015-011205)|(201404304554)|(201705237369)|(2015-014058PRJ)|((340 Valencia)|(2002.0809))|(2451 Sacramento)|(2017-016047PRJ)|(2017-016045PRJ)" >> testdata/ppts-one.csv
 
 xzcat data/ppts/2019-06-02-ppts.csv.xz | head -n1 > testdata/ppts-two.csv
-xzcat data/ppts/2019-06-02-ppts.csv.xz | egrep -i "(1950 mission)|(8 10th)|(429 beale)|(430 main)|(2015-011205)|(201404304554)|(201705237369)|(2015-014058PRJ)|((340 Valencia)|(2002.0809))|(2451 Sacramento)" >> testdata/ppts-two.csv
+xzcat data/ppts/2019-06-02-ppts.csv.xz | egrep -i "(1950 mission)|(8 10th)|(429 beale)|(430 main)|(2015-011205)|(201404304554)|(201705237369)|(2015-014058PRJ)|((340 Valencia)|(2002.0809))|(2451 Sacramento)|(2017-016047PRJ)|(2017-016045PRJ)" >> testdata/ppts-two.csv
 
 head -n1 data/mohcd/mohcd-pipeline-2020-01-30.csv > testdata/mohcd-pipeline.csv
 cat data/mohcd/mohcd-pipeline-2020-01-30.csv | egrep -i "(1950 mission)|(2015-011205)|(transbay)|(2011-005)|(2016-023)|(2015-014058PRJ)" >> testdata/mohcd-pipeline.csv
@@ -12,7 +12,7 @@ head -n1 data/mohcd/affordable-rental-portfolio-2019-09-06.csv > testdata/afford
 cat data/mohcd/affordable-rental-portfolio-2019-09-06.csv | egrep -i "(Valencia Gardens)|(Kennedy Towers)" >> testdata/affordable-rental-portfolio.csv
 
 xzcat data/pts/2020-01-24-pts-after-2013.csv.xz | head -n1 > testdata/pts.csv
-xzcat data/pts/2020-01-24-pts-after-2013.csv.xz | egrep -i "(201705318009)|(201706058373)|(201711284964)|(201801118389)|(201404304554)|(201705237369)|(201301027105)|(2451,,Sacramento,St)|(201609218371)|(201910225142)|(201910225150)|(201910225151)|(201910225152)|(201910225153)|(201910225154)|(201910225155)" >> testdata/pts.csv
+xzcat data/pts/2020-01-24-pts-after-2013.csv.xz | egrep -i "(201705318009)|(201706058373)|(201711284964)|(201801118389)|(201404304554)|(201705237369)|(201301027105)|(2451,,Sacramento,St)|(201609218371)|(201910225142)|(201910225150)|(201910225151)|(201910225152)|(201910225153)|(201910225154)|(201910225155)|(201712085881)|(201712085886)" >> testdata/pts.csv
 
 head -n1 data/mohcd/mohcd-inclusionary-2020-02-05.csv > testdata/mohcd-inclusionary.csv
 cat data/mohcd/mohcd-inclusionary-2020-02-05.csv | egrep -i "(2011-005)|(2016-023)|(2015-014058PRJ)" >> testdata/mohcd-inclusionary.csv

@@ -174,8 +174,9 @@ class PTSHelper(RecordGraphBuilderHelper,
         self._permit_number_to_pts_fk = defaultdict(list)
         self._address_to_pts_fk = defaultdict(list)
 
-        # Maps "root" permits with their associated child permits.
-        self._permit_groupings = defaultdict(list)
+        self._permit_groupings = {}
+        self._pts_fk_to_permit_grouping = {}
+        self._pts_fk_to_permit_number = {}
 
     def find_by_building_permit_number(self, permit_number):
         """Find a fk by PTS building permit number."""
@@ -191,49 +192,72 @@ class PTSHelper(RecordGraphBuilderHelper,
             if 'permit_number' in record:
                 self._permit_number_to_pts_fk[
                     record['permit_number']].append(fk)
+                self._pts_fk_to_permit_number[fk] = record['permit_number']
+
             record = self.add_calculated_fields(record)
             if 'address_norm' in record:
                 self._address_to_pts_fk[record['address_norm']].append(fk)
 
             if set(PTSHelper.PERMIT_GROUPING_ATTRS).issubset(record.keys()):
                 groupable_records[fk] = record
-        self.permit_groupings = self.compute_permit_groupings(groupable_records)
-        print(self.permit_groupings)
+        self.compute_permit_groupings(groupable_records)
+        print(self._permit_groupings)
 
     def compute_permit_groupings(self, groupable_records):
         groupable_records_df = pd.DataFrame(groupable_records.values())
         groupable_records_df['fk'] = groupable_records.keys()
 
         permit_groupings_df = groupable_records_df.groupby(PTSHelper.PERMIT_GROUPING_ATTRS)
-        permit_groupings = {}
-        for _, group in permit_groupings_df:
-            group_fks = group['fk'].tolist()
-            permit_groupings[group_fks[0]] = group_fks[1:]
-        return permit_groupings
+        for name, group in permit_groupings_df:
+            self._permit_groupings[name] = group['fk'].tolist()
+            for fk in self._permit_groupings[name]:
+                self._pts_fk_to_permit_grouping[fk] = name
+
+    def compute_ppts_parents_for_permit_group(self, permit_group_name):
+      permit_group = self._permit_groupings[permit_group_name]
+      ppts_helper = self.graph_builder.helpers[PPTS.NAME]
+
+      for fk in permit_group:
+        permit_number = self._pts_fk_to_permit_number[fk]
+        ppts_parents = ppts_helper.find_by_permit_number(permit_number)
+        if len(ppts_parents) > 0:
+            return fk, ppts_parents
+      return None, None
 
     def process(self, fk, record, parents, children):
-        # Make sure that the permit is linked to other permits in its "group".
-        if fk in self.permit_groupings.keys():
-            children.extend(self.permit_groupings[fk])
+        # Check to see if the record belongs to a permit group.
+        permit_group_name = None
+        if fk in self._pts_fk_to_permit_grouping:
+            permit_group_name = self._pts_fk_to_permit_grouping[fk]
 
-        # Make sure that the permit is linked to other permits with the same
-        # permit number.
-        permit_number = record['permit_number']
-        pts_helper = self.graph_builder.helpers[PTS.NAME]
-        pts_records_with_permit_no = pts_helper.find_by_building_permit_number(permit_number)
+        if permit_group_name:
+            permits_in_group = self._permit_groupings[permit_group_name]
+            group_root_fk, group_ppts_parents = self.compute_ppts_parents_for_permit_group(permit_group_name)
+            if group_ppts_parents and fk == group_root_fk:
+                parents.extend(group_ppts_parents)
+                children.extend([child_fk for child_fk in permits_in_group if child_fk != fk ])
+            if not group_ppts_parents and  fk == permits_in_group[0]:
+                children.extend(permits_in_group[1:])
+        else:
+            permit_number = record['permit_number']
+            ppts_helper = self.graph_builder.helpers[PPTS.NAME]
+            parent_ppts_records = ppts_helper.find_by_permit_number(permit_number)
 
-        if pts_records_with_permit_no and pts_records_with_permit_no[0] != fk and pts_records_with_permit_no[0] not in children:
-            parents.append(pts_records_with_permit_no[0])
+            pts_helper = self.graph_builder.helpers[PTS.NAME]
+            pts_records = pts_helper.find_by_building_permit_number(permit_number)
 
-        # Make sure that the permit is linked to any parent PPTS records.
-        ppts_helper = self.graph_builder.helpers[PPTS.NAME]
-        parent_ppts_records = ppts_helper.find_by_permit_number(permit_number)
-
-        if parent_ppts_records:
-            # If there is a PPTS record that should be the parent
-            # record of PTS records with this permit number, we
-            # assign that as the parent.
-            parents.extend(parent_ppts_records)
+            if parent_ppts_records:
+                parents.extend(parent_ppts_records)
+            elif pts_records and pts_records[0] == fk:
+                # Even if there is no PPTS record that should be the
+                # parent of PTS records with this permit number, we need
+                # to ensure that all PTS records with the same permit number
+                # are assigned the same UUID.
+                #
+                # We do this by picking the first PTS record with the given
+                # permit number and assigning any other records with
+                # that permit number  as "children" of that record.
+                children.extend(pts_records[1:])
 
     def process_likely(self, fk, record, parents, children):
         record = self.add_calculated_fields(record)

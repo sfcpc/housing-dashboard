@@ -486,7 +486,7 @@ def test_link_pts_records_without_ppts():
     verify_records_linked(rg, pts_records)
 
 
-def test_link_pts_records_in_same_group():
+def test_link_pts_group_without_ppts():
     # The following pts records have the same 'mapblklot', 'filed_date', and
     # 'proposed_use', and therefore belong to the same grouping. Thus, they must
     # all be assigned the same UUID.
@@ -505,38 +505,52 @@ def test_link_pts_records_in_same_group():
     verify_records_linked(rg, pts_records)
 
 
+def test_link_pts_group_with_ppts():
+    prj_fk_1 = 'ppts_2017-016047PRJ' # lists permit 201712085886 as 'related_building_permit'
+    prj_fk_2 = 'ppts_2017-016045PRJ' # also lists permit 201712085886 as 'related_building_permit'
+
+    # These pts records have the same 'mapblklot', 'filed_date', and
+    # 'proposed_use' and therefore belong to the same 'permit group'. Thus, they
+    # must all be assigned the same UUID.
+    pts_records = [
+        'pts_1489866510069', # permit no: 201712085881
+        'pts_1489855510068' # permit no: 201712085886 (ppts_2017-016047PRJ &  ppts_2017-016045PRJ refer to this).
+    ]
+
+    rg = RecordGraph.from_files(
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv')
+
+    # Verify that the permits in the group have the same uuid.
+    verify_records_linked(rg, pts_records)
+    permit_group_uuid = rg.get(pts_records[0]).uuid
+
+    # Verify that the permit group has the same uuid as at least one of the prjs
+    # that list permit no 201712085886 as a 'related_building_permit'
+    prj_fk_1_uuid = rg.get(prj_fk_1).uuid
+    prj_fk_2_uuid = rg.get(prj_fk_2).uuid
+
+    assert(prj_fk_1_uuid == permit_group_uuid or prj_fk_2_uuid == permit_group_uuid)
+
+
 def test_link_pts_to_ppts_records():
     prj_fk = 'ppts_2017-007883PRJ'
-    expected_pts_children = [
+    related_pts_fks = [
         'pts_1465081108606',
         'pts_1465082390978'
     ]
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    verify_valid_children(rg, prj_fk, expected_pts_children)
-    prj_fk = 'ppts_2017-006969PRL'
-    expected_pts_children = [
-        'pts_1465580423638',
-    ]
-    verify_valid_children(rg, prj_fk, expected_pts_children)
+    verify_records_linked(rg, ['ppts_2017-007883PRJ','pts_1465081108606','pts_1465082390978'])
+    verify_records_linked(rg, ['ppts_2017-006969PRL', 'pts_1465580423638'])
 
 
 def test_tco_link():
-    prj_fk = 'ppts_2017-006823PRJ'
-
-    # Note both of these have the same permit number.
-    pts_fk_1 = 'pts_1492183510316'
-    pts_fk_2 = 'pts_1464175214172'
-
-    tco_fk = 'tco_201705237369_2018-05-01'
-
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    verify_valid_children(rg, prj_fk, [pts_fk_1, pts_fk_2])
-    verify_valid_children(rg, pts_fk_1, [tco_fk])
-    verify_valid_children(rg, pts_fk_2, [pts_fk_1, tco_fk])
+    verify_records_linked(rg, ['ppts_2017-006823PRJ', 'pts_1492183510316','pts_1464175214172','tco_201705237369_2018-05-01'])
 
 
 def test_mohcd_records_link_with_prj():

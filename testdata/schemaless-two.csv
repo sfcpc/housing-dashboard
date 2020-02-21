@@ -931,6 +931,22 @@ ppts_1592PRV,ppts,2020-01-29,description,340-370 Valencia Street.  Discuss Valen
 ppts_1592PRV,ppts,2020-01-29,planner_name,Jonathan Purvis
 ppts_1592PRV,ppts,2020-01-29,planner_email,jonathan.purvis@sfgov.org
 ppts_1592PRV,ppts,2020-01-29,planner_phone,415-558-6354
+ppts_2017-016047PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.44215523 37.750351804, -122.442163328 37.750433945, -122.441754587 37.750459137, -122.441739292 37.750303985, -122.442148032 37.750278791, -122.442148481 37.750283356, -122.44215523 37.750351804)))"
+ppts_2017-016047PRJ,ppts,2020-01-29,record_id,2017-016047PRJ
+ppts_2017-016047PRJ,ppts,2020-01-29,date_opened,12/15/2017 12:00:00 AM +0000
+ppts_2017-016047PRJ,ppts,2020-01-29,status,Under Review
+ppts_2017-016047PRJ,ppts,2020-01-29,address,20 FOUNTAIN ST 94114
+ppts_2017-016047PRJ,ppts,2020-01-29,record_type,Project Profile (PRJ)
+ppts_2017-016047PRJ,ppts,2020-01-29,record_type_category,PRJ
+ppts_2017-016047PRJ,ppts,2020-01-29,name,20 FOUNTAIN ST
+ppts_2017-016047PRJ,ppts,2020-01-29,description,"TO ERECT 4 STORIES, 1 BASEMENT, TYPE V-A, 2 UNITS RESIDENTIAL BUILDING."
+ppts_2017-016047PRJ,ppts,2020-01-29,planner_name,Elizabeth Gordon Jonckheer
+ppts_2017-016047PRJ,ppts,2020-01-29,planner_email,Elizabeth.Gordon-Jonckheer@sfgov.org
+ppts_2017-016047PRJ,ppts,2020-01-29,planner_phone,415-575-8728
+ppts_2017-016047PRJ,ppts,2020-01-29,market_rate_units_existing,0
+ppts_2017-016047PRJ,ppts,2020-01-29,market_rate_units_proposed,2
+ppts_2017-016047PRJ,ppts,2020-01-29,market_rate_units_net,2
+ppts_2017-016047PRJ,ppts,2020-01-29,building_permit_number,201712085886
 ppts_2675PRV,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466780014 37.763042601, -122.467194508 37.763024399, -122.467200255 37.763106663, -122.467205044 37.763175216, -122.46679055 37.763193418, -122.466785761 37.763124865, -122.466780014 37.763042601)))"
 ppts_2675PRV,ppts,2020-01-29,record_id,2675PRV
 ppts_2675PRV,ppts,2020-01-29,date_opened,08/06/2003 12:00:00 AM +0000
@@ -1042,6 +1058,22 @@ ppts_2008.1186E,ppts,2020-01-29,parent,2008.1186
 ppts_2008.1186E,ppts,2020-01-29,planner_name,Brett Bollinger
 ppts_2008.1186E,ppts,2020-01-29,planner_email,brett.bollinger@sfgov.org
 ppts_2008.1186E,ppts,2020-01-29,planner_phone,415-575-9024
+ppts_2017-016045PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.44215523 37.750351804, -122.442163328 37.750433945, -122.441754587 37.750459137, -122.441739292 37.750303985, -122.442148032 37.750278791, -122.442148481 37.750283356, -122.44215523 37.750351804)))"
+ppts_2017-016045PRJ,ppts,2020-01-29,record_id,2017-016045PRJ
+ppts_2017-016045PRJ,ppts,2020-01-29,date_opened,12/15/2017 12:00:00 AM +0000
+ppts_2017-016045PRJ,ppts,2020-01-29,status,Under Review
+ppts_2017-016045PRJ,ppts,2020-01-29,address,24 FOUNTAIN ST 94114
+ppts_2017-016045PRJ,ppts,2020-01-29,record_type,Project Profile (PRJ)
+ppts_2017-016045PRJ,ppts,2020-01-29,record_type_category,PRJ
+ppts_2017-016045PRJ,ppts,2020-01-29,name,24 FOUNTAIN ST
+ppts_2017-016045PRJ,ppts,2020-01-29,description,"TO ERECT 4 STORIES, 1 BASEMENT, TYPE V-A, 2 UNITS RESIDENTIAL BUILDING."
+ppts_2017-016045PRJ,ppts,2020-01-29,planner_name,Elizabeth Gordon Jonckheer
+ppts_2017-016045PRJ,ppts,2020-01-29,planner_email,Elizabeth.Gordon-Jonckheer@sfgov.org
+ppts_2017-016045PRJ,ppts,2020-01-29,planner_phone,415-575-8728
+ppts_2017-016045PRJ,ppts,2020-01-29,market_rate_units_existing,0
+ppts_2017-016045PRJ,ppts,2020-01-29,market_rate_units_proposed,2
+ppts_2017-016045PRJ,ppts,2020-01-29,market_rate_units_net,2
+ppts_2017-016045PRJ,ppts,2020-01-29,building_permit_number,201712085886
 ppts_2008.1021,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.432926626 37.789880223, -122.432853514 37.7895187, -122.432938794 37.789507856, -122.433025927 37.789496774, -122.433113062 37.789485693, -122.433200197 37.789474611, -122.43328733 37.78946353, -122.433374465 37.789452449, -122.433461599 37.789441367, -122.433489425 37.789579538, -122.433668832 37.789556902, -122.433697625 37.789699266, -122.433701043 37.789698834, -122.433717546 37.789780436, -122.43353668 37.789803255, -122.432926626 37.789880223)))"
 ppts_2008.1021,ppts,2020-01-29,record_id,2008.1021
 ppts_2008.1021,ppts,2020-01-29,date_opened,08/07/2008 12:00:00 AM +0000
@@ -2241,6 +2273,82 @@ pts_1488557475859,pts,2020-01-29,supervisor_district,1
 pts_1488557475859,pts,2020-01-29,zipcode,94118
 pts_1488557475859,pts,2020-01-29,location,"(37.779332583627614, -122.46812819228221)"
 pts_1488557475859,pts,2020-01-29,record_id,1488557475859
+pts_1489855510068,pts,2020-01-29,permit_number,201712085881
+pts_1489855510068,pts,2020-01-29,permit_type,2
+pts_1489855510068,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1489855510068,pts,2020-01-29,permit_creation_date,12/08/2017
+pts_1489855510068,pts,2020-01-29,block,6501
+pts_1489855510068,pts,2020-01-29,lot,061
+pts_1489855510068,pts,2020-01-29,street_number,24
+pts_1489855510068,pts,2020-01-29,street_name,Fountain
+pts_1489855510068,pts,2020-01-29,current_status,filed
+pts_1489855510068,pts,2020-01-29,current_status_date,12/08/2017
+pts_1489855510068,pts,2020-01-29,filed_date,12/08/2017
+pts_1489855510068,pts,2020-01-29,proposed_use,2 family dwelling
+pts_1489855510068,pts,2020-01-29,proposed_units,2
+pts_1489855510068,pts,2020-01-29,proposed_construction_type,5
+pts_1489855510068,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489855510068,pts,2020-01-29,supervisor_district,8
+pts_1489855510068,pts,2020-01-29,zipcode,94114
+pts_1489855510068,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
+pts_1489855510068,pts,2020-01-29,record_id,1489855510068
+pts_1489856510067,pts,2020-01-29,permit_number,201712085881
+pts_1489856510067,pts,2020-01-29,permit_type,2
+pts_1489856510067,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1489856510067,pts,2020-01-29,permit_creation_date,12/08/2017
+pts_1489856510067,pts,2020-01-29,block,6501
+pts_1489856510067,pts,2020-01-29,lot,061
+pts_1489856510067,pts,2020-01-29,street_number,26
+pts_1489856510067,pts,2020-01-29,street_name,Fountain
+pts_1489856510067,pts,2020-01-29,current_status,filed
+pts_1489856510067,pts,2020-01-29,current_status_date,12/08/2017
+pts_1489856510067,pts,2020-01-29,filed_date,12/08/2017
+pts_1489856510067,pts,2020-01-29,proposed_use,2 family dwelling
+pts_1489856510067,pts,2020-01-29,proposed_units,2
+pts_1489856510067,pts,2020-01-29,proposed_construction_type,5
+pts_1489856510067,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489856510067,pts,2020-01-29,supervisor_district,8
+pts_1489856510067,pts,2020-01-29,zipcode,94114
+pts_1489856510067,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
+pts_1489856510067,pts,2020-01-29,record_id,1489856510067
+pts_1489866510069,pts,2020-01-29,permit_number,201712085886
+pts_1489866510069,pts,2020-01-29,permit_type,2
+pts_1489866510069,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1489866510069,pts,2020-01-29,permit_creation_date,12/08/2017
+pts_1489866510069,pts,2020-01-29,block,6501
+pts_1489866510069,pts,2020-01-29,lot,061
+pts_1489866510069,pts,2020-01-29,street_number,20
+pts_1489866510069,pts,2020-01-29,street_name,Fountain
+pts_1489866510069,pts,2020-01-29,current_status,filed
+pts_1489866510069,pts,2020-01-29,current_status_date,12/08/2017
+pts_1489866510069,pts,2020-01-29,filed_date,12/08/2017
+pts_1489866510069,pts,2020-01-29,proposed_use,2 family dwelling
+pts_1489866510069,pts,2020-01-29,proposed_units,2
+pts_1489866510069,pts,2020-01-29,proposed_construction_type,5
+pts_1489866510069,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489866510069,pts,2020-01-29,supervisor_district,8
+pts_1489866510069,pts,2020-01-29,zipcode,94114
+pts_1489866510069,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
+pts_1489866510069,pts,2020-01-29,record_id,1489866510069
+pts_1489867205291,pts,2020-01-29,permit_number,201712085886
+pts_1489867205291,pts,2020-01-29,permit_type,2
+pts_1489867205291,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1489867205291,pts,2020-01-29,permit_creation_date,12/08/2017
+pts_1489867205291,pts,2020-01-29,block,6501
+pts_1489867205291,pts,2020-01-29,lot,061
+pts_1489867205291,pts,2020-01-29,street_number,22
+pts_1489867205291,pts,2020-01-29,street_name,Fountain
+pts_1489867205291,pts,2020-01-29,current_status,filed
+pts_1489867205291,pts,2020-01-29,current_status_date,12/08/2017
+pts_1489867205291,pts,2020-01-29,filed_date,12/08/2017
+pts_1489867205291,pts,2020-01-29,proposed_use,2 family dwelling
+pts_1489867205291,pts,2020-01-29,proposed_units,2
+pts_1489867205291,pts,2020-01-29,proposed_construction_type,5
+pts_1489867205291,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489867205291,pts,2020-01-29,supervisor_district,8
+pts_1489867205291,pts,2020-01-29,zipcode,94114
+pts_1489867205291,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
+pts_1489867205291,pts,2020-01-29,record_id,1489867205291
 pts_1491389495475,pts,2020-01-29,permit_number,201712207036
 pts_1491389495475,pts,2020-01-29,permit_type,8
 pts_1491389495475,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -4126,6 +4234,10 @@ ppts_2014-002033APL,ppts,2020-01-29,parent,2014-002033ENV
 ppts_2014-002033APL,ppts,2020-01-29,planner_name,Michael Li
 ppts_2014-002033APL,ppts,2020-01-29,planner_email,Michael.J.Li@sfgov.org
 ppts_2014-002033APL,ppts,2020-01-29,planner_phone,415-575-9107
+ppts_2017-016047PRJ,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.44215523 37.750351805, -122.442163328 37.750433945, -122.441754587 37.750459137, -122.441739292 37.750303985, -122.442148032 37.750278791, -122.442148481 37.750283356, -122.44215523 37.750351805)))"
+ppts_2017-016047PRJ,ppts,2020-01-29,planner_name,Linda Ajello Hoagland
+ppts_2017-016047PRJ,ppts,2020-01-29,planner_email,Linda.AjelloHoagland@sfgov.org
+ppts_2017-016047PRJ,ppts,2020-01-29,planner_phone,415-575-6823
 ppts_2015-006663MIS,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.417919582 37.775981011, -122.41779697 37.776077885, -122.417453754 37.776349056, -122.417025525 37.776007513, -122.416927898 37.775929647, -122.416854678 37.775871249, -122.416769255 37.775803116, -122.416583973 37.775655337, -122.416828954 37.7754614, -122.416865702 37.775432309, -122.416780279 37.775364177, -122.416872894 37.775290249, -122.417091738 37.775464796, -122.417156729 37.775413457, -122.41729831 37.775524434, -122.417322834 37.775505061, -122.417919582 37.775981011)))"
 ppts_09-053,ppts,2020-01-29,planner_name,Ben Fu
 ppts_09-053,ppts,2020-01-29,planner_email,BEN.FU@SFGOV.ORG
@@ -4273,13 +4385,13 @@ ppts_2016-010699ENF,ppts,2020-01-29,the_geom,"MULTIPOLYGON (((-122.466816413 37.
 ppts_2016-010699ENF,ppts,2020-01-29,name,1316/1318 10th Avenue Illegal Short-Term Rentals by Owners
 ppts_2016-010699ENF,ppts,2020-01-29,description,"Illegal short-term rentals on Airbnb by Owners. Certificate issued, then revoked by OSTR staff (September 2018)."
 ppts_2015-014058PRJ,ppts,2020-01-29,description,"Construction of a new 7 story 41 unit multi-family residential structure over retail and parking garage for both vehicles and bikes.
-MULTIPOLYGON (((-122.390146674 37.787310971"
-ppts_2015-014058PRJ,ppts,2020-01-29,parent,-122.389962894 37.787722742
-ppts_2015-014058PRJ,ppts,2020-01-29,children,-122.389797269 37.787587174
-ppts_2015-014058PRJ,ppts,2020-01-29,planner_name,48684
-ppts_2015-014058PRJ,ppts,2020-01-29,planner_email,2016-002196GEN
-ppts_2015-014058PRJ,ppts,2020-01-29,planner_phone,01/12/2016 12:00:00 AM +0000
-ppts_2015-014058PRJ,ppts,2020-01-29,is_adu,Josephine Chen
+MULTIPOLYGON (((-122.44215523 37.750351805"
+ppts_2015-014058PRJ,ppts,2020-01-29,parent,-122.442148032 37.750278791
+ppts_2015-014058PRJ,ppts,2020-01-29,children,-122.442148481 37.750283356
+ppts_2015-014058PRJ,ppts,2020-01-29,planner_name,20627
+ppts_2015-014058PRJ,ppts,2020-01-29,planner_email,2017-016045PRJ
+ppts_2015-014058PRJ,ppts,2020-01-29,planner_phone,12/15/2017 12:00:00 AM +0000
+ppts_2015-014058PRJ,ppts,2020-01-29,is_adu,Linda Ajello Hoagland
 ppts_EE80.114,ppts,2020-01-29,description,"Leasing of School Property
 MULTIPOLYGON (((-122.467683034 37.774865322"
 ppts_EE80.114,ppts,2020-01-29,parent,"-122.467683034 37.774865322)))"""
