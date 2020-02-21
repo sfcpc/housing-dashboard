@@ -1,0 +1,29 @@
+# Lint as: python3
+"""TODO(ipalanisamy): DO NOT SUBMIT without one-line documentation for test_mapblklot_generator.
+
+TODO(ipalanisamy): DO NOT SUBMIT without a detailed description of test_mapblklot_generator.
+"""
+
+from schemaless.mapblklot_generator import MapblklotGenerator
+
+def test_one_instance():
+    assert(MapblklotGenerator.get_instance() == None)
+    MapblklotGenerator('data/assessor/2020-02-18-parcels.csv.xz')
+
+    instance = MapblklotGenerator.get_instance()
+    assert(instance != None)
+    # Make sure that subsequent calls to get the instance returns the same
+    # underlying instance. 
+    assert(instance == MapblklotGenerator.get_instance())
+
+    # Make sure that even if someone tries to reinitialize the generator, the
+    # same underlying instance is what is returned.
+    MapblklotGenerator('data/assessor/2020-02-18-parcels.csv.xz')
+    assert(instance == MapblklotGenerator.get_instance())
+
+def test_correct_mapblklot():
+    mapblklot_gen = MapblklotGenerator.get_instance()
+    assert(mapblklot_gen.find_mapblklot_for_blklot('3514098') == '3514045')
+    assert(mapblklot_gen.find_mapblklot_for_blklot('2935015') == '2935015')
+    assert(mapblklot_gen.find_mapblklot_for_blklot('foo') == None)
+    assert(mapblklot_gen.find_mapblklot_for_blklot('') == None)

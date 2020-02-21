@@ -27,8 +27,6 @@ class MapblklotGenerator():
     def __init__(self, filepath):
         if not MapblklotGenerator.__instance:
             MapblklotGenerator.__instance = MapblklotGenerator.__MapblklotGeneratorImpl(filepath)
-        else:
-            raise Exception("Attempted to instantiate singleton more than once")
 
     @staticmethod
     def get_instance():

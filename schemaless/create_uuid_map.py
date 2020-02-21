@@ -344,7 +344,7 @@ class PermitAddendaSummaryHelper(RecordGraphBuilderHelper):
 class RecordGraphBuilder:
     """RecordGraphBuilder reads in files and builds a RecordGraph."""
 
-    def __init__(self, graph_class, schemaless_file, uuid_map_file, parcel_data_file,
+    def __init__(self, graph_class, schemaless_file, uuid_map_file,
                  find_likely_matches=False, exclude_known_likely_matches=True):
         """Init the graph builder.
 
@@ -663,7 +663,6 @@ if __name__ == "__main__":
         RecordGraph,
         args.schemaless_file,
         args.uuid_map_file,
-        args.parcel_data_file,
         args.likely_match_file != "")
     rg = builder.build()
 
