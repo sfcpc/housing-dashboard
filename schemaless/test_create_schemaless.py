@@ -41,7 +41,7 @@ def test_latest_values_update(tmpdir):
     sf = tmpdir.join("schemaless.csv")
     shutil.copyfile('testdata/schemaless-one.csv', sf)
     fk = 'planning_2016-001514PRJ'  # 1950 Mission St
-    aff_key = 'affordable_units_proposed'
+    aff_key = 'number_of_affordable_units'
 
     latest = latest_values(sf)
     assert latest[Planning.NAME][fk][aff_key] == '157'
@@ -51,7 +51,7 @@ def test_latest_values_update(tmpdir):
         writer = csv.writer(outf)
         writer.writerow(
             [fk, 'planning', date.today().isoformat(),
-             'affordable_units_proposed', '700'])
+             'number_of_affordable_units', '700'])
     latest = latest_values(sf)
     assert latest[Planning.NAME][fk][aff_key] == '700'
 
@@ -60,7 +60,7 @@ def test_latest_values_update(tmpdir):
         writer = csv.writer(outf)
         writer.writerow(
             [fk, 'planning', date.today().isoformat(),
-             'affordable_units_proposed', '100'])
+             'number_of_affordable_units', '100'])
     latest = latest_values(sf)
     assert latest[Planning.NAME][fk][aff_key] == '100'
 
@@ -69,9 +69,9 @@ def test_latest_values_no_collision():
     """Ensure we're not overwriting values for unrelated projects."""
     latest = latest_values('testdata/schemaless-one.csv')
     assert latest[Planning.NAME][
-            'planning_2016-008581PRJ']['market_rate_units_proposed'] \
+            'planning_2016-008581PRJ']['number_of_market_rate_units'] \
         != latest[Planning.NAME][
-            'planning_2017-007883PRJ']['market_rate_units_proposed']
+            'planning_2017-007883PRJ']['number_of_market_rate_units']
 
 
 def test_just_dump(tmpdir):

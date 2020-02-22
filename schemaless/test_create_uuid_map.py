@@ -439,6 +439,7 @@ def test_planning_child_1950_mission():
         'planning_2016-001514PPA',
         'planning_2016-001514CUA',
         'planning_2016-001514ENV',
+        'planning_2016-001514MCM',
     ]
     expected_pts_children = [
         'pts_1438278158065',
@@ -492,6 +493,7 @@ def test_link_pts_to_planning_records():
         'pts_1465081108606',
         'pts_1465082390978'
     ]
+    # Linking on building permit number 201705318009
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
@@ -522,10 +524,12 @@ def test_tco_link():
 def test_mohcd_records_link_with_prj():
     prj_fk = 'planning_2015-014058PRJ'
     expected_planning_children = [
+        'planning_2015-014058CND',
         'planning_2015-014058CUA',
         'planning_2015-014058ENV',
-        'planning_2015-014058VAR',
+        'planning_2015-014058PPA',
         'planning_2015-014058TDM',
+        'planning_2015-014058VAR',
     ]
     expected_mohcd_pipeline_children = [
         'mohcd_pipeline_2017-034'
@@ -555,7 +559,7 @@ def test_mohcd_records_link_without_prj():
 
 def verify_valid_children(rg, parent_fk, expected_child_fks):
     parent = rg.get(parent_fk)
-    assert len(parent.children) == len(expected_child_fks)
+    assert set(parent.children) == set(expected_child_fks)
     for child_fk in expected_child_fks:
         assert child_fk in parent.children
         child = rg.get(child_fk)
