@@ -4,6 +4,7 @@ from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Mapblklot
 from schemaless.mapblklot_generator import MapblklotGenerator
 
+
 def test_mapblklot_field():
     MapblklotGenerator('data/assessor/2020-02-18-parcels.csv.xz')
 
@@ -18,6 +19,7 @@ def test_mapblklot_field():
     record = {'mapblklot': 'foo'}
     mapblklot = Mapblklot(mapblklot='mapblklot')
     assert(mapblklot.get_value(record) == 'foo')
+
 
 def test_permit_addenda_yield_records():
     ''' Checks that addenda summary source correctly summarizes details

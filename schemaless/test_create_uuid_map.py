@@ -488,16 +488,16 @@ def test_link_pts_records_without_ppts():
 
 def test_link_pts_group_without_ppts():
     # The following pts records have the same 'mapblklot', 'filed_date', and
-    # 'proposed_use', and therefore belong to the same grouping. Thus, they must
-    # all be assigned the same UUID.
+    # 'proposed_use', and therefore belong to the same grouping. Thus, they
+    # must all be assigned the same UUID.
     pts_records = [
-        'pts_1572972516074', # permit no: 201910225142
-        'pts_1572988516074', # permit no: 201910225150
-        'pts_1572991516074', # permit no: 201910225151
-        'pts_1572992516074', # permit no: 201910225152
-        'pts_1572996516074', # permit no: 201910225153
-        'pts_1573002516074', # permit no: 201910225154
-        'pts_1573004516074', # permit no: 201910225155
+        'pts_1572972516074',  # permit no: 201910225142
+        'pts_1572988516074',  # permit no: 201910225150
+        'pts_1572991516074',  # permit no: 201910225151
+        'pts_1572992516074',  # permit no: 201910225152
+        'pts_1572996516074',  # permit no: 201910225153
+        'pts_1573002516074',  # permit no: 201910225154
+        'pts_1573004516074',  # permit no: 201910225155
     ]
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
@@ -506,15 +506,21 @@ def test_link_pts_group_without_ppts():
 
 
 def test_link_pts_group_with_ppts():
-    prj_fk_1 = 'ppts_2017-016047PRJ' # lists permit 201712085886 as 'related_building_permit'
-    prj_fk_2 = 'ppts_2017-016045PRJ' # also lists permit 201712085886 as 'related_building_permit'
+    # Lists permit 201712085886 as 'related_building_permit'
+    prj_fk_1 = 'ppts_2017-016047PRJ'
+
+    # Lists permit 201712085886 as 'related_building_permit'
+    prj_fk_2 = 'ppts_2017-016045PRJ'
 
     # These pts records have the same 'mapblklot', 'filed_date', and
-    # 'proposed_use' and therefore belong to the same 'permit group'. Thus, they
-    # must all be assigned the same UUID.
+    # 'proposed_use' and therefore belong to the same 'permit group'.
+    # Thus, they must all be assigned the same UUID.
     pts_records = [
-        'pts_1489866510069', # permit no: 201712085881
-        'pts_1489855510068' # permit no: 201712085886 (ppts_2017-016047PRJ &  ppts_2017-016045PRJ refer to this).
+        # permit no: 201712085881
+        'pts_1489866510069',
+        # permit no: 201712085886 (ppts_2017-016047PRJ &
+        # ppts_2017-016045PRJ refer to this permit no).
+        'pts_1489855510068'
     ]
 
     rg = RecordGraph.from_files(
@@ -525,24 +531,25 @@ def test_link_pts_group_with_ppts():
     verify_records_linked(rg, pts_records)
     permit_group_uuid = rg.get(pts_records[0]).uuid
 
-    # Verify that the permit group has the same uuid as at least one of the prjs
-    # that list permit no 201712085886 as a 'related_building_permit'
+    # Verify that the permit group has the same uuid as at least one of
+    # the prjs that list permit no 201712085886 as a
+    # 'related_building_permit'.
     prj_fk_1_uuid = rg.get(prj_fk_1).uuid
     prj_fk_2_uuid = rg.get(prj_fk_2).uuid
 
-    assert(prj_fk_1_uuid == permit_group_uuid or prj_fk_2_uuid == permit_group_uuid)
+    assert(prj_fk_1_uuid == permit_group_uuid or
+           prj_fk_2_uuid == permit_group_uuid)
 
 
 def test_link_pts_to_ppts_records():
-    prj_fk = 'ppts_2017-007883PRJ'
-    related_pts_fks = [
-        'pts_1465081108606',
-        'pts_1465082390978'
-    ]
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    verify_records_linked(rg, ['ppts_2017-007883PRJ','pts_1465081108606','pts_1465082390978'])
+    verify_records_linked(rg, [
+        'ppts_2017-007883PRJ',
+        'pts_1465081108606',
+        'pts_1465082390978']
+    )
     verify_records_linked(rg, ['ppts_2017-006969PRL', 'pts_1465580423638'])
 
 
@@ -550,7 +557,12 @@ def test_tco_link():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    verify_records_linked(rg, ['ppts_2017-006823PRJ', 'pts_1492183510316','pts_1464175214172','tco_201705237369_2018-05-01'])
+    verify_records_linked(rg, [
+        'ppts_2017-006823PRJ',
+        'pts_1492183510316',
+        'pts_1464175214172',
+        'tco_201705237369_2018-05-01'
+    ])
 
 
 def test_mohcd_records_link_with_prj():
@@ -596,7 +608,7 @@ def verify_valid_children(rg, parent_fk, expected_child_fks):
         assert child.uuid == parent.uuid
         assert parent_fk in child.parents
 
-def verify_records_linked(rg, fks):
-   for fk in fks[1:]:
-        assert rg.get(fks[0]).uuid == rg.get(fk).uuid
 
+def verify_records_linked(rg, fks):
+    for fk in fks[1:]:
+        assert rg.get(fks[0]).uuid == rg.get(fk).uuid

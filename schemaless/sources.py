@@ -65,14 +65,16 @@ class Mapblklot(Field):
 
     def get_value(self, record):
         if self.mapblklot:
-          return record[self.mapblklot]
+            return record[self.mapblklot]
 
         mapblklot_generator = MapblklotGenerator.get_instance()
         if mapblklot_generator:
             if self.blklot:
-                return mapblklot_generator.find_mapblklot_for_blklot(record[self.blklot])
+                return mapblklot_generator.find_mapblklot_for_blklot(
+                    record[self.blklot])
             if self.block and self.lot:
-                return mapblklot_generator.find_mapblklot_for_blklot(record[self.block] + record[self.lot])
+                return mapblklot_generator.find_mapblklot_for_blklot(
+                    record[self.block] + record[self.lot])
         return None
 
 
@@ -127,8 +129,8 @@ class Address(Field):
         try:
             addr = normalize_address_record(addr)
         except AddressNormalizationError:
-          print("WARN3: Unparseable: %s" % addr)
-          return ""
+            print("WARN3: Unparseable: %s" % addr)
+            return ""
         else:
             try:
                 return format_address_record(addr)
