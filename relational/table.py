@@ -10,7 +10,6 @@ from collections import OrderedDict
 import math
 import re
 
-from schemaless.sources import source_map
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
@@ -237,8 +236,7 @@ class ProjectFacts(Table):
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = ''  # TODO
             row[self.index(self.PERMIT_AUTHORITY)] = PPTS.OUTPUT_NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', PPTS.NAME)
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(PPTS.NAME)
         elif proj.field('permit_number',
                         PTS.NAME,
                         entry_predicate=pts_pred) != '':
@@ -258,8 +256,8 @@ class ProjectFacts(Table):
                            PTS.NAME,
                            entry_predicate=pts_pred)
             row[self.index(self.PERMIT_AUTHORITY)] = PTS.NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', PTS.NAME, entry_predicate=pts_pred)
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(
+                    PTS.NAME, entry_predicate=pts_pred)
         else:
             for mohcd in _MOHCD_TYPES.keys():
                 if proj.field('project_id', mohcd) == '':
@@ -282,10 +280,8 @@ class ProjectFacts(Table):
                 row[self.index(self.SUPERVISOR_DISTRICT)] = \
                     proj.field('supervisor_district', mohcd)
 
-                row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                    'fk', mohcd)
-                row[self.index(self.PERMIT_AUTHORITY)] = \
-                    source_map[mohcd].DEPARTMENT
+                row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(mohcd)
+                row[self.index(self.PERMIT_AUTHORITY)] = 'mohcd'  # TODO
 
     def _estimate_bmr(self, net):
         """Estimates the BMR we project a project to have.
@@ -322,22 +318,33 @@ class ProjectFacts(Table):
             row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = source
         else:
             dbi_net = _get_dbi_units(proj)
+            ppts_net = proj.field('market_rate_units_net', PPTS.NAME)
             net = dbi_net
-            if dbi_net is not None:
+            # PTS may have an explicitly set 0 unit count for projects
+            # that have no business dealing with housing (possible with
+            # permit type 3 in particular), so we only emit a 0-count
+            # PTS unit count if we had an explicit non-0 PPTS unit
+            # count (therefore indicating a housing-related project that
+            # lost its housing somehow).
+            if (dbi_net is not None
+                    and (dbi_net != 0 or ppts_net)):
                 row[self.index(self.NET_NUM_UNITS)] = str(dbi_net)
                 row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
             else:
                 # TODO: how to handle cases where prop - existing != net ?
-                net = proj.field('market_rate_units_net', PPTS.NAME)
-                row[self.index(self.NET_NUM_UNITS)] = net
-                row[self.index(self.NET_NUM_UNITS_DATA)] = \
-                    PPTS.OUTPUT_NAME if net else ''
+                try:
+                    net = int(ppts_net)
+                    row[self.index(self.NET_NUM_UNITS)] = ppts_net
+                    row[self.index(self.NET_NUM_UNITS_DATA)] = PPTS.OUTPUT_NAME
+                except ValueError:
+                    net = None
+                    pass
 
             bmr_net = proj.field('affordable_units_net', PPTS.NAME)
             if bmr_net != '':
                 row[self.index(self.NET_NUM_UNITS_BMR)] = bmr_net
                 row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = PPTS.OUTPUT_NAME
-            elif net != '':
+            elif net is not None:
                 row[self.index(self.NET_EST_NUM_UNITS_BMR)] = \
                     self._estimate_bmr(net)
                 row[self.index(self.NET_EST_NUM_UNITS_BMR_DATA)] = \

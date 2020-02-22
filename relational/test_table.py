@@ -43,6 +43,8 @@ def test_table_project_facts_atleast_one_measure():
 def _get_value_for_row(table, rows, name, return_multiple=False):
     if len(rows) > 1:
         raise ValueError('_get_value_for_row expected a one-row result')
+    elif len(rows) == 0:
+        return ''
     return rows[0][table.index(name)]
 
 
@@ -194,6 +196,18 @@ def test_table_project_facts_units(basic_graph):
                        NameValue('proposed_units', '8', d)]),
             ],
             want='7'),
+        EntriesTestRow(
+            name='dont use a 0 pts unit count if ppts wasnt explicitly set',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      []),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('proposed_units', '0', d)]),
+            ],
+            want=''),
     ]
 
     for test in tests:
