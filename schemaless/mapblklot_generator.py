@@ -7,8 +7,8 @@ class MapblklotGenerator():
     """Supports instantiating an object that can return the mapblklot for
     a given blklot.
 
-    This is class is implemented as a singleton, so it can only be
-    instantiated once. 
+    This class is implemented as a singleton, so it can only be
+    instantiated once.
     """
     class __MapblklotGeneratorImpl:
         def __init__(self, filepath):

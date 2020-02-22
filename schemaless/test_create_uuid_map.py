@@ -432,33 +432,20 @@ def test_assign_uuids_uuid_reassign_parent(graph_uuid_reassign_parent):
 
 
 # Tests below use the data in the 'testdata' directory
-def test_ppts_child_1950_mission():
-    # All children of 1950 Mission's PRJ should be accounted for
-    prj_fk = 'ppts_2016-001514PRJ'
-    expected_ppts_children = [
-        'ppts_2016-001514PPA',
-        'ppts_2016-001514CUA',
-        'ppts_2016-001514ENV',
-    ]
-    expected_pts_children = [
-        'pts_1438278158065',
-    ]
-    expected_mohcd_children = [
-        'mohcd_pipeline_2013-046',
-    ]
+def test_1950_mission_records_linked():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
 
-    # Verify that the PRJ has the expected children
-    verify_valid_children(rg, prj_fk, expected_ppts_children
-                          + expected_pts_children
-                          + expected_mohcd_children)
-
-    # Verify that the building permit has the expected
-    # child addenda.
-    verify_valid_children(rg, 'pts_1438278158065',
-                          ['permit_addenda_summary_201609218371'])
+    verify_records_linked(rg, [
+        'ppts_2016-001514PRJ',
+        'ppts_2016-001514PPA',
+        'ppts_2016-001514CUA',
+        'ppts_2016-001514ENV',
+        'pts_1438278158065',
+        'mohcd_pipeline_2013-046',
+        'permit_addenda_summary_201609218371',
+    ])
 
 
 def test_ppts_child_1950_mission_just_parent():
@@ -566,47 +553,27 @@ def test_tco_link():
 
 
 def test_mohcd_records_link_with_prj():
-    prj_fk = 'ppts_2015-014058PRJ'
-    expected_ppts_children = [
+    rg = RecordGraph.from_files(
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv')
+    verify_records_linked(rg, [
+        'ppts_2015-014058PRJ',
         'ppts_2015-014058CUA',
         'ppts_2015-014058ENV',
         'ppts_2015-014058VAR',
         'ppts_2015-014058TDM',
-    ]
-    expected_mohcd_pipeline_children = [
-        'mohcd_pipeline_2017-034'
-    ]
-    expected_mohcd_inclusionary_children = [
+        'mohcd_pipeline_2017-034',
         'mohcd_inclusionary_2017-034'
-    ]
-    rg = RecordGraph.from_files(
-        'testdata/schemaless-one.csv',
-        'testdata/uuid-map-one.csv')
-    verify_valid_children(rg, prj_fk, expected_ppts_children +
-                          expected_mohcd_pipeline_children +
-                          expected_mohcd_inclusionary_children)
+    ])
 
 
 def test_mohcd_records_link_without_prj():
-    mohcd_pipeline_fk = 'mohcd_pipeline_2016-023'
-    expected_mohcd_inclusionary_children = [
-        'mohcd_inclusionary_2016-023'
-    ]
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    verify_valid_children(rg, mohcd_pipeline_fk,
-                          expected_mohcd_inclusionary_children)
-
-
-def verify_valid_children(rg, parent_fk, expected_child_fks):
-    parent = rg.get(parent_fk)
-    assert len(parent.children) == len(expected_child_fks)
-    for child_fk in expected_child_fks:
-        assert child_fk in parent.children
-        child = rg.get(child_fk)
-        assert child.uuid == parent.uuid
-        assert parent_fk in child.parents
+    verify_records_linked(rg, [
+        'mohcd_pipeline_2016-023',
+        'mohcd_inclusionary_2016-023'])
 
 
 def verify_records_linked(rg, fks):
