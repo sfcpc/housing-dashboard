@@ -74,7 +74,7 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
             last_updated = the_date.isoformat()
 
         for source in sources:
-            valid_keys = set(source.FIELDS.values())
+            valid_keys = source.field_names()
             for line in source.yield_records():
                 fk = source.foreign_key(line)
                 if fk not in records[source.NAME]:
