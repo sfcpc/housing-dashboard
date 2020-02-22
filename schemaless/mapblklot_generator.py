@@ -4,6 +4,12 @@ from fileutils import open_file
 
 
 class MapblklotGenerator():
+    """Supports instantiating an object that can return the mapblklot for
+    a given blklot.
+
+    This is class is implemented as a singleton, so it can only be
+    instantiated once. 
+    """
     class __MapblklotGeneratorImpl:
         def __init__(self, filepath):
             blklot_to_mapblklot = {}
@@ -14,6 +20,7 @@ class MapblklotGenerator():
             self._blklot_to_mapblklot = blklot_to_mapblklot
 
         def find_mapblklot_for_blklot(self, blklot):
+            """Returns the mapblklot for the given blklot"""
             if blklot in self._blklot_to_mapblklot:
                 return self._blklot_to_mapblklot[blklot]
             return None
