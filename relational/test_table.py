@@ -69,7 +69,9 @@ def test_table_project_facts_units(basic_graph):
     table = ProjectFacts()
 
     entries1 = [
-        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1',
+              Planning.NAME,
+              [NameValue('number_of_market_rate_units', '10', d)]),
         Entry('2',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
@@ -82,7 +84,9 @@ def test_table_project_facts_units(basic_graph):
     assert _get_value_for_row(table, fields, 'net_num_units') == '-2'
 
     entries2 = [
-        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1',
+              Planning.NAME,
+              [NameValue('number_of_market_rate_units', '10', d)]),
         Entry('2', PTS.NAME, [NameValue('proposed_units', '7', d)]),
     ]
     proj_no_permit_type = Project('uuid1', entries2, basic_graph)
@@ -91,7 +95,9 @@ def test_table_project_facts_units(basic_graph):
     assert _get_value_for_row(table, fields, 'net_num_units') == '10'
 
     entries3 = [
-        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1',
+              Planning.NAME,
+              [NameValue('number_of_market_rate_units', '10', d)]),
         Entry('2', PTS.NAME, [NameValue('permit_type', '1', d),
                               NameValue('existing_units', '7', d)]),
     ]
@@ -102,7 +108,9 @@ def test_table_project_facts_units(basic_graph):
     assert _get_value_for_row(table, fields, 'net_num_units') == '10'
 
     entries4 = [
-        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1',
+              Planning.NAME,
+              [NameValue('number_of_market_rate_units', '10', d)]),
         Entry('2',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
@@ -114,7 +122,9 @@ def test_table_project_facts_units(basic_graph):
     assert _get_value_for_row(table, fields, 'net_num_units') == '7'
 
     entries5 = [
-        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1',
+              Planning.NAME,
+              [NameValue('number_of_market_rate_units', '10', d)]),
     ]
     proj_ppts_only = Project('uuid1', entries5, basic_graph)
     fields = table.rows(proj_ppts_only)
@@ -122,7 +132,9 @@ def test_table_project_facts_units(basic_graph):
     assert _get_value_for_row(table, fields, 'net_num_units') == '10'
 
     entries6 = [
-        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1',
+              Planning.NAME,
+              [NameValue('number_of_market_rate_units', '10', d)]),
         Entry('2',
               PTS.NAME,
               [NameValue('permit_type', '3', d),
@@ -139,7 +151,9 @@ def test_table_project_facts_units_mohcd(basic_graph):
     table = ProjectFacts()
 
     entries1 = [
-        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1',
+              Planning.NAME,
+              [NameValue('number_of_market_rate_units', '10', d)]),
         Entry('2',
               MOHCDPipeline.NAME,
               [NameValue('total_project_units', '7', d),
@@ -160,7 +174,9 @@ def test_table_project_facts_units_mohcd(basic_graph):
         MOHCDPipeline.NAME
 
     entries2 = [
-        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1',
+              Planning.NAME,
+              [NameValue('number_of_market_rate_units', '10', d)]),
         Entry('3',
               MOHCDInclusionary.NAME,
               [NameValue('total_project_units', '6', d),
@@ -177,7 +193,9 @@ def test_table_project_facts_units_mohcd(basic_graph):
         MOHCDInclusionary.NAME
 
     entries3 = [
-        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1',
+              Planning.NAME,
+              [NameValue('number_of_market_rate_units', '10', d)]),
         Entry('2',
               MOHCDPipeline.NAME,
               [NameValue('total_project_units', '7', d)]),
@@ -198,7 +216,9 @@ def test_table_project_units_full_count(basic_graph):
     table = ProjectUnitCountsFull()
 
     entries1 = [
-        Entry('1', Planning.NAME, [NameValue('market_rate_units_net', '10', d)]),
+        Entry('1',
+              Planning.NAME,
+              [NameValue('number_of_market_rate_units', '10', d)]),
         Entry('2',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
@@ -242,14 +262,16 @@ def test_project_details_bedroom_info(unit_graph):
     entries1 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('residential_units_1br_net', '10', d)]),
+              [NameValue('residential_units_1br_exist', '0', d),
+               NameValue('residential_units_1br_prop', '10', d)]),
     ]
     proj_normal = Project('uuid1', entries1, unit_graph)
 
     entries2 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('residential_units_adu_1br_net', '1', d)]),
+              [NameValue('residential_units_adu_1br_exist', '0', d),
+               NameValue('residential_units_adu_1br_prop', '1', d)]),
     ]
     proj_adu = Project('uuid2', entries2, unit_graph)
 
@@ -268,7 +290,8 @@ def test_project_details_bedroom_info_mohcd(basic_graph):
     entries1 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('residential_units_1br_net', '2', d)]),
+              [NameValue('residential_units_1br_exist', '0', d),
+               NameValue('residential_units_1br_prop', '2', d)]),
         Entry('2',
               MOHCDPipeline.NAME,
               [NameValue('num_1bd_units', '10', d)]),
@@ -282,7 +305,8 @@ def test_project_details_bedroom_info_mohcd(basic_graph):
     entries2 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('residential_units_1br_net', '2', d)]),
+              [NameValue('residential_units_1br_exist', '0', d),
+               NameValue('residential_units_1br_prop', '2', d)]),
         Entry('2',
               MOHCDInclusionary.NAME,
               [NameValue('num_2bd_units', '5', d),
@@ -332,7 +356,8 @@ def test_project_details_ami_info_mohcd(basic_graph):
     entries1 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('residential_units_1br_net', '2', d)]),
+              [NameValue('residential_units_1br_exist', '0', d),
+               NameValue('residential_units_1br_prop', '2', d)]),
         Entry('2',
               MOHCDPipeline.NAME,
               [NameValue('num_20_percent_ami_units', '10', d)]),
@@ -346,7 +371,8 @@ def test_project_details_ami_info_mohcd(basic_graph):
     entries2 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('residential_units_1br_net', '2', d)]),
+              [NameValue('residential_units_1br_exist', '0', d),
+               NameValue('residential_units_1br_prop', '2', d)]),
         Entry('2',
               MOHCDInclusionary.NAME,
               [NameValue('num_20_percent_ami_units', '5', d),
