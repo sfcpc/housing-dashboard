@@ -173,7 +173,8 @@ class ProjectFacts(Table):
     def _gen_facts(self, row, proj):
         pts_pred = [('permit_type', lambda x: x == '1' or x == '2')]
         if proj.field('address', Planning.NAME) != '':
-            row[self.index(self.ADDRESS)] = proj.field('address', Planning.NAME)
+            row[self.index(self.ADDRESS)] = proj.field(
+                'address', Planning.NAME)
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = ''  # TODO
             row[self.index(self.PERMIT_AUTHORITY)] = Planning.OUTPUT_NAME
@@ -255,7 +256,7 @@ class ProjectFacts(Table):
                 row[self.index(self.NET_NUM_UNITS_DATA)] = \
                     Planning.OUTPUT_NAME if net else ''
 
-            bmr_net = proj.field('affordable_units_net', Planning.NAME)
+            bmr_net = proj.field('number_of_affordable_units', Planning.NAME)
             row[self.index(self.NET_NUM_UNITS_BMR)] = bmr_net
             row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = \
                 Planning.OUTPUT_NAME if bmr_net else ''
@@ -283,6 +284,7 @@ class ProjectGeo(NameValueTable):
         super().__init__('project_geo')
 
     def _geom(self, rows, proj):
+        # TODO(sbuss): We need this field to be added back
         geom = proj.field('the_geom', Planning.NAME)
         if geom != '':
             rows.append(self.nv_row(proj,
@@ -307,7 +309,7 @@ class ProjectUnitCountsFull(NameValueTable):
                                     name='net_num_units',
                                     value=ppts_units,
                                     data=Planning.OUTPUT_NAME))
-        ppts_bmr = proj.field('affordable_units_net', Planning.NAME)
+        ppts_bmr = proj.field('number_of_affordable_units', Planning.NAME)
         if ppts_bmr:
             rows.append(self.nv_row(proj,
                                     name='net_num_units_bmr',
@@ -479,6 +481,7 @@ class ProjectDetails(NameValueTable):
                                     data=datum[2]))
 
     def _square_feet(self, rows, proj):
+        # TODO: This field is gone
         sqft = proj.field('residential_sq_ft_net', Planning.NAME)
         if sqft != '':
             rows.append(self.nv_row(proj,
@@ -497,7 +500,7 @@ class ProjectDetails(NameValueTable):
 
 class ProjectStatusHistory(Table):
     _Planning_ENT_CODES = {'ENV', 'AHB', 'COA', 'CUA', 'CTZ', 'DNX', 'ENX',
-                       'OFA', 'PTA', 'SHD', 'TDM', 'VAR', 'WLS'}
+                           'OFA', 'PTA', 'SHD', 'TDM', 'VAR', 'WLS'}
 
     TOP_LEVEL_STATUS = 'top_level_status'
     START_DATE = 'start_date'
