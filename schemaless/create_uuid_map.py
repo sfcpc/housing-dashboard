@@ -138,11 +138,11 @@ class PlanningHelper(RecordGraphBuilderHelper, CalculatedFieldsMixin):
     def preprocess(self, latest_records):
         for fk, record in latest_records.get(Planning.NAME, {}).items():
             self._planning_id_to_fk[record['record_id']] = fk
-            if 'building_permit_number' in record:
+            if 'building_permits' in record:
                 for permit_number in \
-                        record['building_permit_number'].split(","):
-                    self._permit_number_to_planning_fk[permit_number].append(
-                        fk)
+                        record['building_permits'].split(","):
+                    self._permit_number_to_planning_fk[
+                        permit_number.strip()].append(fk)
             record = self.add_calculated_fields(record)
             if 'address_norm' in record:
                 self._address_to_planning_fk[record['address_norm']].append(fk)
