@@ -139,12 +139,12 @@ planning_2014-002033PRJ,planning,2020-01-29,residential_prop,140970
 planning_2014-002033PRJ,planning,2020-01-29,parking_spaces_prop,72
 planning_2014-002033PRJ,planning,2020-01-29,parking_gsf_prop,18230
 planning_2014-002033PRJ,planning,2020-01-29,office_prop,0
-planning_2014-002033PRJ,planning,2020-01-29,residential_studio_exist,0
-planning_2014-002033PRJ,planning,2020-01-29,residential_1br_exist,0
-planning_2014-002033PRJ,planning,2020-01-29,residential_2br_exist,0
-planning_2014-002033PRJ,planning,2020-01-29,residential_studio_prop,60
-planning_2014-002033PRJ,planning,2020-01-29,residential_1br_prop,25
-planning_2014-002033PRJ,planning,2020-01-29,residential_2br_prop,59
+planning_2014-002033PRJ,planning,2020-01-29,residential_units_studio_exist,0
+planning_2014-002033PRJ,planning,2020-01-29,residential_units_1br_exist,0
+planning_2014-002033PRJ,planning,2020-01-29,residential_units_2br_exist,0
+planning_2014-002033PRJ,planning,2020-01-29,residential_units_studio_prop,60
+planning_2014-002033PRJ,planning,2020-01-29,residential_units_1br_prop,25
+planning_2014-002033PRJ,planning,2020-01-29,residential_units_2br_prop,59
 planning_2014-002033TDM,planning,2020-01-29,record_id,2014-002033TDM
 planning_2014-002033TDM,planning,2020-01-29,record_type,TDM
 planning_2014-002033TDM,planning,2020-01-29,status,Closed - Withdrawn
@@ -266,12 +266,12 @@ planning_2015-010665PRJ,planning,2020-01-29,residential_prop,36203
 planning_2015-010665PRJ,planning,2020-01-29,parking_spaces_prop,3
 planning_2015-010665PRJ,planning,2020-01-29,parking_gsf_prop,1974
 planning_2015-010665PRJ,planning,2020-01-29,office_prop,179
-planning_2015-010665PRJ,planning,2020-01-29,residential_studio_exist,76
-planning_2015-010665PRJ,planning,2020-01-29,residential_1br_exist,21
-planning_2015-010665PRJ,planning,2020-01-29,residential_2br_exist,1
-planning_2015-010665PRJ,planning,2020-01-29,residential_studio_prop,76
-planning_2015-010665PRJ,planning,2020-01-29,residential_1br_prop,21
-planning_2015-010665PRJ,planning,2020-01-29,residential_2br_prop,1
+planning_2015-010665PRJ,planning,2020-01-29,residential_units_studio_exist,76
+planning_2015-010665PRJ,planning,2020-01-29,residential_units_1br_exist,21
+planning_2015-010665PRJ,planning,2020-01-29,residential_units_2br_exist,1
+planning_2015-010665PRJ,planning,2020-01-29,residential_units_studio_prop,76
+planning_2015-010665PRJ,planning,2020-01-29,residential_units_1br_prop,21
+planning_2015-010665PRJ,planning,2020-01-29,residential_units_2br_prop,1
 planning_2015-010665VAR,planning,2020-01-29,record_id,2015-010665VAR
 planning_2015-010665VAR,planning,2020-01-29,record_type,VAR
 planning_2015-010665VAR,planning,2020-01-29,status,Closed - Approved
@@ -524,12 +524,12 @@ planning_2015-014058PRJ,planning,2020-01-29,parking_spaces_prop,31
 planning_2015-014058PRJ,planning,2020-01-29,car_share_spaces_prop,3
 planning_2015-014058PRJ,planning,2020-01-29,parking_gsf_prop,15102
 planning_2015-014058PRJ,planning,2020-01-29,retail_commercial_prop,2914
-planning_2015-014058PRJ,planning,2020-01-29,residential_1br_exist,0
-planning_2015-014058PRJ,planning,2020-01-29,residential_2br_exist,0
-planning_2015-014058PRJ,planning,2020-01-29,residential_3br_exist,0
-planning_2015-014058PRJ,planning,2020-01-29,residential_1br_prop,10
-planning_2015-014058PRJ,planning,2020-01-29,residential_2br_prop,24
-planning_2015-014058PRJ,planning,2020-01-29,residential_3br_prop,7
+planning_2015-014058PRJ,planning,2020-01-29,residential_units_1br_exist,0
+planning_2015-014058PRJ,planning,2020-01-29,residential_units_2br_exist,0
+planning_2015-014058PRJ,planning,2020-01-29,residential_units_3br_exist,0
+planning_2015-014058PRJ,planning,2020-01-29,residential_units_1br_prop,10
+planning_2015-014058PRJ,planning,2020-01-29,residential_units_2br_prop,24
+planning_2015-014058PRJ,planning,2020-01-29,residential_units_3br_prop,7
 planning_2015-014058TDM,planning,2020-01-29,record_id,2015-014058TDM
 planning_2015-014058TDM,planning,2020-01-29,record_type,TDM
 planning_2015-014058TDM,planning,2020-01-29,status,Approved
@@ -868,14 +868,14 @@ planning_2016-001514PRJ,planning,2020-01-29,office_exist,0
 planning_2016-001514PRJ,planning,2020-01-29,residential_prop,143320
 planning_2016-001514PRJ,planning,2020-01-29,retail_commercial_prop,11357
 planning_2016-001514PRJ,planning,2020-01-29,office_prop,2368
-planning_2016-001514PRJ,planning,2020-01-29,residential_studio_exist,0
-planning_2016-001514PRJ,planning,2020-01-29,residential_1br_exist,0
-planning_2016-001514PRJ,planning,2020-01-29,residential_2br_exist,0
-planning_2016-001514PRJ,planning,2020-01-29,residential_3br_exist,0
-planning_2016-001514PRJ,planning,2020-01-29,residential_studio_prop,32
-planning_2016-001514PRJ,planning,2020-01-29,residential_1br_prop,36
-planning_2016-001514PRJ,planning,2020-01-29,residential_2br_prop,73
-planning_2016-001514PRJ,planning,2020-01-29,residential_3br_prop,16
+planning_2016-001514PRJ,planning,2020-01-29,residential_units_studio_exist,0
+planning_2016-001514PRJ,planning,2020-01-29,residential_units_1br_exist,0
+planning_2016-001514PRJ,planning,2020-01-29,residential_units_2br_exist,0
+planning_2016-001514PRJ,planning,2020-01-29,residential_units_3br_exist,0
+planning_2016-001514PRJ,planning,2020-01-29,residential_units_studio_prop,32
+planning_2016-001514PRJ,planning,2020-01-29,residential_units_1br_prop,36
+planning_2016-001514PRJ,planning,2020-01-29,residential_units_2br_prop,73
+planning_2016-001514PRJ,planning,2020-01-29,residential_units_3br_prop,16
 planning_2016-002196GEN,planning,2020-01-29,record_id,2016-002196GEN
 planning_2016-002196GEN,planning,2020-01-29,record_type,GEN
 planning_2016-002196GEN,planning,2020-01-29,status,Closed - Informational
@@ -1640,8 +1640,8 @@ planning_2018-013088PRJ,planning,2020-01-29,parking_gsf_exist,0
 planning_2018-013088PRJ,planning,2020-01-29,residential_prop,2793
 planning_2018-013088PRJ,planning,2020-01-29,parking_spaces_prop,2
 planning_2018-013088PRJ,planning,2020-01-29,parking_gsf_prop,361
-planning_2018-013088PRJ,planning,2020-01-29,residential_3br_exist,3
-planning_2018-013088PRJ,planning,2020-01-29,residential_3br_prop,3
+planning_2018-013088PRJ,planning,2020-01-29,residential_units_3br_exist,3
+planning_2018-013088PRJ,planning,2020-01-29,residential_units_3br_prop,3
 planning_2018-015375ENF,planning,2020-01-29,record_id,2018-015375ENF
 planning_2018-015375ENF,planning,2020-01-29,record_type,ENF
 planning_2018-015375ENF,planning,2020-01-29,status,Closed - Abated
