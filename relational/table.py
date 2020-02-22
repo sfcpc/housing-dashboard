@@ -360,7 +360,9 @@ class ProjectDetails(NameValueTable):
             net = 0
             ok = False
             try:
-                net = str(int(proj.field(prefix + '_net', Planning.NAME)))
+                exist = int(proj.field(prefix + '_exist', Planning.NAME))
+                proposed = int(proj.field(prefix + '_prop', Planning.NAME))
+                net = str(proposed - exist)
                 ok = True
 
                 if re.search('_adu_', prefix):
