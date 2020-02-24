@@ -5,14 +5,18 @@ from collections import namedtuple
 from relational.process_schemaless import Freshness
 from relational.process_schemaless import is_seen_id
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
+from schemaless.sources import TCO
 
 
 def test_freshness():
     newer = datetime.fromisoformat('2020-01-01')
     pts = datetime.fromisoformat('2020-02-01')
+    tco = datetime.fromisoformat('2020-02-10')
     mohcd = datetime.fromisoformat('2019-01-01')
+    addenda = datetime.fromisoformat('2019-05-05')
 
     lines = []
     lines.append({
@@ -40,12 +44,27 @@ def test_freshness():
         'name': 'completed_date',
         'value': '02/01/2020',
     })
+    lines.append({
+        'source': TCO.NAME,
+        'name': 'date_issued',
+        'value': '02/05/2020',
+    })
+    lines.append({
+        'source': TCO.NAME,
+        'name': 'date_issued',
+        'value': '02/10/2020',
+    })
 
     # ignored because the field isn't permitted
     lines.append({
         'source': PTS.NAME,
         'name': 'arbitrary',
         'value': '02/02/2020',
+    })
+    lines.append({
+        'source': TCO.NAME,
+        'name': 'arbitrary',
+        'value': '05/02/2020',
     })
 
     # ignored, in the future
@@ -70,13 +89,23 @@ def test_freshness():
         'value': '01/01/2020',
     })
 
+    # permit addenda summary extracts from last_updated
+    lines.append({
+        'last_updated': '2019-05-05',  # isoformat for last_updated
+        'source': PermitAddendaSummary.NAME,
+        'name': 'earliest_addenda_arrival',
+        'value': '04/01/2015',
+    })
+
     fresh = Freshness()
     for line in lines:
         fresh.update_freshness(line)
 
     assert fresh.freshness[Planning.NAME] == newer
     assert fresh.freshness[PTS.NAME] == pts
+    assert fresh.freshness[TCO.NAME] == tco
     assert fresh.freshness[MOHCDPipeline.NAME] == mohcd
+    assert fresh.freshness[PermitAddendaSummary.NAME] == addenda
     assert 'bamboozle' not in fresh.freshness
 
 

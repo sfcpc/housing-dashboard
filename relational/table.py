@@ -7,12 +7,16 @@ from datetime import date
 from datetime import datetime
 from collections import OrderedDict
 
+import math
 import re
 
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
+from schemaless.sources import TCO
 
 
 class Table(ABC):
@@ -63,6 +67,7 @@ class NameValueTable(Table):
 _MOHCD_TYPES = OrderedDict([
     (MOHCDPipeline.NAME, MOHCDPipeline.OUTPUT_NAME),
     (MOHCDInclusionary.NAME, MOHCDInclusionary.OUTPUT_NAME),
+    (AffordableRentalPortfolio.NAME, AffordableRentalPortfolio.OUTPUT_NAME),
 ])
 
 
@@ -111,37 +116,87 @@ def _get_mohcd_units(proj, source_override=None):
 
 _valid_dbi_permit_types = set('123')
 
+_invalid_dbi_statuses = set(['cancelled', 'withdrawn'])
 
-_is_valid_dbi_type = ('permit_type',
-                      lambda x: x in _valid_dbi_permit_types)
+
+_is_valid_dbi_entry = [('permit_type',
+                        lambda x: x in _valid_dbi_permit_types),
+                       ('current_status',
+                        lambda x: x == '' or x not in _invalid_dbi_statuses)]
 
 
 def _get_dbi_units(proj):
     """
     Returns:
       Net new units from DBI, only if it could be sourced from a new
-      construction permit.  None if no data from DBI.
+      construction permit or addition.  None if no data from DBI.
     """
     dbi_exist = 0
     dbi_prop = 0
     try:
-        dbi_exist = int(proj.field(
-            'existing_units', PTS.NAME,
-            entry_predicate=[_is_valid_dbi_type]))
+        fk_entries = proj.fields('existing_units',
+                                 PTS.NAME,
+                                 entry_predicate=_is_valid_dbi_entry)
+        for (fk, entries) in fk_entries.items():
+            latest = (None, datetime.min)
+            # If we have multiple entries for the same foreign key,
+            # de-dupe by selecting the most recent one.
+            for entry in entries:
+                entry_latest = entry.get_latest('existing_units')
+                if entry_latest[1] > latest[1]:
+                    latest = entry_latest
+
+            if latest[0]:
+                dbi_exist += int(latest[0])
     except ValueError:
+        dbi_exist = 0
         pass
 
     try:
-        dbi_prop = int(proj.field(
-            'proposed_units', PTS.NAME,
-            entry_predicate=[_is_valid_dbi_type]))
+        fk_entries = proj.fields('proposed_units',
+                                 PTS.NAME,
+                                 entry_predicate=_is_valid_dbi_entry)
+        for (fk, entries) in fk_entries.items():
+            latest = (None, datetime.min)
+            # If we have multiple entries for the same foreign key,
+            # de-dupe by selecting the most recent one.
+            for entry in entries:
+                entry_latest = entry.get_latest('proposed_units')
+                if entry_latest[1] > latest[1]:
+                    latest = entry_latest
+
+            if latest[0]:
+                dbi_prop += int(latest[0])
     except ValueError:
+        dbi_prop = 0
         pass
 
     if dbi_prop:
         return dbi_prop - dbi_exist
 
     return None
+
+
+def _get_tco_units(proj):
+    """
+    Returns:
+      Net new units from TCO dataset (summation number of all unit numbers
+      from existing permits). None if no data in TCO.
+    """
+    num_tco_units = 0
+    try:
+        fk_entries = proj.fields('num_units', TCO.NAME)
+        for (_, entries) in fk_entries.items():
+            # Add up all units, even if there are dupe foreign keys
+            for entry in entries:
+                entry_latest = entry.get_latest('num_units')
+                if entry_latest[0]:
+                    num_tco_units += int(entry_latest[0])
+    except ValueError:
+        num_tco_units = 0
+        pass
+
+    return num_tco_units if num_tco_units else None
 
 
 class ProjectFacts(Table):
@@ -154,6 +209,8 @@ class ProjectFacts(Table):
     NET_NUM_UNITS_DATA = 'net_num_units_data'
     NET_NUM_UNITS_BMR = 'net_num_units_bmr'
     NET_NUM_UNITS_BMR_DATA = 'net_num_units_bmr_data'
+    NET_EST_NUM_UNITS_BMR = 'net_estimated_num_units_bmr'
+    NET_EST_NUM_UNITS_BMR_DATA = 'net_estimated_num_units_bmr_data'
 
     SEEN_IDS = set()
 
@@ -168,6 +225,8 @@ class ProjectFacts(Table):
             self.NET_NUM_UNITS_DATA,
             self.NET_NUM_UNITS_BMR,
             self.NET_NUM_UNITS_BMR_DATA,
+            self.NET_EST_NUM_UNITS_BMR,
+            self.NET_EST_NUM_UNITS_BMR_DATA,
         ])
 
     def _gen_facts(self, row, proj):
@@ -178,8 +237,7 @@ class ProjectFacts(Table):
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = ''  # TODO
             row[self.index(self.PERMIT_AUTHORITY)] = Planning.OUTPUT_NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', Planning.NAME)
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(Planning.NAME)
         elif proj.field('permit_number',
                         PTS.NAME,
                         entry_predicate=pts_pred) != '':
@@ -199,42 +257,57 @@ class ProjectFacts(Table):
                            PTS.NAME,
                            entry_predicate=pts_pred)
             row[self.index(self.PERMIT_AUTHORITY)] = PTS.NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', PTS.NAME, entry_predicate=pts_pred)
-        elif proj.field('project_id', MOHCDPipeline.NAME) != '':
-            num = proj.field('street_number', MOHCDPipeline.NAME)
-            addr = proj.field('street_name', MOHCDPipeline.NAME)
-            if num:
-                addr = ('%s %s' % (num, addr))
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(
+                    PTS.NAME, entry_predicate=pts_pred)
+        else:
+            for mohcd in _MOHCD_TYPES.keys():
+                if proj.field('project_id', mohcd) == '':
+                    continue
 
-            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
-                    addr,
-                    proj.field('street_type', MOHCDPipeline.NAME),
-                    proj.field('zip_code', MOHCDPipeline.NAME))
-            row[self.index(self.APPLICANT)] = \
-                proj.field('project_lead_sponsor', MOHCDPipeline.NAME)
-            row[self.index(self.SUPERVISOR_DISTRICT)] = \
-                proj.field('supervisor_district', MOHCDPipeline.NAME)
-            row[self.index(self.PERMIT_AUTHORITY)] = MOHCDPipeline.NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', MOHCDPipeline.NAME)
-        elif proj.field('project_id', MOHCDInclusionary.NAME) != '':
-            num = proj.field('street_number', MOHCDInclusionary.NAME)
-            addr = proj.field('street_name', MOHCDInclusionary.NAME)
-            if num:
-                addr = ('%s %s' % (num, addr))
+                num = proj.field('street_number', mohcd)
+                addr = proj.field('street_name', mohcd)
+                if num:
+                    addr = ('%s %s' % (num, addr))
 
-            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
-                    addr,
-                    proj.field('street_type', MOHCDInclusionary.NAME),
-                    proj.field('zip_code', MOHCDInclusionary.NAME))
-            row[self.index(self.APPLICANT)] = \
-                proj.field('project_lead_sponsor', MOHCDInclusionary.NAME)
-            row[self.index(self.SUPERVISOR_DISTRICT)] = \
-                proj.field('supervisor_district', MOHCDInclusionary.NAME)
-            row[self.index(self.PERMIT_AUTHORITY)] = MOHCDInclusionary.NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.field(
-                'fk', MOHCDInclusionary.NAME)
+                row[self.index(self.ADDRESS)] = '%s %s, %s' % (
+                        addr,
+                        proj.field('street_type', mohcd),
+                        proj.field('zip_code', mohcd))
+                sponsor = proj.field('project_lead_sponsor', mohcd)
+                if not sponsor:
+                    sponsor = proj.field('project_sponsor', mohcd)
+                row[self.index(self.APPLICANT)] = sponsor
+
+                row[self.index(self.SUPERVISOR_DISTRICT)] = \
+                    proj.field('supervisor_district', mohcd)
+
+                row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(mohcd)
+                row[self.index(self.PERMIT_AUTHORITY)] = 'mohcd'  # TODO
+
+    def _estimate_bmr(self, net):
+        """Estimates the BMR we project a project to have.
+
+        This exists because currently all/most projects in planning have
+        nothing specified for their affordable unit counts, but we can provide
+        a rough estimate of what we expect the project to have when it gets
+        entitled.
+
+        net: a (string) net unit count
+
+        Returns: a non-empty string
+        """
+        # TODO: this logic can get pretty complicated if needed, but right
+        # now this is just a basic "floor" number that leans on the side of
+        # undercounting.
+        net = int(net)
+        if net < 10:
+            return '0'
+        else:
+            # based on the inclusionary affordable housing program as of 2019
+            if net < 25:
+                return str(math.floor(.2 * net))
+            else:
+                return str(math.floor(.3 * net))
 
     def _gen_units(self, row, proj):
         mohcd = _get_mohcd_units(proj)
@@ -246,24 +319,43 @@ class ProjectFacts(Table):
             row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = source
         else:
             dbi_net = _get_dbi_units(proj)
-            if dbi_net is not None:
+            planning_net = proj.field(
+                'number_of_market_rate_units', Planning.NAME)
+            net = dbi_net
+            # PTS may have an explicitly set 0 unit count for projects
+            # that have no business dealing with housing (possible with
+            # permit type 3 in particular), so we only emit a 0-count
+            # PTS unit count if we had an explicit non-0 Planning unit
+            # count (therefore indicating a housing-related project that
+            # lost its housing somehow).
+            if (dbi_net is not None
+                    and (dbi_net != 0 or planning_net)):
                 row[self.index(self.NET_NUM_UNITS)] = str(dbi_net)
                 row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
             else:
-                # TODO: how to handle cases where prop - existing != net ?
-                net = proj.field('number_of_market_rate_units', Planning.NAME)
-                row[self.index(self.NET_NUM_UNITS)] = net
-                row[self.index(self.NET_NUM_UNITS_DATA)] = \
-                    Planning.OUTPUT_NAME if net else ''
-
+                try:
+                    net = int(planning_net)
+                    row[self.index(self.NET_NUM_UNITS)] = planning_net
+                    row[self.index(self.NET_NUM_UNITS_DATA)] = \
+                        Planning.OUTPUT_NAME
+                except ValueError:
+                    net = None
+                    pass
             bmr_net = proj.field('number_of_affordable_units', Planning.NAME)
-            row[self.index(self.NET_NUM_UNITS_BMR)] = bmr_net
-            row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = \
-                Planning.OUTPUT_NAME if bmr_net else ''
+            if bmr_net != '':
+                row[self.index(self.NET_NUM_UNITS_BMR)] = bmr_net
+                row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = \
+                    Planning.OUTPUT_NAME
+            elif net is not None:
+                row[self.index(self.NET_EST_NUM_UNITS_BMR)] = \
+                    self._estimate_bmr(net)
+                row[self.index(self.NET_EST_NUM_UNITS_BMR_DATA)] = \
+                    Planning.OUTPUT_NAME
 
     def _atleast_one_measure(self, row):
         return (row[self.index(self.NET_NUM_UNITS)] != '' or
-                row[self.index(self.NET_NUM_UNITS_BMR)] != '')
+                row[self.index(self.NET_NUM_UNITS_BMR)] != '' or
+                row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '')
 
     def rows(self, proj):
         row = [''] * len(self.header())
@@ -303,17 +395,18 @@ class ProjectUnitCountsFull(NameValueTable):
         super().__init__('project_unit_counts_full')
 
     def _all_units(self, rows, proj):
-        ppts_units = proj.field('number_of_market_rate_units', Planning.NAME)
-        if ppts_units:
+        planning_units = proj.field(
+            'number_of_market_rate_units', Planning.NAME)
+        if planning_units:
             rows.append(self.nv_row(proj,
                                     name='net_num_units',
-                                    value=ppts_units,
+                                    value=planning_units,
                                     data=Planning.OUTPUT_NAME))
-        ppts_bmr = proj.field('number_of_affordable_units', Planning.NAME)
-        if ppts_bmr:
+        planning_bmr = proj.field('number_of_affordable_units', Planning.NAME)
+        if planning_bmr:
             rows.append(self.nv_row(proj,
                                     name='net_num_units_bmr',
-                                    value=ppts_bmr,
+                                    value=planning_bmr,
                                     data=Planning.OUTPUT_NAME))
 
         dbi_net = _get_dbi_units(proj)
@@ -322,6 +415,13 @@ class ProjectUnitCountsFull(NameValueTable):
                                     name='net_num_units',
                                     value=str(dbi_net),
                                     data=PTS.OUTPUT_NAME))
+
+        tco_net = _get_tco_units(proj)
+        if tco_net is not None:
+            rows.append(self.nv_row(proj,
+                                    name='net_num_units',
+                                    value=str(tco_net),
+                                    data=TCO.OUTPUT_NAME))
 
         for source_override in [MOHCDPipeline.NAME, MOHCDInclusionary.NAME]:
             mohcd = _get_mohcd_units(proj, source_override=source_override)
@@ -407,6 +507,9 @@ class ProjectDetails(NameValueTable):
         """Extracts information from MOHCD, preferring Pipeline over
         Inclusionary.
 
+        fieldmap: a dict of the mohcd field name to an output field name
+        to use in the returned tuple.
+
         Returns:
             A list of (name, value, source) tuples.  If there was not
             at least one non-zero value, then the list will be empty,
@@ -482,6 +585,31 @@ class ProjectDetails(NameValueTable):
                                     value=datum[1],
                                     data=datum[2]))
 
+    _IS_100_AFFORDABLE_FIELDMAP = {
+        'total_project_units': 'total_project_units',
+        'total_affordable_units': 'total_affordable_units',
+    }
+
+    def _is_100_affordable(self, rows, proj):
+        """Populates whether a project is 100% affordable, at least insofar
+        as we can tell from MOHCD data.
+        """
+        units = _get_mohcd_units(proj, MOHCDPipeline.NAME)
+        if units and units[0] > 0:
+            rows.append(self.nv_row(
+                proj,
+                name='is_100pct_affordable',
+                value='TRUE' if units[0] == units[1] else 'FALSE',
+                data=MOHCDPipeline.OUTPUT_NAME))
+        else:
+            units = _get_mohcd_units(proj, AffordableRentalPortfolio.NAME)
+            if units and units[0] > 0:
+                rows.append(self.nv_row(
+                        proj,
+                        name='is_100pct_affordable',
+                        value='TRUE',
+                        data=AffordableRentalPortfolio.OUTPUT_NAME))
+
     def _square_feet(self, rows, proj):
         # TODO: This field is gone
         sqft = proj.field('residential_sq_ft_net', Planning.NAME)
@@ -491,12 +619,36 @@ class ProjectDetails(NameValueTable):
                                     value=sqft,
                                     data=Planning.OUTPUT_NAME))
 
+    def _onsite_or_feeout(self, rows, proj):
+        for (mohcdin, mohcdout) in _MOHCD_TYPES.items():
+            s415 = proj.field('section_415_declaration', mohcdin)
+
+            if s415 != '':
+                rows.append(self.nv_row(
+                        proj,
+                        name='inclusionary_housing_program_status',
+                        value=s415,
+                        data=mohcdout))
+                break
+
+    def _earliest_addenda_arrival(self, rows, proj):
+        date = proj.field('earliest_addenda_arrival',
+                          PermitAddendaSummary.NAME)
+        if date:
+            rows.append(self.nv_row(proj,
+                                    name='earliest_addenda_arrival',
+                                    value=date,
+                                    data=PermitAddendaSummary.OUTPUT_NAME))
+
     def rows(self, proj):
         result = []
         self._square_feet(result, proj)
         self._bedroom_info(result, proj)
         self._bedroom_info_mohcd(result, proj)
         self._ami_info_mohcd(result, proj)
+        self._is_100_affordable(result, proj)
+        self._onsite_or_feeout(result, proj)
+        self._earliest_addenda_arrival(result, proj)
         return result
 
 

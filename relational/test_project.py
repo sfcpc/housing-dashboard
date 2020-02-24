@@ -65,6 +65,14 @@ def rootless_graph():
     return rg
 
 
+def test_project_fields(basic_entries, basic_graph):
+    proj = Project('uuid-0001', basic_entries, basic_graph)
+    entries = proj.fields('num_units_bmr', 'planning')
+    assert len(entries) == 2
+    assert '1' in entries
+    assert '2' in entries
+
+
 def test_project_simple_case(basic_entries, basic_graph):
     proj = Project('uuid-0001', basic_entries, basic_graph)
     assert len(proj.roots) == 1
@@ -84,7 +92,7 @@ def test_project_simple_case(basic_entries, basic_graph):
     assert proj.field('num_square_feet',
                       Planning.NAME,
                       entry_predicate=[('residential_units_1br',
-                                        lambda x: True)]) == '2300'
+                                        lambda x: x != '')]) == '2300'
 
     # nothing because the predicate value doesn't match
     assert proj.field('num_square_feet',

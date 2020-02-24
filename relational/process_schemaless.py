@@ -18,8 +18,10 @@ from relational.project import Project
 from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
+from schemaless.sources import TCO
 from schemaless.sources import source_map
 
 csv.field_size_limit(sys.maxsize)
@@ -71,6 +73,7 @@ class Freshness:
             'issued_date',
             'permit_creation_date',
         ]),
+        TCO.NAME: set(['date_issued']),
     }
 
     def __init__(self):
@@ -80,8 +83,10 @@ class Freshness:
         self._freshness_checks = {
             Planning.NAME: self._planning,
             PTS.NAME: self._pts,
+            TCO.NAME: self._tco,
             MOHCDPipeline.NAME: self._mohcd_pipeline,
             MOHCDInclusionary.NAME: self._mohcd_inclusionary,
+            PermitAddendaSummary.NAME: self._permit_addenda_summary,
         }
 
     def _check_and_log_good_date(self, date, source, line):
@@ -133,11 +138,17 @@ class Freshness:
     def _pts(self, line):
         self._extract_nv_date(line, PTS.NAME)
 
+    def _tco(self, line):
+        self._extract_nv_date(line, TCO.NAME)
+
     def _mohcd_pipeline(self, line):
         self._extract_last_updated(line, MOHCDPipeline.NAME)
 
     def _mohcd_inclusionary(self, line):
         self._extract_last_updated(line, MOHCDInclusionary.NAME)
+
+    def _permit_addenda_summary(self, line):
+        self._extract_last_updated(line, PermitAddendaSummary.NAME)
 
 
 # entries_map is a dict of key, value of string=>list of Entry, where key is
