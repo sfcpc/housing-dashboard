@@ -100,7 +100,7 @@ class Address(Field):
         try:
             addr = normalize_address_record(addr_str)
         except AddressNormalizationError:
-            logger.warn("Unparseable: %s", addr_str)
+            logger.warning("Unparseable: %s", addr_str)
             return ""
         else:
             if not addr['postal_code']:
@@ -108,7 +108,7 @@ class Address(Field):
                 try:
                     return format_address_record(addr)
                 except AddressNormalizationError:
-                    logger.warn("Unable to format address %s", addr)
+                    logger.warning("Unable to format address %s", addr)
                     return ""
 
             if not addr['city']:
@@ -130,14 +130,14 @@ class Address(Field):
         try:
             addr = normalize_address_record(addr)
         except AddressNormalizationError:
-            logger.warn("Unparseable: %s", addr)
+            logger.warning("Unparseable: %s", addr)
             return ""
         else:
             try:
                 return format_address_record(addr)
             except AddressNormalizationError:
-                logger.warn("WARN4: Unable to parse address %s for %s",
-                            addr, addr_str)
+                logger.warning("WARN4: Unable to parse address %s for %s",
+                               addr, addr_str)
                 return ""
         return ""
 
