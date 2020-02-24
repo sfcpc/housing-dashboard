@@ -230,10 +230,46 @@ class ProjectFacts(Table):
         ])
 
     def _gen_facts(self, row, proj):
+        used_mohcd = False
+        for mohcd in _MOHCD_TYPES.keys():
+            if used_mohcd or proj.field('project_id', mohcd) == '':
+                continue
+
+            used_mohcd = True
+
+            name = proj.field('project_name', mohcd)
+
+            num = proj.field('street_number', mohcd)
+            addr = proj.field('street_name', mohcd)
+            if num:
+                addr = ('%s %s' % (num, addr))
+
+            if name:
+                addr = ('%s, %s' % (name, addr))
+
+            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
+                    addr,
+                    proj.field('street_type', mohcd),
+                    proj.field('zip_code', mohcd))
+            sponsor = proj.field('project_lead_sponsor', mohcd)
+            if not sponsor:
+                sponsor = proj.field('project_sponsor', mohcd)
+            row[self.index(self.APPLICANT)] = sponsor
+
+            row[self.index(self.SUPERVISOR_DISTRICT)] = \
+                proj.field('supervisor_district', mohcd)
+
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(mohcd)
+            row[self.index(self.PERMIT_AUTHORITY)] = 'mohcd'  # TODO
+
+        if used_mohcd:
+            return
+
         addr = proj.field('address', PPTS.NAME)
         if not addr:
             addr = proj.field('name', PPTS.NAME)
-        if addr != '':
+
+        if addr:
             row[self.index(self.ADDRESS)] = addr
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = ''  # TODO
@@ -260,30 +296,6 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY)] = PTS.NAME
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(
                     PTS.NAME, entry_predicate=_is_valid_dbi_entry)
-        else:
-            for mohcd in _MOHCD_TYPES.keys():
-                if proj.field('project_id', mohcd) == '':
-                    continue
-
-                num = proj.field('street_number', mohcd)
-                addr = proj.field('street_name', mohcd)
-                if num:
-                    addr = ('%s %s' % (num, addr))
-
-                row[self.index(self.ADDRESS)] = '%s %s, %s' % (
-                        addr,
-                        proj.field('street_type', mohcd),
-                        proj.field('zip_code', mohcd))
-                sponsor = proj.field('project_lead_sponsor', mohcd)
-                if not sponsor:
-                    sponsor = proj.field('project_sponsor', mohcd)
-                row[self.index(self.APPLICANT)] = sponsor
-
-                row[self.index(self.SUPERVISOR_DISTRICT)] = \
-                    proj.field('supervisor_district', mohcd)
-
-                row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(mohcd)
-                row[self.index(self.PERMIT_AUTHORITY)] = 'mohcd'  # TODO
 
     def _estimate_bmr(self, net):
         """Estimates the BMR we project a project to have.

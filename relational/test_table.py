@@ -94,6 +94,39 @@ def test_table_project_facts(basic_graph, d):
                        NameValue('market_rate_units_net', '10', d)]),
             ],
             want={'address': 'BALBOA RESERVOIR DEVELOPMENT'}),
+        EntriesTestRow(
+            name='always use mohcd if information found',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
+                       NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('project_id', '1', d),
+                       NameValue('street_number', '123', d),
+                       NameValue('street_name', 'chris', d),
+                       NameValue('street_type', 'st', d),
+                       NameValue('zip_code', '94123', d)]),
+            ],
+            want={'address': '123 chris st, 94123'}),
+        EntriesTestRow(
+            name='incorporate mohcd name if found',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
+                       NameValue('market_rate_units_net', '10', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('project_id', '1', d),
+                       NameValue('project_name', 'chris place', d),
+                       NameValue('street_number', '123', d),
+                       NameValue('street_name', 'chris', d),
+                       NameValue('street_type', 'st', d),
+                       NameValue('zip_code', '94123', d)]),
+            ],
+            want={'address': 'chris place, 123 chris st, 94123'}),
     ]
 
     for test in tests:
