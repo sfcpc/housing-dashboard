@@ -633,8 +633,32 @@ class ProjectDetails(NameValueTable):
                                     value=date,
                                     data=PermitAddendaSummary.OUTPUT_NAME))
 
+    def _unique(self, rows):
+        """Prunes duplicate name-value entries, preferring entries that were
+        added later in the process.
+        """
+        seen = set()
+
+        def _is_already_seen(row):
+            nonlocal seen
+
+            name = row[self.index(self.NAME)]
+            if name in seen:
+                return True
+            seen.add(name)
+            return False
+
+        rows[:] = [row for row in reversed(rows) if not _is_already_seen(row)]
+
     def rows(self, proj):
+        """Generates all the rows for this project.
+
+        As a name-value table we nonetheless expect this table to be pivoted,
+        so the names are for each project."""
         result = []
+
+        # Order here matters, because _unique will prune earlier entries
+        # in favor of identical names added later.
         self._square_feet(result, proj)
         self._bedroom_info(result, proj)
         self._bedroom_info_mohcd(result, proj)
@@ -642,6 +666,9 @@ class ProjectDetails(NameValueTable):
         self._is_100_affordable(result, proj)
         self._onsite_or_feeout(result, proj)
         self._earliest_addenda_arrival(result, proj)
+
+        self._unique(result)
+
         return result
 
 

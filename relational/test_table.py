@@ -433,6 +433,26 @@ def unit_graph():
     return rg
 
 
+def test_project_details_unique(basic_graph, d):
+    table = ProjectDetails()
+
+    entries = [
+        Entry('1',
+              PPTS.NAME,
+              [NameValue('residential_units_1br_net', '10', d)]),
+        Entry('2',
+              MOHCDPipeline.NAME,
+              [NameValue('num_1bd_units', '9', d)]),
+    ]
+    proj = Project('uuid1', entries, basic_graph)
+    nvs = table.rows(proj)
+
+    assert _get_value_for_name(table,
+                               nvs,
+                               table.OUT_1BR,
+                               return_multiple=True) == ['9']
+
+
 def test_project_details_bedroom_info(unit_graph, d):
     table = ProjectDetails()
 
@@ -479,112 +499,119 @@ def test_project_details_permit_addenda_summary(basic_graph, d):
 def test_project_details_bedroom_info_mohcd(basic_graph, d):
     table = ProjectDetails()
 
-    entries1 = [
-        Entry('1',
-              PPTS.NAME,
-              [NameValue('residential_units_1br_net', '2', d)]),
-        Entry('2',
-              MOHCDPipeline.NAME,
-              [NameValue('num_1bd_units', '10', d)]),
-        Entry('3',
-              MOHCDInclusionary.NAME,
-              [NameValue('num_2bd_units', '5', d),
-               NameValue('num_3bd_units', '3', d)]),
+    tests = [
+        EntriesTestRow(
+            name='only pull information from pipeline even if inclusionary',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('num_1bd_units', '10', d)]),
+                Entry('3',
+                      MOHCDInclusionary.NAME,
+                      [NameValue('num_2bd_units', '5', d),
+                       NameValue('num_3bd_units', '3', d)]),
+            ],
+            want={
+                'residential_units_1br': '10',
+                'residential_units_2br': '',
+                'residential_units_3br': '',
+            }),
+        EntriesTestRow(
+            name='pull info from inclusionary because no other choice',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDInclusionary.NAME,
+                      [NameValue('num_2bd_units', '5', d),
+                       NameValue('num_3bd_units', '3', d)]),
+            ],
+            want={
+                'residential_units_1br': '2',
+                'residential_units_2br': '5',
+                'residential_units_3br': '3',
+            }),
+        EntriesTestRow(
+            name='at least one non-zero bedroom count to emit',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      []),
+                Entry('2',
+                      MOHCDInclusionary.NAME,
+                      [NameValue('num_2bd_units', '0', d)]),
+            ],
+            want={
+                'residential_units_2br': '',
+            }),
     ]
-    proj_pipeline = Project('uuid1', entries1, basic_graph)
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
 
-    entries2 = [
-        Entry('1',
-              PPTS.NAME,
-              [NameValue('residential_units_1br_net', '2', d)]),
-        Entry('2',
-              MOHCDInclusionary.NAME,
-              [NameValue('num_2bd_units', '5', d),
-               NameValue('num_3bd_units', '3', d)]),
-    ]
-    proj_inclusionary = Project('uuid2', entries2, basic_graph)
-
-    entries3 = [
-        Entry('1',
-              PPTS.NAME,
-              []),
-        Entry('2',
-              MOHCDInclusionary.NAME,
-              [NameValue('num_2bd_units', '0', d)]),
-    ]
-    proj_no_nonzero = Project('uuid3', entries3, basic_graph)
-
-    nvs = table.rows(proj_pipeline)
-    # only pull information from Pipeline regardless of Inclusionary
-    assert _get_value_for_name(
-            table,
-            nvs,
-            'residential_units_1br',
-            return_multiple=True) == ['2', '10']
-    assert _get_value_for_name(table, nvs, 'residential_units_2br') == ''
-    assert _get_value_for_name(table, nvs, 'residential_units_3br') == ''
-
-    nvs = table.rows(proj_inclusionary)
-    # pull information from Inclusionary because no other choice
-    assert _get_value_for_name(
-            table,
-            nvs,
-            'residential_units_1br',
-            return_multiple=True) == ['2']
-    assert _get_value_for_name(table, nvs, 'residential_units_2br') == '5'
-    assert _get_value_for_name(table, nvs, 'residential_units_3br') == '3'
-
-    nvs = table.rows(proj_no_nonzero)
-    # has to have at least one non-zero bedroom count to emit information
-    assert _get_value_for_name(table, nvs, 'residential_units_2br') == ''
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_name(table,
+                                       fields,
+                                       name) == wantvalue, test.name
 
 
 def test_project_details_ami_info_mohcd(basic_graph, d):
     table = ProjectDetails()
 
-    entries1 = [
-        Entry('1',
-              PPTS.NAME,
-              [NameValue('residential_units_1br_net', '2', d)]),
-        Entry('2',
-              MOHCDPipeline.NAME,
-              [NameValue('num_20_percent_ami_units', '10', d)]),
-        Entry('3',
-              MOHCDInclusionary.NAME,
-              [NameValue('num_20_percent_ami_units', '5', d),
-               NameValue('num_more_than_120_percent_ami_units', '3', d)]),
+    tests = [
+        EntriesTestRow(
+            name='only pull information from pipeline even if inclusionary',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('num_20_percent_ami_units', '10', d)]),
+                Entry('3',
+                      MOHCDInclusionary.NAME,
+                      [NameValue('num_20_percent_ami_units', '5', d),
+                       NameValue(
+                           'num_more_than_120_percent_ami_units',
+                           '3',
+                           d)]),
+            ],
+            want={
+                'num_20_percent_ami_units': '10',
+                'num_more_than_120_percent_ami_units': '',
+            }),
+        EntriesTestRow(
+            name='pull info from inclusionary because no other choice',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDInclusionary.NAME,
+                      [NameValue('num_20_percent_ami_units', '5', d),
+                       NameValue(
+                           'num_more_than_120_percent_ami_units',
+                           '3',
+                           d)]),
+            ],
+            want={
+                'residential_units_1br': '2',
+                'num_20_percent_ami_units': '5',
+                'num_more_than_120_percent_ami_units': '3',
+            }),
     ]
-    proj_pipeline = Project('uuid1', entries1, basic_graph)
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
 
-    entries2 = [
-        Entry('1',
-              PPTS.NAME,
-              [NameValue('residential_units_1br_net', '2', d)]),
-        Entry('2',
-              MOHCDInclusionary.NAME,
-              [NameValue('num_20_percent_ami_units', '5', d),
-               NameValue('num_more_than_120_percent_ami_units', '3', d)]),
-    ]
-    proj_inclusionary = Project('uuid2', entries2, basic_graph)
-
-    nvs = table.rows(proj_pipeline)
-    # only pull information from Pipeline regardless of Inclusionary
-    assert _get_value_for_name(table, nvs, 'num_20_percent_ami_units') == '10'
-    assert _get_value_for_name(table,
-                               nvs,
-                               'num_more_than_120_percent_ami_units') == ''
-
-    nvs = table.rows(proj_inclusionary)
-    # pull information from Inclusionary because no other choice
-    assert _get_value_for_name(
-            table,
-            nvs,
-            'residential_units_1br',
-            return_multiple=True) == ['2']
-    assert _get_value_for_name(table, nvs, 'num_20_percent_ami_units') == '5'
-    assert _get_value_for_name(table,
-                               nvs,
-                               'num_more_than_120_percent_ami_units') == '3'
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_name(table,
+                                       fields,
+                                       name) == wantvalue, test.name
 
 
 def test_project_details_is_100pct_affordable_mohcd(basic_graph, d):
