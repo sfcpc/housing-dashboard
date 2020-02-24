@@ -230,34 +230,36 @@ class ProjectFacts(Table):
         ])
 
     def _gen_facts(self, row, proj):
-        pts_pred = [('permit_type', lambda x: x == '1' or x == '2')]
-        if proj.field('address', PPTS.NAME) != '':
-            row[self.index(self.ADDRESS)] = proj.field('address', PPTS.NAME)
+        addr = proj.field('address', PPTS.NAME)
+        if not addr:
+            addr = proj.field('name', PPTS.NAME)
+        if addr != '':
+            row[self.index(self.ADDRESS)] = addr
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = ''  # TODO
             row[self.index(self.PERMIT_AUTHORITY)] = PPTS.OUTPUT_NAME
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(PPTS.NAME)
         elif proj.field('permit_number',
                         PTS.NAME,
-                        entry_predicate=pts_pred) != '':
+                        entry_predicate=_is_valid_dbi_entry) != '':
             row[self.index(self.ADDRESS)] = '%s %s, %s' % (
                     proj.field('street_number',
                                PTS.NAME,
-                               entry_predicate=pts_pred),
+                               entry_predicate=_is_valid_dbi_entry),
                     proj.field('street_name',
                                PTS.NAME,
-                               entry_predicate=pts_pred),
+                               entry_predicate=_is_valid_dbi_entry),
                     proj.field('zip_code',
                                PTS.NAME,
-                               entry_predicate=pts_pred))
+                               entry_predicate=_is_valid_dbi_entry))
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = \
                 proj.field('supervisor_district',
                            PTS.NAME,
-                           entry_predicate=pts_pred)
+                           entry_predicate=_is_valid_dbi_entry)
             row[self.index(self.PERMIT_AUTHORITY)] = PTS.NAME
             row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(
-                    PTS.NAME, entry_predicate=pts_pred)
+                    PTS.NAME, entry_predicate=_is_valid_dbi_entry)
         else:
             for mohcd in _MOHCD_TYPES.keys():
                 if proj.field('project_id', mohcd) == '':

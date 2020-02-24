@@ -22,24 +22,6 @@ from schemaless.sources import PTS
 from schemaless.sources import TCO
 
 
-def test_table_project_facts_atleast_one_measure():
-    table = ProjectFacts()
-
-    RowTest = namedtuple('RowTest', ['input', 'want'])
-    tests = [
-        RowTest(['', '', ''], False),  # empty row
-        RowTest(['', '0', ''], True),  # zero different from empty
-        RowTest(['1', '2', ''], True),  # normal full row
-        RowTest(['', '', '1'], True),  # estimated field
-    ]
-    for test in tests:
-        row = [''] * len(table.header())
-        row[table.index(table.NET_NUM_UNITS)] = test.input[0]
-        row[table.index(table.NET_NUM_UNITS_BMR)] = test.input[1]
-        row[table.index(table.NET_EST_NUM_UNITS_BMR)] = test.input[2]
-        assert table._atleast_one_measure(row) == test.want
-
-
 def _get_value_for_row(table, rows, name, return_multiple=False):
     if len(rows) > 1:
         raise ValueError('_get_value_for_row expected a one-row result')
@@ -81,8 +63,51 @@ def basic_graph():
 EntriesTestRow = namedtuple('EntriesTestRow', ['name', 'entries', 'want'])
 
 
-def test_table_project_facts_units(basic_graph):
-    d = datetime.fromisoformat('2019-01-01')
+def test_table_project_facts_atleast_one_measure():
+    table = ProjectFacts()
+
+    RowTest = namedtuple('RowTest', ['input', 'want'])
+    tests = [
+        RowTest(['', '', ''], False),  # empty row
+        RowTest(['', '0', ''], True),  # zero different from empty
+        RowTest(['1', '2', ''], True),  # normal full row
+        RowTest(['', '', '1'], True),  # estimated field
+    ]
+    for test in tests:
+        row = [''] * len(table.header())
+        row[table.index(table.NET_NUM_UNITS)] = test.input[0]
+        row[table.index(table.NET_NUM_UNITS_BMR)] = test.input[1]
+        row[table.index(table.NET_EST_NUM_UNITS_BMR)] = test.input[2]
+        assert table._atleast_one_measure(row) == test.want
+
+
+def test_table_project_facts(basic_graph, d):
+    table = ProjectFacts()
+
+    tests = [
+        EntriesTestRow(
+            name='use name if no address',
+            entries=[
+                Entry('1',
+                      PPTS.NAME,
+                      [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
+                       NameValue('market_rate_units_net', '10', d)]),
+            ],
+            want={'address': 'BALBOA RESERVOIR DEVELOPMENT'}),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
+        print('WTF %s' % fields)
+
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_row(table,
+                                      fields,
+                                      name) == wantvalue, test.name
+
+
+def test_table_project_facts_units(basic_graph, d):
     table = ProjectFacts()
 
     tests = [
