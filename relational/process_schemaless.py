@@ -16,6 +16,7 @@ from relational.project import Entry
 from relational.project import NameValue
 from relational.project import Project
 from schemaless.create_uuid_map import RecordGraph
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
@@ -86,6 +87,7 @@ class Freshness:
             TCO.NAME: self._tco,
             MOHCDPipeline.NAME: self._mohcd_pipeline,
             MOHCDInclusionary.NAME: self._mohcd_inclusionary,
+            AffordableRentalPortfolio.NAME: self._affordable_rental,
             PermitAddendaSummary.NAME: self._permit_addenda_summary,
         }
 
@@ -146,6 +148,9 @@ class Freshness:
 
     def _mohcd_inclusionary(self, line):
         self._extract_last_updated(line, MOHCDInclusionary.NAME)
+
+    def _affordable_rental(self, line):
+        self._extract_last_updated(line, AffordableRentalPortfolio.NAME)
 
     def _permit_addenda_summary(self, line):
         self._extract_last_updated(line, PermitAddendaSummary.NAME)
