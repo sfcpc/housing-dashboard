@@ -46,7 +46,7 @@ def just_dump(sources, outfile, the_date=None):
                         source.NAME,
                         last_updated,
                         key,
-                        val.strip().replace('\n', '')
+                        val.strip().replace('\n', ' ')
                     ])
 
 
