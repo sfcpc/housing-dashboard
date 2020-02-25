@@ -4,9 +4,10 @@ from collections import namedtuple
 
 from relational.process_schemaless import Freshness
 from relational.process_schemaless import is_seen_id
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
-from schemaless.sources import PPTS
+from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import TCO
 
@@ -20,17 +21,17 @@ def test_freshness():
 
     lines = []
     lines.append({
-        'source': PPTS.NAME,
+        'source': Planning.NAME,
         'name': 'date_opened',
         'value': '01/01/2000',
     })
     lines.append({
-        'source': PPTS.NAME,
+        'source': Planning.NAME,
         'name': 'date_opened',
         'value': '01/01/2010',
     })
     lines.append({
-        'source': PPTS.NAME,
+        'source': Planning.NAME,
         'name': 'date_opened',
         'value': '01/01/2020',
     })
@@ -69,7 +70,7 @@ def test_freshness():
 
     # ignored, in the future
     lines.append({
-        'source': PPTS.NAME,
+        'source': Planning.NAME,
         'name': 'date_opened',
         'value': datetime.max.strftime('%m/%d/%Y'),
     })
@@ -97,14 +98,23 @@ def test_freshness():
         'value': '04/01/2015',
     })
 
+    # affordable rental porrtfolio extracts from last_updated
+    lines.append({
+        'last_updated': '2019-01-01',  # isoformat for last_updated
+        'source': AffordableRentalPortfolio.NAME,
+        'name': 'project_name',
+        'value': 'the foo building',
+    })
+
     fresh = Freshness()
     for line in lines:
         fresh.update_freshness(line)
 
-    assert fresh.freshness[PPTS.NAME] == newer
+    assert fresh.freshness[Planning.NAME] == newer
     assert fresh.freshness[PTS.NAME] == pts
     assert fresh.freshness[TCO.NAME] == tco
     assert fresh.freshness[MOHCDPipeline.NAME] == mohcd
+    assert fresh.freshness[AffordableRentalPortfolio.NAME] == mohcd
     assert fresh.freshness[PermitAddendaSummary.NAME] == addenda
     assert 'bamboozle' not in fresh.freshness
 
