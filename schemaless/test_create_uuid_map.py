@@ -538,6 +538,7 @@ def test_link_pts_group_with_ppts():
 
     assert(prj_fk_1_uuid == permit_group_uuid or
            prj_fk_2_uuid == permit_group_uuid)
+    assert(prj_fk_1_uuid != prj_fk_2_uuid)
 
 
 def test_link_pts_to_planning_records():
