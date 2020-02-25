@@ -299,6 +299,7 @@ def output_projects(projects, config):
                             print('\t...%s entries to %s' %
                                   (lines_out, finalfile))
                         writer.writerow(out)
+        table.log_bad_data()
 
     if lines_out > 0:
         print('\t%s total entries' % lines_out)

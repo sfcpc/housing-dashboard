@@ -8,6 +8,7 @@ from datetime import datetime
 from collections import OrderedDict
 
 import math
+import queue
 import re
 
 from schemaless.sources import AffordableRentalPortfolio
@@ -38,6 +39,9 @@ class Table(ABC):
 
     def gen_id(self, row, proj):
         row[self.index(self.ID)] = proj.id
+
+    def log_bad_data(self):
+        pass
 
     @abstractmethod
     def rows(self, proj):
@@ -199,21 +203,21 @@ def _get_tco_units(proj):
     return num_tco_units if num_tco_units else None
 
 
-def _get_earliest_addenda_arrival_date(proj):
+def _get_earliest_date(proj, field, source, predicate, date_fmt):
     """
     Returns:
-      The earliest addenda arrival dates for all data associated with PTS
-      permits for a single project. None if no data in PTS.
+      The earliest date when there are multiple entries for the same
+      field with different dates (and just taking the latest entry may
+      not suffice)
     """
     date = datetime.max
     try:
-        fk_entries = proj.fields('earliest_addenda_arrival',
-                                 PermitAddendaSummary.NAME)
+        fk_entries = proj.fields(field, source, entry_predicate=predicate)
         for (_, entries) in fk_entries.items():
             for entry in entries:
-                entry_latest = entry.get_latest('earliest_addenda_arrival')
+                entry_latest = entry.get_latest(field)
                 if entry_latest[0]:
-                    date_entry = datetime.strptime(entry_latest[0], "%Y-%m-%d")
+                    date_entry = datetime.strptime(entry_latest[0], date_fmt)
                     if date_entry < date:
                         date = date_entry
     except ValueError:
@@ -221,6 +225,19 @@ def _get_earliest_addenda_arrival_date(proj):
         pass
 
     return date.date() if date < datetime.max else None
+
+
+def _get_earliest_addenda_arrival_date(proj):
+    """
+    Returns:
+      The earliest addenda arrival dates for all data associated with PTS
+      permits for a single project. None if no data in PTS.
+    """
+    return _get_earliest_date(proj,
+                              'earliest_addenda_arrival',
+                              PermitAddendaSummary.NAME,
+                              [],
+                              "%Y-%m-%d")
 
 
 class ProjectFacts(Table):
@@ -738,7 +755,7 @@ class ProjectDetails(NameValueTable):
         return result
 
 
-_valid_planning_ent_codes = set(['ENV', 'AHB', 'COA', 'CUA', 'CTZ', 'DNX',
+_valid_planning_ent_codes = set(['AHB', 'COA', 'CUA', 'CTZ', 'DNX',
                                  'ENX', 'OFA', 'PTA', 'SHD', 'TDM', 'VAR',
                                  'WLS'])
 _valid_planning_root_type = set(['PRJ', 'PRL'])
@@ -756,8 +773,12 @@ class ProjectStatusHistory(Table):
             self.START_DATE,
             self.END_DATE,
             self.DATA_SOURCE])
+        self.non_sqntl_dates = 0
+        self.non_sqntl_dates_sample = {}
+        self.non_consecutive_status = 0
+        self.non_consecutive_status_sample = {}
 
-    def _filed_for_entitlements_date(self, proj):
+    def _under_entitlement_review_date(self, proj):
         # TODO: Use the Application Submitted date once we have pulled
         # in the new Planning data pipeline (if that doesn't exist fall back to
         # our own logic)
@@ -825,41 +846,34 @@ class ProjectStatusHistory(Table):
             elif count_closed_no_date > 0:
                 # Fall back to PRJ date if all ENT child records are closed
                 # but there's no date
-                date_closed_field = root[0].get_latest('date_closed')
-                if date_closed_field:
-                    date_closed = datetime.strptime(
-                        date_closed_field[0].split(' ')[0],
-                        '%d-%b-%y').date()
-                    return (date_closed, Planning.OUTPUT_NAME)
+                date_closed_entry = root[0].get_latest('date_closed')
+                if date_closed_entry:
+                    date_closed_field = date_closed_entry[0]
+                    if date_closed_field:
+                        date_closed = datetime.strptime(
+                            date_closed_field.split(' ')[0],
+                            '%d-%b-%y').date()
+                        return (date_closed, Planning.OUTPUT_NAME)
 
         return (None, None)
 
     def _filed_for_permits(self, proj):
-        filed_for_permits = _get_earliest_addenda_arrival_date(proj)
-        return (filed_for_permits, PermitAddendaSummary.OUTPUT_NAME) \
+        filed_for_permits = _get_earliest_date(proj,
+                                               'filed_date',
+                                               PTS.NAME,
+                                               _is_valid_dbi_entry,
+                                               "%m/%d/%Y")
+        return (filed_for_permits, PTS.OUTPUT_NAME) \
             if filed_for_permits else (None, None)
 
     def _under_construction(self, proj):
-        date = datetime.max
-        try:
-            fk_entries = proj.fields('first_construction_document_date',
-                                     PTS.NAME,
-                                     entry_predicate=_is_valid_dbi_entry)
-            for (_, entries) in fk_entries.items():
-                for entry in entries:
-                    entry_latest = \
-                        entry.get_latest('first_construction_document_date')
-                    if entry_latest[0]:
-                        date_entry = datetime.strptime(entry_latest[0],
-                                                       "%m/%d/%Y")
-                        if date_entry < date:
-                            date = date_entry
-        except ValueError:
-            date = datetime.max
-            pass
-
-        return (date.date(), PTS.OUTPUT_NAME) \
-            if date < datetime.max else (None, None)
+        under_constr = _get_earliest_date(proj,
+                                          'first_construction_document_date',
+                                          PTS.NAME,
+                                          _is_valid_dbi_entry,
+                                          "%m/%d/%Y")
+        return (under_constr, PTS.OUTPUT_NAME) \
+            if under_constr else (None, None)
 
     def _completed_construction(self, proj):
         # If a CFC record exists in the TCO dataset then the project has
@@ -941,8 +955,48 @@ class ProjectStatusHistory(Table):
         row[self.index(self.DATA_SOURCE)] = data
         return row
 
+    def _check_and_log_non_sqntl_date(self,
+                                      proj_id,
+                                      cur_status,
+                                      cur_date,
+                                      next_status,
+                                      next_date):
+        if next_date and cur_date and next_date < cur_date:
+            self.non_sqntl_dates += 1
+            if cur_status not in self.non_sqntl_dates_sample:
+                self.non_sqntl_dates_sample[cur_status] = \
+                    queue.Queue(maxsize=10)
+            if not self.non_sqntl_dates_sample[cur_status].full():
+                self.non_sqntl_dates_sample[cur_status].put_nowait(
+                    "Project %s has %s date %s and %s date %s (non-sequential)"
+                    % (proj_id,
+                       cur_status,
+                       cur_date.isoformat(),
+                       next_status,
+                       next_date.isoformat()))
+            return False
+        return True
+
+    def _log_non_consecutive_status(self,
+                                    proj_id,
+                                    cur_status,
+                                    cur_date,
+                                    prev_status):
+        self.non_consecutive_status += 1
+        if cur_status not in self.non_consecutive_status_sample:
+            self.non_consecutive_status_sample[cur_status] = \
+                queue.Queue(maxsize=10)
+        if not self.non_consecutive_status_sample[cur_status].full():
+            self.non_consecutive_status_sample[cur_status].put_nowait(
+                "Project %s has %s date %s but no %s date"
+                % (proj_id,
+                   cur_status,
+                   cur_date.isoformat(),
+                   prev_status))
+        return False
+
     def rows(self, proj):
-        (filed_date, filed_data) = self._filed_for_entitlements_date(proj)
+        (filed_date, filed_data) = self._under_entitlement_review_date(proj)
         (entitled_date, entitled_data) = self._entitled_date(proj)
         (permits_date, permits_data) = self._filed_for_permits(proj)
         (construction_date, construction_data) = self._under_construction(proj)
@@ -950,27 +1004,36 @@ class ProjectStatusHistory(Table):
 
         result = []
         if filed_date:
-            if entitled_date and entitled_date < filed_date:
-                print("Error: Project %s has entitlements filed date %s and "
-                      "entitled date %s (non-sequential)"
-                      % (proj.id, filed_date, entitled_date))
-
+            self._check_and_log_non_sqntl_date(proj.id,
+                                               "under_entitlement_review",
+                                               filed_date,
+                                               "entitled",
+                                               entitled_date)
             result.append(
                 self.status_row(proj,
-                                'filed_for_entitlements',
+                                'under_entitlement_review',
                                 filed_date.isoformat(),
                                 entitled_date.isoformat() if entitled_date
                                 else '',
                                 filed_data))
-        else:
-            return result
 
         if entitled_date:
-            if permits_date and permits_date < entitled_date:
-                print("Error: Project %s has entitled date %s and "
-                      "permits filed date %s (non-sequential)"
-                      % (proj.id, entitled_date, permits_date))
+            if not filed_date:
+                self._log_non_consecutive_status(proj.id,
+                                                 "entitled",
+                                                 entitled_date,
+                                                 "under_entitlement_review")
 
+            # To make these dates sequential we will modify entitled dates
+            # so that they don't overlap with dates when filed for permit
+            if permits_date and entitled_date > permits_date:
+                permits_date = entitled_date
+
+            self._check_and_log_non_sqntl_date(proj.id,
+                                               "entitled",
+                                               entitled_date,
+                                               "filed_for_permits",
+                                               permits_date)
             result.append(
                 self.status_row(proj,
                                 'entitled',
@@ -978,15 +1041,14 @@ class ProjectStatusHistory(Table):
                                 permits_date.isoformat() if permits_date
                                 else '',
                                 entitled_data))
-        else:
-            return result
 
         if permits_date:
-            if construction_date and construction_date < permits_date:
-                print("Error: Project %s has permits filed date %s and "
-                      "under construction date %s (non-sequential)"
-                      % (proj.id, permits_date, construction_date))
-
+            self._check_and_log_non_sqntl_date(
+                proj.id,
+                "filed_for_permits",
+                permits_date,
+                "under_construction",
+                construction_date)
             result.append(
                 self.status_row(proj,
                                 'filed_for_permits',
@@ -998,11 +1060,18 @@ class ProjectStatusHistory(Table):
             return result
 
         if construction_date:
-            if completed_date and completed_date < construction_date:
-                print("Error: Project %s has under construction date %s and "
-                      "completed date %s (non-sequential)"
-                      % (proj.id, construction_date, completed_date))
-
+            if not permits_date:
+                self._log_non_consecutive_status(
+                    proj.id,
+                    "under_construction",
+                    construction_date,
+                    "filed_for_permits")
+            self._check_and_log_non_sqntl_date(
+                proj.id,
+                "under_construction",
+                construction_date,
+                "completed_construction",
+                completed_date)
             result.append(
                 self.status_row(proj,
                                 'under_construction',
@@ -1010,10 +1079,14 @@ class ProjectStatusHistory(Table):
                                 completed_date.isoformat()
                                 if completed_date else '',
                                 construction_data))
-        else:
-            return result
 
         if completed_date:
+            if not permits_date:
+                self._log_non_consecutive_status(
+                    proj.id,
+                    "completed_construction",
+                    completed_date,
+                    "filed_for_permits")
             result.append(
                 self.status_row(proj,
                                 'completed_construction',
@@ -1021,3 +1094,24 @@ class ProjectStatusHistory(Table):
                                 '',
                                 completed_data))
         return result
+
+    def log_bad_data(self):
+        if self.non_consecutive_status > 0:
+            print('Found %s non-consecutive statuses'
+                  % self.non_consecutive_status)
+            print('Sample entries:')
+            for (status, status_queue) in \
+                    self.non_consecutive_status_sample.items():
+                print('\tFor status "%s"' % status)
+                while not status_queue.empty():
+                    sample = status_queue.get_nowait()
+                    print('\t\t%s' % sample)
+
+        if self.non_sqntl_dates > 0:
+            print('Found %s non-sequential dates' % self.non_sqntl_dates)
+            print('Sample entries:')
+            for (status, dates_queue) in self.non_sqntl_dates_sample.items():
+                print('\tFor status "%s"' % status)
+                while not dates_queue.empty():
+                    sample = dates_queue.get_nowait()
+                    print('\t\t%s' % sample)

@@ -842,7 +842,7 @@ def child_parent_graph():
     return rg
 
 
-def test_project_status_history_filed_for_entitlements(child_parent_graph, d):
+def test_project_status_history_under_ent_review(child_parent_graph, d):
     table = ProjectStatusHistory()
 
     entries1 = [
@@ -876,7 +876,7 @@ def test_project_status_history_filed_for_entitlements(child_parent_graph, d):
     status_rows = _get_values_for_status(table, fields)
     # Filed status from earliest open ENT child record.
     assert len(status_rows) == 1
-    assert status_rows[0].top_level_status == 'filed_for_entitlements'
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
     assert status_rows[0].start_date == '2018-11-25'
     assert status_rows[0].end_date == ''
 
@@ -924,7 +924,7 @@ def test_project_status_history_entitled(child_parent_graph, d):
     status_rows = _get_values_for_status(table, fields)
     # Status looking at closed
     assert len(status_rows) == 2
-    assert status_rows[0].top_level_status == 'filed_for_entitlements'
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
     assert status_rows[0].start_date == '2018-11-25'
     assert status_rows[0].end_date == '2019-04-15'
     assert status_rows[1].top_level_status == 'entitled'
@@ -960,7 +960,7 @@ def test_project_status_history_entitled(child_parent_graph, d):
     fields = table.rows(proj_not_entitled)
     status_rows = _get_values_for_status(table, fields)
     assert len(status_rows) == 1
-    assert status_rows[0].top_level_status == 'filed_for_entitlements'
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
     assert status_rows[0].start_date == '2018-11-25'
     assert status_rows[0].end_date == ''
 
@@ -982,7 +982,7 @@ def test_project_status_history_entitled(child_parent_graph, d):
     fields = table.rows(proj_prj_closed)
     status_rows = _get_values_for_status(table, fields)
     assert len(status_rows) == 2
-    assert status_rows[0].top_level_status == 'filed_for_entitlements'
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
     assert status_rows[0].start_date == '2018-11-28'
     assert status_rows[0].end_date == '2019-04-15'
     assert status_rows[1].top_level_status == 'entitled'
@@ -1012,21 +1012,23 @@ def test_project_status_history_filed_for_permits(child_parent_graph, d):
                NameValue('date_opened', '28-NOV-18', d),
                NameValue('date_closed', '15-APR-19', d)]),
         Entry('4',
-              PermitAddendaSummary.NAME,
+              PTS.NAME,
               [NameValue('permit_number', 'abc', d),
-               NameValue('earliest_addenda_arrival', '2019-06-02', d)]),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/02/2019', d)]),
         Entry('5',
-              PermitAddendaSummary.NAME,
+              PTS.NAME,
               [NameValue('permit_number', 'xyz', d),
-               NameValue('earliest_addenda_arrival', '2019-06-10', d)]),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/10/2019', d)]),
     ]
 
     proj = Project('uuid1', entries1, child_parent_graph)
     fields = table.rows(proj)
     status_rows = _get_values_for_status(table, fields)
-    # Use the earliest addenda arrival date for filed for permits status
+    # Use the earliest filed date for filed for permits status
     assert len(status_rows) == 3
-    assert status_rows[0].top_level_status == 'filed_for_entitlements'
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
     assert status_rows[0].start_date == '2018-11-25'
     assert status_rows[0].end_date == '2019-04-15'
     assert status_rows[1].top_level_status == 'entitled'
@@ -1034,6 +1036,52 @@ def test_project_status_history_filed_for_permits(child_parent_graph, d):
     assert status_rows[1].end_date == '2019-06-02'
     assert status_rows[2].top_level_status == 'filed_for_permits'
     assert status_rows[2].start_date == '2019-06-02'
+    assert status_rows[2].end_date == ''
+
+    entries2 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '18-NOV-18', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('status', 'Closed - CEQA', d),
+               NameValue('date_opened', '25-NOV-18', d),
+               NameValue('date_closed', '27-MAR-19', d)]),
+        Entry('3',
+              Planning.NAME,
+              [NameValue('record_type', 'VAR', d),
+               NameValue('status', 'Closed - XYZ', d),
+               NameValue('date_opened', '28-NOV-18', d),
+               NameValue('date_closed', '15-APR-19', d)]),
+        Entry('4',
+              PTS.NAME,
+              [NameValue('permit_number', 'abc', d),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '01/10/2019', d)]),
+        Entry('5',
+              PTS.NAME,
+              [NameValue('permit_number', 'xyz', d),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/10/2019', d)]),
+    ]
+
+    proj = Project('uuid1', entries2, child_parent_graph)
+    fields = table.rows(proj)
+    status_rows = _get_values_for_status(table, fields)
+    # If earliest filed date is before the entitled date, make the
+    # entitled date equivalent to filed date (no maintain sequentiality)
+    assert len(status_rows) == 3
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
+    assert status_rows[0].start_date == '2018-11-25'
+    assert status_rows[0].end_date == '2019-04-15'
+    assert status_rows[1].top_level_status == 'entitled'
+    assert status_rows[1].start_date == '2019-04-15'
+    assert status_rows[1].end_date == '2019-04-15'
+    assert status_rows[2].top_level_status == 'filed_for_permits'
+    assert status_rows[2].start_date == '2019-04-15'
     assert status_rows[2].end_date == ''
 
 
@@ -1059,12 +1107,14 @@ def test_project_status_history_under_construction(child_parent_graph, d):
                NameValue('date_opened', '28-NOV-18', d),
                NameValue('date_closed', '15-APR-19', d)]),
         Entry('4',
-              PermitAddendaSummary.NAME,
+              PTS.NAME,
               [NameValue('permit_number', 'abc', d),
-               NameValue('earliest_addenda_arrival', '2019-06-02', d)]),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/02/2019', d)]),
         Entry('5',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'xyz', d),
                NameValue('current_status', 'issued', d),
                NameValue('proposed_units', '7', d),
                NameValue('first_construction_document_date',
@@ -1072,6 +1122,7 @@ def test_project_status_history_under_construction(child_parent_graph, d):
         Entry('6',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'abcd', d),
                NameValue('current_status', 'complete', d),
                NameValue('proposed_units', '7', d),
                NameValue('first_construction_document_date',
@@ -1084,7 +1135,7 @@ def test_project_status_history_under_construction(child_parent_graph, d):
     # Use the earliest first construction document date for under
     # construction status
     assert len(status_rows) == 4
-    assert status_rows[0].top_level_status == 'filed_for_entitlements'
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
     assert status_rows[0].start_date == '2018-11-25'
     assert status_rows[0].end_date == '2019-04-15'
     assert status_rows[1].top_level_status == 'entitled'
@@ -1120,12 +1171,14 @@ def test_project_status_history_completed_construction(child_parent_graph, d):
                NameValue('date_opened', '28-NOV-18', d),
                NameValue('date_closed', '15-APR-19', d)]),
         Entry('4',
-              PermitAddendaSummary.NAME,
+              PTS.NAME,
               [NameValue('permit_number', 'abc', d),
-               NameValue('earliest_addenda_arrival', '2019-06-02', d)]),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/02/2019', d)]),
         Entry('5',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'xyz', d),
                NameValue('current_status', 'complete', d),
                NameValue('proposed_units', '7', d),
                NameValue('first_construction_document_date',
@@ -1142,7 +1195,7 @@ def test_project_status_history_completed_construction(child_parent_graph, d):
     status_rows = _get_values_for_status(table, fields)
     # If a project has been CFC'ed then it is complete
     assert len(status_rows) == 5
-    assert status_rows[0].top_level_status == 'filed_for_entitlements'
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
     assert status_rows[0].start_date == '2018-11-25'
     assert status_rows[0].end_date == '2019-04-15'
     assert status_rows[1].top_level_status == 'entitled'
@@ -1177,12 +1230,14 @@ def test_project_status_history_completed_construction(child_parent_graph, d):
                NameValue('date_opened', '28-NOV-18', d),
                NameValue('date_closed', '15-APR-19', d)]),
         Entry('4',
-              PermitAddendaSummary.NAME,
+              PTS.NAME,
               [NameValue('permit_number', 'abc', d),
-               NameValue('earliest_addenda_arrival', '2019-06-02', d)]),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '02/06/2019', d)]),
         Entry('5',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'xyz', d),
                NameValue('current_status', 'complete', d),
                NameValue('proposed_units', '7', d),
                NameValue('first_construction_document_date',
@@ -1234,8 +1289,10 @@ def test_project_status_history_completed_construction(child_parent_graph, d):
         Entry('5',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'abc', d),
                NameValue('current_status', 'complete', d),
                NameValue('proposed_units', '7', d),
+               NameValue('filed_date', '06/02/2019', d),
                NameValue('completed_date', '2/1/2020', d),
                NameValue('first_construction_document_date',
                '11/11/2019', d)]),
@@ -1252,6 +1309,7 @@ def test_project_status_history_completed_construction(child_parent_graph, d):
         Entry('8',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'xyz', d),
                NameValue('current_status', 'complete', d),
                NameValue('proposed_units', '7', d),
                NameValue('completed_date', '2/10/2020', d)]),
@@ -1285,12 +1343,14 @@ def test_project_status_history_completed_construction(child_parent_graph, d):
                NameValue('date_opened', '28-NOV-18', d),
                NameValue('date_closed', '15-APR-19', d)]),
         Entry('4',
-              PermitAddendaSummary.NAME,
+              PTS.NAME,
               [NameValue('permit_number', 'abc', d),
-               NameValue('earliest_addenda_arrival', '2019-06-02', d)]),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/02/2019', d)]),
         Entry('5',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'abc', d),
                NameValue('current_status', 'complete', d),
                NameValue('proposed_units', '7', d),
                NameValue('completed_date', '2/1/2020', d),
@@ -1304,11 +1364,13 @@ def test_project_status_history_completed_construction(child_parent_graph, d):
         Entry('8',
               PTS.NAME,
               [NameValue('permit_type', '2', d),
+               NameValue('permit_number', 'xyz', d),
                NameValue('current_status', 'issued', d),
                NameValue('proposed_units', '2', d)]),
         Entry('8',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'abcd', d),
                NameValue('current_status', 'complete', d),
                NameValue('proposed_units', '2', d),
                NameValue('completed_date', '2/10/2020', d)]),
