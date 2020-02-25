@@ -4,6 +4,7 @@ from collections import namedtuple
 
 from relational.process_schemaless import Freshness
 from relational.process_schemaless import is_seen_id
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import PPTS
@@ -97,6 +98,14 @@ def test_freshness():
         'value': '04/01/2015',
     })
 
+    # affordable rental porrtfolio extracts from last_updated
+    lines.append({
+        'last_updated': '2019-01-01',  # isoformat for last_updated
+        'source': AffordableRentalPortfolio.NAME,
+        'name': 'project_name',
+        'value': 'the foo building',
+    })
+
     fresh = Freshness()
     for line in lines:
         fresh.update_freshness(line)
@@ -105,6 +114,7 @@ def test_freshness():
     assert fresh.freshness[PTS.NAME] == pts
     assert fresh.freshness[TCO.NAME] == tco
     assert fresh.freshness[MOHCDPipeline.NAME] == mohcd
+    assert fresh.freshness[AffordableRentalPortfolio.NAME] == mohcd
     assert fresh.freshness[PermitAddendaSummary.NAME] == addenda
     assert 'bamboozle' not in fresh.freshness
 
