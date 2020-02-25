@@ -438,7 +438,7 @@ def test_1950_mission_records_linked():
         'testdata/uuid-map-one.csv')
 
     verify_records_linked(rg, [
-        'planning_2016-001514PRJ'
+        'planning_2016-001514PRJ',
         'planning_2016-001514PPA',
         'planning_2016-001514CUA',
         'planning_2016-001514ENV',
@@ -496,10 +496,10 @@ def test_link_pts_group_without_planning():
 
 def test_link_pts_group_with_ppts():
     # Lists permit 201712085886 as 'related_building_permit'
-    prj_fk_1 = 'ppts_2017-016047PRJ'
+    prj_fk_1 = 'planning_2017-016047PRJ'
 
     # Lists permit 201712085886 as 'related_building_permit'
-    prj_fk_2 = 'ppts_2017-016045PRJ'
+    prj_fk_2 = 'planning_2017-016045PRJ'
 
     # These pts records have the same 'mapblklot', 'filed_date', and
     # 'proposed_use' and therefore belong to the same 'permit group'.
