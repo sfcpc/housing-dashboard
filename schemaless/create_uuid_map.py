@@ -250,13 +250,14 @@ class PTSHelper(RecordGraphBuilderHelper,
 
     def _compute_pts_groups(self, groupable_records):
         """Groups pts records by grouping attrs and sets up lookup tables."""
-        groupable_records_df = pd.DataFrame(groupable_records.values())
-        groupable_records_df['fk'] = groupable_records.keys()
+        groupable_records_df = pd.DataFrame.from_dict(
+            groupable_records, orient='index')
 
         permit_groupings_df = groupable_records_df.groupby(
             PTSHelper.PTS_GROUPING_ATTRS)
         for group_name, group in permit_groupings_df:
-            self._pts_groups[group_name] = group['fk'].tolist()
+            # Map group names to a list of fks of pts records in the group.
+            self._pts_groups[group_name] = group.keys()
             for fk in self._pts_groups[group_name]:
                 self._pts_fk_to_group_name[fk] = group_name
 
@@ -266,6 +267,11 @@ class PTSHelper(RecordGraphBuilderHelper,
 
         Returns the fk of the *first* pts record in the group that has an
         explicit link to planning record(s), as well as those planning record fks.
+
+        We pick the first pts record with an explicit link to planning records
+        since it is possible for multiple permits in a group to link to some
+        planning record, and we want to ensure that the entire pts group gets
+        linked to the same planning parents.
         """
         group_fks = self._pts_groups[group_name]
         planning_helper = self.graph_builder.helpers[Planning.NAME]
