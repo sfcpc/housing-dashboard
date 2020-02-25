@@ -230,6 +230,14 @@ class ProjectFacts(Table):
         ])
 
     def _gen_facts(self, row, proj):
+        """Generates the basic non-numeric details about a project.
+
+        In terms of departmental data, we only use PTS as a fallback for when
+        we don't have data from planning.  However, if we have MOHCD data,
+        we use that *even if* we have data from planning.  This is just a
+        loose rule in how we rely on these non-numeric details to be most
+        accurate.
+        """
         used_mohcd = False
         for mohcd in _MOHCD_TYPES.keys():
             if used_mohcd or proj.field('project_id', mohcd) == '':
