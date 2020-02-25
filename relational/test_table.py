@@ -446,7 +446,8 @@ def test_project_details_unique(basic_graph, d):
               [NameValue('residential_units_1br_net', '10', d)]),
         Entry('2',
               MOHCDPipeline.NAME,
-              [NameValue('num_1bd_units', '9', d)]),
+              [NameValue('project_id', 'mohcd1', d),
+               NameValue('num_1bd_units', '9', d)]),
     ]
     proj = Project('uuid1', entries, basic_graph)
     nvs = table.rows(proj)
@@ -515,10 +516,12 @@ def test_project_details_bedroom_info_mohcd(basic_graph, d):
                       [NameValue('residential_units_1br_net', '2', d)]),
                 Entry('2',
                       MOHCDPipeline.NAME,
-                      [NameValue('num_1bd_units', '10', d)]),
+                      [NameValue('project_id', 'mohcd1', d),
+                       NameValue('num_1bd_units', '10', d)]),
                 Entry('3',
                       MOHCDInclusionary.NAME,
-                      [NameValue('num_2bd_units', '5', d),
+                      [NameValue('project_id', 'mohcd1', d),
+                       NameValue('num_2bd_units', '5', d),
                        NameValue('num_3bd_units', '3', d)]),
             ],
             want={
@@ -535,11 +538,12 @@ def test_project_details_bedroom_info_mohcd(basic_graph, d):
                        NameValue('residential_units_1br_prop', '2', d)]),
                 Entry('2',
                       MOHCDInclusionary.NAME,
-                      [NameValue('num_2bd_units', '5', d),
+                      [NameValue('project_id', 'mohcd1', d),
+                       NameValue('num_2bd_units', '5', d),
                        NameValue('num_3bd_units', '3', d)]),
             ],
             want={
-                'residential_units_1br': '2',
+                'residential_units_1br': '',  # ignore planning data
                 'residential_units_2br': '5',
                 'residential_units_3br': '3',
             }),
@@ -551,7 +555,8 @@ def test_project_details_bedroom_info_mohcd(basic_graph, d):
                       []),
                 Entry('2',
                       MOHCDInclusionary.NAME,
-                      [NameValue('num_2bd_units', '0', d)]),
+                      [NameValue('project_id', 'mohcd1', d),
+                       NameValue('num_2bd_units', '0', d)]),
             ],
             want={
                 'residential_units_2br': '',
