@@ -7,7 +7,7 @@ def test_address_match():
     kennedy_towers = "bmr_2013-037"
     # TODO(#76): This parent is actually wrong. The record starts after the
     # BMRs are available, and we should actually have no parents.
-    parent = 'ppts_2017-016475ENF'
+    parent = 'planning_2017-016475ENF'
     rgb = RecordGraphBuilder(
         RecordGraph,
         'testdata/schemaless-one.csv',
@@ -42,11 +42,13 @@ def test_dont_exclude_existing_parents():
     )
     rgb.build()
     parents = [
-        'ppts_2015-014058PRJ',
-        'ppts_2015-014058CUA',
-        'ppts_2015-014058ENV',
-        'ppts_2015-014058VAR',
-        'ppts_2015-014058TDM',
+        'planning_2015-014058CND',
+        'planning_2015-014058CUA',
+        'planning_2015-014058ENV',
+        'planning_2015-014058PPA',
+        'planning_2015-014058PRJ',
+        'planning_2015-014058TDM',
+        'planning_2015-014058VAR',
     ]
 
     assert set(parents) == set(rgb.likelies[fk]['parents'])

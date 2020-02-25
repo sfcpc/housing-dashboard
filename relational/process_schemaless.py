@@ -16,10 +16,11 @@ from relational.project import Entry
 from relational.project import NameValue
 from relational.project import Project
 from schemaless.create_uuid_map import RecordGraph
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
-from schemaless.sources import PPTS
+from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import TCO
 from schemaless.sources import source_map
@@ -64,7 +65,7 @@ config = [
 
 class Freshness:
     _FIELD_SETS = {
-        PPTS.NAME: set(['date_opened', 'date_closed']),
+        Planning.NAME: set(['date_opened', 'date_closed']),
         PTS.NAME: set([
             'completed_date',
             'current_status_date',
@@ -81,11 +82,12 @@ class Freshness:
         self.bad_dates = 0
         self.bad_dates_sample = {}
         self._freshness_checks = {
-            PPTS.NAME: self._ppts,
+            Planning.NAME: self._planning,
             PTS.NAME: self._pts,
             TCO.NAME: self._tco,
             MOHCDPipeline.NAME: self._mohcd_pipeline,
             MOHCDInclusionary.NAME: self._mohcd_inclusionary,
+            AffordableRentalPortfolio.NAME: self._affordable_rental,
             PermitAddendaSummary.NAME: self._permit_addenda_summary,
         }
 
@@ -132,8 +134,8 @@ class Freshness:
             print('Warning: unknown source for '
                   'data freshness: %s, skipping' % line['source'])
 
-    def _ppts(self, line):
-        self._extract_nv_date(line, PPTS.NAME)
+    def _planning(self, line):
+        self._extract_nv_date(line, Planning.NAME)
 
     def _pts(self, line):
         self._extract_nv_date(line, PTS.NAME)
@@ -146,6 +148,9 @@ class Freshness:
 
     def _mohcd_inclusionary(self, line):
         self._extract_last_updated(line, MOHCDInclusionary.NAME)
+
+    def _affordable_rental(self, line):
+        self._extract_last_updated(line, AffordableRentalPortfolio.NAME)
 
     def _permit_addenda_summary(self, line):
         self._extract_last_updated(line, PermitAddendaSummary.NAME)

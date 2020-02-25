@@ -14,7 +14,7 @@ from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
-from schemaless.sources import PPTS
+from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import TCO
 
@@ -265,16 +265,16 @@ class ProjectFacts(Table):
         if used_mohcd:
             return
 
-        addr = proj.field('address', PPTS.NAME)
+        addr = proj.field('address', Planning.NAME)
         if not addr:
-            addr = proj.field('name', PPTS.NAME)
+            addr = proj.field('name', Planning.NAME)
 
         if addr:
             row[self.index(self.ADDRESS)] = addr
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = ''  # TODO
-            row[self.index(self.PERMIT_AUTHORITY)] = PPTS.OUTPUT_NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(PPTS.NAME)
+            row[self.index(self.PERMIT_AUTHORITY)] = Planning.OUTPUT_NAME
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(Planning.NAME)
         elif proj.field('permit_number',
                         PTS.NAME,
                         entry_predicate=_is_valid_dbi_entry) != '':
@@ -300,8 +300,8 @@ class ProjectFacts(Table):
     def _estimate_bmr(self, net):
         """Estimates the BMR we project a project to have.
 
-        This exists because currently all/most projects in ppts have nothing
-        specified for their affordable unit counts, but we can provide
+        This exists because currently all/most projects in planning have
+        nothing specified for their affordable unit counts, but we can provide
         a rough estimate of what we expect the project to have when it gets
         entitled.
 
@@ -332,37 +332,38 @@ class ProjectFacts(Table):
             row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = source
         else:
             dbi_net = _get_dbi_units(proj)
-            ppts_net = proj.field('market_rate_units_net', PPTS.NAME)
+            planning_net = proj.field(
+                'number_of_market_rate_units', Planning.NAME)
             net = dbi_net
             # PTS may have an explicitly set 0 unit count for projects
             # that have no business dealing with housing (possible with
             # permit type 3 in particular), so we only emit a 0-count
-            # PTS unit count if we had an explicit non-0 PPTS unit
+            # PTS unit count if we had an explicit non-0 Planning unit
             # count (therefore indicating a housing-related project that
             # lost its housing somehow).
             if (dbi_net is not None
-                    and (dbi_net != 0 or ppts_net)):
+                    and (dbi_net != 0 or planning_net)):
                 row[self.index(self.NET_NUM_UNITS)] = str(dbi_net)
                 row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
             else:
-                # TODO: how to handle cases where prop - existing != net ?
                 try:
-                    net = int(ppts_net)
-                    row[self.index(self.NET_NUM_UNITS)] = ppts_net
-                    row[self.index(self.NET_NUM_UNITS_DATA)] = PPTS.OUTPUT_NAME
+                    net = int(planning_net)
+                    row[self.index(self.NET_NUM_UNITS)] = planning_net
+                    row[self.index(self.NET_NUM_UNITS_DATA)] = \
+                        Planning.OUTPUT_NAME
                 except ValueError:
                     net = None
                     pass
-
-            bmr_net = proj.field('affordable_units_net', PPTS.NAME)
+            bmr_net = proj.field('number_of_affordable_units', Planning.NAME)
             if bmr_net != '':
                 row[self.index(self.NET_NUM_UNITS_BMR)] = bmr_net
-                row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = PPTS.OUTPUT_NAME
+                row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = \
+                    Planning.OUTPUT_NAME
             elif net is not None:
                 row[self.index(self.NET_EST_NUM_UNITS_BMR)] = \
                     self._estimate_bmr(net)
                 row[self.index(self.NET_EST_NUM_UNITS_BMR_DATA)] = \
-                    PPTS.OUTPUT_NAME
+                    Planning.OUTPUT_NAME
 
     def _atleast_one_measure(self, row):
         return (row[self.index(self.NET_NUM_UNITS)] != '' or
@@ -388,12 +389,13 @@ class ProjectGeo(NameValueTable):
         super().__init__('project_geo')
 
     def _geom(self, rows, proj):
-        geom = proj.field('the_geom', PPTS.NAME)
+        # TODO(sbuss): We need this field to be added back
+        geom = proj.field('the_geom', Planning.NAME)
         if geom != '':
             rows.append(self.nv_row(proj,
                                     name='geom',
                                     value=geom,
-                                    data=PPTS.OUTPUT_NAME))
+                                    data=Planning.OUTPUT_NAME))
 
     def rows(self, proj):
         result = []
@@ -406,18 +408,19 @@ class ProjectUnitCountsFull(NameValueTable):
         super().__init__('project_unit_counts_full')
 
     def _all_units(self, rows, proj):
-        ppts_units = proj.field('market_rate_units_net', PPTS.NAME)
-        if ppts_units:
+        planning_units = proj.field(
+            'number_of_market_rate_units', Planning.NAME)
+        if planning_units:
             rows.append(self.nv_row(proj,
                                     name='net_num_units',
-                                    value=ppts_units,
-                                    data=PPTS.OUTPUT_NAME))
-        ppts_bmr = proj.field('affordable_units_net', PPTS.NAME)
-        if ppts_bmr:
+                                    value=planning_units,
+                                    data=Planning.OUTPUT_NAME))
+        planning_bmr = proj.field('number_of_affordable_units', Planning.NAME)
+        if planning_bmr:
             rows.append(self.nv_row(proj,
                                     name='net_num_units_bmr',
-                                    value=ppts_bmr,
-                                    data=PPTS.OUTPUT_NAME))
+                                    value=planning_bmr,
+                                    data=Planning.OUTPUT_NAME))
 
         dbi_net = _get_dbi_units(proj)
         if dbi_net is not None:
@@ -463,6 +466,17 @@ class ProjectDetails(NameValueTable):
         super().__init__('project_details')
 
     def _bedroom_info(self, rows, proj):
+        was_mohcd = False
+        for mohcd in _MOHCD_TYPES.keys():
+            if proj.field('project_id', mohcd):
+                self._bedroom_info_mohcd(rows, proj, mohcd)
+                was_mohcd = True
+                break
+
+        if not was_mohcd:
+            self._bedroom_info_planning(rows, proj)
+
+    def _bedroom_info_planning(self, rows, proj):
         is_adu = False
 
         def _crunch_number(prefix):
@@ -470,7 +484,9 @@ class ProjectDetails(NameValueTable):
             net = 0
             ok = False
             try:
-                net = str(int(proj.field(prefix + '_net', PPTS.NAME)))
+                exist = int(proj.field(prefix + '_exist', Planning.NAME))
+                proposed = int(proj.field(prefix + '_prop', Planning.NAME))
+                net = str(proposed - exist)
                 ok = True
 
                 if re.search('_adu_', prefix):
@@ -488,7 +504,7 @@ class ProjectDetails(NameValueTable):
                       self.OUT_1BR,
                       self.OUT_2BR,
                       self.OUT_3BR,
-                      # No OUT_4BR because no 4br data in PPTS
+                      # No OUT_4BR because no 4br data in Planning
                       'residential_units_micro',
                       'residential_units_sro']:
             (net, ok) = _crunch_number(field)
@@ -496,13 +512,13 @@ class ProjectDetails(NameValueTable):
                 rows.append(self.nv_row(proj,
                                         name=field,
                                         value=net,
-                                        data=PPTS.OUTPUT_NAME))
+                                        data=Planning.OUTPUT_NAME))
 
         if len(rows) > 0:
             rows.append(self.nv_row(proj,
                                     name='is_adu',
                                     value='TRUE' if is_adu else 'FALSE',
-                                    data=PPTS.OUTPUT_NAME))
+                                    data=Planning.OUTPUT_NAME))
 
     _MOHCD_BEDROOM_MAP = {
         'num_1bd_units': OUT_1BR,
@@ -511,7 +527,7 @@ class ProjectDetails(NameValueTable):
         'num_4bd_units': OUT_4BR,
     }
 
-    def _get_mohcd_fields(self, proj, fieldmap):
+    def _get_mohcd_fields(self, proj, fieldmap, mohcd=None):
         """Extracts information from MOHCD, preferring Pipeline over
         Inclusionary.
 
@@ -526,6 +542,9 @@ class ProjectDetails(NameValueTable):
         out = []
         nonzero = False
         for (source, outsource) in _MOHCD_TYPES.items():
+            if mohcd and source != mohcd:
+                continue
+
             added = False
             for (mohcdfield, outfield) in fieldmap.items():
                 try:
@@ -543,14 +562,16 @@ class ProjectDetails(NameValueTable):
 
         return out if nonzero else []
 
-    def _bedroom_info_mohcd(self, rows, proj):
+    def _bedroom_info_mohcd(self, rows, proj, mohcd):
         """Populates bedroom information from MOHCD.
 
         Only pulls data from one MOHCD source, preferring Pipeline over
         Inclusionary.  This is because this is a matter of correctness and
         unnecessary duplication, rather than completeness.
         """
-        for datum in self._get_mohcd_fields(proj, self._MOHCD_BEDROOM_MAP):
+        for datum in self._get_mohcd_fields(proj,
+                                            self._MOHCD_BEDROOM_MAP,
+                                            mohcd):
             rows.append(self.nv_row(proj,
                                     name=datum[0],
                                     value=datum[1],
@@ -619,12 +640,13 @@ class ProjectDetails(NameValueTable):
                         data=AffordableRentalPortfolio.OUTPUT_NAME))
 
     def _square_feet(self, rows, proj):
-        sqft = proj.field('residential_sq_ft_net', PPTS.NAME)
+        # TODO: This field is gone
+        sqft = proj.field('residential_sq_ft_net', Planning.NAME)
         if sqft != '':
             rows.append(self.nv_row(proj,
                                     name='net_num_square_feet',
                                     value=sqft,
-                                    data=PPTS.OUTPUT_NAME))
+                                    data=Planning.OUTPUT_NAME))
 
     def _onsite_or_feeout(self, rows, proj):
         for (mohcdin, mohcdout) in _MOHCD_TYPES.items():
@@ -647,21 +669,47 @@ class ProjectDetails(NameValueTable):
                                     value=date,
                                     data=PermitAddendaSummary.OUTPUT_NAME))
 
+    def _unique(self, rows):
+        """Prunes duplicate name-value entries, preferring entries that were
+        added later in the process.
+        """
+        seen = set()
+
+        def _is_already_seen(row):
+            nonlocal seen
+
+            name = row[self.index(self.NAME)]
+            if name in seen:
+                return True
+            seen.add(name)
+            return False
+
+        rows[:] = [row for row in reversed(rows) if not _is_already_seen(row)]
+
     def rows(self, proj):
+        """Generates all the rows for this project.
+
+        As a name-value table we nonetheless expect this table to be pivoted,
+        so the names are for each project."""
         result = []
+
+        # Order here matters, because _unique will prune earlier entries
+        # in favor of identical names added later.
         self._square_feet(result, proj)
         self._bedroom_info(result, proj)
-        self._bedroom_info_mohcd(result, proj)
         self._ami_info_mohcd(result, proj)
         self._is_100_affordable(result, proj)
         self._onsite_or_feeout(result, proj)
         self._earliest_addenda_arrival(result, proj)
+
+        self._unique(result)
+
         return result
 
 
 class ProjectStatusHistory(Table):
-    _PPTS_ENT_CODES = {'ENV', 'AHB', 'COA', 'CUA', 'CTZ', 'DNX', 'ENX',
-                       'OFA', 'PTA', 'SHD', 'TDM', 'VAR', 'WLS'}
+    _Planning_ENT_CODES = {'ENV', 'AHB', 'COA', 'CUA', 'CTZ', 'DNX', 'ENX',
+                           'OFA', 'PTA', 'SHD', 'TDM', 'VAR', 'WLS'}
 
     TOP_LEVEL_STATUS = 'top_level_status'
     START_DATE = 'start_date'
@@ -677,35 +725,35 @@ class ProjectStatusHistory(Table):
 
     def _predevelopment_date(self, proj):
         # TODO: Use the PPA submitted date once we have pulled in the new
-        # PPTS data pipeline (if that doesn't exist fall back to using our
+        # Planning data pipeline (if that doesn't exist fall back to using our
         # own logic)
         ppa_opened_field = proj.field(
-            'date_opened', PPTS.NAME,
+            'date_opened', Planning.NAME,
             entry_predicate=[('record_type_category',
                               lambda x: x == 'PPA')])
         if ppa_opened_field:
             ppa_opened_date = datetime.strptime(
                 ppa_opened_field.split(' ')[0],
                 "%m/%d/%Y").date()
-            return (ppa_opened_date.isoformat(), PPTS.OUTPUT_NAME)
+            return (ppa_opened_date.isoformat(), Planning.OUTPUT_NAME)
 
         return ('', None)
 
     def _filed_for_entitlements_date(self, proj):
         # TODO: Use the Application Submitted date once we have pulled
-        # in the new PPTS data pipeline (if that doesn't exist fall back to
+        # in the new Planning data pipeline (if that doesn't exist fall back to
         # our own logic)
 
         # Look for the earliest date_opened on an ENT child of a PRJ.
-        root = proj.roots[PPTS.NAME]
+        root = proj.roots[Planning.NAME]
         if root is None:
-            print("Error: Project with non-PPTS root id %s" % proj.id)
+            print("Error: Project with non-Planning root id %s" % proj.id)
             return ('', None)
         if root[0].get_latest('record_type_category')[0] == 'PRJ':
             oldest_open = date.max
-            for child in proj.children[PPTS.NAME]:
+            for child in proj.children[Planning.NAME]:
                 record_type = child.get_latest('record_type_category')[0]
-                if record_type not in self._PPTS_ENT_CODES:
+                if record_type not in self._Planning_ENT_CODES:
                     continue
 
                 date_opened_field = child.get_latest('date_opened')[0]
@@ -716,26 +764,26 @@ class ProjectStatusHistory(Table):
                     oldest_open = date_opened
 
             if oldest_open < date.max:
-                return (oldest_open.isoformat(), PPTS.OUTPUT_NAME)
+                return (oldest_open.isoformat(), Planning.OUTPUT_NAME)
 
         return ('', None)
 
     def _entitled_date(self, proj):
         # TODO: Use the Entitlements Approved date once we have pulled
-        # in the new PPTS data pipeline (if that doesn't exist fall back)
+        # in the new Planning data pipeline (if that doesn't exist fall back)
 
         # Look for the ENT child of a PRJ with the latest date_closed
         # (assuming all are closed). Fall back to the PRJ date.
-        root = proj.roots[PPTS.NAME]
+        root = proj.roots[Planning.NAME]
         if root is None:
-            print("Error: Project with non-PPTS root id %s" % proj.id)
+            print("Error: Project with non-Planning root id %s" % proj.id)
             return ('', None)
         if root[0].get_latest('record_type_category')[0] == 'PRJ':
             newest_closed = date.min
             count_closed_no_date = 0
-            for child in proj.children[PPTS.NAME]:
+            for child in proj.children[Planning.NAME]:
                 record_type = child.get_latest('record_type_category')[0]
-                if record_type not in self._PPTS_ENT_CODES:
+                if record_type not in self._Planning_ENT_CODES:
                     continue
 
                 date_closed_value = child.get_latest('date_closed')
@@ -753,7 +801,7 @@ class ProjectStatusHistory(Table):
                     return ('', None)
 
             if newest_closed > date.min:
-                return (newest_closed.isoformat(), PPTS.OUTPUT_NAME)
+                return (newest_closed.isoformat(), Planning.OUTPUT_NAME)
             elif count_closed_no_date > 0:
                 # Fall back to PRJ date if all ENT child records are closed
                 # but there's no date
@@ -762,7 +810,7 @@ class ProjectStatusHistory(Table):
                     date_closed = datetime.strptime(
                         date_closed_field.split(' ')[0],
                         "%m/%d/%Y").date()
-                    return (date_closed.isoformat(), PPTS.OUTPUT_NAME)
+                    return (date_closed.isoformat(), Planning.OUTPUT_NAME)
 
         return ('', None)
 
