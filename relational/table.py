@@ -812,11 +812,11 @@ class ProjectStatusHistory(Table):
             elif count_closed_no_date > 0:
                 # Fall back to PRJ date if all ENT child records are closed
                 # but there's no date
-                date_closed_field = root[0].get_latest('date_closed')[0]
+                date_closed_field = root[0].get_latest('date_closed')
                 if date_closed_field:
                     date_closed = datetime.strptime(
-                        date_closed_field.split(' ')[0],
-                        "%d-%b-%y").date()
+                        date_closed_field[0].split(' ')[0],
+                        '%d-%b-%y').date()
                     return (date_closed.isoformat(), Planning.OUTPUT_NAME)
 
         return ('', None)
