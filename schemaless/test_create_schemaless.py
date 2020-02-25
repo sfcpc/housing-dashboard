@@ -9,6 +9,7 @@ import shutil
 from schemaless.create_schemaless import dump_and_diff
 from schemaless.create_schemaless import just_dump
 from schemaless.create_schemaless import latest_values
+import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
@@ -19,6 +20,15 @@ from schemaless.sources import TCO
 
 
 TESTDATA_GEN_DATE = date(2020, 1, 29)
+
+
+def setup_module(module):
+    mapblklot_gen.generator_instance = mapblklot_gen.MapblklotGenerator(
+        'data/assessor/2020-02-18-parcels.csv.xz')
+
+
+def teardown_module(module):
+    mapblklot_gen.generator_instance = None
 
 
 def test_latest_values_num_entries():

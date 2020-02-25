@@ -10,7 +10,6 @@ import uuid
 
 from datetime import date
 from fileutils import open_file
-from schemaless.mapblklot_generator import MapblklotGenerator
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
@@ -20,6 +19,7 @@ from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import source_map
 from schemaless.sources import TCO
+import schemaless.mapblklot_generator as mapblklot_gen
 
 
 class RecordGraphBuilderHelper:
@@ -224,7 +224,8 @@ class PTSHelper(RecordGraphBuilderHelper,
         else:
             permit_number = record['permit_number']
             planning_helper = self.graph_builder.helpers[Planning.NAME]
-            planning_parents = planning_helper.find_by_permit_number(permit_number)
+            planning_parents = planning_helper.find_by_permit_number(
+                permit_number)
 
             pts_helper = self.graph_builder.helpers[PTS.NAME]
             pts_records_with_permit_num = \
@@ -266,7 +267,8 @@ class PTSHelper(RecordGraphBuilderHelper,
         in the given group.
 
         Returns the fk of the *first* pts record in the group that has an
-        explicit link to planning record(s), as well as those planning record fks.
+        explicit link to planning record(s), as well as those planning record
+        fks.
 
         We pick the first pts record with an explicit link to planning records
         since it is possible for multiple permits in a group to link to some
@@ -278,7 +280,8 @@ class PTSHelper(RecordGraphBuilderHelper,
 
         for fk in group_fks:
             permit_number = self._pts_fk_to_permit_number[fk]
-            planning_parents = planning_helper.find_by_permit_number(permit_number)
+            planning_parents = planning_helper.find_by_permit_number(
+                permit_number)
             if len(planning_parents) > 0:
                 return fk, planning_parents
         return None, None
@@ -294,9 +297,9 @@ class PTSHelper(RecordGraphBuilderHelper,
         """
         records_in_group = self._pts_groups[pts_group_name]
 
-        # If there are parent panning records for the given pts group, the "root"
-        # fk for the group is the record in the group where that linkage was
-        # explicitly specified.
+        # If there are parent panning records for the given pts group, the
+        # "root" fk for the group is the record in the group where that linkage
+        # was explicitly specified.
         group_root_fk, group_ppts_parents = \
             self._compute_ppts_parents_for_pts_group(pts_group_name)
 
@@ -731,7 +734,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.parcel_data_file:
-        MapblklotGenerator(args.parcel_data_file)
+        mapblklot_gen.generator_instance = mapblklot_gen.MapblklotGenerator(
+            args.parcel_data_file)
 
     builder = RecordGraphBuilder(
         RecordGraph,

@@ -15,7 +15,7 @@ from datetime import datetime
 import shutil
 import sys
 
-from schemaless.mapblklot_generator import MapblklotGenerator
+import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
@@ -122,7 +122,8 @@ if __name__ == "__main__":
         the_date = datetime.strptime(args.the_date, "%Y-%m-%d").date()
 
     if args.parcel_data_file:
-        MapblklotGenerator(args.parcel_data_file)
+        mapblklot_gen.generator_instance = mapblklot_gen.MapblklotGenerator(
+            args.parcel_data_file)
 
     sources = []
     if args.planning_file:

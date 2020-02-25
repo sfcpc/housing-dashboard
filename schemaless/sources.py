@@ -6,7 +6,7 @@ from datetime import datetime
 from fileutils import open_file
 import logging
 
-from schemaless.mapblklot_generator import MapblklotGenerator
+import schemaless.mapblklot_generator as mapblklot_gen
 from scourgify.exceptions import AddressNormalizationError
 from scourgify.normalize import format_address_record
 from scourgify.normalize import normalize_address_record
@@ -91,7 +91,7 @@ class Mapblklot(Field):
         if self.mapblklot:
             return record[self.mapblklot]
 
-        mapblklot_generator = MapblklotGenerator.get_instance()
+        mapblklot_generator = mapblklot_gen.generator_instance
         if mapblklot_generator:
             if self.blklot:
                 return mapblklot_generator.find_mapblklot_for_blklot(
@@ -99,7 +99,16 @@ class Mapblklot(Field):
             if self.block and self.lot:
                 return mapblklot_generator.find_mapblklot_for_blklot(
                     record[self.block] + record[self.lot])
+        else:
+            raise MapblklotException(
+                "MapblklotGenerator is not instantiated. Please instantiate \
+                schemaless.mapblklot_generator.generator_instance in the \
+                top-level script environment")
         return None
+
+
+class MapblklotException(Exception):
+    pass
 
 
 class Address(Field):

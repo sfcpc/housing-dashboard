@@ -6,6 +6,16 @@ import pytest
 
 from schemaless.create_uuid_map import RecordGraph
 from schemaless.create_uuid_map import Node
+import schemaless.mapblklot_generator as mapblklot_gen
+
+
+def setup_module(module):
+    mapblklot_gen.generator_instance = mapblklot_gen.MapblklotGenerator(
+        'data/assessor/2020-02-18-parcels.csv.xz')
+
+
+def teardown_module(module):
+    mapblklot_gen.generator_instance = None
 
 
 @pytest.fixture
@@ -583,4 +593,3 @@ def test_mohcd_records_link_without_prj():
 def verify_records_linked(rg, fks):
     for fk in fks[1:]:
         assert rg.get(fks[0]).uuid == rg.get(fk).uuid
-

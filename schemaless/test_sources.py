@@ -2,14 +2,22 @@
 #
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Mapblklot
-from schemaless.mapblklot_generator import MapblklotGenerator
+from schemaless.sources import MapblklotException
+import schemaless.mapblklot_generator as mapblklot_gen
+import pytest
 
 
 def test_mapblklot_field():
-    MapblklotGenerator('data/assessor/2020-02-18-parcels.csv.xz')
-
     record = {'blklot': '3514098'}
     mapblklot = Mapblklot(blklot='blklot')
+
+    # Assert that an exception is thrown when trying to use the
+    # mapblklot generator without instantiating it.
+    with pytest.raises(MapblklotException):
+        mapblklot.get_value(record)
+
+    mapblklot_gen.generator_instance = mapblklot_gen.MapblklotGenerator(
+        'data/assessor/2020-02-18-parcels.csv.xz')
     assert(mapblklot.get_value(record) == '3514045')
 
     record = {'block': '3514', 'lot': '098'}
