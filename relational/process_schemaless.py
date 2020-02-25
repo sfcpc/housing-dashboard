@@ -106,10 +106,10 @@ class Freshness:
             return False
         return True
 
-    def _extract_nv_date(self, line, source):
+    def _extract_nv_date(self, line, source, timeformat='%m/%d/%Y'):
         if (line['source'] == source and
                 line['name'] in self._FIELD_SETS[source]):
-            nvdate = datetime.strptime(line['value'].split(' ')[0], '%m/%d/%Y')
+            nvdate = datetime.strptime(line['value'].split(' ')[0], timeformat)
             if not self._check_and_log_good_date(nvdate, source, line):
                 return
 
@@ -135,7 +135,7 @@ class Freshness:
                   'data freshness: %s, skipping' % line['source'])
 
     def _planning(self, line):
-        self._extract_nv_date(line, Planning.NAME)
+        self._extract_nv_date(line, Planning.NAME, timeformat='%d-%b-%y')
 
     def _pts(self, line):
         self._extract_nv_date(line, PTS.NAME)
