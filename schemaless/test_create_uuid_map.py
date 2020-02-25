@@ -438,23 +438,24 @@ def test_1950_mission_records_linked():
         'testdata/uuid-map-one.csv')
 
     verify_records_linked(rg, [
-        'ppts_2016-001514PRJ',
-        'ppts_2016-001514PPA',
-        'ppts_2016-001514CUA',
-        'ppts_2016-001514ENV',
+        'planning_2016-001514PRJ'
+        'planning_2016-001514PPA',
+        'planning_2016-001514CUA',
+        'planning_2016-001514ENV',
+        'planning_2016-001514MCM',
         'pts_1438278158065',
         'mohcd_pipeline_2013-046',
-        'permit_addenda_summary_201609218371',
+        'permit_addenda_summary_201609218371'
     ])
 
 
-def test_ppts_child_1950_mission_just_parent():
+def test_planning_child_1950_mission_just_parent():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
-    child = rg.get('ppts_2016-001514GPR')
-    parent = rg.get('ppts_2016-001514PPA')
-    grandparent = rg.get('ppts_2016-001514PRJ')
+    child = rg.get('planning_2016-001514GPR')
+    parent = rg.get('planning_2016-001514PPA')
+    grandparent = rg.get('planning_2016-001514PRJ')
     assert len(child.parents) == 1
     assert child.record_id in parent.children
     assert parent.record_id in child.parents
@@ -462,7 +463,7 @@ def test_ppts_child_1950_mission_just_parent():
     assert child.uuid == grandparent.uuid
 
 
-def test_link_pts_records_without_ppts():
+def test_link_pts_records_without_planning():
     pts_records = [
         'pts_129220091307',
         'pts_1292201488027'
@@ -473,7 +474,7 @@ def test_link_pts_records_without_ppts():
     verify_records_linked(rg, pts_records)
 
 
-def test_link_pts_group_without_ppts():
+def test_link_pts_group_without_planning():
     # The following pts records have the same 'mapblklot', 'filed_date', and
     # 'proposed_use', and therefore belong to the same grouping. Thus, they
     # must all be assigned the same UUID.
@@ -486,6 +487,7 @@ def test_link_pts_group_without_ppts():
         'pts_1573002516074',  # permit no: 201910225154
         'pts_1573004516074',  # permit no: 201910225155
     ]
+    # Linking on building permit number 201705318009
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
@@ -528,16 +530,16 @@ def test_link_pts_group_with_ppts():
            prj_fk_2_uuid == permit_group_uuid)
 
 
-def test_link_pts_to_ppts_records():
+def test_link_pts_to_planning_records():
     rg = RecordGraph.from_files(
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
     verify_records_linked(rg, [
-        'ppts_2017-007883PRJ',
+        'planning_2017-007883PRJ',
         'pts_1465081108606',
         'pts_1465082390978']
     )
-    verify_records_linked(rg, ['ppts_2017-006969PRL', 'pts_1465580423638'])
+    verify_records_linked(rg, ['planning_2017-006969PRL', 'pts_1465580423638'])
 
 
 def test_tco_link():
@@ -545,7 +547,7 @@ def test_tco_link():
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
     verify_records_linked(rg, [
-        'ppts_2017-006823PRJ',
+        'planning_2017-006823PRJ',
         'pts_1492183510316',
         'pts_1464175214172',
         'tco_201705237369_2018-05-01'
@@ -557,11 +559,13 @@ def test_mohcd_records_link_with_prj():
         'testdata/schemaless-one.csv',
         'testdata/uuid-map-one.csv')
     verify_records_linked(rg, [
-        'ppts_2015-014058PRJ',
-        'ppts_2015-014058CUA',
-        'ppts_2015-014058ENV',
-        'ppts_2015-014058VAR',
-        'ppts_2015-014058TDM',
+        'planning_2015-014058PRJ',
+        'planning_2015-014058CND',
+        'planning_2015-014058CUA',
+        'planning_2015-014058ENV',
+        'planning_2015-014058PPA',
+        'planning_2015-014058TDM',
+        'planning_2015-014058VAR',
         'mohcd_pipeline_2017-034',
         'mohcd_inclusionary_2017-034'
     ])
@@ -579,3 +583,4 @@ def test_mohcd_records_link_without_prj():
 def verify_records_linked(rg, fks):
     for fk in fks[1:]:
         assert rg.get(fks[0]).uuid == rg.get(fk).uuid
+

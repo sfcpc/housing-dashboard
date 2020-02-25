@@ -1,7 +1,7 @@
 # Lint as: python3
 """Convert departmental data files into a schemaless csv.
 
-If you run this with a PPTS and PTS file specified, it will
+If you run this with a Planning and PTS file specified, it will
 dump those into a schemaless csv. If you provide the files
 and also set the --diff flag, it will diff against an existing
 schemaless csv.
@@ -16,11 +16,11 @@ import shutil
 import sys
 
 from schemaless.mapblklot_generator import MapblklotGenerator
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
-from schemaless.sources import AffordableRentalPortfolio
-from schemaless.sources import PPTS
+from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import TCO
 
@@ -75,7 +75,7 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
             last_updated = the_date.isoformat()
 
         for source in sources:
-            valid_keys = set(source.FIELDS.values())
+            valid_keys = source.field_names()
             for line in source.yield_records():
                 fk = source.foreign_key(line)
                 if fk not in records[source.NAME]:
@@ -92,7 +92,7 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--ppts_file', help='PPTS file', default='')
+    parser.add_argument('--planning_file', help='Planning file', default='')
     parser.add_argument('--pts_file', help='PTS file', default='')
     parser.add_argument('--tco_file', help='TCO file', default='')
     parser.add_argument('--mohcd_pipeline_file',
@@ -125,8 +125,8 @@ if __name__ == "__main__":
         MapblklotGenerator(args.parcel_data_file)
 
     sources = []
-    if args.ppts_file:
-        sources.append(PPTS(args.ppts_file))
+    if args.planning_file:
+        sources.append(Planning(args.planning_file))
     if args.pts_file:
         sources.append(PTS(args.pts_file))
     if args.tco_file:
