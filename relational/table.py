@@ -453,6 +453,17 @@ class ProjectDetails(NameValueTable):
         super().__init__('project_details')
 
     def _bedroom_info(self, rows, proj):
+        was_mohcd = False
+        for mohcd in _MOHCD_TYPES.keys():
+            if proj.field('project_id', mohcd):
+                self._bedroom_info_mohcd(rows, proj, mohcd)
+                was_mohcd = True
+                break
+
+        if not was_mohcd:
+            self._bedroom_info_planning(rows, proj)
+
+    def _bedroom_info_planning(self, rows, proj):
         is_adu = False
 
         def _crunch_number(prefix):
@@ -503,7 +514,7 @@ class ProjectDetails(NameValueTable):
         'num_4bd_units': OUT_4BR,
     }
 
-    def _get_mohcd_fields(self, proj, fieldmap):
+    def _get_mohcd_fields(self, proj, fieldmap, mohcd=None):
         """Extracts information from MOHCD, preferring Pipeline over
         Inclusionary.
 
@@ -518,6 +529,9 @@ class ProjectDetails(NameValueTable):
         out = []
         nonzero = False
         for (source, outsource) in _MOHCD_TYPES.items():
+            if mohcd and source != mohcd:
+                continue
+
             added = False
             for (mohcdfield, outfield) in fieldmap.items():
                 try:
@@ -535,14 +549,16 @@ class ProjectDetails(NameValueTable):
 
         return out if nonzero else []
 
-    def _bedroom_info_mohcd(self, rows, proj):
+    def _bedroom_info_mohcd(self, rows, proj, mohcd):
         """Populates bedroom information from MOHCD.
 
         Only pulls data from one MOHCD source, preferring Pipeline over
         Inclusionary.  This is because this is a matter of correctness and
         unnecessary duplication, rather than completeness.
         """
-        for datum in self._get_mohcd_fields(proj, self._MOHCD_BEDROOM_MAP):
+        for datum in self._get_mohcd_fields(proj,
+                                            self._MOHCD_BEDROOM_MAP,
+                                            mohcd):
             rows.append(self.nv_row(proj,
                                     name=datum[0],
                                     value=datum[1],
@@ -640,15 +656,41 @@ class ProjectDetails(NameValueTable):
                                     value=date,
                                     data=PermitAddendaSummary.OUTPUT_NAME))
 
+    def _unique(self, rows):
+        """Prunes duplicate name-value entries, preferring entries that were
+        added later in the process.
+        """
+        seen = set()
+
+        def _is_already_seen(row):
+            nonlocal seen
+
+            name = row[self.index(self.NAME)]
+            if name in seen:
+                return True
+            seen.add(name)
+            return False
+
+        rows[:] = [row for row in reversed(rows) if not _is_already_seen(row)]
+
     def rows(self, proj):
+        """Generates all the rows for this project.
+
+        As a name-value table we nonetheless expect this table to be pivoted,
+        so the names are for each project."""
         result = []
+
+        # Order here matters, because _unique will prune earlier entries
+        # in favor of identical names added later.
         self._square_feet(result, proj)
         self._bedroom_info(result, proj)
-        self._bedroom_info_mohcd(result, proj)
         self._ami_info_mohcd(result, proj)
         self._is_100_affordable(result, proj)
         self._onsite_or_feeout(result, proj)
         self._earliest_addenda_arrival(result, proj)
+
+        self._unique(result)
+
         return result
 
 
