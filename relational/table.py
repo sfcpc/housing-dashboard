@@ -741,7 +741,7 @@ class ProjectStatusHistory(Table):
         if ppa_opened_field:
             ppa_opened_date = datetime.strptime(
                 ppa_opened_field.split(' ')[0],
-                "%m/%d/%Y").date()
+                "%d-%b-%y").date()
             return (ppa_opened_date.isoformat(), Planning.OUTPUT_NAME)
 
         return ('', None)
@@ -798,7 +798,7 @@ class ProjectStatusHistory(Table):
                 if date_closed_value:
                     date_closed = datetime.strptime(
                         date_closed_value[0].split(' ')[0],
-                        "%m/%d/%Y").date()
+                        "%d-%b-%y").date()
                     if date_closed > newest_closed:
                         newest_closed = date_closed
                 elif status_value and 'closed' in status_value[0].lower():
@@ -816,7 +816,7 @@ class ProjectStatusHistory(Table):
                 if date_closed_field:
                     date_closed = datetime.strptime(
                         date_closed_field.split(' ')[0],
-                        "%m/%d/%Y").date()
+                        "%d-%b-%y").date()
                     return (date_closed.isoformat(), Planning.OUTPUT_NAME)
 
         return ('', None)
