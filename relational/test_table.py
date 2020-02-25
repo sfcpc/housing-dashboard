@@ -828,8 +828,8 @@ def test_project_status_history_predevelopment(child_parent_graph, d):
     entries1 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('record_type_category', 'PRJ', d),
-               NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d)]),
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('date_opened', '18-NOV-18', d)]),
     ]
     proj_no_ppa = Project('uuid1', entries1, child_parent_graph)
     fields = table.rows(proj_no_ppa)
@@ -840,17 +840,17 @@ def test_project_status_history_predevelopment(child_parent_graph, d):
     entries2 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('record_type_category', 'PRJ', d),
-               NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d)]),
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('date_opened', '18-NOV-18', d)]),
         Entry('2',
               Planning.NAME,
-              [NameValue('record_type_category', 'PPA', d),
-               NameValue('date_opened', '10/18/2018 12:00:00 AM +0000', d)]),
+              [NameValue('record_type', 'PPA', d),
+               NameValue('date_opened', '18-OCT-18', d)]),
         # ENT's don't matter for pre-development open date but do for end_date
         Entry('3',
               Planning.NAME,
-              [NameValue('record_type_category', 'CUA', d),
-               NameValue('date_opened', '11/25/2018 12:00:00 AM +0000', d)])
+              [NameValue('record_type', 'CUA', d),
+               NameValue('date_opened', '25-NOV-18', d)])
     ]
 
     proj_with_ppa = Project('uuid1', entries2, child_parent_graph)
@@ -873,27 +873,27 @@ def test_project_status_history_filed_for_entitlements(child_parent_graph, d):
     entries1 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('record_type_category', 'PRJ', d),
-               NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d)]),
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('date_opened', '18-NOV-18', d)]),
         Entry('2',
               Planning.NAME,
-              [NameValue('record_type_category', 'CUA', d),
-               NameValue('date_opened', '11/25/2018 12:00:00 AM +0000', d)]),
+              [NameValue('record_type', 'CUA', d),
+               NameValue('date_opened', '25-NOV-18', d)]),
         # Ignore any ENT records that don't have oldest open date
         Entry('3',
               Planning.NAME,
-              [NameValue('record_type_category', 'ENV', d),
-               NameValue('date_opened', '11/28/2018 12:00:00 AM +0000', d)]),
+              [NameValue('record_type', 'ENV', d),
+               NameValue('date_opened', '28-NOV-18', d)]),
         # Ignore any non-ENT records
         Entry('4',
               Planning.NAME,
-              [NameValue('record_type_category', 'ABC', d),
-               NameValue('date_opened', '11/30/2018 12:00:00 AM +0000', d)]),
+              [NameValue('record_type', 'ABC', d),
+               NameValue('date_opened', '30-NOV-18', d)]),
         # Ignore any record not part of the PRJ
         Entry('5',
               Planning.NAME,
-              [NameValue('record_type_category', 'VAR', d),
-               NameValue('date_opened', '11/01/2018 12:00:00 AM +0000', d)]),
+              [NameValue('record_type', 'VAR', d),
+               NameValue('date_opened', '01-NOV-18', d)]),
     ]
 
     proj = Project('uuid1', entries1, child_parent_graph)
@@ -912,36 +912,36 @@ def test_project_status_history_entitled(child_parent_graph, d):
     entries1 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('record_type_category', 'PRJ', d),
+              [NameValue('record_type', 'PRJ', d),
                NameValue('status', 'Accepted', d),
-               NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d)]),
+               NameValue('date_opened', '18-NOV-18', d)]),
         # Ignore any ENT records that don't have newest closed date
         Entry('2',
               Planning.NAME,
-              [NameValue('record_type_category', 'CUA', d),
+              [NameValue('record_type', 'CUA', d),
                NameValue('status', 'Closed - CEQA', d),
-               NameValue('date_opened', '11/25/2018 12:00:00 AM +0000', d),
-               NameValue('date_closed', '3/27/2019 12:00:00 AM +0000', d)]),
+               NameValue('date_opened', '25-NOV-18', d),
+               NameValue('date_closed', '27-MAR-19', d)]),
         Entry('3',
               Planning.NAME,
-              [NameValue('record_type_category', 'VAR', d),
+              [NameValue('record_type', 'VAR', d),
                NameValue('status', 'Closed - XYZ', d),
-               NameValue('date_opened', '11/28/2018 12:00:00 AM +0000', d),
-               NameValue('date_closed', '4/15/2019 12:00:00 AM +0000', d)]),
+               NameValue('date_opened', '28-NOV-18', d),
+               NameValue('date_closed', '15-APR-19', d)]),
         # Ignore any non-ENT records
         Entry('4',
               Planning.NAME,
-              [NameValue('record_type_category', 'ABC', d),
+              [NameValue('record_type', 'ABC', d),
                NameValue('status', 'closed', d),
-               NameValue('date_opened', '11/30/2018 12:00:00 AM +0000', d),
-               NameValue('date_closed', '5/20/2019 12:00:00 AM +0000', d)]),
+               NameValue('date_opened', '30-NOV-18', d),
+               NameValue('date_closed', '20-MAY-19', d)]),
         # Ignore any record not part of the PRJ
         Entry('5',
               Planning.NAME,
-              [NameValue('record_type_category', 'ENV', d),
+              [NameValue('record_type', 'ENV', d),
                NameValue('status', 'Closed', d),
-               NameValue('date_opened', '11/01/2018 12:00:00 AM +0000', d),
-               NameValue('date_closed', '5/28/2019 12:00:00 AM +0000', d)]),
+               NameValue('date_opened', '01-NOV-18', d),
+               NameValue('date_closed', '28-MAY-19', d)]),
     ]
 
     proj = Project('uuid1', entries1, child_parent_graph)
@@ -959,26 +959,26 @@ def test_project_status_history_entitled(child_parent_graph, d):
     entries2 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('record_type_category', 'PRJ', d),
+              [NameValue('record_type', 'PRJ', d),
                NameValue('status', 'Accepted', d),
-               NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d)]),
+               NameValue('date_opened', '18-NOV-18', d)]),
         # ENT is still open, project is not entitlded
         Entry('2',
               Planning.NAME,
-              [NameValue('record_type_category', 'CUA', d),
+              [NameValue('record_type', 'CUA', d),
                NameValue('status', 'Accepted', d),
-               NameValue('date_opened', '11/25/2018 12:00:00 AM +0000', d)]),
+               NameValue('date_opened', '25-NOV-18', d)]),
         Entry('3',
               Planning.NAME,
-              [NameValue('record_type_category', 'VAR', d),
+              [NameValue('record_type', 'VAR', d),
                NameValue('status', 'Closed - XYZ', d),
-               NameValue('date_opened', '11/28/2018 12:00:00 AM +0000', d),
-               NameValue('date_closed', '4/15/2019 12:00:00 AM +0000', d)]),
+               NameValue('date_opened', '28-NOV-18', d),
+               NameValue('date_closed', '15-APR-19', d)]),
         Entry('4',
               Planning.NAME,
-              [NameValue('record_type_category', 'PPA', d),
-               NameValue('date_opened', '10/18/2018 12:00:00 AM +0000', d),
-               NameValue('date_closed', '1/1/2019 12:00:00 AM +0000', d)]),
+              [NameValue('record_type', 'PPA', d),
+               NameValue('date_opened', '18-OCT-18', d),
+               NameValue('date_closed', '01-JAN-19', d)]),
     ]
 
     proj_not_entitled = Project('uuid1', entries2, child_parent_graph)
@@ -995,15 +995,15 @@ def test_project_status_history_entitled(child_parent_graph, d):
     entries3 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('record_type_category', 'PRJ', d),
+              [NameValue('record_type', 'PRJ', d),
                NameValue('status', 'Closed', d),
-               NameValue('date_opened', '11/18/2018 12:00:00 AM +0000', d),
-               NameValue('date_closed', '4/15/2019 12:00:00 AM +0000', d)]),
+               NameValue('date_opened', '18-NOV-18', d),
+               NameValue('date_closed', '15-APR-19', d)]),
         Entry('2',
               Planning.NAME,
-              [NameValue('record_type_category', 'VAR', d),
+              [NameValue('record_type', 'VAR', d),
                NameValue('status', 'Closed - XYZ', d),
-               NameValue('date_opened', '11/28/2018 12:00:00 AM +0000', d)]),
+               NameValue('date_opened', '28-NOV-18', d)]),
     ]
 
     proj_prj_closed = Project('uuid1', entries3, child_parent_graph)

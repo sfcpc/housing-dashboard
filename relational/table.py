@@ -737,12 +737,11 @@ class ProjectStatusHistory(Table):
         # own logic)
         ppa_opened_field = proj.field(
             'date_opened', Planning.NAME,
-            entry_predicate=[('record_type_category',
-                              lambda x: x == 'PPA')])
+            entry_predicate=[('record_type', lambda x: x == 'PPA')])
         if ppa_opened_field:
             ppa_opened_date = datetime.strptime(
                 ppa_opened_field.split(' ')[0],
-                "%m/%d/%Y").date()
+                "%d-%b-%y").date()
             return (ppa_opened_date.isoformat(), Planning.OUTPUT_NAME)
 
         return ('', None)
@@ -757,17 +756,17 @@ class ProjectStatusHistory(Table):
         if root is None:
             print("Error: Project with non-Planning root id %s" % proj.id)
             return ('', None)
-        if root[0].get_latest('record_type_category')[0] == 'PRJ':
+        if root[0].get_latest('record_type')[0] == 'PRJ':
             oldest_open = date.max
             for child in proj.children[Planning.NAME]:
-                record_type = child.get_latest('record_type_category')[0]
+                record_type = child.get_latest('record_type')[0]
                 if record_type not in self._Planning_ENT_CODES:
                     continue
 
                 date_opened_field = child.get_latest('date_opened')[0]
                 date_opened = datetime.strptime(
                     date_opened_field.split(' ')[0],
-                    "%m/%d/%Y").date()
+                    '%d-%b-%y').date()
                 if date_opened < oldest_open:
                     oldest_open = date_opened
 
@@ -786,11 +785,11 @@ class ProjectStatusHistory(Table):
         if root is None:
             print("Error: Project with non-Planning root id %s" % proj.id)
             return ('', None)
-        if root[0].get_latest('record_type_category')[0] == 'PRJ':
+        if root[0].get_latest('record_type')[0] == 'PRJ':
             newest_closed = date.min
             count_closed_no_date = 0
             for child in proj.children[Planning.NAME]:
-                record_type = child.get_latest('record_type_category')[0]
+                record_type = child.get_latest('record_type')[0]
                 if record_type not in self._Planning_ENT_CODES:
                     continue
 
@@ -799,7 +798,7 @@ class ProjectStatusHistory(Table):
                 if date_closed_value:
                     date_closed = datetime.strptime(
                         date_closed_value[0].split(' ')[0],
-                        "%m/%d/%Y").date()
+                        "%d-%b-%y").date()
                     if date_closed > newest_closed:
                         newest_closed = date_closed
                 elif status_value and 'closed' in status_value[0].lower():
@@ -813,11 +812,11 @@ class ProjectStatusHistory(Table):
             elif count_closed_no_date > 0:
                 # Fall back to PRJ date if all ENT child records are closed
                 # but there's no date
-                date_closed_field = root[0].get_latest('date_closed')[0]
+                date_closed_field = root[0].get_latest('date_closed')
                 if date_closed_field:
                     date_closed = datetime.strptime(
-                        date_closed_field.split(' ')[0],
-                        "%m/%d/%Y").date()
+                        date_closed_field[0].split(' ')[0],
+                        '%d-%b-%y').date()
                     return (date_closed.isoformat(), Planning.OUTPUT_NAME)
 
         return ('', None)

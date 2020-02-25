@@ -23,17 +23,17 @@ def test_freshness():
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': '01/01/2000',
+        'value': '01-JAN-00',
     })
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': '01/01/2010',
+        'value': '01-JAN-10',
     })
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': '01/01/2020',
+        'value': '01-JAN-20',
     })
     lines.append({
         'source': PTS.NAME,
@@ -72,7 +72,7 @@ def test_freshness():
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': datetime.max.strftime('%m/%d/%Y'),
+        'value': datetime.max.strftime('%d-%b-%y'),
     })
 
     # ignored because the source is unknown
