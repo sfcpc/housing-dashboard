@@ -766,7 +766,7 @@ class ProjectStatusHistory(Table):
                 date_opened_field = child.get_latest('date_opened')[0]
                 date_opened = datetime.strptime(
                     date_opened_field.split(' ')[0],
-                    "%m/%d/%Y").date()
+                    '%d-%b-%y').date()
                 if date_opened < oldest_open:
                     oldest_open = date_opened
 
