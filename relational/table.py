@@ -389,6 +389,17 @@ class ProjectFacts(Table):
                 row[self.index(self.NET_NUM_UNITS_BMR)] != '' or
                 row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '')
 
+    def _nonzero_or_nonempty_address(self, row):
+        """Returns true if this row had a non-empty address, or had an
+        empty address but a non-zero net unit count"""
+        if row[self.index(self.ADDRESS)] != '':
+            return True
+
+        if (row[self.index(self.NET_NUM_UNITS)] and
+                row[self.index(self.NET_NUM_UNITS)] != '0'):
+            return True
+        return False
+
     def rows(self, proj):
         row = [''] * len(self.header())
 
@@ -396,7 +407,8 @@ class ProjectFacts(Table):
         self._gen_facts(row, proj)
         self._gen_units(row, proj)
 
-        if self._atleast_one_measure(row):
+        if (self._atleast_one_measure(row) and
+                self._nonzero_or_nonempty_address(row)):
             self.SEEN_IDS.add(row[self.index(self.ID)])
             return [row]
 
