@@ -322,6 +322,17 @@ def test_table_project_facts_units_planning_bmr(basic_graph, d):
             want={'net_num_units_bmr': '',
                   'net_estimated_num_units_bmr': '0'},
         ),
+        EntriesTestRow(
+            name='estimated bmr calculation for medium project when zero',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('number_of_market_rate_units', '20', d),
+                       NameValue('number_of_affordable_units', '0', d)]),
+            ],
+            want={'net_num_units_bmr': '',
+                  'net_estimated_num_units_bmr': '4'},
+        ),
     ]
 
     for test in tests:
