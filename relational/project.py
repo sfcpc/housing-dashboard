@@ -231,8 +231,8 @@ class Project:
             * If multiple roots, choose one with latest update time.
           * If source != Planning, then descend to children.
             * If multiple children, choose one with latest update time.
-          * If source == Planning, then only descend to children if None found on
-            root.
+          * If source == Planning, then only descend to children if None found
+            on root.
 
         Returns:
             string (an empty string if no value found)

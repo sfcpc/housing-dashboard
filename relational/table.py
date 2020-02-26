@@ -231,7 +231,27 @@ class ProjectFacts(Table):
             self.NET_EST_NUM_UNITS_BMR_DATA,
         ])
 
-    _ZIP_CODE_REGEX = re.compile(' [0-9]{5}$')
+    def _maybe_add_geo(self, row):
+        """Adds 'San Francisco, CA' to an address if necessary.
+
+        PowerBI seems to handle address queries not very well, so even a
+        fairly unambiguous '1 South Park 94107' ends up being placed in the
+        UK.  The best way to deal with this is explicitly specify
+        San Francisco, CA."""
+        addr = row[self.index(self.ADDRESS)]
+        if not addr:
+            return
+
+        if re.search('san francisco', addr, flags=re.IGNORECASE):
+            return
+
+        # if we match a 'CA', we only skip adding geo information if it
+        # comes at the end or is followed by a zip-code like entry.
+        # Explicitly do not ignore case here, because 'ca' is a bit ambiguous
+        if re.search('CA$|CA [0-9]{5}(-[0-9]{4})?', addr):
+            return
+
+        row[self.index(self.ADDRESS)] = addr.strip() + ', San Francisco, CA'
 
     def _gen_facts(self, row, proj):
         """Generates the basic non-numeric details about a project.
@@ -281,7 +301,7 @@ class ProjectFacts(Table):
         name = proj.field('name', Planning.NAME)
         if name or addr:
             if not name:
-                name = re.sub(self._ZIP_CODE_REGEX, '', addr)
+                name = re.sub(' [0-9]{5}$', '', addr)
 
             row[self.index(self.NAME)] = name
             row[self.index(self.ADDRESS)] = addr
@@ -389,14 +409,18 @@ class ProjectFacts(Table):
                 row[self.index(self.NET_NUM_UNITS_BMR)] != '' or
                 row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '')
 
+    _UNTRUSTED_EMPTY_ADDRESS_ZERO_UNITS = set([Planning.NAME, PTS.NAME])
+
     def _nonzero_or_nonempty_address(self, row):
         """Returns true if this row had a non-empty address, or had an
-        empty address but a non-zero net unit count"""
+        empty address but a non-zero net unit count from planning or dbi"""
         if row[self.index(self.ADDRESS)] != '':
             return True
 
-        if (row[self.index(self.NET_NUM_UNITS)] and
-                row[self.index(self.NET_NUM_UNITS)] != '0'):
+        if (row[self.index(self.NET_NUM_UNITS_DATA)] not in
+            self._UNTRUSTED_EMPTY_ADDRESS_ZERO_UNITS or
+            (row[self.index(self.NET_NUM_UNITS)] and
+             row[self.index(self.NET_NUM_UNITS)] != '0')):
             return True
         return False
 
@@ -406,6 +430,7 @@ class ProjectFacts(Table):
         self.gen_id(row, proj)
         self._gen_facts(row, proj)
         self._gen_units(row, proj)
+        self._maybe_add_geo(row)
 
         if (self._atleast_one_measure(row) and
                 self._nonzero_or_nonempty_address(row)):

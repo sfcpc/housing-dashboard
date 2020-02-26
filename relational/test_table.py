@@ -110,7 +110,7 @@ def test_table_project_facts(basic_graph, d):
                 'address': '',
             }),
         EntriesTestRow(
-            name='use address for name if no name',
+            name='use address for name if no name, add CA',
             entries=[
                 Entry('1',
                       Planning.NAME,
@@ -119,10 +119,10 @@ def test_table_project_facts(basic_graph, d):
             ],
             want={
                 'name': '123 chris st',
-                'address': '123 chris st',
+                'address': '123 chris st, San Francisco, CA',
             }),
         EntriesTestRow(
-            name='strip out planning zip code for name if found',
+            name='strip out planning zip code for name if found, insert CA',
             entries=[
                 Entry('1',
                       Planning.NAME,
@@ -131,7 +131,7 @@ def test_table_project_facts(basic_graph, d):
             ],
             want={
                 'name': '123 chris st',
-                'address': '123 chris st 94114',
+                'address': '123 chris st 94114, San Francisco, CA',
             }),
         EntriesTestRow(
             name='always use mohcd if information found',
@@ -151,7 +151,7 @@ def test_table_project_facts(basic_graph, d):
             ],
             want={
                 'name': 'BALBOA!',
-                'address': '123 chris st, 94123',
+                'address': '123 chris st, 94123, San Francisco, CA',
             }),
         EntriesTestRow(
             name='use mohcd subset for name if no name found',
@@ -169,7 +169,7 @@ def test_table_project_facts(basic_graph, d):
             ],
             want={
                 'name': '123 chris st',
-                'address': '123 chris st, 94123',
+                'address': '123 chris st, 94123, San Francisco, CA',
             }),
         EntriesTestRow(
             name='override planning name with mohcd name if found',
@@ -189,7 +189,20 @@ def test_table_project_facts(basic_graph, d):
             ],
             want={
                 'name': 'chris place',
-                'address': '123 chris st, 94123',
+                'address': '123 chris st, 94123, San Francisco, CA',
+            }),
+        EntriesTestRow(
+            name='do not double up on CA place name',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('address',
+                                 '123 chris st, SAN FRANCISCO CA',
+                                 d),
+                       NameValue('number_of_market_rate_units', '10', d)]),
+            ],
+            want={
+                'address': '123 chris st, SAN FRANCISCO CA',
             }),
     ]
 
