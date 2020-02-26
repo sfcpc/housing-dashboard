@@ -42,7 +42,11 @@ def just_dump(sources, outfile, the_date=None):
                     if key not in valid_keys:
                         continue
                     writer.writerow([
-                            fk, source.NAME, last_updated, key, val.strip()
+                        fk,
+                        source.NAME,
+                        last_updated,
+                        key,
+                        val.strip().replace('\n', ' ')
                     ])
 
 
@@ -85,7 +89,11 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
                     if val != records[source.NAME][fk].get(key, None):
                         records[source.NAME][fk][key] = val
                         writer.writerow([
-                            fk, source.NAME, last_updated, key, val.strip()
+                            fk,
+                            source.NAME,
+                            last_updated,
+                            key,
+                            val.strip().replace('\n', ' ')
                         ])
 
 
