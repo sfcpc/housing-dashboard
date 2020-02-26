@@ -779,9 +779,15 @@ class ProjectStatusHistory(Table):
         self.non_consecutive_status_sample = {}
 
     def _under_entitlement_review_date(self, proj):
-        # TODO: Use the Application Submitted date once we have pulled
-        # in the new Planning data pipeline (if that doesn't exist fall back to
-        # our own logic)
+        # Use the Application Submitted date if it exists, if not fallback
+        # to looking for the earliest open ENT record
+        date_submitted_entry = proj.field('date_application_submitted',
+                                          Planning.NAME)
+        if date_submitted_entry:
+            date_submitted = datetime.strptime(
+                date_submitted_entry.split(' ')[0], "%Y-%m-%d").date()
+            if date_submitted:
+                return (date_submitted, Planning.NAME)
 
         # Look for the earliest date_opened on an ENT child of a PRJ.
         root = proj.roots[Planning.NAME]
@@ -799,7 +805,7 @@ class ProjectStatusHistory(Table):
                 date_opened_field = child.get_latest('date_opened')[0]
                 date_opened = datetime.strptime(
                     date_opened_field.split(' ')[0],
-                    '%d-%b-%y').date()
+                    '%Y-%m-%d').date()
                 if date_opened < oldest_open:
                     oldest_open = date_opened
 
@@ -809,8 +815,15 @@ class ProjectStatusHistory(Table):
         return (None, None)
 
     def _entitled_date(self, proj):
-        # TODO: Use the Entitlements Approved date once we have pulled
-        # in the new Planning data pipeline (if that doesn't exist fall back)
+        # Use the Entitlements Approved date if it exists. If it doesn't,
+        # fallback to using the latest closed date of an ENT record.
+        date_entitled_entry = proj.field('date_entitlements_approved',
+                                         Planning.NAME)
+        if date_entitled_entry:
+            date_entitled = datetime.strptime(
+                date_entitled_entry.split(' ')[0], "%Y-%m-%d").date()
+            if date_entitled:
+                return (date_entitled, Planning.NAME)
 
         # Look for the ENT child of a PRJ with the latest date_closed
         # (assuming all are closed). Fall back to the PRJ date.
@@ -832,7 +845,7 @@ class ProjectStatusHistory(Table):
                 if date_closed_value:
                     date_closed = datetime.strptime(
                         date_closed_value[0].split(' ')[0],
-                        "%d-%b-%y").date()
+                        "%Y-%m-%d").date()
                     if date_closed > newest_closed:
                         newest_closed = date_closed
                 elif status_value and 'closed' in status_value[0].lower():
@@ -852,7 +865,7 @@ class ProjectStatusHistory(Table):
                     if date_closed_field:
                         date_closed = datetime.strptime(
                             date_closed_field.split(' ')[0],
-                            '%d-%b-%y').date()
+                            '%Y-%m-%d').date()
                         return (date_closed, Planning.OUTPUT_NAME)
 
         return (None, None)

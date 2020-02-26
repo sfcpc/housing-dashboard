@@ -135,7 +135,7 @@ class Freshness:
                   'data freshness: %s, skipping' % line['source'])
 
     def _planning(self, line):
-        self._extract_nv_date(line, Planning.NAME, timeformat='%d-%b-%y')
+        self._extract_nv_date(line, Planning.NAME, timeformat='%Y-%m-%d')
 
     def _pts(self, line):
         self._extract_nv_date(line, PTS.NAME)
