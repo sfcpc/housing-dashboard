@@ -66,19 +66,19 @@ EntriesTestRow = namedtuple('EntriesTestRow', ['name', 'entries', 'want'])
 def test_table_project_facts_atleast_one_measure():
     table = ProjectFacts()
 
-    RowTest = namedtuple('RowTest', ['input', 'want'])
+    RowTest = namedtuple('RowTest', ['input', 'want', 'name'])
     tests = [
-        RowTest(['', '', ''], False),  # empty row
-        RowTest(['', '0', ''], True),  # zero different from empty
-        RowTest(['1', '2', ''], True),  # normal full row
-        RowTest(['', '', '1'], True),  # estimated field
+        RowTest(['', '', ''], False, 'empty row'),
+        RowTest(['', '0', ''], True, 'zero different from empty'),
+        RowTest(['1', '2', ''], True, 'normal full row'),
+        RowTest(['', '', '1'], True, 'estimated field'),
     ]
     for test in tests:
         row = [''] * len(table.header())
         row[table.index(table.NET_NUM_UNITS)] = test.input[0]
         row[table.index(table.NET_NUM_UNITS_BMR)] = test.input[1]
         row[table.index(table.NET_EST_NUM_UNITS_BMR)] = test.input[2]
-        assert table._atleast_one_measure(row) == test.want
+        assert table._atleast_one_measure(row) == test.want, test.name
 
 
 def test_table_project_facts(basic_graph, d):
@@ -95,6 +95,18 @@ def test_table_project_facts(basic_graph, d):
             ],
             want={
                 'name': 'BALBOA RESERVOIR DEVELOPMENT',
+                'address': '',
+            }),
+        EntriesTestRow(
+            name='exclude no-address planning entries if no net units',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
+                       NameValue('number_of_market_rate_units', '0', d)]),
+            ],
+            want={
+                'name': '',
                 'address': '',
             }),
         EntriesTestRow(
