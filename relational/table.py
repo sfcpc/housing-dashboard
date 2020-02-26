@@ -251,7 +251,14 @@ class ProjectFacts(Table):
         if re.search('CA$|CA [0-9]{5}(-[0-9]{4})?', addr):
             return
 
-        row[self.index(self.ADDRESS)] = addr.strip() + ', San Francisco, CA'
+        if not re.search('[0-9]{5}', addr):
+            row[self.index(self.ADDRESS)] = addr.strip() + \
+                ', San Francisco, CA'
+        else:
+            row[self.index(self.ADDRESS)] = \
+                re.sub(r',? +([0-9]{5}(-[0-9]{4})?)',
+                       r', San Francisco, CA \1',
+                       addr)
 
     def _gen_facts(self, row, proj):
         """Generates the basic non-numeric details about a project.

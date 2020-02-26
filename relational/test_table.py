@@ -131,7 +131,7 @@ def test_table_project_facts(basic_graph, d):
             ],
             want={
                 'name': '123 chris st',
-                'address': '123 chris st 94114, San Francisco, CA',
+                'address': '123 chris st, San Francisco, CA 94114',
             }),
         EntriesTestRow(
             name='always use mohcd if information found',
@@ -151,7 +151,7 @@ def test_table_project_facts(basic_graph, d):
             ],
             want={
                 'name': 'BALBOA!',
-                'address': '123 chris st, 94123, San Francisco, CA',
+                'address': '123 chris st, San Francisco, CA 94123',
             }),
         EntriesTestRow(
             name='use mohcd subset for name if no name found',
@@ -169,7 +169,7 @@ def test_table_project_facts(basic_graph, d):
             ],
             want={
                 'name': '123 chris st',
-                'address': '123 chris st, 94123, San Francisco, CA',
+                'address': '123 chris st, San Francisco, CA 94123',
             }),
         EntriesTestRow(
             name='override planning name with mohcd name if found',
@@ -189,7 +189,7 @@ def test_table_project_facts(basic_graph, d):
             ],
             want={
                 'name': 'chris place',
-                'address': '123 chris st, 94123, San Francisco, CA',
+                'address': '123 chris st, San Francisco, CA 94123',
             }),
         EntriesTestRow(
             name='do not double up on CA place name',
