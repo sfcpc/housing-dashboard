@@ -363,7 +363,7 @@ class ProjectFacts(Table):
                     net = None
                     pass
             bmr_net = proj.field('number_of_affordable_units', Planning.NAME)
-            if bmr_net != '':
+            if bmr_net and bmr_net != '0':
                 row[self.index(self.NET_NUM_UNITS_BMR)] = bmr_net
                 row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = \
                     Planning.OUTPUT_NAME
