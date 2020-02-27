@@ -23,17 +23,17 @@ def test_freshness():
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': '01-JAN-00',
+        'value': '2000-01-01',
     })
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': '01-JAN-10',
+        'value': '2010-01-01',
     })
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': '01-JAN-20',
+        'value': '2020-01-01',
     })
     lines.append({
         'source': PTS.NAME,
@@ -48,12 +48,12 @@ def test_freshness():
     lines.append({
         'source': TCO.NAME,
         'name': 'date_issued',
-        'value': '02/05/2020',
+        'value': '2020/02/05',
     })
     lines.append({
         'source': TCO.NAME,
         'name': 'date_issued',
-        'value': '02/10/2020',
+        'value': '2020/02/10',
     })
 
     # ignored because the field isn't permitted
@@ -65,14 +65,14 @@ def test_freshness():
     lines.append({
         'source': TCO.NAME,
         'name': 'arbitrary',
-        'value': '05/02/2020',
+        'value': '2020/05/02',
     })
 
     # ignored, in the future
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': datetime.max.strftime('%d-%b-%y'),
+        'value': datetime.max.strftime('%Y-%m-%d'),
     })
 
     # ignored because the source is unknown

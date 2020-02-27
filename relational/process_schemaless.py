@@ -135,13 +135,13 @@ class Freshness:
                   'data freshness: %s, skipping' % line['source'])
 
     def _planning(self, line):
-        self._extract_nv_date(line, Planning.NAME, timeformat='%d-%b-%y')
+        self._extract_nv_date(line, Planning.NAME, timeformat='%Y-%m-%d')
 
     def _pts(self, line):
         self._extract_nv_date(line, PTS.NAME)
 
     def _tco(self, line):
-        self._extract_nv_date(line, TCO.NAME)
+        self._extract_nv_date(line, TCO.NAME, timeformat='%Y/%m/%d')
 
     def _mohcd_pipeline(self, line):
         self._extract_last_updated(line, MOHCDPipeline.NAME)
@@ -299,6 +299,7 @@ def output_projects(projects, config):
                             print('\t...%s entries to %s' %
                                   (lines_out, finalfile))
                         writer.writerow(out)
+        table.log_bad_data()
 
     if lines_out > 0:
         print('\t%s total entries' % lines_out)

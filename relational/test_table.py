@@ -565,6 +565,11 @@ def test_project_details_permit_addenda_summary(basic_graph, d):
               PermitAddendaSummary.NAME,
               [NameValue('permit_number', 'xyz', d),
                NameValue('earliest_addenda_arrival', '2015-01-01', d)]),
+        # Use the earliest addenda arrival date
+        Entry('3',
+              PermitAddendaSummary.NAME,
+              [NameValue('permit_number', 'abc', d),
+               NameValue('earliest_addenda_arrival', '2015-02-02', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
     nvs = table.rows(proj_normal)
@@ -829,90 +834,65 @@ def child_parent_graph():
     rg.add(Node(record_id='2', parents=['1']))
     rg.add(Node(record_id='3', parents=['1']))
     rg.add(Node(record_id='4', parents=['1']))
-    rg.add(Node(record_id='5'))
+    rg.add(Node(record_id='5', parents=['1']))
+    rg.add(Node(record_id='6', parents=['1']))
+    rg.add(Node(record_id='7', parents=['1']))
+    rg.add(Node(record_id='8', parents=['1']))
+    rg.add(Node(record_id='9'))
     return rg
 
 
-def test_project_status_history_predevelopment(child_parent_graph, d):
+def test_project_status_history_under_ent_review(child_parent_graph, d):
     table = ProjectStatusHistory()
 
     entries1 = [
         Entry('1',
               Planning.NAME,
               [NameValue('record_type', 'PRJ', d),
-               NameValue('date_opened', '18-NOV-18', d)]),
-    ]
-    proj_no_ppa = Project('uuid1', entries1, child_parent_graph)
-    fields = table.rows(proj_no_ppa)
-    # No pre-development status if there is no PPA
-    status_rows = _get_values_for_status(table, fields)
-    assert len(status_rows) == 0
-
-    entries2 = [
-        Entry('1',
-              Planning.NAME,
-              [NameValue('record_type', 'PRJ', d),
-               NameValue('date_opened', '18-NOV-18', d)]),
-        Entry('2',
-              Planning.NAME,
-              [NameValue('record_type', 'PPA', d),
-               NameValue('date_opened', '18-OCT-18', d)]),
-        # ENT's don't matter for pre-development open date but do for end_date
-        Entry('3',
-              Planning.NAME,
-              [NameValue('record_type', 'CUA', d),
-               NameValue('date_opened', '25-NOV-18', d)])
-    ]
-
-    proj_with_ppa = Project('uuid1', entries2, child_parent_graph)
-    fields = table.rows(proj_with_ppa)
-    # Pre-development is taken from the PPA record date
-    status_rows = _get_values_for_status(table, fields)
-    assert len(status_rows) == 2
-    assert status_rows[0].top_level_status == 'pre-development'
-    assert status_rows[0].start_date == '2018-10-18'
-    assert status_rows[0].end_date == '2018-11-25'
-    # Filed status is taken from first open ENT record under PRJ
-    assert status_rows[1].top_level_status == 'filed_for_entitlements'
-    assert status_rows[1].start_date == '2018-11-25'
-    assert status_rows[1].end_date == ''
-
-
-def test_project_status_history_filed_for_entitlements(child_parent_graph, d):
-    table = ProjectStatusHistory()
-
-    entries1 = [
-        Entry('1',
-              Planning.NAME,
-              [NameValue('record_type', 'PRJ', d),
-               NameValue('date_opened', '18-NOV-18', d)]),
-        Entry('2',
-              Planning.NAME,
-              [NameValue('record_type', 'CUA', d),
-               NameValue('date_opened', '25-NOV-18', d)]),
-        # Ignore any ENT records that don't have oldest open date
-        Entry('3',
-              Planning.NAME,
-              [NameValue('record_type', 'ENV', d),
-               NameValue('date_opened', '28-NOV-18', d)]),
-        # Ignore any non-ENT records
-        Entry('4',
-              Planning.NAME,
-              [NameValue('record_type', 'ABC', d),
-               NameValue('date_opened', '30-NOV-18', d)]),
-        # Ignore any record not part of the PRJ
-        Entry('5',
-              Planning.NAME,
-              [NameValue('record_type', 'VAR', d),
-               NameValue('date_opened', '01-NOV-18', d)]),
+               NameValue('date_application_submitted', '2018-11-18', d)]),
     ]
 
     proj = Project('uuid1', entries1, child_parent_graph)
     fields = table.rows(proj)
     status_rows = _get_values_for_status(table, fields)
+    # Use the application submitted date if it exists
+    assert len(status_rows) == 1
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
+    assert status_rows[0].start_date == '2018-11-18'
+    assert status_rows[0].end_date == ''
+
+    entries2 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('date_opened', '2018-11-18 00:00:00', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('date_opened', '2018-11-25', d)]),
+        # Ignore any ENT records that don't have oldest open date
+        Entry('3',
+              Planning.NAME,
+              [NameValue('record_type', 'ENV', d),
+               NameValue('date_opened', '2018-11-28', d)]),
+        # Ignore any non-ENT records
+        Entry('4',
+              Planning.NAME,
+              [NameValue('record_type', 'ABC', d),
+               NameValue('date_opened', '2018-11-30', d)]),
+        # Ignore any record not part of the PRJ
+        Entry('9',
+              Planning.NAME,
+              [NameValue('record_type', 'VAR', d),
+               NameValue('date_opened', '2018-11-01', d)]),
+    ]
+
+    proj = Project('uuid1', entries2, child_parent_graph)
+    fields = table.rows(proj)
+    status_rows = _get_values_for_status(table, fields)
     # Filed status from earliest open ENT child record.
     assert len(status_rows) == 1
-    assert status_rows[0].top_level_status == 'filed_for_entitlements'
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
     assert status_rows[0].start_date == '2018-11-25'
     assert status_rows[0].end_date == ''
 
@@ -924,43 +904,19 @@ def test_project_status_history_entitled(child_parent_graph, d):
         Entry('1',
               Planning.NAME,
               [NameValue('record_type', 'PRJ', d),
+               NameValue('date_application_submitted', '2018-11-25', d),
+               NameValue('date_entitlements_approved',
+                         '2019-04-15 00:00:00', d),
                NameValue('status', 'Accepted', d),
-               NameValue('date_opened', '18-NOV-18', d)]),
-        # Ignore any ENT records that don't have newest closed date
-        Entry('2',
-              Planning.NAME,
-              [NameValue('record_type', 'CUA', d),
-               NameValue('status', 'Closed - CEQA', d),
-               NameValue('date_opened', '25-NOV-18', d),
-               NameValue('date_closed', '27-MAR-19', d)]),
-        Entry('3',
-              Planning.NAME,
-              [NameValue('record_type', 'VAR', d),
-               NameValue('status', 'Closed - XYZ', d),
-               NameValue('date_opened', '28-NOV-18', d),
-               NameValue('date_closed', '15-APR-19', d)]),
-        # Ignore any non-ENT records
-        Entry('4',
-              Planning.NAME,
-              [NameValue('record_type', 'ABC', d),
-               NameValue('status', 'closed', d),
-               NameValue('date_opened', '30-NOV-18', d),
-               NameValue('date_closed', '20-MAY-19', d)]),
-        # Ignore any record not part of the PRJ
-        Entry('5',
-              Planning.NAME,
-              [NameValue('record_type', 'ENV', d),
-               NameValue('status', 'Closed', d),
-               NameValue('date_opened', '01-NOV-18', d),
-               NameValue('date_closed', '28-MAY-19', d)]),
+               NameValue('date_opened', '2018-11-18', d)]),
     ]
 
     proj = Project('uuid1', entries1, child_parent_graph)
     fields = table.rows(proj)
     status_rows = _get_values_for_status(table, fields)
-    # Status looking at closed
+    # Use the explicit entitlements approved date if provided
     assert len(status_rows) == 2
-    assert status_rows[0].top_level_status == 'filed_for_entitlements'
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
     assert status_rows[0].start_date == '2018-11-25'
     assert status_rows[0].end_date == '2019-04-15'
     assert status_rows[1].top_level_status == 'entitled'
@@ -972,58 +928,495 @@ def test_project_status_history_entitled(child_parent_graph, d):
               Planning.NAME,
               [NameValue('record_type', 'PRJ', d),
                NameValue('status', 'Accepted', d),
-               NameValue('date_opened', '18-NOV-18', d)]),
-        # ENT is still open, project is not entitlded
+               NameValue('date_opened', '2018-11-18', d)]),
+        # Ignore any ENT records that don't have newest closed date
         Entry('2',
               Planning.NAME,
               [NameValue('record_type', 'CUA', d),
-               NameValue('status', 'Accepted', d),
-               NameValue('date_opened', '25-NOV-18', d)]),
+               NameValue('status', 'Closed - CEQA', d),
+               NameValue('date_opened', '2018-11-25', d),
+               NameValue('date_closed', '2019-03-27', d)]),
         Entry('3',
               Planning.NAME,
               [NameValue('record_type', 'VAR', d),
                NameValue('status', 'Closed - XYZ', d),
-               NameValue('date_opened', '28-NOV-18', d),
-               NameValue('date_closed', '15-APR-19', d)]),
+               NameValue('date_opened', '2018-11-28', d),
+               NameValue('date_closed', '2019-04-15', d)]),
+        # Ignore any non-ENT records
         Entry('4',
               Planning.NAME,
-              [NameValue('record_type', 'PPA', d),
-               NameValue('date_opened', '18-OCT-18', d),
-               NameValue('date_closed', '01-JAN-19', d)]),
+              [NameValue('record_type', 'ABC', d),
+               NameValue('status', 'closed', d),
+               NameValue('date_opened', '2018-11-30', d),
+               NameValue('date_closed', '2019-05-19', d)]),
+        # Ignore any record not part of the PRJ
+        Entry('9',
+              Planning.NAME,
+              [NameValue('record_type', 'ENV', d),
+               NameValue('status', 'Closed', d),
+               NameValue('date_opened', '2018-11-01', d),
+               NameValue('date_closed', '2019-05-28', d)]),
     ]
 
-    proj_not_entitled = Project('uuid1', entries2, child_parent_graph)
-    fields = table.rows(proj_not_entitled)
+    proj = Project('uuid1', entries2, child_parent_graph)
+    fields = table.rows(proj)
     status_rows = _get_values_for_status(table, fields)
+    # Status looking at closed
     assert len(status_rows) == 2
-    assert status_rows[0].top_level_status == 'pre-development'
-    assert status_rows[0].start_date == '2018-10-18'
-    assert status_rows[0].end_date == '2018-11-25'
-    assert status_rows[1].top_level_status == 'filed_for_entitlements'
-    assert status_rows[1].start_date == '2018-11-25'
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
+    assert status_rows[0].start_date == '2018-11-25'
+    assert status_rows[0].end_date == '2019-04-15'
+    assert status_rows[1].top_level_status == 'entitled'
+    assert status_rows[1].start_date == '2019-04-15'
     assert status_rows[1].end_date == ''
 
     entries3 = [
         Entry('1',
               Planning.NAME,
               [NameValue('record_type', 'PRJ', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '2018-11-18', d)]),
+        # ENT is still open, project is not entitlded
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '2018-11-25', d)]),
+        Entry('3',
+              Planning.NAME,
+              [NameValue('record_type', 'VAR', d),
+               NameValue('status', 'Closed - XYZ', d),
+               NameValue('date_opened', '2018-11-28', d),
+               NameValue('date_closed', '2019-04-15', d)]),
+        Entry('4',
+              Planning.NAME,
+              [NameValue('record_type', 'PPA', d),
+               NameValue('date_opened', '2018-10-18', d),
+               NameValue('date_closed', '2019-01-01', d)]),
+    ]
+
+    proj_not_entitled = Project('uuid1', entries3, child_parent_graph)
+    fields = table.rows(proj_not_entitled)
+    status_rows = _get_values_for_status(table, fields)
+    assert len(status_rows) == 1
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
+    assert status_rows[0].start_date == '2018-11-25'
+    assert status_rows[0].end_date == ''
+
+    entries4 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
                NameValue('status', 'Closed', d),
-               NameValue('date_opened', '18-NOV-18', d),
-               NameValue('date_closed', '15-APR-19', d)]),
+               NameValue('date_opened', '2018-11-18', d),
+               NameValue('date_closed', '2019-04-15', d)]),
         Entry('2',
               Planning.NAME,
               [NameValue('record_type', 'VAR', d),
                NameValue('status', 'Closed - XYZ', d),
-               NameValue('date_opened', '28-NOV-18', d)]),
+               NameValue('date_opened', '2018-11-28', d)]),
     ]
 
-    proj_prj_closed = Project('uuid1', entries3, child_parent_graph)
+    proj_prj_closed = Project('uuid1', entries4, child_parent_graph)
     fields = table.rows(proj_prj_closed)
     status_rows = _get_values_for_status(table, fields)
     assert len(status_rows) == 2
-    assert status_rows[0].top_level_status == 'filed_for_entitlements'
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
     assert status_rows[0].start_date == '2018-11-28'
     assert status_rows[0].end_date == '2019-04-15'
     assert status_rows[1].top_level_status == 'entitled'
     assert status_rows[1].start_date == '2019-04-15'
     assert status_rows[1].end_date == ''
+
+
+def test_project_status_history_filed_for_permits(child_parent_graph, d):
+    table = ProjectStatusHistory()
+
+    entries1 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '2018-11-18', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('status', 'Closed - CEQA', d),
+               NameValue('date_opened', '2018-11-25', d),
+               NameValue('date_closed', '2019-03-03', d)]),
+        Entry('3',
+              Planning.NAME,
+              [NameValue('record_type', 'VAR', d),
+               NameValue('status', 'Closed - XYZ', d),
+               NameValue('date_opened', '2018-11-28', d),
+               NameValue('date_closed', '2019-04-15', d)]),
+        Entry('4',
+              PTS.NAME,
+              [NameValue('permit_number', 'abc', d),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/02/2019', d)]),
+        Entry('5',
+              PTS.NAME,
+              [NameValue('permit_number', 'xyz', d),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/10/2019', d)]),
+    ]
+
+    proj = Project('uuid1', entries1, child_parent_graph)
+    fields = table.rows(proj)
+    status_rows = _get_values_for_status(table, fields)
+    # Use the earliest filed date for filed for permits status
+    assert len(status_rows) == 3
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
+    assert status_rows[0].start_date == '2018-11-25'
+    assert status_rows[0].end_date == '2019-04-15'
+    assert status_rows[1].top_level_status == 'entitled'
+    assert status_rows[1].start_date == '2019-04-15'
+    assert status_rows[1].end_date == '2019-06-02'
+    assert status_rows[2].top_level_status == 'filed_for_permits'
+    assert status_rows[2].start_date == '2019-06-02'
+    assert status_rows[2].end_date == ''
+
+    entries2 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '2018-11-18', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('status', 'Closed - CEQA', d),
+               NameValue('date_opened', '2018-11-25', d),
+               NameValue('date_closed', '2019-03-27', d)]),
+        Entry('3',
+              Planning.NAME,
+              [NameValue('record_type', 'VAR', d),
+               NameValue('status', 'Closed - XYZ', d),
+               NameValue('date_opened', '2018-11-28', d),
+               NameValue('date_closed', '2019-04-15', d)]),
+        Entry('4',
+              PTS.NAME,
+              [NameValue('permit_number', 'abc', d),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '01/10/2019', d)]),
+        Entry('5',
+              PTS.NAME,
+              [NameValue('permit_number', 'xyz', d),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/10/2019', d)]),
+    ]
+
+    proj = Project('uuid1', entries2, child_parent_graph)
+    fields = table.rows(proj)
+    status_rows = _get_values_for_status(table, fields)
+    # If earliest filed date is before the entitled date, make the
+    # entitled date equivalent to filed date (no maintain sequentiality)
+    assert len(status_rows) == 3
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
+    assert status_rows[0].start_date == '2018-11-25'
+    assert status_rows[0].end_date == '2019-04-15'
+    assert status_rows[1].top_level_status == 'entitled'
+    assert status_rows[1].start_date == '2019-04-15'
+    assert status_rows[1].end_date == '2019-04-15'
+    assert status_rows[2].top_level_status == 'filed_for_permits'
+    assert status_rows[2].start_date == '2019-04-15'
+    assert status_rows[2].end_date == ''
+
+
+def test_project_status_history_under_construction(child_parent_graph, d):
+    table = ProjectStatusHistory()
+
+    entries1 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '2018-11-18', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('status', 'Closed - CEQA', d),
+               NameValue('date_opened', '2018-11-25', d),
+               NameValue('date_closed', '2019-03-27', d)]),
+        Entry('3',
+              Planning.NAME,
+              [NameValue('record_type', 'VAR', d),
+               NameValue('status', 'Closed - XYZ', d),
+               NameValue('date_opened', '2018-11-28', d),
+               NameValue('date_closed', '2019-04-15', d)]),
+        Entry('4',
+              PTS.NAME,
+              [NameValue('permit_number', 'abc', d),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/02/2019', d)]),
+        Entry('5',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'xyz', d),
+               NameValue('current_status', 'issued', d),
+               NameValue('proposed_units', '7', d),
+               NameValue('first_construction_document_date',
+               '10/10/2019', d)]),
+        Entry('6',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'abcd', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('proposed_units', '7', d),
+               NameValue('first_construction_document_date',
+               '11/11/2019', d)]),
+    ]
+
+    proj = Project('uuid1', entries1, child_parent_graph)
+    fields = table.rows(proj)
+    status_rows = _get_values_for_status(table, fields)
+    # Use the earliest first construction document date for under
+    # construction status
+    assert len(status_rows) == 4
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
+    assert status_rows[0].start_date == '2018-11-25'
+    assert status_rows[0].end_date == '2019-04-15'
+    assert status_rows[1].top_level_status == 'entitled'
+    assert status_rows[1].start_date == '2019-04-15'
+    assert status_rows[1].end_date == '2019-06-02'
+    assert status_rows[2].top_level_status == 'filed_for_permits'
+    assert status_rows[2].start_date == '2019-06-02'
+    assert status_rows[2].end_date == '2019-10-10'
+    assert status_rows[3].top_level_status == 'under_construction'
+    assert status_rows[3].start_date == '2019-10-10'
+    assert status_rows[3].end_date == ''
+
+
+def test_project_status_history_completed_construction(child_parent_graph, d):
+    table = ProjectStatusHistory()
+
+    entries1 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '2018-11-18', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('status', 'Closed - CEQA', d),
+               NameValue('date_opened', '2018-11-25', d),
+               NameValue('date_closed', '2019-03-27', d)]),
+        Entry('3',
+              Planning.NAME,
+              [NameValue('record_type', 'VAR', d),
+               NameValue('status', 'Closed - XYZ', d),
+               NameValue('date_opened', '2018-11-28', d),
+               NameValue('date_closed', '2019-04-15', d)]),
+        Entry('4',
+              PTS.NAME,
+              [NameValue('permit_number', 'abc', d),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/02/2019', d)]),
+        Entry('5',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'xyz', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('proposed_units', '7', d),
+               NameValue('first_construction_document_date',
+               '11/11/2019', d)]),
+        Entry('6',
+              TCO.NAME,
+              [NameValue('building_permit_type', 'CFC', d),
+               NameValue('num_units', '7', d),
+               NameValue('date_issued', '2020/01/15', d)]),
+    ]
+
+    proj = Project('uuid1', entries1, child_parent_graph)
+    fields = table.rows(proj)
+    status_rows = _get_values_for_status(table, fields)
+    # If a project has been CFC'ed then it is complete
+    assert len(status_rows) == 5
+    assert status_rows[0].top_level_status == 'under_entitlement_review'
+    assert status_rows[0].start_date == '2018-11-25'
+    assert status_rows[0].end_date == '2019-04-15'
+    assert status_rows[1].top_level_status == 'entitled'
+    assert status_rows[1].start_date == '2019-04-15'
+    assert status_rows[1].end_date == '2019-06-02'
+    assert status_rows[2].top_level_status == 'filed_for_permits'
+    assert status_rows[2].start_date == '2019-06-02'
+    assert status_rows[2].end_date == '2019-11-11'
+    assert status_rows[3].top_level_status == 'under_construction'
+    assert status_rows[3].start_date == '2019-11-11'
+    assert status_rows[3].end_date == '2020-01-15'
+    assert status_rows[4].top_level_status == 'completed_construction'
+    assert status_rows[4].start_date == '2020-01-15'
+    assert status_rows[4].end_date == ''
+
+    entries2 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '2018-11-18', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('status', 'Closed - CEQA', d),
+               NameValue('date_opened', '2018-11-25', d),
+               NameValue('date_closed', '2019-03-27', d)]),
+        Entry('3',
+              Planning.NAME,
+              [NameValue('record_type', 'VAR', d),
+               NameValue('status', 'Closed - XYZ', d),
+               NameValue('date_opened', '2018-11-28', d),
+               NameValue('date_closed', '2019-04-15', d)]),
+        Entry('4',
+              PTS.NAME,
+              [NameValue('permit_number', 'abc', d),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '02/06/2019', d)]),
+        Entry('5',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'xyz', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('proposed_units', '7', d),
+               NameValue('first_construction_document_date',
+               '11/11/2019', d)]),
+        Entry('6',
+              TCO.NAME,
+              [NameValue('building_permit_type', 'TCO', d),
+               NameValue('num_units', '4', d),
+               NameValue('date_issued', '2020/01/15', d)]),
+        Entry('7',
+              TCO.NAME,
+              [NameValue('building_permit_type', 'TCO', d),
+               NameValue('num_units', '3', d),
+               NameValue('date_issued', '2020/01/30', d)]),
+    ]
+
+    proj = Project('uuid1', entries2, child_parent_graph)
+    fields = table.rows(proj)
+    status_rows = _get_values_for_status(table, fields)
+    # Add up all the TCO'ed units and check if that is equivalent
+    # to all of the project units
+    assert len(status_rows) == 5
+    assert status_rows[4].top_level_status == 'completed_construction'
+    assert status_rows[4].start_date == '2020-01-30'
+    assert status_rows[4].end_date == ''
+
+    entries3 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '2018-11-18', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('status', 'Closed - CEQA', d),
+               NameValue('date_opened', '2018-11-25', d),
+               NameValue('date_closed', '2019-03-27', d)]),
+        Entry('3',
+              Planning.NAME,
+              [NameValue('record_type', 'VAR', d),
+               NameValue('status', 'Closed - XYZ', d),
+               NameValue('date_opened', '2018-11-28', d),
+               NameValue('date_closed', '2019-04-15', d)]),
+        Entry('4',
+              PermitAddendaSummary.NAME,
+              [NameValue('permit_number', 'abc', d),
+               NameValue('earliest_addenda_arrival', '2019-06-02', d)]),
+        Entry('5',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'abc', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('proposed_units', '7', d),
+               NameValue('filed_date', '06/02/2019', d),
+               NameValue('completed_date', '2/1/2020', d),
+               NameValue('first_construction_document_date',
+               '11/11/2019', d)]),
+        Entry('6',
+              TCO.NAME,
+              [NameValue('building_permit_type', 'TCO', d),
+               NameValue('num_units', '4', d),
+               NameValue('date_issued', '2020/01/15', d)]),
+        Entry('7',
+              TCO.NAME,
+              [NameValue('building_permit_type', 'TCO', d),
+               NameValue('num_units', '2', d),
+               NameValue('date_issued', '2020/01/30', d)]),
+        Entry('8',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'xyz', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('proposed_units', '7', d),
+               NameValue('completed_date', '2/10/2020', d)]),
+    ]
+
+    proj = Project('uuid1', entries3, child_parent_graph)
+    fields = table.rows(proj)
+    status_rows = _get_values_for_status(table, fields)
+    # If the permits in PTS are all closed use the latest completed date
+    assert len(status_rows) == 5
+    assert status_rows[4].top_level_status == 'completed_construction'
+    assert status_rows[4].start_date == '2020-02-10'
+    assert status_rows[4].end_date == ''
+
+    entries4 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '2018-11-18', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('status', 'Closed - CEQA', d),
+               NameValue('date_opened', '2018-11-25', d),
+               NameValue('date_closed', '2019-03-27', d)]),
+        Entry('3',
+              Planning.NAME,
+              [NameValue('record_type', 'VAR', d),
+               NameValue('status', 'Closed - XYZ', d),
+               NameValue('date_opened', '2018-11-28', d),
+               NameValue('date_closed', '2019-04-15', d)]),
+        Entry('4',
+              PTS.NAME,
+              [NameValue('permit_number', 'abc', d),
+               NameValue('permit_type', '1', d),
+               NameValue('filed_date', '06/02/2019', d)]),
+        Entry('5',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'abc', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('proposed_units', '7', d),
+               NameValue('completed_date', '2/1/2020', d),
+               NameValue('first_construction_document_date',
+               '11/11/2019', d)]),
+        Entry('6',
+              TCO.NAME,
+              [NameValue('building_permit_type', 'TCO', d),
+               NameValue('num_units', '4', d),
+               NameValue('date_issued', '2020/01/15', d)]),
+        Entry('8',
+              PTS.NAME,
+              [NameValue('permit_type', '2', d),
+               NameValue('permit_number', 'xyz', d),
+               NameValue('current_status', 'issued', d),
+               NameValue('proposed_units', '2', d)]),
+        Entry('8',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'abcd', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('proposed_units', '2', d),
+               NameValue('completed_date', '2/10/2020', d)]),
+    ]
+
+    proj = Project('uuid1', entries4, child_parent_graph)
+    fields = table.rows(proj)
+    status_rows = _get_values_for_status(table, fields)
+    # If a permit in PTS is still open then it is not completed
+    assert len(status_rows) == 4
