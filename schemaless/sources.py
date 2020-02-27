@@ -6,6 +6,7 @@ from datetime import datetime
 from fileutils import open_file
 import logging
 
+import schemaless.mapblklot_generator as mapblklot_gen
 from scourgify.exceptions import AddressNormalizationError
 from scourgify.normalize import format_address_record
 from scourgify.normalize import normalize_address_record
@@ -77,6 +78,38 @@ class Date(Field):
 
     def get_value_str(self, record):
         return self.get_value(record).isoformat()
+
+
+class Mapblklot(Field):
+    def __init__(self, block=None, lot=None, blklot=None, mapblklot=None):
+        self.block = block
+        self.lot = lot
+        self.blklot = blklot
+        self.mapblklot = mapblklot
+
+    def get_value(self, record):
+        if self.mapblklot:
+            return record[self.mapblklot]
+
+        mapblklot_generator = \
+            mapblklot_gen.MapblklotGeneratorSingleton.get_instance()
+        if mapblklot_generator:
+            if self.blklot:
+                return mapblklot_generator.find_mapblklot_for_blklot(
+                    record[self.blklot])
+            if self.block and self.lot:
+                return mapblklot_generator.find_mapblklot_for_blklot(
+                    record[self.block] + record[self.lot])
+        else:
+            raise MapblklotException(
+                "MapblklotGeneratorSingleton is not instantiated. Please instantiate \
+                by calling schemaless.mapblklot_generator.init(filepath) in \
+                top-level script environment")
+        return None
+
+
+class MapblklotException(Exception):
+    pass
 
 
 class Address(Field):
@@ -394,6 +427,7 @@ class PTS(DirectSource):
             'unit_suffix',
             'zipcode',
         ),
+        'mapblklot': Mapblklot('block', 'lot'),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9"  # NOQA
 

@@ -1,7 +1,7 @@
 # Lint as: python3
 """Convert departmental data files into a schemaless csv.
 
-If you run this with a PPTS and PTS file specified, it will
+If you run this with a Planning and PTS file specified, it will
 dump those into a schemaless csv. If you provide the files
 and also set the --diff flag, it will diff against an existing
 schemaless csv.
@@ -15,6 +15,7 @@ from datetime import datetime
 import shutil
 import sys
 
+import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
@@ -121,11 +122,16 @@ if __name__ == "__main__":
         help=('Date this script was run, optional, defaults to today. '
               'YYYY-MM-DD'),
         default='')
+    parser.add_argument('--parcel_data_file')
     args = parser.parse_args()
 
     the_date = None
     if args.the_date:
         the_date = datetime.strptime(args.the_date, "%Y-%m-%d").date()
+
+    if args.parcel_data_file:
+        mapblklot_gen.init(args.parcel_data_file)
+
     sources = []
     if args.planning_file:
         sources.append(Planning(args.planning_file))

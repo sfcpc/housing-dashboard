@@ -1303,6 +1303,54 @@ planning_2017-015112PRL,planning,2020-01-29,planner_last_name,Botn
 planning_2017-015112PRL,planning,2020-01-29,planner_email,kurt.botn@sfgov.org
 planning_2017-015112PRL,planning,2020-01-29,planner_phone,415-575-9192
 planning_2017-015112PRL,planning,2020-01-29,description,Replace street facing windows with double hung wood windows with true divided light patterns. No other work.
+planning_2017-016045PRJ,planning,2020-01-29,record_id,2017-016045PRJ
+planning_2017-016045PRJ,planning,2020-01-29,record_type,PRJ
+planning_2017-016045PRJ,planning,2020-01-29,status,Under Review
+planning_2017-016045PRJ,planning,2020-01-29,class,COMPLETE
+planning_2017-016045PRJ,planning,2020-01-29,block,6501
+planning_2017-016045PRJ,planning,2020-01-29,lot,061
+planning_2017-016045PRJ,planning,2020-01-29,mapblocklot,6501061
+planning_2017-016045PRJ,planning,2020-01-29,date_opened,15-DEC-17
+planning_2017-016045PRJ,planning,2020-01-29,name,24 FOUNTAIN ST
+planning_2017-016045PRJ,planning,2020-01-29,address,24 FOUNTAIN ST 94114
+planning_2017-016045PRJ,planning,2020-01-29,supervisor_district,8
+planning_2017-016045PRJ,planning,2020-01-29,building_permits,201712085886
+planning_2017-016045PRJ,planning,2020-01-29,number_of_units,2
+planning_2017-016045PRJ,planning,2020-01-29,number_of_market_rate_units,2
+planning_2017-016045PRJ,planning,2020-01-29,number_of_affordable_units,0
+planning_2017-016045PRJ,planning,2020-01-29,developer_name,"Pashelingky, William"
+planning_2017-016045PRJ,planning,2020-01-29,assigned_to_planner,Linda Ajello Hoagland
+planning_2017-016045PRJ,planning,2020-01-29,planner_first_name,Linda
+planning_2017-016045PRJ,planning,2020-01-29,planner_last_name,Ajello Hoagland
+planning_2017-016045PRJ,planning,2020-01-29,planner_email,Linda.AjelloHoagland@sfgov.org
+planning_2017-016045PRJ,planning,2020-01-29,planner_phone,415-575-6823
+planning_2017-016045PRJ,planning,2020-01-29,description,"TO ERECT 4 STORIES, 1 BASEMENT, TYPE V-A, 2 UNITS RESIDENTIAL BUILDING."
+planning_2017-016045PRJ,planning,2020-01-29,new_construction,CHECKED
+planning_2017-016047PRJ,planning,2020-01-29,record_id,2017-016047PRJ
+planning_2017-016047PRJ,planning,2020-01-29,record_type,PRJ
+planning_2017-016047PRJ,planning,2020-01-29,status,Under Review
+planning_2017-016047PRJ,planning,2020-01-29,class,COMPLETE
+planning_2017-016047PRJ,planning,2020-01-29,block,6501
+planning_2017-016047PRJ,planning,2020-01-29,lot,061
+planning_2017-016047PRJ,planning,2020-01-29,mapblocklot,6501061
+planning_2017-016047PRJ,planning,2020-01-29,date_opened,15-DEC-17
+planning_2017-016047PRJ,planning,2020-01-29,name,20 FOUNTAIN ST
+planning_2017-016047PRJ,planning,2020-01-29,address,20 FOUNTAIN ST 94114
+planning_2017-016047PRJ,planning,2020-01-29,supervisor_district,8
+planning_2017-016047PRJ,planning,2020-01-29,building_permits,201712085886
+planning_2017-016047PRJ,planning,2020-01-29,number_of_units,2
+planning_2017-016047PRJ,planning,2020-01-29,number_of_market_rate_units,2
+planning_2017-016047PRJ,planning,2020-01-29,number_of_affordable_units,0
+planning_2017-016047PRJ,planning,2020-01-29,developer_name,"Pashelinsky, William"
+planning_2017-016047PRJ,planning,2020-01-29,assigned_to_planner,Linda Ajello Hoagland
+planning_2017-016047PRJ,planning,2020-01-29,planner_first_name,Linda
+planning_2017-016047PRJ,planning,2020-01-29,planner_last_name,Ajello Hoagland
+planning_2017-016047PRJ,planning,2020-01-29,planner_email,Linda.AjelloHoagland@sfgov.org
+planning_2017-016047PRJ,planning,2020-01-29,planner_phone,415-575-6823
+planning_2017-016047PRJ,planning,2020-01-29,description,"TO ERECT 4 STORIES, 1 BASEMENT, TYPE V-A, 2 UNITS RESIDENTIAL BUILDING."
+planning_2017-016047PRJ,planning,2020-01-29,date_plan_check_letter_issued,10/30/2018
+planning_2017-016047PRJ,planning,2020-01-29,date_project_desc_stable,02/16/2018
+planning_2017-016047PRJ,planning,2020-01-29,new_construction,CHECKED
 planning_2017-016475ENF,planning,2020-01-29,record_id,2017-016475ENF
 planning_2017-016475ENF,planning,2020-01-29,record_type,ENF
 planning_2017-016475ENF,planning,2020-01-29,status,Closed - Informational
@@ -38169,6 +38217,82 @@ pts_148984163329,pts,2020-01-29,supervisor_district,3
 pts_148984163329,pts,2020-01-29,zipcode,94111
 pts_148984163329,pts,2020-01-29,location,"(37.79397080047016, -122.4026249712659)"
 pts_148984163329,pts,2020-01-29,record_id,148984163329
+pts_1489855510068,pts,2020-01-29,permit_number,201712085881
+pts_1489855510068,pts,2020-01-29,permit_type,2
+pts_1489855510068,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1489855510068,pts,2020-01-29,permit_creation_date,12/08/2017
+pts_1489855510068,pts,2020-01-29,block,6501
+pts_1489855510068,pts,2020-01-29,lot,061
+pts_1489855510068,pts,2020-01-29,street_number,24
+pts_1489855510068,pts,2020-01-29,street_name,Fountain
+pts_1489855510068,pts,2020-01-29,current_status,filed
+pts_1489855510068,pts,2020-01-29,current_status_date,12/08/2017
+pts_1489855510068,pts,2020-01-29,filed_date,12/08/2017
+pts_1489855510068,pts,2020-01-29,proposed_use,2 family dwelling
+pts_1489855510068,pts,2020-01-29,proposed_units,2
+pts_1489855510068,pts,2020-01-29,proposed_construction_type,5
+pts_1489855510068,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489855510068,pts,2020-01-29,supervisor_district,8
+pts_1489855510068,pts,2020-01-29,zipcode,94114
+pts_1489855510068,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
+pts_1489855510068,pts,2020-01-29,record_id,1489855510068
+pts_1489856510067,pts,2020-01-29,permit_number,201712085881
+pts_1489856510067,pts,2020-01-29,permit_type,2
+pts_1489856510067,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1489856510067,pts,2020-01-29,permit_creation_date,12/08/2017
+pts_1489856510067,pts,2020-01-29,block,6501
+pts_1489856510067,pts,2020-01-29,lot,061
+pts_1489856510067,pts,2020-01-29,street_number,26
+pts_1489856510067,pts,2020-01-29,street_name,Fountain
+pts_1489856510067,pts,2020-01-29,current_status,filed
+pts_1489856510067,pts,2020-01-29,current_status_date,12/08/2017
+pts_1489856510067,pts,2020-01-29,filed_date,12/08/2017
+pts_1489856510067,pts,2020-01-29,proposed_use,2 family dwelling
+pts_1489856510067,pts,2020-01-29,proposed_units,2
+pts_1489856510067,pts,2020-01-29,proposed_construction_type,5
+pts_1489856510067,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489856510067,pts,2020-01-29,supervisor_district,8
+pts_1489856510067,pts,2020-01-29,zipcode,94114
+pts_1489856510067,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
+pts_1489856510067,pts,2020-01-29,record_id,1489856510067
+pts_1489866510069,pts,2020-01-29,permit_number,201712085886
+pts_1489866510069,pts,2020-01-29,permit_type,2
+pts_1489866510069,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1489866510069,pts,2020-01-29,permit_creation_date,12/08/2017
+pts_1489866510069,pts,2020-01-29,block,6501
+pts_1489866510069,pts,2020-01-29,lot,061
+pts_1489866510069,pts,2020-01-29,street_number,20
+pts_1489866510069,pts,2020-01-29,street_name,Fountain
+pts_1489866510069,pts,2020-01-29,current_status,filed
+pts_1489866510069,pts,2020-01-29,current_status_date,12/08/2017
+pts_1489866510069,pts,2020-01-29,filed_date,12/08/2017
+pts_1489866510069,pts,2020-01-29,proposed_use,2 family dwelling
+pts_1489866510069,pts,2020-01-29,proposed_units,2
+pts_1489866510069,pts,2020-01-29,proposed_construction_type,5
+pts_1489866510069,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489866510069,pts,2020-01-29,supervisor_district,8
+pts_1489866510069,pts,2020-01-29,zipcode,94114
+pts_1489866510069,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
+pts_1489866510069,pts,2020-01-29,record_id,1489866510069
+pts_1489867205291,pts,2020-01-29,permit_number,201712085886
+pts_1489867205291,pts,2020-01-29,permit_type,2
+pts_1489867205291,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1489867205291,pts,2020-01-29,permit_creation_date,12/08/2017
+pts_1489867205291,pts,2020-01-29,block,6501
+pts_1489867205291,pts,2020-01-29,lot,061
+pts_1489867205291,pts,2020-01-29,street_number,22
+pts_1489867205291,pts,2020-01-29,street_name,Fountain
+pts_1489867205291,pts,2020-01-29,current_status,filed
+pts_1489867205291,pts,2020-01-29,current_status_date,12/08/2017
+pts_1489867205291,pts,2020-01-29,filed_date,12/08/2017
+pts_1489867205291,pts,2020-01-29,proposed_use,2 family dwelling
+pts_1489867205291,pts,2020-01-29,proposed_units,2
+pts_1489867205291,pts,2020-01-29,proposed_construction_type,5
+pts_1489867205291,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489867205291,pts,2020-01-29,supervisor_district,8
+pts_1489867205291,pts,2020-01-29,zipcode,94114
+pts_1489867205291,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
+pts_1489867205291,pts,2020-01-29,record_id,1489867205291
 pts_1490433232935,pts,2020-01-29,permit_number,M866087
 pts_1490433232935,pts,2020-01-29,permit_type,8
 pts_1490433232935,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -51613,6 +51737,139 @@ pts_1572623371116,pts,2020-01-29,supervisor_district,3
 pts_1572623371116,pts,2020-01-29,zipcode,94104
 pts_1572623371116,pts,2020-01-29,location,"(37.79323391658362, -122.40366760544659)"
 pts_1572623371116,pts,2020-01-29,record_id,1572623371116
+pts_1572972516074,pts,2020-01-29,permit_number,201910225142
+pts_1572972516074,pts,2020-01-29,permit_type,2
+pts_1572972516074,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1572972516074,pts,2020-01-29,permit_creation_date,10/22/2019
+pts_1572972516074,pts,2020-01-29,block,4624
+pts_1572972516074,pts,2020-01-29,lot,023
+pts_1572972516074,pts,2020-01-29,street_number,200
+pts_1572972516074,pts,2020-01-29,street_name,Acacia
+pts_1572972516074,pts,2020-01-29,current_status,filed
+pts_1572972516074,pts,2020-01-29,current_status_date,10/22/2019
+pts_1572972516074,pts,2020-01-29,filed_date,10/22/2019
+pts_1572972516074,pts,2020-01-29,proposed_use,apartments
+pts_1572972516074,pts,2020-01-29,proposed_units,4
+pts_1572972516074,pts,2020-01-29,proposed_construction_type,5
+pts_1572972516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1572972516074,pts,2020-01-29,supervisor_district,10
+pts_1572972516074,pts,2020-01-29,zipcode,94124
+pts_1572972516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
+pts_1572972516074,pts,2020-01-29,record_id,1572972516074
+pts_1572988516074,pts,2020-01-29,permit_number,201910225150
+pts_1572988516074,pts,2020-01-29,permit_type,2
+pts_1572988516074,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1572988516074,pts,2020-01-29,permit_creation_date,10/22/2019
+pts_1572988516074,pts,2020-01-29,block,4624
+pts_1572988516074,pts,2020-01-29,lot,023
+pts_1572988516074,pts,2020-01-29,street_number,200
+pts_1572988516074,pts,2020-01-29,street_name,Acacia
+pts_1572988516074,pts,2020-01-29,current_status,filed
+pts_1572988516074,pts,2020-01-29,current_status_date,10/22/2019
+pts_1572988516074,pts,2020-01-29,filed_date,10/22/2019
+pts_1572988516074,pts,2020-01-29,proposed_use,apartments
+pts_1572988516074,pts,2020-01-29,proposed_units,4
+pts_1572988516074,pts,2020-01-29,proposed_construction_type,5
+pts_1572988516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1572988516074,pts,2020-01-29,supervisor_district,10
+pts_1572988516074,pts,2020-01-29,zipcode,94124
+pts_1572988516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
+pts_1572988516074,pts,2020-01-29,record_id,1572988516074
+pts_1572991516074,pts,2020-01-29,permit_number,201910225151
+pts_1572991516074,pts,2020-01-29,permit_type,2
+pts_1572991516074,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1572991516074,pts,2020-01-29,permit_creation_date,10/22/2019
+pts_1572991516074,pts,2020-01-29,block,4624
+pts_1572991516074,pts,2020-01-29,lot,023
+pts_1572991516074,pts,2020-01-29,street_number,200
+pts_1572991516074,pts,2020-01-29,street_name,Acacia
+pts_1572991516074,pts,2020-01-29,current_status,filed
+pts_1572991516074,pts,2020-01-29,current_status_date,10/22/2019
+pts_1572991516074,pts,2020-01-29,filed_date,10/22/2019
+pts_1572991516074,pts,2020-01-29,proposed_use,apartments
+pts_1572991516074,pts,2020-01-29,proposed_units,4
+pts_1572991516074,pts,2020-01-29,proposed_construction_type,5
+pts_1572991516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1572991516074,pts,2020-01-29,supervisor_district,10
+pts_1572991516074,pts,2020-01-29,zipcode,94124
+pts_1572991516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
+pts_1572991516074,pts,2020-01-29,record_id,1572991516074
+pts_1572992516074,pts,2020-01-29,permit_number,201910225152
+pts_1572992516074,pts,2020-01-29,permit_type,2
+pts_1572992516074,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1572992516074,pts,2020-01-29,permit_creation_date,10/22/2019
+pts_1572992516074,pts,2020-01-29,block,4624
+pts_1572992516074,pts,2020-01-29,lot,023
+pts_1572992516074,pts,2020-01-29,street_number,200
+pts_1572992516074,pts,2020-01-29,street_name,Acacia
+pts_1572992516074,pts,2020-01-29,current_status,filed
+pts_1572992516074,pts,2020-01-29,current_status_date,10/22/2019
+pts_1572992516074,pts,2020-01-29,filed_date,10/22/2019
+pts_1572992516074,pts,2020-01-29,proposed_use,apartments
+pts_1572992516074,pts,2020-01-29,proposed_units,6
+pts_1572992516074,pts,2020-01-29,proposed_construction_type,5
+pts_1572992516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1572992516074,pts,2020-01-29,supervisor_district,10
+pts_1572992516074,pts,2020-01-29,zipcode,94124
+pts_1572992516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
+pts_1572992516074,pts,2020-01-29,record_id,1572992516074
+pts_1572996516074,pts,2020-01-29,permit_number,201910225153
+pts_1572996516074,pts,2020-01-29,permit_type,2
+pts_1572996516074,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1572996516074,pts,2020-01-29,permit_creation_date,10/22/2019
+pts_1572996516074,pts,2020-01-29,block,4624
+pts_1572996516074,pts,2020-01-29,lot,023
+pts_1572996516074,pts,2020-01-29,street_number,200
+pts_1572996516074,pts,2020-01-29,street_name,Acacia
+pts_1572996516074,pts,2020-01-29,current_status,filed
+pts_1572996516074,pts,2020-01-29,current_status_date,10/22/2019
+pts_1572996516074,pts,2020-01-29,filed_date,10/22/2019
+pts_1572996516074,pts,2020-01-29,proposed_use,apartments
+pts_1572996516074,pts,2020-01-29,proposed_units,4
+pts_1572996516074,pts,2020-01-29,proposed_construction_type,5
+pts_1572996516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1572996516074,pts,2020-01-29,supervisor_district,10
+pts_1572996516074,pts,2020-01-29,zipcode,94124
+pts_1572996516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
+pts_1572996516074,pts,2020-01-29,record_id,1572996516074
+pts_1573002516074,pts,2020-01-29,permit_number,201910225154
+pts_1573002516074,pts,2020-01-29,permit_type,2
+pts_1573002516074,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1573002516074,pts,2020-01-29,permit_creation_date,10/22/2019
+pts_1573002516074,pts,2020-01-29,block,4624
+pts_1573002516074,pts,2020-01-29,lot,023
+pts_1573002516074,pts,2020-01-29,street_number,200
+pts_1573002516074,pts,2020-01-29,street_name,Acacia
+pts_1573002516074,pts,2020-01-29,current_status,filed
+pts_1573002516074,pts,2020-01-29,current_status_date,10/22/2019
+pts_1573002516074,pts,2020-01-29,filed_date,10/22/2019
+pts_1573002516074,pts,2020-01-29,proposed_use,apartments
+pts_1573002516074,pts,2020-01-29,proposed_units,4
+pts_1573002516074,pts,2020-01-29,proposed_construction_type,5
+pts_1573002516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1573002516074,pts,2020-01-29,supervisor_district,10
+pts_1573002516074,pts,2020-01-29,zipcode,94124
+pts_1573002516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
+pts_1573002516074,pts,2020-01-29,record_id,1573002516074
+pts_1573004516074,pts,2020-01-29,permit_number,201910225155
+pts_1573004516074,pts,2020-01-29,permit_type,2
+pts_1573004516074,pts,2020-01-29,permit_type_definition,new construction wood frame
+pts_1573004516074,pts,2020-01-29,permit_creation_date,10/22/2019
+pts_1573004516074,pts,2020-01-29,block,4624
+pts_1573004516074,pts,2020-01-29,lot,023
+pts_1573004516074,pts,2020-01-29,street_number,200
+pts_1573004516074,pts,2020-01-29,street_name,Acacia
+pts_1573004516074,pts,2020-01-29,current_status,filed
+pts_1573004516074,pts,2020-01-29,current_status_date,10/22/2019
+pts_1573004516074,pts,2020-01-29,filed_date,10/22/2019
+pts_1573004516074,pts,2020-01-29,proposed_use,apartments
+pts_1573004516074,pts,2020-01-29,proposed_units,8
+pts_1573004516074,pts,2020-01-29,proposed_construction_type,5
+pts_1573004516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1573004516074,pts,2020-01-29,supervisor_district,10
+pts_1573004516074,pts,2020-01-29,zipcode,94124
+pts_1573004516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
+pts_1573004516074,pts,2020-01-29,record_id,1573004516074
 pts_157309476979,pts,2020-01-29,permit_number,M1156547
 pts_157309476979,pts,2020-01-29,permit_type,8
 pts_157309476979,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -56305,6 +56562,7 @@ planning_2016-001514PRJ,planning,2020-01-29,building_permits,"201609218371, 2018
 planning_2017-011288EEC,planning,2020-01-29,description,SE Quadrant - Installation is to fulfill capacity objectives caused by the rapid increased usage of wireless data and technology in the City Adjacent to: 314 11th St; 105 Berry St; 345 6th St; 429 Beale St; 1695 Palou Ave; 1600 Newcomb Ave; 360 4th St; 164 Townsend St; 1401 Palou Ave; 3200 24th St; 2558 24th St; 1106 Wisconsin St; 1720 26th St; 1021 Minnesota St; 3566 19th St; 2013 Folsom St; 2535 18th St; 1750 Harrison St; 335 South Van Ness Ave; 70 Otis St; 1717 Harrison St; 275 9th St;
 planning_2017-011288ENV,planning,2020-01-29,description,SE Quadrant - Installation is to fulfill capacity objectives caused by the rapid increased usage of wireless data and technology in the City Adjacent to: 314 11th St; 105 Berry St; 345 6th St; 429 Beale St; 1695 Palou Ave; 1600 Newcomb Ave; 360 4th St; 164 Townsend St; 1401 Palou Ave; 3200 24th St; 2558 24th St; 1106 Wisconsin St; 1720 26th St; 1021 Minnesota St; 3566 19th St; 2013 Folsom St; 2535 18th St; 1750 Harrison St; 335 South Van Ness Ave; 70 Otis St; 1717 Harrison St; 275 9th St;
 planning_2017-011288PRJ,planning,2020-01-29,description,SE Quadrant - Installation is to fulfill capacity objectives caused by the rapid increased usage of wireless data and technology in the City Adjacent to: 314 11th St; 105 Berry St; 345 6th St; 429 Beale St; 1695 Palou Ave; 1600 Newcomb Ave; 360 4th St; 164 Townsend St; 1401 Palou Ave; 3200 24th St; 2558 24th St; 1106 Wisconsin St; 1720 26th St; 1021 Minnesota St; 3566 19th St; 2013 Folsom St; 2535 18th St; 1750 Harrison St; 335 South Van Ness Ave; 70 Otis St; 1717 Harrison St; 275 9th St;
+planning_2017-016045PRJ,planning,2020-01-29,building_permits,"201712085886, 201712085890"
 planning_2018-000851ENF,planning,2020-01-29,description,8 10th Street Illegal Short-Term Rentals. Ongoing Illegal Short-Term Rentals by Lesses resulting in quality of life complaints from long-term residents. Listings appear to include persons involved in illegal short-term rentals at multiple properties including Paul Hamadeh & Heigo Paartalu (lLooky homes operation) : https://www.airbnb.com/rooms/18522159; https://www.airbnb.com/rooms/18859942; https://www.airbnb.com/rooms/19590104; https://www.airbnb.com/rooms/20857978; https://www.airbnb.com/rooms/21553816; https://www.airbnb.com/rooms/6186737; https://www.airbnb.com/rooms/6559856; https://www.airbnb.com/rooms/7439398; https://www.airbnb.com/rooms/17027820  As of January 2018 one lessee Syed Arif Ali re-activated a listing with an invalid registration number). Host eventually provided proof of no pending reservations after repeat request by OSTR and Property Managment. https://www.airbnb.com/rooms/21553816. It appears remaining listings were removed by hosts and/or Airbnb per a Federal settlement agreement (with future reservations cancelled).  Violation abated (resolved).
 planning_2018-008884PRL,planning,2020-01-29,building_permits,"201806222695, 201905312150"
 planning_3890_ENF,planning,2020-01-29,record_id,3890_ENF

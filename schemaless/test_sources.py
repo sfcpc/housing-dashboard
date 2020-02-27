@@ -1,6 +1,27 @@
 # Lint as: python3
 #
 from schemaless.sources import PermitAddendaSummary
+from schemaless.sources import Mapblklot
+import schemaless.mapblklot_generator as mapblklot_gen
+
+
+def setup_module(module):
+    if mapblklot_gen.MapblklotGeneratorSingleton.get_instance() is None:
+        mapblklot_gen.init('data/assessor/2020-02-18-parcels.csv.xz')
+
+
+def test_mapblklot_field():
+    record = {'blklot': '3514098'}
+    mapblklot = Mapblklot(blklot='blklot')
+    assert(mapblklot.get_value(record) == '3514045')
+
+    record = {'block': '3514', 'lot': '098'}
+    mapblklot = Mapblklot(block='block', lot='lot')
+    assert(mapblklot.get_value(record) == '3514045')
+
+    record = {'mapblklot': 'foo'}
+    mapblklot = Mapblklot(mapblklot='mapblklot')
+    assert(mapblklot.get_value(record) == 'foo')
 
 
 def test_permit_addenda_yield_records():

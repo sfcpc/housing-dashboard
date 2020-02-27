@@ -1,6 +1,12 @@
 # Lint as: python3
 from schemaless.create_uuid_map import RecordGraph
 from schemaless.create_uuid_map import RecordGraphBuilder
+import schemaless.mapblklot_generator as mapblklot_gen
+
+
+def setup_module(module):
+    if mapblklot_gen.MapblklotGeneratorSingleton.get_instance() is None:
+        mapblklot_gen.init('data/assessor/2020-02-18-parcels.csv.xz')
 
 
 def test_address_match():
