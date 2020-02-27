@@ -23,12 +23,8 @@ TESTDATA_GEN_DATE = date(2020, 1, 29)
 
 
 def setup_module(module):
-    mapblklot_gen.generator_instance = mapblklot_gen.MapblklotGenerator(
-        'data/assessor/2020-02-18-parcels.csv.xz')
-
-
-def teardown_module(module):
-    mapblklot_gen.generator_instance = None
+    if mapblklot_gen.MapblklotGeneratorSingleton.get_instance() is None:
+        mapblklot_gen.init('data/assessor/2020-02-18-parcels.csv.xz')
 
 
 def test_latest_values_num_entries():

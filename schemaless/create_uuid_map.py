@@ -734,8 +734,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if args.parcel_data_file:
-        mapblklot_gen.generator_instance = mapblklot_gen.MapblklotGenerator(
-            args.parcel_data_file)
+        mapblklot_gen.init(args.parcel_data_file)
 
     builder = RecordGraphBuilder(
         RecordGraph,

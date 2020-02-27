@@ -91,7 +91,8 @@ class Mapblklot(Field):
         if self.mapblklot:
             return record[self.mapblklot]
 
-        mapblklot_generator = mapblklot_gen.generator_instance
+        mapblklot_generator = \
+            mapblklot_gen.MapblklotGeneratorSingleton.get_instance()
         if mapblklot_generator:
             if self.blklot:
                 return mapblklot_generator.find_mapblklot_for_blklot(
@@ -101,8 +102,8 @@ class Mapblklot(Field):
                     record[self.block] + record[self.lot])
         else:
             raise MapblklotException(
-                "MapblklotGenerator is not instantiated. Please instantiate \
-                schemaless.mapblklot_generator.generator_instance in the \
+                "MapblklotGeneratorSingleton is not instantiated. Please instantiate \
+                by calling schemaless.mapblklot_generator.init(filepath) in \
                 top-level script environment")
         return None
 
