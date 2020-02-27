@@ -16,6 +16,7 @@ from relational.project import Entry
 from relational.project import NameValue
 from relational.project import Project
 from schemaless.create_uuid_map import RecordGraph
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
@@ -86,6 +87,7 @@ class Freshness:
             TCO.NAME: self._tco,
             MOHCDPipeline.NAME: self._mohcd_pipeline,
             MOHCDInclusionary.NAME: self._mohcd_inclusionary,
+            AffordableRentalPortfolio.NAME: self._affordable_rental,
             PermitAddendaSummary.NAME: self._permit_addenda_summary,
         }
 
@@ -104,10 +106,10 @@ class Freshness:
             return False
         return True
 
-    def _extract_nv_date(self, line, source):
+    def _extract_nv_date(self, line, source, timeformat='%m/%d/%Y'):
         if (line['source'] == source and
                 line['name'] in self._FIELD_SETS[source]):
-            nvdate = datetime.strptime(line['value'].split(' ')[0], '%m/%d/%Y')
+            nvdate = datetime.strptime(line['value'].split(' ')[0], timeformat)
             if not self._check_and_log_good_date(nvdate, source, line):
                 return
 
@@ -133,19 +135,22 @@ class Freshness:
                   'data freshness: %s, skipping' % line['source'])
 
     def _planning(self, line):
-        self._extract_nv_date(line, Planning.NAME)
+        self._extract_nv_date(line, Planning.NAME, timeformat='%Y-%m-%d')
 
     def _pts(self, line):
         self._extract_nv_date(line, PTS.NAME)
 
     def _tco(self, line):
-        self._extract_nv_date(line, TCO.NAME)
+        self._extract_nv_date(line, TCO.NAME, timeformat='%Y/%m/%d')
 
     def _mohcd_pipeline(self, line):
         self._extract_last_updated(line, MOHCDPipeline.NAME)
 
     def _mohcd_inclusionary(self, line):
         self._extract_last_updated(line, MOHCDInclusionary.NAME)
+
+    def _affordable_rental(self, line):
+        self._extract_last_updated(line, AffordableRentalPortfolio.NAME)
 
     def _permit_addenda_summary(self, line):
         self._extract_last_updated(line, PermitAddendaSummary.NAME)
@@ -294,6 +299,7 @@ def output_projects(projects, config):
                             print('\t...%s entries to %s' %
                                   (lines_out, finalfile))
                         writer.writerow(out)
+        table.log_bad_data()
 
     if lines_out > 0:
         print('\t%s total entries' % lines_out)

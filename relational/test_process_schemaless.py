@@ -4,6 +4,7 @@ from collections import namedtuple
 
 from relational.process_schemaless import Freshness
 from relational.process_schemaless import is_seen_id
+from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
@@ -22,17 +23,17 @@ def test_freshness():
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': '01/01/2000',
+        'value': '2000-01-01',
     })
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': '01/01/2010',
+        'value': '2010-01-01',
     })
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': '01/01/2020',
+        'value': '2020-01-01',
     })
     lines.append({
         'source': PTS.NAME,
@@ -47,12 +48,12 @@ def test_freshness():
     lines.append({
         'source': TCO.NAME,
         'name': 'date_issued',
-        'value': '02/05/2020',
+        'value': '2020/02/05',
     })
     lines.append({
         'source': TCO.NAME,
         'name': 'date_issued',
-        'value': '02/10/2020',
+        'value': '2020/02/10',
     })
 
     # ignored because the field isn't permitted
@@ -64,14 +65,14 @@ def test_freshness():
     lines.append({
         'source': TCO.NAME,
         'name': 'arbitrary',
-        'value': '05/02/2020',
+        'value': '2020/05/02',
     })
 
     # ignored, in the future
     lines.append({
         'source': Planning.NAME,
         'name': 'date_opened',
-        'value': datetime.max.strftime('%m/%d/%Y'),
+        'value': datetime.max.strftime('%Y-%m-%d'),
     })
 
     # ignored because the source is unknown
@@ -97,6 +98,14 @@ def test_freshness():
         'value': '04/01/2015',
     })
 
+    # affordable rental porrtfolio extracts from last_updated
+    lines.append({
+        'last_updated': '2019-01-01',  # isoformat for last_updated
+        'source': AffordableRentalPortfolio.NAME,
+        'name': 'project_name',
+        'value': 'the foo building',
+    })
+
     fresh = Freshness()
     for line in lines:
         fresh.update_freshness(line)
@@ -105,6 +114,7 @@ def test_freshness():
     assert fresh.freshness[PTS.NAME] == pts
     assert fresh.freshness[TCO.NAME] == tco
     assert fresh.freshness[MOHCDPipeline.NAME] == mohcd
+    assert fresh.freshness[AffordableRentalPortfolio.NAME] == mohcd
     assert fresh.freshness[PermitAddendaSummary.NAME] == addenda
     assert 'bamboozle' not in fresh.freshness
 
