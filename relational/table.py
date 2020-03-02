@@ -468,8 +468,6 @@ class ProjectFacts(Table):
 
 
 class ProjectGeo(NameValueTable):
-    _BLKLOT = mapblklot_gen.MapblklotGeneratorSingleton.get_instance()
-
     def __init__(self):
         super().__init__('project_geo')
 
@@ -486,7 +484,8 @@ class ProjectGeo(NameValueTable):
         '''Extract an arbitrary longitude and latitude.'''
         blocklot = proj.field('mapblocklot', Planning.NAME)
         if blocklot:
-            lnglat = self._BLKLOT.find_lnglat_for_blklot(blocklot)
+            blkloter = mapblklot_gen.MapblklotGeneratorSingleton.get_instance()
+            lnglat = blkloter.find_lnglat_for_blklot(blocklot)
             if lnglat:
                 rows.append(self.nv_row(proj,
                                         name='lng',
