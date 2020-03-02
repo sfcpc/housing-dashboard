@@ -58,6 +58,7 @@ TableConfig = namedtuple('TableConfig',
 config = [
     tabledef.ProjectFacts(),
     tabledef.ProjectUnitCountsFull(),
+    tabledef.ProjectCompletedUnitCounts(),
     tabledef.ProjectStatusHistory(),
     tabledef.ProjectGeo(),
     tabledef.ProjectDetails(),
