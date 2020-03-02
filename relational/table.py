@@ -396,10 +396,16 @@ class ProjectFacts(Table):
                 row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
             else:
                 try:
+                    # Only fallback to using planning if we have a non-zero
+                    # unit count, because we always have a 0 even for
+                    # irrelevant projects.
                     net = int(planning_net)
-                    row[self.index(self.NET_NUM_UNITS)] = planning_net
-                    row[self.index(self.NET_NUM_UNITS_DATA)] = \
-                        Planning.OUTPUT_NAME
+                    if net != 0:
+                        row[self.index(self.NET_NUM_UNITS)] = planning_net
+                        row[self.index(self.NET_NUM_UNITS_DATA)] = \
+                            Planning.OUTPUT_NAME
+                    else:
+                        net = None
                 except ValueError:
                     net = None
                     pass

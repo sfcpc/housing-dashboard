@@ -265,6 +265,14 @@ def test_table_project_facts_units(basic_graph, d):
                        NameValue('proposed_units', '0', d)]),
             ],
             want=''),
+        EntriesTestRow(
+            name='dont use 0 planning unit count if no other data',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('number_of_market_rate_units', '0', d)]),
+            ],
+            want=''),
     ]
 
     for test in tests:
