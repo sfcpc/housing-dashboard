@@ -11,6 +11,7 @@ import math
 import queue
 import re
 
+import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
@@ -467,6 +468,8 @@ class ProjectFacts(Table):
 
 
 class ProjectGeo(NameValueTable):
+    _BLKLOT = mapblklot_gen.MapblklotGeneratorSingleton.get_instance()
+
     def __init__(self):
         super().__init__('project_geo')
 
@@ -479,9 +482,25 @@ class ProjectGeo(NameValueTable):
                                     value=geom,
                                     data=Planning.OUTPUT_NAME))
 
+    def _lnglat(self, rows, proj):
+        '''Extract an arbitrary longitude and latitude.'''
+        blocklot = proj.field('mapblocklot', Planning.NAME)
+        if blocklot:
+            lnglat = self._BLKLOT.find_lnglat_for_blklot(blocklot)
+            if lnglat:
+                rows.append(self.nv_row(proj,
+                                        name='lng',
+                                        value=lnglat[0],
+                                        data=Planning.OUTPUT_NAME))
+                rows.append(self.nv_row(proj,
+                                        name='lat',
+                                        value=lnglat[1],
+                                        data=Planning.OUTPUT_NAME))
+
     def rows(self, proj):
         result = []
         self._geom(result, proj)
+        self._lnglat(result, proj)
         return result
 
 
