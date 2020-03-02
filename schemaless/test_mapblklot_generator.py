@@ -20,7 +20,7 @@ def test_correct_mapblklot():
     assert(gen.find_mapblklot_for_blklot('') is None)
 
 
-def test_centroid():
+def test_lnglat():
     gen = mapblklot_gen.MapblklotGeneratorSingleton.get_instance()
     res = gen.find_lnglat_for_blklot('0102002')
     assert res[0] == '-122.41073416433598'
