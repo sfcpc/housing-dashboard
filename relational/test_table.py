@@ -69,7 +69,7 @@ def test_table_project_facts_atleast_one_measure():
     RowTest = namedtuple('RowTest', ['input', 'want', 'name'])
     tests = [
         RowTest(['', '', ''], False, 'empty row'),
-        RowTest(['', '0', ''], True, 'zero different from empty'),
+        RowTest(['', '0', ''], False, 'zero different from empty'),
         RowTest(['1', '2', ''], True, 'normal full row'),
         RowTest(['', '', '1'], True, 'estimated field'),
     ]
@@ -319,7 +319,7 @@ def test_table_project_facts_units(basic_graph, d):
             ],
             want='7'),
         EntriesTestRow(
-            name='dont use 0 pts unit count if planning wasnt explicitly set',
+            name='dont use 0 pts unit count',
             entries=[
                 Entry('1',
                       Planning.NAME,
@@ -331,11 +331,23 @@ def test_table_project_facts_units(basic_graph, d):
             ],
             want=''),
         EntriesTestRow(
-            name='dont use 0 planning unit count if no other data',
+            name='dont use 0 planning unit',
             entries=[
                 Entry('1',
                       Planning.NAME,
                       [NameValue('number_of_market_rate_units', '0', d)]),
+            ],
+            want=''),
+        EntriesTestRow(
+            name='dont use 0 even if in planning and pts',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('number_of_market_rate_units', '0', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('proposed_units', '0', d)]),
             ],
             want=''),
     ]

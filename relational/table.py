@@ -402,7 +402,8 @@ class ProjectFacts(Table):
             # count (therefore indicating a housing-related project that
             # lost its housing somehow).
             if (dbi_net is not None
-                    and (dbi_net != 0 or planning_net)):
+                    and (dbi_net != 0 or
+                         (planning_net and planning_net != '0'))):
                 row[self.index(self.NET_NUM_UNITS)] = str(dbi_net)
                 row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
             else:
@@ -432,9 +433,12 @@ class ProjectFacts(Table):
                     Planning.OUTPUT_NAME
 
     def _atleast_one_measure(self, row):
-        return (row[self.index(self.NET_NUM_UNITS)] != '' or
-                row[self.index(self.NET_NUM_UNITS_BMR)] != '' or
-                row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '')
+        return ((row[self.index(self.NET_NUM_UNITS)] != '' and
+                 row[self.index(self.NET_NUM_UNITS)] != '0') or
+                (row[self.index(self.NET_NUM_UNITS_BMR)] != '' and
+                 row[self.index(self.NET_NUM_UNITS_BMR)] != '0') or
+                (row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '' and
+                 row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '0'))
 
     def _nonzero_or_nonempty_address(self, row):
         """Returns true if this row had a non-empty address, or had an
