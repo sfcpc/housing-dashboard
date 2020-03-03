@@ -66,19 +66,19 @@ EntriesTestRow = namedtuple('EntriesTestRow', ['name', 'entries', 'want'])
 def test_table_project_facts_atleast_one_measure():
     table = ProjectFacts()
 
-    RowTest = namedtuple('RowTest', ['input', 'want'])
+    RowTest = namedtuple('RowTest', ['input', 'want', 'name'])
     tests = [
-        RowTest(['', '', ''], False),  # empty row
-        RowTest(['', '0', ''], True),  # zero different from empty
-        RowTest(['1', '2', ''], True),  # normal full row
-        RowTest(['', '', '1'], True),  # estimated field
+        RowTest(['', '', ''], False, 'empty row'),
+        RowTest(['', '0', ''], False, 'zero different from empty'),
+        RowTest(['1', '2', ''], True, 'normal full row'),
+        RowTest(['', '', '1'], True, 'estimated field'),
     ]
     for test in tests:
         row = [''] * len(table.header())
         row[table.index(table.NET_NUM_UNITS)] = test.input[0]
         row[table.index(table.NET_NUM_UNITS_BMR)] = test.input[1]
         row[table.index(table.NET_EST_NUM_UNITS_BMR)] = test.input[2]
-        assert table._atleast_one_measure(row) == test.want
+        assert table._atleast_one_measure(row) == test.want, test.name
 
 
 def test_table_project_facts(basic_graph, d):
@@ -93,7 +93,46 @@ def test_table_project_facts(basic_graph, d):
                       [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
                        NameValue('number_of_market_rate_units', '10', d)]),
             ],
-            want={'address': 'BALBOA RESERVOIR DEVELOPMENT'}),
+            want={
+                'name': 'BALBOA RESERVOIR DEVELOPMENT',
+                'address': '',
+            }),
+        EntriesTestRow(
+            name='exclude no-address planning entries if no net units',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
+                       NameValue('number_of_market_rate_units', '0', d)]),
+            ],
+            want={
+                'name': '',
+                'address': '',
+            }),
+        EntriesTestRow(
+            name='use address for name if no name',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('address', '123 chris st', d),
+                       NameValue('number_of_market_rate_units', '10', d)]),
+            ],
+            want={
+                'name': '123 chris st',
+                'address': '123 chris st',
+            }),
+        EntriesTestRow(
+            name='strip out planning zip code for name if found',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('address', '123 chris st 94114', d),
+                       NameValue('number_of_market_rate_units', '10', d)]),
+            ],
+            want={
+                'name': '123 chris st',
+                'address': '123 chris st 94114',
+            }),
         EntriesTestRow(
             name='always use mohcd if information found',
             entries=[
@@ -104,14 +143,36 @@ def test_table_project_facts(basic_graph, d):
                 Entry('2',
                       MOHCDPipeline.NAME,
                       [NameValue('project_id', '1', d),
+                       NameValue('project_name', 'BALBOA!', d),
                        NameValue('street_number', '123', d),
                        NameValue('street_name', 'chris', d),
                        NameValue('street_type', 'st', d),
                        NameValue('zip_code', '94123', d)]),
             ],
-            want={'address': '123 chris st, 94123'}),
+            want={
+                'name': 'BALBOA!',
+                'address': '123 chris st, 94123',
+            }),
         EntriesTestRow(
-            name='incorporate mohcd name if found',
+            name='use mohcd subset for name if no name found',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('number_of_market_rate_units', '10', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('project_id', '1', d),
+                       NameValue('street_number', '123', d),
+                       NameValue('street_name', 'chris', d),
+                       NameValue('street_type', 'st', d),
+                       NameValue('zip_code', '94123', d)]),
+            ],
+            want={
+                'name': '123 chris st',
+                'address': '123 chris st, 94123',
+            }),
+        EntriesTestRow(
+            name='override planning name with mohcd name if found',
             entries=[
                 Entry('1',
                       Planning.NAME,
@@ -126,7 +187,10 @@ def test_table_project_facts(basic_graph, d):
                        NameValue('street_type', 'st', d),
                        NameValue('zip_code', '94123', d)]),
             ],
-            want={'address': 'chris place, 123 chris st, 94123'}),
+            want={
+                'name': 'chris place',
+                'address': '123 chris st, 94123',
+            }),
     ]
 
     for test in tests:
@@ -134,9 +198,10 @@ def test_table_project_facts(basic_graph, d):
         fields = table.rows(proj)
 
         for (name, wantvalue) in test.want.items():
-            assert _get_value_for_row(table,
-                                      fields,
-                                      name) == wantvalue, test.name
+            assert _get_value_for_row(
+                table,
+                fields,
+                name) == wantvalue, ('%s, field: %s' % (test.name, name))
 
 
 def test_table_project_facts_units(basic_graph, d):
@@ -254,11 +319,31 @@ def test_table_project_facts_units(basic_graph, d):
             ],
             want='7'),
         EntriesTestRow(
-            name='dont use 0 pts unit count if planning wasnt explicitly set',
+            name='dont use 0 pts unit count',
             entries=[
                 Entry('1',
                       Planning.NAME,
                       []),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('proposed_units', '0', d)]),
+            ],
+            want=''),
+        EntriesTestRow(
+            name='dont use 0 planning unit',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('number_of_market_rate_units', '0', d)]),
+            ],
+            want=''),
+        EntriesTestRow(
+            name='dont use 0 even if in planning and pts',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('number_of_market_rate_units', '0', d)]),
                 Entry('2',
                       PTS.NAME,
                       [NameValue('permit_type', '2', d),
@@ -575,6 +660,26 @@ def test_project_details_permit_addenda_summary(basic_graph, d):
     nvs = table.rows(proj_normal)
     assert _get_value_for_name(table, nvs, 'earliest_addenda_arrival') == \
         '2015-01-01'
+
+
+def test_project_details_env_review_type(basic_graph, d):
+    table = ProjectDetails()
+
+    entries1 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('residential_units_1br_exist', '0', d),
+               NameValue('residential_units_1br_prop', '2', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('environmental_review_type',
+                         'Categorical Exemption-Certificate', d),
+               NameValue('residential_units_1br_prop', '2', d)]),
+    ]
+    proj_normal = Project('uuid1', entries1, basic_graph)
+    nvs = table.rows(proj_normal)
+    assert _get_value_for_name(table, nvs, 'environmental_review_type') == \
+        'Categorical Exemption-Certificate'
 
 
 def test_project_details_bedroom_info_mohcd(basic_graph, d):

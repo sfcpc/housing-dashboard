@@ -11,6 +11,7 @@ import math
 import queue
 import re
 
+import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
@@ -241,6 +242,7 @@ def _get_earliest_addenda_arrival_date(proj):
 
 
 class ProjectFacts(Table):
+    NAME = 'name'
     ADDRESS = 'address'
     APPLICANT = 'applicant'
     SUPERVISOR_DISTRICT = 'supervisor_district'
@@ -257,6 +259,7 @@ class ProjectFacts(Table):
 
     def __init__(self):
         super().__init__('project_facts', header=[
+            self.NAME,
             self.ADDRESS,
             self.APPLICANT,
             self.SUPERVISOR_DISTRICT,
@@ -269,6 +272,8 @@ class ProjectFacts(Table):
             self.NET_EST_NUM_UNITS_BMR,
             self.NET_EST_NUM_UNITS_BMR_DATA,
         ])
+
+    _ZIP_CODE_REGEX = re.compile(' [0-9]{5}$')
 
     def _gen_facts(self, row, proj):
         """Generates the basic non-numeric details about a project.
@@ -286,19 +291,19 @@ class ProjectFacts(Table):
 
             used_mohcd = True
 
-            name = proj.field('project_name', mohcd)
-
             num = proj.field('street_number', mohcd)
-            addr = proj.field('street_name', mohcd)
+            addr = '%s %s' % (proj.field('street_name', mohcd),
+                              proj.field('street_type', mohcd))
             if num:
                 addr = ('%s %s' % (num, addr))
 
-            if name:
-                addr = ('%s, %s' % (name, addr))
+            name = proj.field('project_name', mohcd)
+            if not name:
+                name = addr
 
-            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
+            row[self.index(self.NAME)] = name
+            row[self.index(self.ADDRESS)] = '%s, %s' % (
                     addr,
-                    proj.field('street_type', mohcd),
                     proj.field('zip_code', mohcd))
             sponsor = proj.field('project_lead_sponsor', mohcd)
             if not sponsor:
@@ -315,10 +320,12 @@ class ProjectFacts(Table):
             return
 
         addr = proj.field('address', Planning.NAME)
-        if not addr:
-            addr = proj.field('name', Planning.NAME)
+        name = proj.field('name', Planning.NAME)
+        if name or addr:
+            if not name:
+                name = re.sub(self._ZIP_CODE_REGEX, '', addr)
 
-        if addr:
+            row[self.index(self.NAME)] = name
             row[self.index(self.ADDRESS)] = addr
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = ''  # TODO
@@ -327,16 +334,21 @@ class ProjectFacts(Table):
         elif proj.field('permit_number',
                         PTS.NAME,
                         entry_predicate=_is_valid_dbi_entry) != '':
-            row[self.index(self.ADDRESS)] = '%s %s, %s' % (
-                    proj.field('street_number',
-                               PTS.NAME,
-                               entry_predicate=_is_valid_dbi_entry),
-                    proj.field('street_name',
-                               PTS.NAME,
-                               entry_predicate=_is_valid_dbi_entry),
-                    proj.field('zip_code',
-                               PTS.NAME,
-                               entry_predicate=_is_valid_dbi_entry))
+            street = '%s %s' % (
+                proj.field('street_number',
+                           PTS.NAME,
+                           entry_predicate=_is_valid_dbi_entry),
+                proj.field('street_name',
+                           PTS.NAME,
+                           entry_predicate=_is_valid_dbi_entry))
+            addr = '%s, %s' % (
+                street,
+                proj.field('zip_code',
+                           PTS.NAME,
+                           entry_predicate=_is_valid_dbi_entry))
+
+            row[self.index(self.NAME)] = street
+            row[self.index(self.ADDRESS)] = addr
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = \
                 proj.field('supervisor_district',
@@ -391,15 +403,22 @@ class ProjectFacts(Table):
             # count (therefore indicating a housing-related project that
             # lost its housing somehow).
             if (dbi_net is not None
-                    and (dbi_net != 0 or planning_net)):
+                    and (dbi_net != 0 or
+                         (planning_net and planning_net != '0'))):
                 row[self.index(self.NET_NUM_UNITS)] = str(dbi_net)
                 row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
             else:
                 try:
+                    # Only fallback to using planning if we have a non-zero
+                    # unit count, because we always have a 0 even for
+                    # irrelevant projects.
                     net = int(planning_net)
-                    row[self.index(self.NET_NUM_UNITS)] = planning_net
-                    row[self.index(self.NET_NUM_UNITS_DATA)] = \
-                        Planning.OUTPUT_NAME
+                    if net != 0:
+                        row[self.index(self.NET_NUM_UNITS)] = planning_net
+                        row[self.index(self.NET_NUM_UNITS_DATA)] = \
+                            Planning.OUTPUT_NAME
+                    else:
+                        net = None
                 except ValueError:
                     net = None
                     pass
@@ -415,9 +434,23 @@ class ProjectFacts(Table):
                     Planning.OUTPUT_NAME
 
     def _atleast_one_measure(self, row):
-        return (row[self.index(self.NET_NUM_UNITS)] != '' or
-                row[self.index(self.NET_NUM_UNITS_BMR)] != '' or
-                row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '')
+        return ((row[self.index(self.NET_NUM_UNITS)] != '' and
+                 row[self.index(self.NET_NUM_UNITS)] != '0') or
+                (row[self.index(self.NET_NUM_UNITS_BMR)] != '' and
+                 row[self.index(self.NET_NUM_UNITS_BMR)] != '0') or
+                (row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '' and
+                 row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '0'))
+
+    def _nonzero_or_nonempty_address(self, row):
+        """Returns true if this row had a non-empty address, or had an
+        empty address but a non-zero net unit count"""
+        if row[self.index(self.ADDRESS)] != '':
+            return True
+
+        if (row[self.index(self.NET_NUM_UNITS)] and
+                row[self.index(self.NET_NUM_UNITS)] != '0'):
+            return True
+        return False
 
     def rows(self, proj):
         row = [''] * len(self.header())
@@ -426,7 +459,8 @@ class ProjectFacts(Table):
         self._gen_facts(row, proj)
         self._gen_units(row, proj)
 
-        if self._atleast_one_measure(row):
+        if (self._atleast_one_measure(row) and
+                self._nonzero_or_nonempty_address(row)):
             self.SEEN_IDS.add(row[self.index(self.ID)])
             return [row]
 
@@ -446,9 +480,26 @@ class ProjectGeo(NameValueTable):
                                     value=geom,
                                     data=Planning.OUTPUT_NAME))
 
+    def _lnglat(self, rows, proj):
+        '''Extract an arbitrary longitude and latitude.'''
+        blocklot = proj.field('mapblocklot', Planning.NAME)
+        if blocklot:
+            blkloter = mapblklot_gen.MapblklotGeneratorSingleton.get_instance()
+            lnglat = blkloter.find_lnglat_for_blklot(blocklot)
+            if lnglat:
+                rows.append(self.nv_row(proj,
+                                        name='lng',
+                                        value=lnglat[0],
+                                        data=Planning.OUTPUT_NAME))
+                rows.append(self.nv_row(proj,
+                                        name='lat',
+                                        value=lnglat[1],
+                                        data=Planning.OUTPUT_NAME))
+
     def rows(self, proj):
         result = []
         self._geom(result, proj)
+        self._lnglat(result, proj)
         return result
 
 
@@ -717,6 +768,15 @@ class ProjectDetails(NameValueTable):
                                     value=date.isoformat(),
                                     data=PermitAddendaSummary.OUTPUT_NAME))
 
+    def _env_review_type(self, rows, proj):
+        env_review_type = proj.field('environmental_review_type',
+                                     Planning.NAME)
+        if env_review_type:
+            rows.append(self.nv_row(proj,
+                                    name='environmental_review_type',
+                                    value=env_review_type,
+                                    data=Planning.OUTPUT_NAME))
+
     def _unique(self, rows):
         """Prunes duplicate name-value entries, preferring entries that were
         added later in the process.
@@ -749,6 +809,7 @@ class ProjectDetails(NameValueTable):
         self._is_100_affordable(result, proj)
         self._onsite_or_feeout(result, proj)
         self._earliest_addenda_arrival(result, proj)
+        self._env_review_type(result, proj)
 
         self._unique(result)
 

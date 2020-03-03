@@ -15,6 +15,7 @@ import relational.table as tabledef
 from relational.project import Entry
 from relational.project import NameValue
 from relational.project import Project
+import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
@@ -323,7 +324,12 @@ if __name__ == '__main__':
             '--out_prefix',
             help='Prefix for output files',
             default='')
+    parser.add_argument('--parcel_data_file')
     args = parser.parse_args()
+    if not args.parcel_data_file:
+        print('Please specify --parcel_data_file')
+        sys.exit()
+    mapblklot_gen.init(args.parcel_data_file)
 
     uuid_mapping = build_uuid_mapping(args.uuid_map_file)
     process_result = process_files(args.schemaless_file, uuid_mapping)
