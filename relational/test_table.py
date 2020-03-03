@@ -662,6 +662,26 @@ def test_project_details_permit_addenda_summary(basic_graph, d):
         '2015-01-01'
 
 
+def test_project_details_env_review_type(basic_graph, d):
+    table = ProjectDetails()
+
+    entries1 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('residential_units_1br_exist', '0', d),
+               NameValue('residential_units_1br_prop', '2', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('environmental_review_type',
+                         'Categorical Exemption-Certificate', d),
+               NameValue('residential_units_1br_prop', '2', d)]),
+    ]
+    proj_normal = Project('uuid1', entries1, basic_graph)
+    nvs = table.rows(proj_normal)
+    assert _get_value_for_name(table, nvs, 'environmental_review_type') == \
+        'Categorical Exemption-Certificate'
+
+
 def test_project_details_bedroom_info_mohcd(basic_graph, d):
     table = ProjectDetails()
 

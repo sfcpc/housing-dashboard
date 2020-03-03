@@ -768,6 +768,15 @@ class ProjectDetails(NameValueTable):
                                     value=date.isoformat(),
                                     data=PermitAddendaSummary.OUTPUT_NAME))
 
+    def _env_review_type(self, rows, proj):
+        env_review_type = proj.field('environmental_review_type',
+                                     Planning.NAME)
+        if env_review_type:
+            rows.append(self.nv_row(proj,
+                                    name='environmental_review_type',
+                                    value=env_review_type,
+                                    data=Planning.OUTPUT_NAME))
+
     def _unique(self, rows):
         """Prunes duplicate name-value entries, preferring entries that were
         added later in the process.
@@ -800,6 +809,7 @@ class ProjectDetails(NameValueTable):
         self._is_100_affordable(result, proj)
         self._onsite_or_feeout(result, proj)
         self._earliest_addenda_arrival(result, proj)
+        self._env_review_type(result, proj)
 
         self._unique(result)
 
