@@ -10,6 +10,7 @@ from relational.project import Project
 from relational.table import ProjectDetails
 from relational.table import ProjectFacts
 from relational.table import ProjectStatusHistory
+from relational.table import ProjectCompletedUnitCounts
 from relational.table import ProjectUnitCountsFull
 from schemaless.create_uuid_map import Node
 from schemaless.create_uuid_map import RecordGraph
@@ -507,6 +508,46 @@ def test_table_project_facts_units_mohcd(basic_graph, d):
                                       name) == wantvalue, test.name
 
 
+def test_table_project_facts_prj_info(basic_graph, d):
+    table = ProjectFacts()
+
+    tests = [
+        EntriesTestRow(
+            name='existing prj id',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('record_id', 'abc', d),
+                       NameValue('number_of_market_rate_units', '10', d),
+                       NameValue('record_type', 'PRJ', d)]),
+            ],
+            want={'prj_id': 'abc',
+                  'pim_link': 'https://sfplanninggis.org/pim?search=abc'},
+        ),
+        EntriesTestRow(
+            name='no prj id, only block lot',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('mapblocklot', '2000', d),
+                       NameValue('number_of_market_rate_units', '10', d),
+                       NameValue('record_id', 'abc', d),
+                       NameValue('record_type', 'CUA', d)]),
+            ],
+            want={'pim_link': 'https://sfplanninggis.org/pim?search=2000'},
+        ),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
+
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_row(table,
+                                      fields,
+                                      name) == wantvalue, test.name
+
+
 def test_table_project_units_full_count(basic_graph, d):
     table = ProjectUnitCountsFull()
 
@@ -581,6 +622,124 @@ def test_table_project_units_full_count(basic_graph, d):
     assert net_num_units[0] == '6'
     assert net_num_units[1] == '7'
     assert net_num_units[2] == '10'
+
+
+CompletedUnitRow = \
+    namedtuple('CompletedUnitRow',
+               ['num_units_completed', 'date_completed', 'data'])
+
+
+def _get_values_for_completed_units(table, rows):
+    result = []
+    for row in rows:
+        num_units_completed = row[table.index(table.NUM_UNITS_COMPLETED)]
+        date_completed = row[table.index(table.DATE_COMPLETED)]
+        data = row[table.index(table.DATA_SOURCE)]
+        result.append(
+            CompletedUnitRow(num_units_completed, date_completed, data))
+    return result
+
+
+def test_table_project_units_completed_count(basic_graph, d):
+    table = ProjectCompletedUnitCounts()
+
+    entries1 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '2018-11-18', d)]),
+        Entry('2',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('completed_date', '2/5/2018', d),
+               NameValue('existing_units', '1', d),
+               NameValue('proposed_units', '5', d)]),
+        Entry('2',  # Ignore PTS since TCO exists
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('completed_date', '2/5/2018', d),
+               NameValue('existing_units', '1', d),
+               NameValue('proposed_units', '5', d)]),
+        Entry('3',
+              TCO.NAME,
+              [NameValue('num_units', '3', d),
+               NameValue('date_issued', '2018/01/01', d)]),
+        Entry('4',
+              TCO.NAME,
+              [NameValue('num_units', '2', d),
+               NameValue('date_issued', '2018/01/10', d)]),
+        Entry('5',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('existing_units', '6', d),
+               NameValue('proposed_units', '5', d)]),
+    ]
+    proj_tco = Project('uuid1', entries1, basic_graph)
+    fields = table.rows(proj_tco)
+    num_rows = _get_values_for_completed_units(table, fields)
+
+    # Use TCO data since there are valid records
+    assert len(num_rows) == 2
+    assert num_rows[0].num_units_completed == '3'
+    assert num_rows[0].date_completed == '2018-01-01'
+    assert num_rows[0].data == 'tco'
+    assert num_rows[1].num_units_completed == '2'
+    assert num_rows[1].date_completed == '2018-01-10'
+    assert num_rows[1].data == 'tco'
+
+    entries2 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('status', 'Accepted', d),
+               NameValue('date_opened', '2018-11-18', d)]),
+        Entry('2',
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'abc', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('completed_date', '2/5/2018', d),
+               NameValue('existing_units', '1', d),
+               NameValue('proposed_units', '5', d)]),
+        Entry('2',  # De-dupe permit numbers
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'abc', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('completed_date', '2/5/2018', d),
+               NameValue('existing_units', '1', d),
+               NameValue('proposed_units', '5', d)]),
+        Entry('3',
+              PTS.NAME,
+              [NameValue('permit_type', '2', d),
+               NameValue('permit_number', 'xyz', d),
+               NameValue('current_status', 'complete', d),
+               NameValue('completed_date', '2/10/2018', d),
+               NameValue('existing_units', '0', d),
+               NameValue('proposed_units', '2', d)]),
+        Entry('4',  # Ignore permits that are not complete
+              PTS.NAME,
+              [NameValue('permit_type', '1', d),
+               NameValue('permit_number', 'def', d),
+               NameValue('current_status', 'filed', d),
+               NameValue('existing_units', '7', d),
+               NameValue('proposed_units', '5', d)]),
+    ]
+    proj_pts = Project('uuid1', entries2, basic_graph)
+    fields = table.rows(proj_pts)
+    num_rows = _get_values_for_completed_units(table, fields)
+
+    # Use PTS data since there are valid records
+    assert len(num_rows) == 2
+    assert num_rows[0].num_units_completed == '5'
+    assert num_rows[0].date_completed == '2018-02-05'
+    assert num_rows[0].data == 'dbi'
+    assert num_rows[1].num_units_completed == '2'
+    assert num_rows[1].date_completed == '2018-02-10'
+    assert num_rows[1].data == 'dbi'
 
 
 @pytest.fixture

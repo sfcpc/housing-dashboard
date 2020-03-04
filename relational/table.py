@@ -254,6 +254,8 @@ class ProjectFacts(Table):
     NET_NUM_UNITS_BMR_DATA = 'net_num_units_bmr_data'
     NET_EST_NUM_UNITS_BMR = 'net_estimated_num_units_bmr'
     NET_EST_NUM_UNITS_BMR_DATA = 'net_estimated_num_units_bmr_data'
+    PRJ_ID = 'prj_id'
+    PIM_LINK = 'pim_link'
 
     SEEN_IDS = set()
 
@@ -271,6 +273,8 @@ class ProjectFacts(Table):
             self.NET_NUM_UNITS_BMR_DATA,
             self.NET_EST_NUM_UNITS_BMR,
             self.NET_EST_NUM_UNITS_BMR_DATA,
+            self.PRJ_ID,
+            self.PIM_LINK
         ])
 
     _ZIP_CODE_REGEX = re.compile(' [0-9]{5}$')
@@ -433,6 +437,23 @@ class ProjectFacts(Table):
                 row[self.index(self.NET_EST_NUM_UNITS_BMR_DATA)] = \
                     Planning.OUTPUT_NAME
 
+    def _prj_info(self, row, proj):
+        prj_id = proj.field('record_id',
+                            Planning.NAME,
+                            entry_predicate=[('record_type',
+                                              lambda x: x == 'PRJ')])
+        pim_link_template = "https://sfplanninggis.org/pim?search=%s"
+        if prj_id:
+            row[self.index(self.PRJ_ID)] = prj_id
+            row[self.index(self.PIM_LINK)] = pim_link_template % prj_id
+        else:
+            row[self.index(self.PRJ_ID)] = ''
+            blocklot = proj.field('mapblocklot', Planning.NAME)
+            if blocklot:
+                row[self.index(self.PIM_LINK)] = pim_link_template % blocklot
+            else:
+                row[self.index(self.PIM_LINK)] = ''
+
     def _atleast_one_measure(self, row):
         return ((row[self.index(self.NET_NUM_UNITS)] != '' and
                  row[self.index(self.NET_NUM_UNITS)] != '0') or
@@ -458,6 +479,7 @@ class ProjectFacts(Table):
         self.gen_id(row, proj)
         self._gen_facts(row, proj)
         self._gen_units(row, proj)
+        self._prj_info(row, proj)
 
         if (self._atleast_one_measure(row) and
                 self._nonzero_or_nonempty_address(row)):
@@ -552,6 +574,91 @@ class ProjectUnitCountsFull(NameValueTable):
     def rows(self, proj):
         result = []
         self._all_units(result, proj)
+        return result
+
+
+class ProjectCompletedUnitCounts(Table):
+    NUM_UNITS_COMPLETED = 'num_units_completed'
+    DATE_COMPLETED = 'date_completed'
+    DATA_SOURCE = 'data_source'
+
+    def __init__(self):
+        super().__init__('project_completed_unit_counts', header=[
+            self.NUM_UNITS_COMPLETED,
+            self.DATE_COMPLETED,
+            self.DATA_SOURCE])
+
+    def _completed_units(self, rows, proj):
+        """Outputs the records associated with units being completed.
+        Prefers to use TCO data if available, but if it's not will look at
+        site permits in PTS."""
+        for child in proj.children[TCO.NAME]:
+            date_issued_field = child.get_latest('date_issued')[0]
+            date_issued = datetime.strptime(
+                date_issued_field.split(' ')[0],
+                '%Y/%m/%d').date()
+            num_units = child.get_latest('num_units')[0]
+
+            rows.append(
+                self.completed_unit_row(proj,
+                                        num_units,
+                                        date_issued.isoformat(),
+                                        TCO.OUTPUT_NAME))
+        # Data exists in TCO data set, don't bother looking in PTS
+        if len(rows) > 0:
+            return
+
+        seen_permit_numbers = set()
+        for child in proj.children[PTS.NAME]:
+            permit_number = child.get_latest('permit_number')[0]
+            if permit_number in seen_permit_numbers:
+                continue
+            else:
+                seen_permit_numbers.add(permit_number)
+
+            permit_type = child.get_latest('permit_type')[0]
+            if permit_type not in _valid_dbi_permit_types:
+                continue
+            status_entry = child.get_latest('current_status')
+            if not status_entry:
+                continue
+            status = status_entry[0]
+            if status != 'complete':
+                continue
+
+            date_completed_entry = child.get_latest('completed_date')
+            if not date_completed_entry:
+                continue
+            date_completed_field = date_completed_entry[0]
+            date_completed = datetime.strptime(
+                date_completed_field.split(' ')[0],
+                '%m/%d/%Y').date()
+            num_units_entry = child.get_latest('proposed_units')
+            if not num_units_entry:
+                continue
+
+            num_units = num_units_entry[0]
+            rows.append(
+                self.completed_unit_row(proj,
+                                        num_units,
+                                        date_completed.isoformat(),
+                                        PTS.OUTPUT_NAME))
+
+    def completed_unit_row(self,
+                           proj,
+                           num_units_completed='',
+                           date_completed='',
+                           data=''):
+        row = [''] * len(self.header())
+        self.gen_id(row, proj)
+        row[self.index(self.NUM_UNITS_COMPLETED)] = num_units_completed
+        row[self.index(self.DATE_COMPLETED)] = date_completed
+        row[self.index(self.DATA_SOURCE)] = data
+        return row
+
+    def rows(self, proj):
+        result = []
+        self._completed_units(result, proj)
         return result
 
 
