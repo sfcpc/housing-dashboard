@@ -651,15 +651,21 @@ class AffordableRentalPortfolio(DirectSource):
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Mayor-s-Office-of-Housing-and-Community-Developmen/9rdx-httc"  # NOQA
 
 
-class DAInfo(Source):
+class DAInfo(DirectSource):
     NAME = 'da_info'
     OUTPUT_NAME = NAME
-    FK = PrimaryKey(NAME, 'delivery_agency', 'project_name', 'phase')
+    FK = PrimaryKey(NAME, 'row_number', 'delivery_agency', 'project_name', 'phase')
     FIELDS = {
+        'Row No.': 'row_number',
         'Housing Delivery Agency': 'delivery_agency',
-        'Project Name:', 'project_name',
-        'Phase/ Bldg/Address/B+L', 'phase',
-        'Building Permit No.': 'permit_number'
+        'Project Name:': 'project_name',
+        'Phase/ Bldg/Address/B+L': 'phase',
+        'Building Permit No.': 'permit_number',
+        'Total Units': 'total_units',
+        '100% Affordable Units': 'affordable_units',
+        'Permit Type': 'permit_type',
+        'DBI Arrival/ Intake Date': 'dbi_arrival_date',
+        'Target Permit Issuance Date': 'target_permit_issuance_date',
     }
     DATA_SF = "https://data.sfgov.org/dataset/Priority-Permits/336t-bzzm"
 

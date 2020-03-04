@@ -11,11 +11,13 @@ python gen_test_data.py data/mohcd/affordable-rental-portfolio-2019-09-06.csv te
 
 # Unfortunately, to include every possible match for 2451 Sacramento, we just
 # need to search for "Sacramento". That's a lot of non-matches.
-python gen_test_data.py data/pts/2020-01-24-pts-after-2013.csv.xz testdata/pts.csv "(201705318009)|(201706058373)|(201711284964)|(201801118389)|(201404304554)|(201705237369)|(201301027105)|(Sacramento)|(201609218371)|(201910225142)|(201910225150)|(201910225151)|(201910225152)|(201910225153)|(201910225154)|(201910225155)|(201712085881)|(201712085886)"
+python gen_test_data.py data/pts/2020-01-24-pts-after-2013.csv.xz testdata/pts.csv "(201705318009)|(201706058373)|(201711284964)|(201801118389)|(201404304554)|(201705237369)|(201301027105)|(Sacramento)|(201609218371)|(201910225142)|(201910225150)|(201910225151)|(201910225152)|(201910225153)|(201910225154)|(201910225155)|(201712085881)|(201712085886)|(201905170923)|(201905170926)"
 
 python gen_test_data.py data/mohcd/mohcd-inclusionary-2020-02-05.csv testdata/mohcd-inclusionary.csv "(2011-005)|(2016-023)|(2015-014058PRJ)"
 
 python gen_test_data.py data/pts/2020-02-11-permit-addenda.csv.xz testdata/permit-addenda.csv "(201609218371)|(8410366)|(201810233961)"
+
+python gen_test_data.py data/da/da-2020-03-03.csv testdata/da.csv "(201905170923)|(201905170926)"
 
 python3 -m schemaless.create_schemaless \
   --planning_file testdata/planning-one.csv \
@@ -25,6 +27,7 @@ python3 -m schemaless.create_schemaless \
   --mohcd_inclusionary_file testdata/mohcd-inclusionary.csv \
   --permit_addenda testdata/permit-addenda.csv \
   --affordable_file testdata/affordable-rental-portfolio.csv \
+  --da_info_file testdata/da.csv \
   --the-date=2020-01-29 \
   --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   testdata/schemaless-one.csv

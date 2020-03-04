@@ -50345,6 +50345,44 @@ pts_155273877219,pts,2020-01-29,supervisor_district,2
 pts_155273877219,pts,2020-01-29,zipcode,94115
 pts_155273877219,pts,2020-01-29,location,"(37.790034668160075, -122.43029500250192)"
 pts_155273877219,pts,2020-01-29,record_id,155273877219
+pts_1552746514785,pts,2020-01-29,permit_number,201905170923
+pts_1552746514785,pts,2020-01-29,permit_type,1
+pts_1552746514785,pts,2020-01-29,permit_type_definition,new construction
+pts_1552746514785,pts,2020-01-29,permit_creation_date,05/17/2019
+pts_1552746514785,pts,2020-01-29,block,8952
+pts_1552746514785,pts,2020-01-29,lot,001
+pts_1552746514785,pts,2020-01-29,street_number,3
+pts_1552746514785,pts,2020-01-29,street_name,Signal
+pts_1552746514785,pts,2020-01-29,current_status,filed
+pts_1552746514785,pts,2020-01-29,current_status_date,05/17/2019
+pts_1552746514785,pts,2020-01-29,filed_date,05/17/2019
+pts_1552746514785,pts,2020-01-29,proposed_use,apartments
+pts_1552746514785,pts,2020-01-29,proposed_units,5
+pts_1552746514785,pts,2020-01-29,proposed_construction_type,3
+pts_1552746514785,pts,2020-01-29,proposed_construction_type_description,constr type 3
+pts_1552746514785,pts,2020-01-29,supervisor_district,6
+pts_1552746514785,pts,2020-01-29,zipcode,94130
+pts_1552746514785,pts,2020-01-29,location,"(37.80978158270176, -122.36682540673715)"
+pts_1552746514785,pts,2020-01-29,record_id,1552746514785
+pts_1552747514784,pts,2020-01-29,permit_number,201905170926
+pts_1552747514784,pts,2020-01-29,permit_type,1
+pts_1552747514784,pts,2020-01-29,permit_type_definition,new construction
+pts_1552747514784,pts,2020-01-29,permit_creation_date,05/17/2019
+pts_1552747514784,pts,2020-01-29,block,8952
+pts_1552747514784,pts,2020-01-29,lot,001
+pts_1552747514784,pts,2020-01-29,street_number,15
+pts_1552747514784,pts,2020-01-29,street_name,Signal
+pts_1552747514784,pts,2020-01-29,current_status,filed
+pts_1552747514784,pts,2020-01-29,current_status_date,05/17/2019
+pts_1552747514784,pts,2020-01-29,filed_date,05/17/2019
+pts_1552747514784,pts,2020-01-29,proposed_use,apartments
+pts_1552747514784,pts,2020-01-29,proposed_units,6
+pts_1552747514784,pts,2020-01-29,proposed_construction_type,3
+pts_1552747514784,pts,2020-01-29,proposed_construction_type_description,constr type 3
+pts_1552747514784,pts,2020-01-29,supervisor_district,6
+pts_1552747514784,pts,2020-01-29,zipcode,94130
+pts_1552747514784,pts,2020-01-29,location,"(37.80978158270176, -122.36682540673715)"
+pts_1552747514784,pts,2020-01-29,record_id,1552747514784
 pts_155301186872,pts,2020-01-29,permit_number,201905201146
 pts_155301186872,pts,2020-01-29,permit_type,8
 pts_155301186872,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -56835,6 +56873,16 @@ bmr_2013-037,bmr,2020-01-29,num_more_than_120_percent_ami_units,0
 bmr_2013-037,bmr,2020-01-29,year_constructed,1900
 bmr_2013-037,bmr,2020-01-29,year_affordability_began,2016
 bmr_2013-037,bmr,2020-01-29,location,POINT (-122.43319449999998 37.79)
+"da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,row_number,59
+"da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,delivery_agency,TIDA
+"da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,project_name,YBI
+"da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,phase,"SubPhase 1YB, Block Y3, Block Y4"
+"da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,total_units,-
+"da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,affordable_units,-
+"da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,permit_type,Building Permit Application
+"da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,permit_number,201905170923 201905170926
+"da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,dbi_arrival_date,05/17/19
+"da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,target_permit_issuance_date,-
 planning_2002.0809,planning,2020-01-29,description,"03/06/2003 Shadow Study Prop. K   The proposed project would demolish the 22 three-story buildings and construct 17 three story affordable housing structures containing a total of 247 units, plus community space and child care designed as a PUD with exceptions from parking and loading requirements."
 planning_2002.0809C,planning,2020-01-29,description,"03/06/2003 Shadow Study Prop. K   The proposed project would demolish the 22 three-story buildings and construct 17 three story affordable housing structures containing a total of 247 units, plus community space and child care designed as a PUD with exceptions from parking and loading requirements."
 planning_2002.0809E,planning,2020-01-29,description,"03/06/2003 Shadow Study Prop. K   The proposed project would demolish the 22 three-story buildings and construct 17 three story affordable housing structures containing a total of 247 units, plus community space and child care designed as a PUD with exceptions from parking and loading requirements."

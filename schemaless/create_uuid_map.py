@@ -12,6 +12,7 @@ from datetime import date
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import AffordableRentalPortfolio
+from schemaless.sources import DAInfo
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
@@ -418,7 +419,8 @@ class PermitAddendaSummaryHelper(RecordGraphBuilderHelper):
 
 class DAInfoHelper(RecordGraphBuilderHelper):
     def process(self, fk, record, parents, children):
-        building_permits_numbers = record['permit_number'].split(" ")
+        pts_helper = self.graph_builder.helpers[PTS.NAME]
+        building_permit_numbers = record['permit_number'].split(" ")
         for permit_no in building_permit_numbers:
             parent_fks = pts_helper.find_by_building_permit_number(permit_no)
             if parent_fks:
@@ -457,7 +459,7 @@ class RecordGraphBuilder:
             PermitAddendaSummary.NAME:
                 PermitAddendaSummaryHelper(self),
             DAInfo.NAME:
-                DaInfoHelper(self),
+                DAInfoHelper(self),
         }
 
     def build(self):
