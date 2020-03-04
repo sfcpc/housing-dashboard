@@ -61,6 +61,7 @@ python3 -m schemaless.create_schemaless \
 --mohcd_inclusionary_file inputdata/2020-02-27-mohcd-inclusionary.csv \
 --permit_addenda inputdata/2020-02-27-permit-addenda.csv \
 --affordable_file inputdata/2020-02-27-affordable-rental-portfolio.csv \
+--oewd_permits_file inputdata/2020-02-27-oewd-permits.csv \
 --the-date=2020-02-27 \
 --parcel_data_file=inputdata/2020-02-27-parcels.csv \
 outputdata/schemaless-one.csv
@@ -84,6 +85,7 @@ python3 -m schemaless.create_schemaless \
 --mohcd_inclusionary_file inputdata/2020-03-04-mohcd-inclusionary.csv \
 --permit_addenda inputdata/2020-03-04-permit-addenda.csv \
 --affordable_file inputdata/2020-03-04-affordable-rental-portfolio.csv \
+--oewd_permits_file inputdata/2020-03-04-oewd-permits.csv \
 --the-date=2020-03-04 \
 --parcel_data_file=inputdata/2020-03-04-parcels.csv \
 --diff outputdata/schemaless-one.csv \
@@ -94,5 +96,21 @@ outputdata/schemaless-two.csv \
 outputdata/uuid-map-two.csv \
 --likely_match_file=outputdata/likelies-two.csv \
 --uuid_map_file=testdata/uuid-map-one.csv \
+--parcel_data_file=inputdata/2020-03-04-parcels.csv
+```
+
+**Note** This also produces the file `likelies-two.csv` which can be used to determine
+possible matches and modify upstream data sources.
+
+### Running relational scripts
+
+After producing the schemaless csv's, you can produce the relational csv's by running
+the commands below and using the latest version of the schemaless csv's that have
+been produced:
+
+```sh
+python3 -m relational.process_schemaless \
+outputdata/schemaless-two.csv \
+outputdata/uuid-map-two.csv \
 --parcel_data_file=inputdata/2020-03-04-parcels.csv
 ```
