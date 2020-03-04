@@ -567,6 +567,9 @@ class ProjectCompletedUnitCounts(Table):
             self.DATA_SOURCE])
 
     def _completed_units(self, rows, proj):
+        """Outputs the records associated with units being completed.
+        Prefers to use TCO data if available, but if it's not will look at
+        site permits in PTS."""
         for child in proj.children[TCO.NAME]:
             date_issued_field = child.get_latest('date_issued')[0]
             date_issued = datetime.strptime(
