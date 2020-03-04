@@ -14,6 +14,7 @@ from schemaless.create_schemaless import latest_values
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import OEWDPermits
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
@@ -258,7 +259,7 @@ class PTSHelper(RecordGraphBuilderHelper,
             PTSHelper.PTS_GROUPING_ATTRS)
         for group_name, group in permit_groupings_df:
             # Map group names to a list of fks of pts records in the group.
-            self._pts_groups[group_name] = group.keys()
+            self._pts_groups[group_name] = group.index.values
             for fk in self._pts_groups[group_name]:
                 self._pts_fk_to_group_name[fk] = group_name
 
@@ -416,6 +417,16 @@ class PermitAddendaSummaryHelper(RecordGraphBuilderHelper):
             parents.extend(parent_fks)
 
 
+class OEWDPermitsHelper(RecordGraphBuilderHelper):
+    def process(self, fk, record, parents, children):
+        pts_helper = self.graph_builder.helpers[PTS.NAME]
+        building_permit_numbers = record['permit_number'].split(" ")
+        for permit_no in building_permit_numbers:
+            parent_fks = pts_helper.find_by_building_permit_number(permit_no)
+            if parent_fks:
+                parents.extend(parent_fks)
+
+
 class RecordGraphBuilder:
     """RecordGraphBuilder reads in files and builds a RecordGraph."""
 
@@ -447,6 +458,8 @@ class RecordGraphBuilder:
                 AffordableRentalPortfolioHelper(self),
             PermitAddendaSummary.NAME:
                 PermitAddendaSummaryHelper(self),
+            OEWDPermits.NAME:
+                OEWDPermitsHelper(self),
         }
 
     def build(self):

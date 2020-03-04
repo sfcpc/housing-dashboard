@@ -19,6 +19,7 @@ import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import OEWDPermits
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
@@ -111,6 +112,8 @@ if __name__ == "__main__":
                         help='AffordableRentalPortfolio file', default='')
     parser.add_argument('--permit_addenda_file',
                         help='Permit Addenda file', default='')
+    parser.add_argument('--oewd_permits_file', help='OEWD permits file',
+                        default='')
     parser.add_argument('out_file', help='output file for schemaless csv')
 
     parser.add_argument(
@@ -147,6 +150,8 @@ if __name__ == "__main__":
         sources.append(PermitAddendaSummary(args.permit_addenda_file))
     if args.affordable_file:
         sources.append(AffordableRentalPortfolio(args.affordable_file))
+    if args.oewd_permits_file:
+        sources.append(OEWDPermits(args.oewd_permits_file))
 
     if len(sources) == 0:
         parser.print_help()
