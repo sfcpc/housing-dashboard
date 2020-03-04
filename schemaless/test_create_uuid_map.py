@@ -587,6 +587,51 @@ def test_mohcd_records_link_without_prj():
         'mohcd_inclusionary_2016-023'])
 
 
+def test_pts_groups_link_to_da_info():
+    rg = RecordGraph.from_files(
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv')
+    verify_records_linked(rg, [
+        # The following pts records should have the same
+        # uuid because they have the same mapblklot,
+        # filed_date, proposed_use.
+        'pts_1552746514785',  # permit no 201905170923
+        'pts_1552747514784',  # permit no. 201905170926
+        # This da info record references both permit no.
+        # 201905170923 and 201905170926 and should therefore
+        # have the same uuid as the pts records with those
+        # numbers.
+        'da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4',
+    ])
+
+    verify_records_linked(rg, [
+        # The following pts records should have the same
+        # uuid because they have the same mapblklot,
+        # filed_date, proposed_use.
+        'pts_1572040514789',  # permit no. 201910154483
+        'pts_1572053514788',  # permit no. 201910154490
+        'pts_1572057514787',  # permit no. 201910154498
+        # This da info record references permit nos. 201910154483,
+        # 201910154490, 201910154498 and should therefore have
+        # the same uuid as the pts records with those numbers.
+        'da_info_63_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4',
+    ])
+
+    verify_records_linked(rg, [
+        # The following pts records should have the same
+        # uuid because they have the same mapblklot,
+        # filed_date, proposed_use.
+        'pts_1579272508820',  # permit no. 201912169614,
+        'pts_1579279508820',  # permit no. 201912169619
+        # This DA record references permit no. 201912169614, so should
+        # have the same UUID as the corresponding pts record.
+        'da_info_68_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1',
+        # This DA record references permit no. 201912169619, so should
+        # havethe same UUID as the corresponding pts record.
+        'da_info_70_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1'
+    ])
+
+
 def verify_records_linked(rg, fks):
     for fk in fks[1:]:
         assert rg.get(fks[0]).uuid == rg.get(fk).uuid

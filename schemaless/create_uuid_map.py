@@ -259,7 +259,7 @@ class PTSHelper(RecordGraphBuilderHelper,
             PTSHelper.PTS_GROUPING_ATTRS)
         for group_name, group in permit_groupings_df:
             # Map group names to a list of fks of pts records in the group.
-            self._pts_groups[group_name] = group.keys()
+            self._pts_groups[group_name] = group.index.values
             for fk in self._pts_groups[group_name]:
                 self._pts_fk_to_group_name[fk] = group_name
 

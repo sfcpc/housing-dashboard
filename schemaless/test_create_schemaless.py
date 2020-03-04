@@ -11,6 +11,7 @@ from schemaless.create_schemaless import just_dump
 from schemaless.create_schemaless import latest_values
 import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
+from schemaless.sources import DAInfo
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import PermitAddendaSummary
@@ -90,7 +91,8 @@ def test_just_dump(tmpdir):
          MOHCDPipeline('testdata/mohcd-pipeline.csv'),
          MOHCDInclusionary('testdata/mohcd-inclusionary.csv'),
          PermitAddendaSummary('testdata/permit-addenda.csv'),
-         AffordableRentalPortfolio('testdata/bmr.csv')],
+         AffordableRentalPortfolio('testdata/bmr.csv'),
+         DAInfo('testdata/da.csv')],
         outfile,
         the_date=TESTDATA_GEN_DATE)
     assert filecmp.cmp('testdata/schemaless-one.csv', outfile)

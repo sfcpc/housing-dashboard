@@ -654,7 +654,8 @@ class AffordableRentalPortfolio(DirectSource):
 class DAInfo(DirectSource):
     NAME = 'da_info'
     OUTPUT_NAME = NAME
-    FK = PrimaryKey(NAME, 'row_number', 'delivery_agency', 'project_name', 'phase')
+    FK = PrimaryKey(
+        NAME, 'row_number', 'delivery_agency', 'project_name', 'phase')
     FIELDS = {
         'Row No.': 'row_number',
         'Housing Delivery Agency': 'delivery_agency',

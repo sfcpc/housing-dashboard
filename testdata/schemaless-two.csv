@@ -52997,6 +52997,63 @@ pts_1571831464960,pts,2020-01-29,supervisor_district,3
 pts_1571831464960,pts,2020-01-29,zipcode,94108
 pts_1571831464960,pts,2020-01-29,location,"(37.79293048567304, -122.41218963211746)"
 pts_1571831464960,pts,2020-01-29,record_id,1571831464960
+pts_1572040514789,pts,2020-01-29,permit_number,201910154483
+pts_1572040514789,pts,2020-01-29,permit_type,3
+pts_1572040514789,pts,2020-01-29,permit_type_definition,additions alterations or repairs
+pts_1572040514789,pts,2020-01-29,permit_creation_date,10/15/2019
+pts_1572040514789,pts,2020-01-29,block,8954
+pts_1572040514789,pts,2020-01-29,lot,001
+pts_1572040514789,pts,2020-01-29,street_number,101
+pts_1572040514789,pts,2020-01-29,street_name,Forest
+pts_1572040514789,pts,2020-01-29,current_status,filed
+pts_1572040514789,pts,2020-01-29,current_status_date,10/15/2019
+pts_1572040514789,pts,2020-01-29,filed_date,10/15/2019
+pts_1572040514789,pts,2020-01-29,proposed_use,apartments
+pts_1572040514789,pts,2020-01-29,proposed_units,4
+pts_1572040514789,pts,2020-01-29,proposed_construction_type,3
+pts_1572040514789,pts,2020-01-29,proposed_construction_type_description,constr type 3
+pts_1572040514789,pts,2020-01-29,supervisor_district,6
+pts_1572040514789,pts,2020-01-29,zipcode,94130
+pts_1572040514789,pts,2020-01-29,location,"(37.81107198559766, -122.3659671988748)"
+pts_1572040514789,pts,2020-01-29,record_id,1572040514789
+pts_1572053514788,pts,2020-01-29,permit_number,201910154490
+pts_1572053514788,pts,2020-01-29,permit_type,3
+pts_1572053514788,pts,2020-01-29,permit_type_definition,additions alterations or repairs
+pts_1572053514788,pts,2020-01-29,permit_creation_date,10/15/2019
+pts_1572053514788,pts,2020-01-29,block,8954
+pts_1572053514788,pts,2020-01-29,lot,001
+pts_1572053514788,pts,2020-01-29,street_number,109
+pts_1572053514788,pts,2020-01-29,street_name,Forest
+pts_1572053514788,pts,2020-01-29,current_status,filed
+pts_1572053514788,pts,2020-01-29,current_status_date,10/15/2019
+pts_1572053514788,pts,2020-01-29,filed_date,10/15/2019
+pts_1572053514788,pts,2020-01-29,proposed_use,apartments
+pts_1572053514788,pts,2020-01-29,proposed_units,5
+pts_1572053514788,pts,2020-01-29,proposed_construction_type,3
+pts_1572053514788,pts,2020-01-29,proposed_construction_type_description,constr type 3
+pts_1572053514788,pts,2020-01-29,supervisor_district,6
+pts_1572053514788,pts,2020-01-29,zipcode,94130
+pts_1572053514788,pts,2020-01-29,location,"(37.81107198559766, -122.3659671988748)"
+pts_1572053514788,pts,2020-01-29,record_id,1572053514788
+pts_1572057514787,pts,2020-01-29,permit_number,201910154498
+pts_1572057514787,pts,2020-01-29,permit_type,3
+pts_1572057514787,pts,2020-01-29,permit_type_definition,additions alterations or repairs
+pts_1572057514787,pts,2020-01-29,permit_creation_date,10/15/2019
+pts_1572057514787,pts,2020-01-29,block,8954
+pts_1572057514787,pts,2020-01-29,lot,001
+pts_1572057514787,pts,2020-01-29,street_number,119
+pts_1572057514787,pts,2020-01-29,street_name,Forest
+pts_1572057514787,pts,2020-01-29,current_status,filed
+pts_1572057514787,pts,2020-01-29,current_status_date,10/15/2019
+pts_1572057514787,pts,2020-01-29,filed_date,10/15/2019
+pts_1572057514787,pts,2020-01-29,proposed_use,apartments
+pts_1572057514787,pts,2020-01-29,proposed_units,14
+pts_1572057514787,pts,2020-01-29,proposed_construction_type,3
+pts_1572057514787,pts,2020-01-29,proposed_construction_type_description,constr type 3
+pts_1572057514787,pts,2020-01-29,supervisor_district,6
+pts_1572057514787,pts,2020-01-29,zipcode,94130
+pts_1572057514787,pts,2020-01-29,location,"(37.81107198559766, -122.3659671988748)"
+pts_1572057514787,pts,2020-01-29,record_id,1572057514787
 pts_1572068434435,pts,2020-01-29,permit_number,201910154500
 pts_1572068434435,pts,2020-01-29,permit_type,8
 pts_1572068434435,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -54509,6 +54566,46 @@ pts_1579138366289,pts,2020-01-29,supervisor_district,2
 pts_1579138366289,pts,2020-01-29,zipcode,94118
 pts_1579138366289,pts,2020-01-29,location,"(37.78773615504753, -122.45236621656346)"
 pts_1579138366289,pts,2020-01-29,record_id,1579138366289
+pts_1579272508820,pts,2020-01-29,permit_number,201912169614
+pts_1579272508820,pts,2020-01-29,permit_type,1
+pts_1579272508820,pts,2020-01-29,permit_type_definition,new construction
+pts_1579272508820,pts,2020-01-29,permit_creation_date,12/16/2019
+pts_1579272508820,pts,2020-01-29,block,8901
+pts_1579272508820,pts,2020-01-29,lot,002
+pts_1579272508820,pts,2020-01-29,street_number,1
+pts_1579272508820,pts,2020-01-29,street_name,Avenue Of The Palms
+pts_1579272508820,pts,2020-01-29,unit_suffix,BLDG 1
+pts_1579272508820,pts,2020-01-29,current_status,filed
+pts_1579272508820,pts,2020-01-29,current_status_date,12/16/2019
+pts_1579272508820,pts,2020-01-29,filed_date,12/16/2019
+pts_1579272508820,pts,2020-01-29,proposed_use,apartments
+pts_1579272508820,pts,2020-01-29,proposed_units,175
+pts_1579272508820,pts,2020-01-29,proposed_construction_type,1
+pts_1579272508820,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1579272508820,pts,2020-01-29,supervisor_district,6
+pts_1579272508820,pts,2020-01-29,zipcode,94130
+pts_1579272508820,pts,2020-01-29,location,"(37.81706254917497, -122.37107778708355)"
+pts_1579272508820,pts,2020-01-29,record_id,1579272508820
+pts_1579279508820,pts,2020-01-29,permit_number,201912169619
+pts_1579279508820,pts,2020-01-29,permit_type,1
+pts_1579279508820,pts,2020-01-29,permit_type_definition,new construction
+pts_1579279508820,pts,2020-01-29,permit_creation_date,12/16/2019
+pts_1579279508820,pts,2020-01-29,block,8901
+pts_1579279508820,pts,2020-01-29,lot,002
+pts_1579279508820,pts,2020-01-29,street_number,1
+pts_1579279508820,pts,2020-01-29,street_name,Avenue Of The Palms
+pts_1579279508820,pts,2020-01-29,unit_suffix,BLDG 1
+pts_1579279508820,pts,2020-01-29,current_status,filed
+pts_1579279508820,pts,2020-01-29,current_status_date,12/16/2019
+pts_1579279508820,pts,2020-01-29,filed_date,12/16/2019
+pts_1579279508820,pts,2020-01-29,proposed_use,apartments
+pts_1579279508820,pts,2020-01-29,proposed_units,248
+pts_1579279508820,pts,2020-01-29,proposed_construction_type,1
+pts_1579279508820,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1579279508820,pts,2020-01-29,supervisor_district,6
+pts_1579279508820,pts,2020-01-29,zipcode,94130
+pts_1579279508820,pts,2020-01-29,location,"(37.81706254917497, -122.37107778708355)"
+pts_1579279508820,pts,2020-01-29,record_id,1579279508820
 pts_157928263381,pts,2020-01-29,permit_number,201912169621
 pts_157928263381,pts,2020-01-29,permit_type,8
 pts_157928263381,pts,2020-01-29,permit_type_definition,otc alterations permit
@@ -56883,6 +56980,33 @@ bmr_2013-037,bmr,2020-01-29,location,POINT (-122.43319449999998 37.79)
 "da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,permit_number,201905170923 201905170926
 "da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,dbi_arrival_date,05/17/19
 "da_info_59_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,target_permit_issuance_date,-
+"da_info_63_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,row_number,63
+"da_info_63_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,delivery_agency,TIDA
+"da_info_63_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,project_name,YBI
+"da_info_63_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,phase,"SubPhase 1YB, Block Y3, Block Y4"
+"da_info_63_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,permit_type,Shoring Permit
+"da_info_63_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,permit_number,201910154483 201910154490 201910154498
+"da_info_63_TIDA_YBI_SubPhase 1YB, Block Y3, Block Y4",da_info,2020-01-29,dbi_arrival_date,10/15/19
+"da_info_68_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,row_number,68
+"da_info_68_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,delivery_agency,TIDA
+"da_info_68_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,project_name,TREASURE ISLAND (TIDA)
+"da_info_68_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,phase,"SubPhase 1C, Block C1"
+"da_info_68_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,total_units,175
+"da_info_68_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,affordable_units,-
+"da_info_68_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,permit_type,Site Permit
+"da_info_68_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,permit_number,201912169614
+"da_info_68_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,dbi_arrival_date,12/12/20
+"da_info_68_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,target_permit_issuance_date,2021-05-12T00:00:00.000
+"da_info_70_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,row_number,70
+"da_info_70_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,delivery_agency,TIDA
+"da_info_70_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,project_name,TREASURE ISLAND (TIDA)
+"da_info_70_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,phase,"SubPhase 1C, Block C1"
+"da_info_70_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,total_units,248
+"da_info_70_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,affordable_units,-
+"da_info_70_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,permit_type,Site Permit
+"da_info_70_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,permit_number,201912169619
+"da_info_70_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,dbi_arrival_date,12/12/20
+"da_info_70_TIDA_TREASURE ISLAND (TIDA)_SubPhase 1C, Block C1",da_info,2020-01-29,target_permit_issuance_date,2021-05-12T00:00:00.000
 planning_2002.0809,planning,2020-01-29,description,"03/06/2003 Shadow Study Prop. K   The proposed project would demolish the 22 three-story buildings and construct 17 three story affordable housing structures containing a total of 247 units, plus community space and child care designed as a PUD with exceptions from parking and loading requirements."
 planning_2002.0809C,planning,2020-01-29,description,"03/06/2003 Shadow Study Prop. K   The proposed project would demolish the 22 three-story buildings and construct 17 three story affordable housing structures containing a total of 247 units, plus community space and child care designed as a PUD with exceptions from parking and loading requirements."
 planning_2002.0809E,planning,2020-01-29,description,"03/06/2003 Shadow Study Prop. K   The proposed project would demolish the 22 three-story buildings and construct 17 three story affordable housing structures containing a total of 247 units, plus community space and child care designed as a PUD with exceptions from parking and loading requirements."
