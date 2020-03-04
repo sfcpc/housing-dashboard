@@ -416,6 +416,15 @@ class PermitAddendaSummaryHelper(RecordGraphBuilderHelper):
             parents.extend(parent_fks)
 
 
+class DAInfoHelper(RecordGraphBuilderHelper):
+    def process(self, fk, record, parents, children):
+        building_permits_numbers = record['permit_number'].split(" ")
+        for permit_no in building_permit_numbers:
+            parent_fks = pts_helper.find_by_building_permit_number(permit_no)
+            if parent_fks:
+                parents.extend(parent_fks)
+
+
 class RecordGraphBuilder:
     """RecordGraphBuilder reads in files and builds a RecordGraph."""
 
@@ -447,6 +456,8 @@ class RecordGraphBuilder:
                 AffordableRentalPortfolioHelper(self),
             PermitAddendaSummary.NAME:
                 PermitAddendaSummaryHelper(self),
+            DAInfo.NAME:
+                DaInfoHelper(self),
         }
 
     def build(self):

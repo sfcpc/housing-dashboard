@@ -651,6 +651,19 @@ class AffordableRentalPortfolio(DirectSource):
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Mayor-s-Office-of-Housing-and-Community-Developmen/9rdx-httc"  # NOQA
 
 
+class DAInfo(Source):
+    NAME = 'da_info'
+    OUTPUT_NAME = NAME
+    FK = PrimaryKey(NAME, 'delivery_agency', 'project_name', 'phase')
+    FIELDS = {
+        'Housing Delivery Agency': 'delivery_agency',
+        'Project Name:', 'project_name',
+        'Phase/ Bldg/Address/B+L', 'phase',
+        'Building Permit No.': 'permit_number'
+    }
+    DATA_SF = "https://data.sfgov.org/dataset/Priority-Permits/336t-bzzm"
+
+
 class PermitAddendaSummary(Source):
     '''Class for permit addenda summary data.
 
@@ -713,4 +726,5 @@ source_map = {
     MOHCDInclusionary.NAME: MOHCDInclusionary,
     PermitAddendaSummary.NAME: PermitAddendaSummary,
     AffordableRentalPortfolio.NAME: AffordableRentalPortfolio,
+    DAInfo.NAME: DAInfo
 }
