@@ -555,6 +555,91 @@ class ProjectUnitCountsFull(NameValueTable):
         return result
 
 
+class ProjectCompletedUnitCounts(Table):
+    NUM_UNITS_COMPLETED = 'num_units_completed'
+    DATE_COMPLETED = 'date_completed'
+    DATA_SOURCE = 'data_source'
+
+    def __init__(self):
+        super().__init__('project_completed_unit_counts', header=[
+            self.NUM_UNITS_COMPLETED,
+            self.DATE_COMPLETED,
+            self.DATA_SOURCE])
+
+    def _completed_units(self, rows, proj):
+        """Outputs the records associated with units being completed.
+        Prefers to use TCO data if available, but if it's not will look at
+        site permits in PTS."""
+        for child in proj.children[TCO.NAME]:
+            date_issued_field = child.get_latest('date_issued')[0]
+            date_issued = datetime.strptime(
+                date_issued_field.split(' ')[0],
+                '%Y/%m/%d').date()
+            num_units = child.get_latest('num_units')[0]
+
+            rows.append(
+                self.completed_unit_row(proj,
+                                        num_units,
+                                        date_issued.isoformat(),
+                                        TCO.OUTPUT_NAME))
+        # Data exists in TCO data set, don't bother looking in PTS
+        if len(rows) > 0:
+            return
+
+        seen_permit_numbers = set()
+        for child in proj.children[PTS.NAME]:
+            permit_number = child.get_latest('permit_number')[0]
+            if permit_number in seen_permit_numbers:
+                continue
+            else:
+                seen_permit_numbers.add(permit_number)
+
+            permit_type = child.get_latest('permit_type')[0]
+            if permit_type not in _valid_dbi_permit_types:
+                continue
+            status_entry = child.get_latest('current_status')
+            if not status_entry:
+                continue
+            status = status_entry[0]
+            if status != 'complete':
+                continue
+
+            date_completed_entry = child.get_latest('completed_date')
+            if not date_completed_entry:
+                continue
+            date_completed_field = date_completed_entry[0]
+            date_completed = datetime.strptime(
+                date_completed_field.split(' ')[0],
+                '%m/%d/%Y').date()
+            num_units_entry = child.get_latest('proposed_units')
+            if not num_units_entry:
+                continue
+
+            num_units = num_units_entry[0]
+            rows.append(
+                self.completed_unit_row(proj,
+                                        num_units,
+                                        date_completed.isoformat(),
+                                        PTS.OUTPUT_NAME))
+
+    def completed_unit_row(self,
+                           proj,
+                           num_units_completed='',
+                           date_completed='',
+                           data=''):
+        row = [''] * len(self.header())
+        self.gen_id(row, proj)
+        row[self.index(self.NUM_UNITS_COMPLETED)] = num_units_completed
+        row[self.index(self.DATE_COMPLETED)] = date_completed
+        row[self.index(self.DATA_SOURCE)] = data
+        return row
+
+    def rows(self, proj):
+        result = []
+        self._completed_units(result, proj)
+        return result
+
+
 class ProjectDetails(NameValueTable):
     # NOTE/TODO: expand as needed
     OUT_1BR = 'residential_units_1br'
