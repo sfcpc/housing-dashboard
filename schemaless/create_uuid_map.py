@@ -12,9 +12,9 @@ from datetime import date
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import AffordableRentalPortfolio
-from schemaless.sources import DAInfo
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import OEWDPermits
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
@@ -417,7 +417,7 @@ class PermitAddendaSummaryHelper(RecordGraphBuilderHelper):
             parents.extend(parent_fks)
 
 
-class DAInfoHelper(RecordGraphBuilderHelper):
+class OEWDPermitsHelper(RecordGraphBuilderHelper):
     def process(self, fk, record, parents, children):
         pts_helper = self.graph_builder.helpers[PTS.NAME]
         building_permit_numbers = record['permit_number'].split(" ")
@@ -458,8 +458,8 @@ class RecordGraphBuilder:
                 AffordableRentalPortfolioHelper(self),
             PermitAddendaSummary.NAME:
                 PermitAddendaSummaryHelper(self),
-            DAInfo.NAME:
-                DAInfoHelper(self),
+            OEWDPermits.NAME:
+                OEWDPermitsHelper(self),
         }
 
     def build(self):

@@ -17,7 +17,7 @@ python gen_test_data.py data/mohcd/mohcd-inclusionary-2020-02-05.csv testdata/mo
 
 python gen_test_data.py data/pts/2020-02-11-permit-addenda.csv.xz testdata/permit-addenda.csv "(201609218371)|(8410366)|(201810233961)"
 
-python gen_test_data.py data/da/da-2020-03-03.csv testdata/da.csv "(201905170923)|(201905170926)|(201910154483)|(201910154490)|(201910154498)|(201912169614)|(201912169619)"
+python gen_test_data.py data/oewd/oewd-permits-2020-03-03.csv testdata/oewd-permits.csv "(201905170923)|(201905170926)|(201910154483)|(201910154490)|(201910154498)|(201912169614)|(201912169619)"
 
 python3 -m schemaless.create_schemaless \
   --planning_file testdata/planning-one.csv \
@@ -27,7 +27,7 @@ python3 -m schemaless.create_schemaless \
   --mohcd_inclusionary_file testdata/mohcd-inclusionary.csv \
   --permit_addenda testdata/permit-addenda.csv \
   --affordable_file testdata/affordable-rental-portfolio.csv \
-  --da_info_file testdata/da.csv \
+  --oewd_permits_file testdata/oewd-permits.csv \
   --the-date=2020-01-29 \
   --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   testdata/schemaless-one.csv
