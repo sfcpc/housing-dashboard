@@ -254,6 +254,8 @@ class ProjectFacts(Table):
     NET_NUM_UNITS_BMR_DATA = 'net_num_units_bmr_data'
     NET_EST_NUM_UNITS_BMR = 'net_estimated_num_units_bmr'
     NET_EST_NUM_UNITS_BMR_DATA = 'net_estimated_num_units_bmr_data'
+    PRJ_ID = 'prj_id'
+    PIM_LINK = 'pim_link'
 
     SEEN_IDS = set()
 
@@ -271,6 +273,8 @@ class ProjectFacts(Table):
             self.NET_NUM_UNITS_BMR_DATA,
             self.NET_EST_NUM_UNITS_BMR,
             self.NET_EST_NUM_UNITS_BMR_DATA,
+            self.PRJ_ID,
+            self.PIM_LINK
         ])
 
     _ZIP_CODE_REGEX = re.compile(' [0-9]{5}$')
@@ -433,6 +437,23 @@ class ProjectFacts(Table):
                 row[self.index(self.NET_EST_NUM_UNITS_BMR_DATA)] = \
                     Planning.OUTPUT_NAME
 
+    def _prj_info(self, row, proj):
+        prj_id = proj.field('record_id',
+                            Planning.NAME,
+                            entry_predicate=[('record_type',
+                                              lambda x: x == 'PRJ')])
+        pim_link_template = "https://sfplanninggis.org/pim?search=%s"
+        if prj_id:
+            row[self.index(self.PRJ_ID)] = prj_id
+            row[self.index(self.PIM_LINK)] = pim_link_template % prj_id
+        else:
+            row[self.index(self.PRJ_ID)] = ''
+            blocklot = proj.field('mapblocklot', Planning.NAME)
+            if blocklot:
+                row[self.index(self.PIM_LINK)] = pim_link_template % blocklot
+            else:
+                row[self.index(self.PIM_LINK)] = ''
+
     def _atleast_one_measure(self, row):
         return ((row[self.index(self.NET_NUM_UNITS)] != '' and
                  row[self.index(self.NET_NUM_UNITS)] != '0') or
@@ -458,6 +479,7 @@ class ProjectFacts(Table):
         self.gen_id(row, proj)
         self._gen_facts(row, proj)
         self._gen_units(row, proj)
+        self._prj_info(row, proj)
 
         if (self._atleast_one_measure(row) and
                 self._nonzero_or_nonempty_address(row)):
