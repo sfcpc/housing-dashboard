@@ -839,6 +839,10 @@ def test_project_details_env_review_type(basic_graph, d):
     nvs = table.rows(proj_normal)
     assert _get_value_for_name(table, nvs, 'environmental_review_type') == \
         'Categorical Exemption-Certificate'
+    assert _get_value_for_name(table,
+                               nvs,
+                               'environmental_review_type_bucketed') == \
+        'Categorical Exemption'
 
 
 def test_project_details_is_da(basic_graph, d):

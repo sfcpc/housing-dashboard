@@ -842,9 +842,9 @@ class ProjectDetails(NameValueTable):
             rows.append(self.nv_row(
                 proj,
                 name='is_100pct_affordable',
-                value='TRUE' \
-                    if units[0] * self._AFFORDABILITY_THRESHOLD <= units[1] \
-                    else 'FALSE',
+                value='TRUE'
+                      if units[0] * self._AFFORDABILITY_THRESHOLD <= units[1]
+                      else 'FALSE',
                 data=MOHCDPipeline.OUTPUT_NAME))
         else:
             units = _get_mohcd_units(proj, AffordableRentalPortfolio.NAME)
@@ -891,6 +891,22 @@ class ProjectDetails(NameValueTable):
             rows.append(self.nv_row(proj,
                                     name='environmental_review_type',
                                     value=env_review_type,
+                                    data=Planning.OUTPUT_NAME))
+
+            bucketed = 'Other'
+            if re.search('categorical exemption', env_review_type, re.I):
+                bucketed = 'Categorical Exemption'
+            elif re.search('community plan', env_review_type, re.I):
+                bucketed = 'Community Plan'
+            elif re.search(r'environmental impact repo|\beir\b',
+                           env_review_type,
+                           re.I):
+                bucketed = 'EIR'
+            elif re.search('negative declaration', env_review_type, re.I):
+                bucketed = 'Negative Declaration'
+            rows.append(self.nv_row(proj,
+                                    name='environmental_review_type_bucketed',
+                                    value=bucketed,
                                     data=Planning.OUTPUT_NAME))
 
     def _is_da_type(self, rows, proj):
