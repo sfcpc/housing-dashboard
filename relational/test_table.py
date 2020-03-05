@@ -839,6 +839,10 @@ def test_project_details_env_review_type(basic_graph, d):
     nvs = table.rows(proj_normal)
     assert _get_value_for_name(table, nvs, 'environmental_review_type') == \
         'Categorical Exemption-Certificate'
+    assert _get_value_for_name(table,
+                               nvs,
+                               'environmental_review_type_bucketed') == \
+        'Categorical Exemption'
 
 
 def test_project_details_is_da(basic_graph, d):
@@ -1076,6 +1080,19 @@ def test_project_details_is_100pct_affordable_mohcd(basic_graph, d):
                        NameValue('total_affordable_units', '0', d)]),
             ],
             want=''),
+        EntriesTestRow(
+            name='is close enough',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('residential_units_1br_exist', '0', d),
+                       NameValue('residential_units_1br_prop', '2', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('total_project_units', '10', d),
+                       NameValue('total_affordable_units', '9', d)]),
+            ],
+            want='TRUE'),
     ]
 
     for test in tests:
