@@ -257,6 +257,7 @@ class ProjectFacts(Table):
     NET_EST_NUM_UNITS_BMR_DATA = 'net_estimated_num_units_bmr_data'
     PRJ_ID = 'prj_id'
     PIM_LINK = 'pim_link'
+    ENTITLEMENT_AGENCY = 'entitlement_agency'
 
     SEEN_IDS = set()
 
@@ -275,7 +276,8 @@ class ProjectFacts(Table):
             self.NET_EST_NUM_UNITS_BMR,
             self.NET_EST_NUM_UNITS_BMR_DATA,
             self.PRJ_ID,
-            self.PIM_LINK
+            self.PIM_LINK,
+            self.ENTITLEMENT_AGENCY
         ])
 
     _ZIP_CODE_REGEX = re.compile(' [0-9]{5}$')
@@ -455,6 +457,13 @@ class ProjectFacts(Table):
             else:
                 row[self.index(self.PIM_LINK)] = ''
 
+    def _entitlement_agency_info(self, row, proj):
+        roots = proj.roots[Planning.NAME]
+        if roots is not None and len(roots) > 0:
+            row[self.index(self.ENTITLEMENT_AGENCY)] = Planning.OUTPUT_NAME
+        else:
+            row[self.index(self.ENTITLEMENT_AGENCY)] = ''
+
     def _atleast_one_measure(self, row):
         return ((row[self.index(self.NET_NUM_UNITS)] != '' and
                  row[self.index(self.NET_NUM_UNITS)] != '0') or
@@ -481,6 +490,7 @@ class ProjectFacts(Table):
         self._gen_facts(row, proj)
         self._gen_units(row, proj)
         self._prj_info(row, proj)
+        self._entitlement_agency_info(row, proj)
 
         if (self._atleast_one_measure(row) and
                 self._nonzero_or_nonempty_address(row)):

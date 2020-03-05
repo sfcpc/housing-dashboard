@@ -549,6 +549,33 @@ def test_table_project_facts_prj_info(basic_graph, d):
                                       name) == wantvalue, test.name
 
 
+def test_table_project_facts_entitlement_agency(basic_graph, d):
+    table = ProjectFacts()
+
+    tests = [
+        EntriesTestRow(
+            name='prj root',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('record_id', 'abc', d),
+                       NameValue('number_of_market_rate_units', '10', d),
+                       NameValue('record_type', 'PRJ', d)]),
+            ],
+            want={'entitlement_agency': 'planning'},
+        ),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
+
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_row(table,
+                                      fields,
+                                      name) == wantvalue, test.name
+
+
 def test_table_project_units_full_count(basic_graph, d):
     table = ProjectUnitCountsFull()
 
