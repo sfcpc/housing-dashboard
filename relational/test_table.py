@@ -509,7 +509,7 @@ def test_table_project_facts_units_mohcd(basic_graph, d):
                                       name) == wantvalue, test.name
 
 
-def test_table_project_facts_prj_info(basic_graph, d):
+def test_table_project_facts_pim_link(basic_graph, d):
     table = ProjectFacts()
 
     tests = [
@@ -522,8 +522,7 @@ def test_table_project_facts_prj_info(basic_graph, d):
                        NameValue('number_of_market_rate_units', '10', d),
                        NameValue('record_type', 'PRJ', d)]),
             ],
-            want={'prj_id': 'abc',
-                  'pim_link': 'https://sfplanninggis.org/pim?search=abc'},
+            want={'pim_link': 'https://sfplanninggis.org/pim?search=abc'},
         ),
         EntriesTestRow(
             name='no prj id, only block lot',
@@ -536,6 +535,34 @@ def test_table_project_facts_prj_info(basic_graph, d):
                        NameValue('record_type', 'CUA', d)]),
             ],
             want={'pim_link': 'https://sfplanninggis.org/pim?search=2000'},
+        ),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
+
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_row(table,
+                                      fields,
+                                      name) == wantvalue, test.name
+
+
+def test_table_project_facts_permit_authority(basic_graph, d):
+    table = ProjectFacts()
+
+    tests = [
+        EntriesTestRow(
+            name='prj root',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('record_id', 'abc', d),
+                       NameValue('number_of_market_rate_units', '10', d),
+                       NameValue('record_type', 'PRJ', d)]),
+            ],
+            want={'permit_authority': 'planning',
+                  'permit_authority_id': 'abc'},
         ),
     ]
 

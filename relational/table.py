@@ -255,7 +255,6 @@ class ProjectFacts(Table):
     NET_NUM_UNITS_BMR_DATA = 'net_num_units_bmr_data'
     NET_EST_NUM_UNITS_BMR = 'net_estimated_num_units_bmr'
     NET_EST_NUM_UNITS_BMR_DATA = 'net_estimated_num_units_bmr_data'
-    PRJ_ID = 'prj_id'
     PIM_LINK = 'pim_link'
 
     SEEN_IDS = set()
@@ -274,8 +273,7 @@ class ProjectFacts(Table):
             self.NET_NUM_UNITS_BMR_DATA,
             self.NET_EST_NUM_UNITS_BMR,
             self.NET_EST_NUM_UNITS_BMR_DATA,
-            self.PRJ_ID,
-            self.PIM_LINK
+            self.PIM_LINK,
         ])
 
     _ZIP_CODE_REGEX = re.compile(' [0-9]{5}$')
@@ -318,9 +316,6 @@ class ProjectFacts(Table):
             row[self.index(self.SUPERVISOR_DISTRICT)] = \
                 proj.field('supervisor_district', mohcd)
 
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(mohcd)
-            row[self.index(self.PERMIT_AUTHORITY)] = 'mohcd'  # TODO
-
         if used_mohcd:
             return
 
@@ -334,8 +329,6 @@ class ProjectFacts(Table):
             row[self.index(self.ADDRESS)] = addr
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = ''  # TODO
-            row[self.index(self.PERMIT_AUTHORITY)] = Planning.OUTPUT_NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(Planning.NAME)
         elif proj.field('permit_number',
                         PTS.NAME,
                         entry_predicate=_is_valid_dbi_entry) != '':
@@ -359,9 +352,6 @@ class ProjectFacts(Table):
                 proj.field('supervisor_district',
                            PTS.NAME,
                            entry_predicate=_is_valid_dbi_entry)
-            row[self.index(self.PERMIT_AUTHORITY)] = PTS.NAME
-            row[self.index(self.PERMIT_AUTHORITY_ID)] = proj.fk(
-                    PTS.NAME, entry_predicate=_is_valid_dbi_entry)
 
     def _estimate_bmr(self, net):
         """Estimates the BMR we project a project to have.
@@ -438,22 +428,32 @@ class ProjectFacts(Table):
                 row[self.index(self.NET_EST_NUM_UNITS_BMR_DATA)] = \
                     Planning.OUTPUT_NAME
 
-    def _prj_info(self, row, proj):
+    def _pim_link_info(self, row, proj):
         prj_id = proj.field('record_id',
                             Planning.NAME,
                             entry_predicate=[('record_type',
                                               lambda x: x == 'PRJ')])
         pim_link_template = "https://sfplanninggis.org/pim?search=%s"
         if prj_id:
-            row[self.index(self.PRJ_ID)] = prj_id
             row[self.index(self.PIM_LINK)] = pim_link_template % prj_id
         else:
-            row[self.index(self.PRJ_ID)] = ''
             blocklot = proj.field('mapblocklot', Planning.NAME)
             if blocklot:
                 row[self.index(self.PIM_LINK)] = pim_link_template % blocklot
             else:
                 row[self.index(self.PIM_LINK)] = ''
+
+    def _permit_authority_info(self, row, proj):
+        roots = proj.roots[Planning.NAME]
+        if roots is not None and len(roots) > 0:
+            row[self.index(self.PERMIT_AUTHORITY)] = Planning.OUTPUT_NAME
+
+            root_entry = roots[0].get_latest('record_id')
+            if root_entry:
+                row[self.index(self.PERMIT_AUTHORITY_ID)] = root_entry[0]
+        else:
+            row[self.index(self.PERMIT_AUTHORITY)] = ''
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = ''
 
     def _atleast_one_measure(self, row):
         return ((row[self.index(self.NET_NUM_UNITS)] != '' and
@@ -480,7 +480,8 @@ class ProjectFacts(Table):
         self.gen_id(row, proj)
         self._gen_facts(row, proj)
         self._gen_units(row, proj)
-        self._prj_info(row, proj)
+        self._pim_link_info(row, proj)
+        self._permit_authority_info(row, proj)
 
         if (self._atleast_one_measure(row) and
                 self._nonzero_or_nonempty_address(row)):
