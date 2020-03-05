@@ -509,7 +509,7 @@ def test_table_project_facts_units_mohcd(basic_graph, d):
                                       name) == wantvalue, test.name
 
 
-def test_table_project_facts_prj_info(basic_graph, d):
+def test_table_project_facts_pim_link(basic_graph, d):
     table = ProjectFacts()
 
     tests = [
@@ -522,8 +522,7 @@ def test_table_project_facts_prj_info(basic_graph, d):
                        NameValue('number_of_market_rate_units', '10', d),
                        NameValue('record_type', 'PRJ', d)]),
             ],
-            want={'prj_id': 'abc',
-                  'pim_link': 'https://sfplanninggis.org/pim?search=abc'},
+            want={'pim_link': 'https://sfplanninggis.org/pim?search=abc'},
         ),
         EntriesTestRow(
             name='no prj id, only block lot',
@@ -549,7 +548,7 @@ def test_table_project_facts_prj_info(basic_graph, d):
                                       name) == wantvalue, test.name
 
 
-def test_table_project_facts_entitlement_agency(basic_graph, d):
+def test_table_project_facts_permit_authority(basic_graph, d):
     table = ProjectFacts()
 
     tests = [
@@ -562,7 +561,8 @@ def test_table_project_facts_entitlement_agency(basic_graph, d):
                        NameValue('number_of_market_rate_units', '10', d),
                        NameValue('record_type', 'PRJ', d)]),
             ],
-            want={'entitlement_agency': 'planning'},
+            want={'permit_authority': 'planning',
+                  'permit_authority_id': 'abc'},
         ),
     ]
 
