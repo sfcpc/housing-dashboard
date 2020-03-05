@@ -15,6 +15,7 @@ import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import OEWDPermits
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
@@ -884,6 +885,26 @@ class ProjectDetails(NameValueTable):
                                     value=env_review_type,
                                     data=Planning.OUTPUT_NAME))
 
+    def _is_da_type(self, rows, proj):
+        """Populates whether a project is a DA or not. Relies on the existence
+        of PHA permits (if it is a Planning project) or it existing in the
+        OEWD permits data set.
+        """
+        pha_record_id = proj.field('record_id',
+                                   Planning.NAME,
+                                   entry_predicate=[('record_type',
+                                                     lambda x: x == 'PHA')])
+        oewd_record_id = proj.field('row_number',
+                                    OEWDPermits.NAME)
+
+        is_da = pha_record_id or oewd_record_id
+        is_da_data = OEWDPermits.OUTPUT_NAME \
+            if oewd_record_id else Planning.OUTPUT_NAME
+        rows.append(self.nv_row(proj,
+                                name='is_da',
+                                value='TRUE' if is_da else 'FALSE',
+                                data=is_da_data))
+
     def _unique(self, rows):
         """Prunes duplicate name-value entries, preferring entries that were
         added later in the process.
@@ -917,6 +938,7 @@ class ProjectDetails(NameValueTable):
         self._onsite_or_feeout(result, proj)
         self._earliest_addenda_arrival(result, proj)
         self._env_review_type(result, proj)
+        self._is_da_type(result, proj)
 
         self._unique(result)
 
