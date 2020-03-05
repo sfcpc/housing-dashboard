@@ -719,7 +719,6 @@ def test_table_project_units_completed_count(basic_graph, d):
                NameValue('permit_number', 'xyz', d),
                NameValue('current_status', 'complete', d),
                NameValue('completed_date', '2/10/2018', d),
-               NameValue('existing_units', '0', d),
                NameValue('proposed_units', '2', d)]),
         Entry('4',  # Ignore permits that are not complete
               PTS.NAME,
@@ -735,7 +734,7 @@ def test_table_project_units_completed_count(basic_graph, d):
 
     # Use PTS data since there are valid records
     assert len(num_rows) == 2
-    assert num_rows[0].num_units_completed == '5'
+    assert num_rows[0].num_units_completed == '4'
     assert num_rows[0].date_completed == '2018-02-05'
     assert num_rows[0].data == 'dbi'
     assert num_rows[1].num_units_completed == '2'
