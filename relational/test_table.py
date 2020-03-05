@@ -93,7 +93,7 @@ def test_table_project_facts(basic_graph, d):
                 Entry('1',
                       Planning.NAME,
                       [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
-                       NameValue('number_of_market_rate_units', '10', d)]),
+                       NameValue('number_of_units', '10', d)]),
             ],
             want={
                 'name': 'BALBOA RESERVOIR DEVELOPMENT',
@@ -105,7 +105,7 @@ def test_table_project_facts(basic_graph, d):
                 Entry('1',
                       Planning.NAME,
                       [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
-                       NameValue('number_of_market_rate_units', '0', d)]),
+                       NameValue('number_of_units', '0', d)]),
             ],
             want={
                 'name': '',
@@ -117,7 +117,7 @@ def test_table_project_facts(basic_graph, d):
                 Entry('1',
                       Planning.NAME,
                       [NameValue('address', '123 chris st', d),
-                       NameValue('number_of_market_rate_units', '10', d)]),
+                       NameValue('number_of_units', '10', d)]),
             ],
             want={
                 'name': '123 chris st',
@@ -129,7 +129,7 @@ def test_table_project_facts(basic_graph, d):
                 Entry('1',
                       Planning.NAME,
                       [NameValue('address', '123 chris st 94114', d),
-                       NameValue('number_of_market_rate_units', '10', d)]),
+                       NameValue('number_of_units', '10', d)]),
             ],
             want={
                 'name': '123 chris st',
@@ -141,7 +141,7 @@ def test_table_project_facts(basic_graph, d):
                 Entry('1',
                       Planning.NAME,
                       [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
-                       NameValue('number_of_market_rate_units', '10', d)]),
+                       NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       MOHCDPipeline.NAME,
                       [NameValue('project_id', '1', d),
@@ -160,7 +160,7 @@ def test_table_project_facts(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       MOHCDPipeline.NAME,
                       [NameValue('project_id', '1', d),
@@ -179,7 +179,7 @@ def test_table_project_facts(basic_graph, d):
                 Entry('1',
                       Planning.NAME,
                       [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
-                       NameValue('number_of_market_rate_units', '10', d)]),
+                       NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       MOHCDPipeline.NAME,
                       [NameValue('project_id', '1', d),
@@ -215,7 +215,7 @@ def test_table_project_facts_units(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       PTS.NAME,
                       [NameValue('permit_type', '1', d),
@@ -228,7 +228,7 @@ def test_table_project_facts_units(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       PTS.NAME,
                       [NameValue('proposed_units', '7', d)]),
@@ -239,7 +239,7 @@ def test_table_project_facts_units(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       PTS.NAME,
                       [NameValue('permit_type', '1', d),
@@ -251,7 +251,7 @@ def test_table_project_facts_units(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       PTS.NAME,
                       [NameValue('permit_type', '1', d),
@@ -263,7 +263,7 @@ def test_table_project_facts_units(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
             ],
             want='10'),
         EntriesTestRow(
@@ -271,7 +271,7 @@ def test_table_project_facts_units(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       PTS.NAME,
                       [NameValue('permit_type', '3', d),
@@ -283,7 +283,7 @@ def test_table_project_facts_units(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       PTS.NAME,
                       [NameValue('permit_type', '2', d),
@@ -303,7 +303,7 @@ def test_table_project_facts_units(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       PTS.NAME,
                       [NameValue('permit_type', '2', d),
@@ -337,7 +337,7 @@ def test_table_project_facts_units(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '0', d)]),
+                      [NameValue('number_of_units', '0', d)]),
             ],
             want=''),
         EntriesTestRow(
@@ -345,7 +345,7 @@ def test_table_project_facts_units(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '0', d)]),
+                      [NameValue('number_of_units', '0', d)]),
                 Entry('2',
                       PTS.NAME,
                       [NameValue('permit_type', '2', d),
@@ -373,7 +373,7 @@ def test_table_project_facts_units_planning_bmr(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '20', d),
+                      [NameValue('number_of_units', '20', d),
                        NameValue('number_of_affordable_units', '10', d)]),
             ],
             want={'net_num_units_bmr': '10',
@@ -384,7 +384,7 @@ def test_table_project_facts_units_planning_bmr(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '20', d)]),
+                      [NameValue('number_of_units', '20', d)]),
             ],
             want={'net_num_units_bmr': '',
                   'net_estimated_num_units_bmr': '4'},
@@ -394,7 +394,7 @@ def test_table_project_facts_units_planning_bmr(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '30', d)]),
+                      [NameValue('number_of_units', '30', d)]),
             ],
             want={'net_num_units_bmr': '',
                   'net_estimated_num_units_bmr': '9'},
@@ -404,7 +404,7 @@ def test_table_project_facts_units_planning_bmr(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '5', d)]),
+                      [NameValue('number_of_units', '5', d)]),
             ],
             want={'net_num_units_bmr': '',
                   'net_estimated_num_units_bmr': '0'},
@@ -414,7 +414,7 @@ def test_table_project_facts_units_planning_bmr(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '20', d),
+                      [NameValue('number_of_units', '20', d),
                        NameValue('number_of_affordable_units', '0', d)]),
             ],
             want={'net_num_units_bmr': '',
@@ -441,7 +441,7 @@ def test_table_project_facts_units_mohcd(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       MOHCDPipeline.NAME,
                       [NameValue('total_project_units', '7', d),
@@ -463,7 +463,7 @@ def test_table_project_facts_units_mohcd(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
                 Entry('3',
                       MOHCDInclusionary.NAME,
                       [NameValue('total_project_units', '6', d),
@@ -482,7 +482,7 @@ def test_table_project_facts_units_mohcd(basic_graph, d):
             entries=[
                 Entry('1',
                       Planning.NAME,
-                      [NameValue('number_of_market_rate_units', '10', d)]),
+                      [NameValue('number_of_units', '10', d)]),
                 Entry('2',
                       MOHCDPipeline.NAME,
                       [NameValue('total_project_units', '7', d)]),
@@ -519,7 +519,7 @@ def test_table_project_facts_pim_link(basic_graph, d):
                 Entry('1',
                       Planning.NAME,
                       [NameValue('record_id', 'abc', d),
-                       NameValue('number_of_market_rate_units', '10', d),
+                       NameValue('number_of_units', '10', d),
                        NameValue('record_type', 'PRJ', d)]),
             ],
             want={'pim_link': 'https://sfplanninggis.org/pim?search=abc'},
@@ -530,7 +530,7 @@ def test_table_project_facts_pim_link(basic_graph, d):
                 Entry('1',
                       Planning.NAME,
                       [NameValue('mapblocklot', '2000', d),
-                       NameValue('number_of_market_rate_units', '10', d),
+                       NameValue('number_of_units', '10', d),
                        NameValue('record_id', 'abc', d),
                        NameValue('record_type', 'CUA', d)]),
             ],
@@ -582,7 +582,7 @@ def test_table_project_units_full_count(basic_graph, d):
     entries1 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('number_of_market_rate_units', '10', d)]),
+              [NameValue('number_of_units', '10', d)]),
         Entry('2',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
@@ -629,7 +629,7 @@ def test_table_project_units_full_count(basic_graph, d):
     entries2 = [
         Entry('1',
               Planning.NAME,
-              [NameValue('number_of_market_rate_units', '10', d)]),
+              [NameValue('number_of_units', '10', d)]),
         Entry('2',
               PTS.NAME,
               [NameValue('permit_type', '1', d),
