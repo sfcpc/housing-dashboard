@@ -633,14 +633,18 @@ class ProjectCompletedUnitCounts(Table):
             date_completed = datetime.strptime(
                 date_completed_field.split(' ')[0],
                 '%m/%d/%Y').date()
-            num_units_entry = child.get_latest('proposed_units')
-            if not num_units_entry:
+            num_units_prop_entry = child.get_latest('proposed_units')
+            if not num_units_prop_entry:
                 continue
 
-            num_units = num_units_entry[0]
+            num_units_exist = 0
+            num_units_exist_entry = child.get_latest('existing_units')
+            if num_units_exist_entry:
+                num_units_exist = int(num_units_exist_entry[0])
+            num_units = int(num_units_prop_entry[0]) - num_units_exist
             rows.append(
                 self.completed_unit_row(proj,
-                                        num_units,
+                                        str(num_units),
                                         date_completed.isoformat(),
                                         PTS.OUTPUT_NAME))
 
