@@ -20,6 +20,7 @@ from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import OEWDPermits
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
@@ -87,6 +88,7 @@ class Freshness:
             Planning.NAME: self._planning,
             PTS.NAME: self._pts,
             TCO.NAME: self._tco,
+            OEWDPermits.NAME: self._oewd_permits,
             MOHCDPipeline.NAME: self._mohcd_pipeline,
             MOHCDInclusionary.NAME: self._mohcd_inclusionary,
             AffordableRentalPortfolio.NAME: self._affordable_rental,
@@ -144,6 +146,9 @@ class Freshness:
 
     def _tco(self, line):
         self._extract_nv_date(line, TCO.NAME, timeformat='%Y/%m/%d')
+
+    def _oewd_permits(self, line):
+        self._extract_last_updated(line, OEWDPermits.NAME)
 
     def _mohcd_pipeline(self, line):
         self._extract_last_updated(line, MOHCDPipeline.NAME)

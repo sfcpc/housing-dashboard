@@ -6,6 +6,7 @@ from relational.process_schemaless import Freshness
 from relational.process_schemaless import is_seen_id
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import OEWDPermits
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
@@ -18,6 +19,7 @@ def test_freshness():
     tco = datetime.fromisoformat('2020-02-10')
     mohcd = datetime.fromisoformat('2019-01-01')
     addenda = datetime.fromisoformat('2019-05-05')
+    oewd = datetime.fromisoformat('2019-10-10')
 
     lines = []
     lines.append({
@@ -90,6 +92,14 @@ def test_freshness():
         'value': '01/01/2020',
     })
 
+    # oewd extracts from last_updated
+    lines.append({
+        'last_updated': '2019-10-10',  # isoformat for last_updated
+        'source': OEWDPermits.NAME,
+        'name': 'dbi_arrival_date',
+        'value': '01/01/2020',
+    })
+
     # permit addenda summary extracts from last_updated
     lines.append({
         'last_updated': '2019-05-05',  # isoformat for last_updated
@@ -116,6 +126,7 @@ def test_freshness():
     assert fresh.freshness[MOHCDPipeline.NAME] == mohcd
     assert fresh.freshness[AffordableRentalPortfolio.NAME] == mohcd
     assert fresh.freshness[PermitAddendaSummary.NAME] == addenda
+    assert fresh.freshness[OEWDPermits.NAME] == oewd
     assert 'bamboozle' not in fresh.freshness
 
 

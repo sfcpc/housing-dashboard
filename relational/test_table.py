@@ -17,6 +17,7 @@ from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
+from schemaless.sources import OEWDPermits
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
@@ -839,6 +840,61 @@ def test_project_details_env_review_type(basic_graph, d):
     nvs = table.rows(proj_normal)
     assert _get_value_for_name(table, nvs, 'environmental_review_type') == \
         'Categorical Exemption-Certificate'
+
+
+def test_project_details_is_da(basic_graph, d):
+    table = ProjectDetails()
+
+    entries1 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('record_id', 'abc', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('record_id', 'xyz', d)])
+    ]
+    # No PHA records in Planning or OEWD entries
+    proj = Project('uuid1', entries1, basic_graph)
+    nvs = table.rows(proj)
+
+    entries2 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('record_id', 'abc', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('record_id', 'xyz', d)]),
+        Entry('3',
+              Planning.NAME,
+              [NameValue('record_type', 'PHA', d),
+               NameValue('record_id', 'def', d)]),
+    ]
+    # Existence of PHA records means it's a DA
+    proj = Project('uuid1', entries2, basic_graph)
+    nvs = table.rows(proj)
+    assert _get_value_for_name(table, nvs, 'is_da') == 'TRUE'
+
+    entries3 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_type', 'PRJ', d),
+               NameValue('record_id', 'abc', d)]),
+        Entry('2',
+              Planning.NAME,
+              [NameValue('record_type', 'CUA', d),
+               NameValue('status', 'Closed - CEQA', d)]),
+        Entry('3',
+              OEWDPermits.NAME,
+              [NameValue('row_number', '1', d)]),
+    ]
+    # Existence of OEWD permits node means it's a DA
+    proj = Project('uuid1', entries3, basic_graph)
+    nvs = table.rows(proj)
+    assert _get_value_for_name(table, nvs, 'is_da') == 'TRUE'
 
 
 def test_project_details_bedroom_info_mohcd(basic_graph, d):
