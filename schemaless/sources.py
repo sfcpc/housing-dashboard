@@ -38,7 +38,14 @@ class PrimaryKey(Field):
             if isinstance(field, Field):
                 vals.append(field.get_value_str(record))
             else:
-                vals.append(record.get(field))
+                val = record.get(field)
+                if val:
+                    vals.append(val)
+                else:
+                    logger.warning(
+                        "Field used to construct PK for this record "
+                        "is null: %s", field)
+                    vals.append("")
         return "_".join([self.prefix] + vals)
 
 
@@ -102,9 +109,9 @@ class Mapblklot(Field):
                     record[self.block] + record[self.lot])
         else:
             raise MapblklotException(
-                "MapblklotGeneratorSingleton is not instantiated. Please instantiate \
-                by calling schemaless.mapblklot_generator.init(filepath) in \
-                top-level script environment")
+                "MapblklotGeneratorSingleton is not instantiated. Please instantiate "
+                "by calling schemaless.mapblklot_generator.init(filepath) in "
+                "top-level script environment")
         return None
 
 
