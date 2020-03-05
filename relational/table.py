@@ -398,8 +398,7 @@ class ProjectFacts(Table):
             row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = source
         else:
             dbi_net = _get_dbi_units(proj)
-            planning_net = proj.field(
-                'number_of_market_rate_units', Planning.NAME)
+            planning_net = proj.field('number_of_units', Planning.NAME)
             net = dbi_net
             # PTS may have an explicitly set 0 unit count for projects
             # that have no business dealing with housing (possible with
@@ -531,8 +530,7 @@ class ProjectUnitCountsFull(NameValueTable):
         super().__init__('project_unit_counts_full')
 
     def _all_units(self, rows, proj):
-        planning_units = proj.field(
-            'number_of_market_rate_units', Planning.NAME)
+        planning_units = proj.field('number_of_units', Planning.NAME)
         if planning_units:
             rows.append(self.nv_row(proj,
                                     name='net_num_units',
