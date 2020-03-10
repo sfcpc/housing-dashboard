@@ -423,6 +423,7 @@ class PTS(DirectSource):
         'Proposed Construction Type': 'proposed_construction_type',
         'Proposed Construction Type Description':
         'proposed_construction_type_description',
+        'Site Permit': 'site_permit',
     }
     COMPUTED_FIELDS = {
         'address_norm': Address(
