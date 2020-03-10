@@ -1216,7 +1216,7 @@ def test_project_status_history_under_ent_review(child_parent_graph, d):
               Planning.NAME,
               [NameValue('record_type', 'CUA', d),
                NameValue('status', 'open', d),
-               NameValue('date_opened', '2000-01-02', d),]),
+               NameValue('date_opened', '2000-01-02', d)]),
     ]
 
     proj = Project('uuid1', entries1, child_parent_graph)
@@ -1233,12 +1233,12 @@ def test_project_status_history_under_ent_review(child_parent_graph, d):
               Planning.NAME,
               [NameValue('record_type', 'PRJ', d),
                NameValue('date_application_submitted', '2018-11-18', d),
-               NameValue('date_application_accepted', '2018-10-18', d),]),
+               NameValue('date_application_accepted', '2018-10-18', d)]),
         Entry('2',
               Planning.NAME,
               [NameValue('record_type', 'CUA', d),
                NameValue('status', 'open', d),
-               NameValue('date_opened', '2000-01-02', d),]),
+               NameValue('date_opened', '2000-01-02', d)]),
     ]
 
     proj = Project('uuid1', entries2, child_parent_graph)
@@ -1274,7 +1274,7 @@ def test_project_status_history_under_ent_review(child_parent_graph, d):
               Planning.NAME,
               [NameValue('record_type', 'VAR', d),
                NameValue('status', 'closed-cancelled', d),
-               NameValue('date_opened', '2000-01-02', d),]),
+               NameValue('date_opened', '2000-01-02', d)]),
         # Ignore any record not part of the PRJ
         Entry('9',
               Planning.NAME,
@@ -1308,7 +1308,7 @@ def test_project_status_history_entitled(child_parent_graph, d):
               Planning.NAME,
               [NameValue('record_type', 'CUA', d),
                NameValue('status', 'open', d),
-               NameValue('date_opened', '2000-01-02', d),]),
+               NameValue('date_opened', '2000-01-02', d)]),
     ]
 
     proj = Project('uuid1', entries1, child_parent_graph)
@@ -1613,7 +1613,7 @@ def test_project_status_history_under_construction(child_parent_graph, d):
               [NameValue('permit_number', 'abc', d),
                NameValue('permit_type', '1', d),
                NameValue('filed_date', '06/02/2019', d),
-               NameValue('issued_date', '07/02/2019', d),]),
+               NameValue('issued_date', '07/02/2019', d)]),
     ]
 
     proj = Project('uuid1', entries2, child_parent_graph)
