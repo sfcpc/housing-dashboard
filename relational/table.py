@@ -1172,7 +1172,7 @@ class ProjectStatusHistory(Table):
 
     def _completed_construction(self, proj):
         """Use the following rules:
-        (1) If the project exists in the TCO recod data set, look for a CFC
+        (1) If the project exists in the TCO record data set, look for a CFC
         or add up all the TCO's to see if all the units have been built
         (2) If not, check if all the associated site permits are complete
         """
