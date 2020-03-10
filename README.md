@@ -29,6 +29,27 @@ pytest
 
 ## Running locally
 
+### Using Airflow
+
+```sh
+# airflow needs a home, ~/airflow is the default,
+# but you can lay foundation somewhere else if you prefer
+# (optional)
+export AIRFLOW_HOME=./airflow
+
+# initialize the database
+airflow initdb
+
+# start the web server, default port is 8080
+airflow webserver -p 8080
+
+# start the scheduler
+airflow scheduler
+```
+
+Visit http://localhost:8080 and enable the housing-dashboard DAG.
+
+
 ### Downloading data
 
 We use data that is downloaded from DataSF. The different data sources that need
