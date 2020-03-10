@@ -970,8 +970,10 @@ class ProjectDetails(NameValueTable):
 
 _valid_planning_ent_codes = set(['AHB', 'COA', 'CUA', 'CTZ', 'DNX',
                                  'ENX', 'OFA', 'PTA', 'SHD', 'TDM', 'VAR',
-                                 'WLS'])
+                                 'WLS', 'ENV'])
 _valid_planning_root_type = set(['PRJ', 'PRL'])
+_invalid_status_keywords = set(['cancelled', 'withdrawn', 'disapproved',
+                                'removed'])
 
 
 class ProjectStatusHistory(Table):
@@ -992,15 +994,23 @@ class ProjectStatusHistory(Table):
         self.non_consecutive_status_sample = {}
 
     def _under_entitlement_review_date(self, proj):
-        # Use the Application Submitted date if it exists, if not fallback
-        # to looking for the earliest open ENT record
+        """Look for the earliest of the Application Submitted and Application
+        Accepted dates if they exist. If not, look for the earliest open
+        ENT record.
+        """
         date_submitted_entry = proj.field('date_application_submitted',
                                           Planning.NAME)
+        date_submitted = None
         if date_submitted_entry:
             date_submitted = datetime.strptime(
                 date_submitted_entry.split(' ')[0], "%Y-%m-%d").date()
-            if date_submitted:
-                return (date_submitted, Planning.NAME)
+
+        date_accepted_entry = proj.field('date_application_accepted',
+                                         Planning.NAME)
+        date_accepted = None
+        if date_accepted_entry:
+            date_accepted = datetime.strptime(
+                date_accepted_entry.split(' ')[0], "%Y-%m-%d").date()
 
         # Look for the earliest date_opened on an ENT child of a PRJ.
         root = proj.roots[Planning.NAME]
@@ -1010,11 +1020,21 @@ class ProjectStatusHistory(Table):
         root_entry = root[0].get_latest('record_type')[0]
         if root_entry in _valid_planning_root_type:
             oldest_open = date.max
+
+            num_valid_children = 0
             for child in proj.children[Planning.NAME]:
                 record_type = child.get_latest('record_type')[0]
                 if record_type not in _valid_planning_ent_codes:
                     continue
 
+                status_value = child.get_latest('status')
+                if status_value:
+                    status_lower = status_value[0].lower()
+                    if any(
+                      x in status_lower for x in _invalid_status_keywords):
+                        continue
+
+                num_valid_children += 1
                 date_opened_field = child.get_latest('date_opened')[0]
                 date_opened = datetime.strptime(
                     date_opened_field.split(' ')[0],
@@ -1022,21 +1042,38 @@ class ProjectStatusHistory(Table):
                 if date_opened < oldest_open:
                     oldest_open = date_opened
 
+            if num_valid_children == 0:
+                return (None, None)
+
+            # If one of the explicit date fields have been marked, use the
+            # earliest possible one
+            if date_submitted and \
+                    date_accepted and \
+                    date_accepted < date_submitted:
+                return (date_accepted, Planning)
+            elif date_submitted:
+                return (date_submitted, Planning)
+            elif date_accepted:
+                return (date_accepted, Planning)
+
+            # If no explicit date field was marked, use the earliest child
+            # ENT record
             if oldest_open < date.max:
-                return (oldest_open, Planning.OUTPUT_NAME)
+                return (oldest_open, Planning)
 
         return (None, None)
 
     def _entitled_date(self, proj):
-        # Use the Entitlements Approved date if it exists. If it doesn't,
-        # fallback to using the latest closed date of an ENT record.
+        """Use the Entitlements Approved date if it exists. If it doesn't,
+        fallback to using the latest closed date of an ENT record.
+        """
         date_entitled_entry = proj.field('date_entitlements_approved',
                                          Planning.NAME)
         if date_entitled_entry:
             date_entitled = datetime.strptime(
                 date_entitled_entry.split(' ')[0], "%Y-%m-%d").date()
             if date_entitled:
-                return (date_entitled, Planning.NAME)
+                return (date_entitled, Planning)
 
         # Look for the ENT child of a PRJ with the latest date_closed
         # (assuming all are closed). Fall back to the PRJ date.
@@ -1053,8 +1090,14 @@ class ProjectStatusHistory(Table):
                 if record_type not in _valid_planning_ent_codes:
                     continue
 
-                date_closed_value = child.get_latest('date_closed')
                 status_value = child.get_latest('status')
+                if status_value:
+                    status_lower = status_value[0].lower()
+                    if any(
+                      x in status_lower for x in _invalid_status_keywords):
+                        continue
+
+                date_closed_value = child.get_latest('date_closed')
                 if date_closed_value:
                     date_closed = datetime.strptime(
                         date_closed_value[0].split(' ')[0],
@@ -1068,7 +1111,7 @@ class ProjectStatusHistory(Table):
                     return (None, None)
 
             if newest_closed > date.min:
-                return (newest_closed, Planning.OUTPUT_NAME)
+                return (newest_closed, Planning)
             elif count_closed_no_date > 0:
                 # Fall back to PRJ date if all ENT child records are closed
                 # but there's no date
@@ -1079,8 +1122,7 @@ class ProjectStatusHistory(Table):
                         date_closed = datetime.strptime(
                             date_closed_field.split(' ')[0],
                             '%Y-%m-%d').date()
-                        return (date_closed, Planning.OUTPUT_NAME)
-
+                        return (date_closed, Planning)
         return (None, None)
 
     def _filed_for_permits(self, proj):
@@ -1089,19 +1131,51 @@ class ProjectStatusHistory(Table):
                                                PTS.NAME,
                                                _is_valid_dbi_entry,
                                                "%m/%d/%Y")
-        return (filed_for_permits, PTS.OUTPUT_NAME) \
+        return (filed_for_permits, PTS) \
             if filed_for_permits else (None, None)
 
     def _under_construction(self, proj):
+        """Use the following rules:
+        (1) If the permit is a site permit, use
+        first_construction_document_date to see it's under construction
+        (2) If the permit is not a site permit, use the permit_issued date to
+        see if it's under construction
+        """
+        is_valid_dbi_site_permit = \
+            [('permit_type',
+             lambda x: x in _valid_dbi_permit_types),
+             ('current_status',
+             lambda x: x == '' or x not in _invalid_dbi_statuses),
+             ('site_permit',
+             lambda x: x == 'Y')]
         under_constr = _get_earliest_date(proj,
                                           'first_construction_document_date',
                                           PTS.NAME,
-                                          _is_valid_dbi_entry,
+                                          is_valid_dbi_site_permit,
                                           "%m/%d/%Y")
-        return (under_constr, PTS.OUTPUT_NAME) \
+        if not under_constr:
+            is_valid_dbi_full_permit = \
+                    [('permit_type',
+                     lambda x: x in _valid_dbi_permit_types),
+                     ('current_status',
+                     lambda x: x == '' or x not in _invalid_dbi_statuses),
+                     ('site_permit',
+                     lambda x: x != 'Y')]
+            under_constr = _get_earliest_date(proj,
+                                              'issued_date',
+                                              PTS.NAME,
+                                              is_valid_dbi_full_permit,
+                                              "%m/%d/%Y")
+
+        return (under_constr, PTS) \
             if under_constr else (None, None)
 
     def _completed_construction(self, proj):
+        """Use the following rules:
+        (1) If the project exists in the TCO recod data set, look for a CFC
+        or add up all the TCO's to see if all the units have been built
+        (2) If not, check if all the associated site permits are complete
+        """
         # If a CFC record exists in the TCO dataset then the project has
         # been completed
         date_issued = proj.field('date_issued',
@@ -1111,7 +1185,7 @@ class ProjectStatusHistory(Table):
         if date_issued:
             date_entry = datetime.strptime(date_issued, "%Y/%m/%d")
             if date_entry:
-                return (date_entry.date(), TCO.NAME)
+                return (date_entry.date(), TCO)
 
         # If TCO's exist, check if TCO'ed units equal all of the potential
         # units to be built
@@ -1134,7 +1208,7 @@ class ProjectStatusHistory(Table):
                 pass
 
             if date > datetime.min:
-                return (date.date(), TCO.NAME)
+                return (date.date(), TCO)
 
         # If the permits are all complete in PTS we can use the latest date.
         # Check to make sure all permits are actually complete first
@@ -1164,7 +1238,7 @@ class ProjectStatusHistory(Table):
             if date_entry > date:
                 date = date_entry
 
-        return (date.date(), PTS.OUTPUT_NAME) \
+        return (date.date(), PTS) \
             if date > datetime.min else (None, None)
 
     def status_row(self,
@@ -1182,42 +1256,49 @@ class ProjectStatusHistory(Table):
         return row
 
     def _check_and_log_non_sqntl_date(self,
-                                      proj_id,
+                                      proj,
                                       cur_status,
                                       cur_date,
+                                      cur_data,
                                       next_status,
-                                      next_date):
+                                      next_date,
+                                      next_data):
         if next_date and cur_date and next_date < cur_date:
             self.non_sqntl_dates += 1
             if cur_status not in self.non_sqntl_dates_sample:
                 self.non_sqntl_dates_sample[cur_status] = \
-                    queue.Queue(maxsize=10)
+                    queue.Queue(maxsize=20)
             if not self.non_sqntl_dates_sample[cur_status].full():
                 self.non_sqntl_dates_sample[cur_status].put_nowait(
-                    "Project %s has %s date %s and %s date %s (non-sequential)"
-                    % (proj_id,
+                    "Project %s has %s date %s fk %s and %s date %s fk %s "
+                    "(non-sequential)"
+                    % (proj.id,
                        cur_status,
                        cur_date.isoformat(),
+                       proj.fk(cur_data.NAME),
                        next_status,
-                       next_date.isoformat()))
+                       next_date.isoformat(),
+                       proj.fk(next_data.NAME)))
             return False
         return True
 
     def _log_non_consecutive_status(self,
-                                    proj_id,
+                                    proj,
                                     cur_status,
                                     cur_date,
+                                    cur_data,
                                     prev_status):
         self.non_consecutive_status += 1
         if cur_status not in self.non_consecutive_status_sample:
             self.non_consecutive_status_sample[cur_status] = \
-                queue.Queue(maxsize=10)
+                queue.Queue(maxsize=20)
         if not self.non_consecutive_status_sample[cur_status].full():
             self.non_consecutive_status_sample[cur_status].put_nowait(
-                "Project %s has %s date %s but no %s date"
-                % (proj_id,
+                "Project %s has %s date %s fk %s but no %s date"
+                % (proj.id,
                    cur_status,
                    cur_date.isoformat(),
+                   proj.fk(cur_data.NAME),
                    prev_status))
         return False
 
@@ -1230,24 +1311,27 @@ class ProjectStatusHistory(Table):
 
         result = []
         if filed_date:
-            self._check_and_log_non_sqntl_date(proj.id,
+            self._check_and_log_non_sqntl_date(proj,
                                                "under_entitlement_review",
                                                filed_date,
+                                               filed_data,
                                                "entitled",
-                                               entitled_date)
+                                               entitled_date,
+                                               entitled_data)
             result.append(
                 self.status_row(proj,
                                 'under_entitlement_review',
                                 filed_date.isoformat(),
                                 entitled_date.isoformat() if entitled_date
                                 else '',
-                                filed_data))
+                                filed_data.OUTPUT_NAME))
 
         if entitled_date:
             if not filed_date:
-                self._log_non_consecutive_status(proj.id,
+                self._log_non_consecutive_status(proj,
                                                  "entitled",
                                                  entitled_date,
+                                                 entitled_data,
                                                  "under_entitlement_review")
 
             # To make these dates sequential we will modify entitled dates
@@ -1255,70 +1339,107 @@ class ProjectStatusHistory(Table):
             if permits_date and entitled_date > permits_date:
                 permits_date = entitled_date
 
-            self._check_and_log_non_sqntl_date(proj.id,
+            self._check_and_log_non_sqntl_date(proj,
                                                "entitled",
                                                entitled_date,
+                                               entitled_data,
                                                "filed_for_permits",
-                                               permits_date)
+                                               permits_date,
+                                               permits_data)
             result.append(
                 self.status_row(proj,
                                 'entitled',
                                 entitled_date.isoformat(),
                                 permits_date.isoformat() if permits_date
                                 else '',
-                                entitled_data))
+                                entitled_data.OUTPUT_NAME))
 
         if permits_date:
-            self._check_and_log_non_sqntl_date(
-                proj.id,
-                "filed_for_permits",
-                permits_date,
-                "under_construction",
-                construction_date)
+            if not entitled_date:
+                if filed_date and \
+                        not construction_date and \
+                        not completed_date:
+                    # Was filed at DBI and Planning around the same time.
+                    # To keep statuses mutually exclusive, only return the
+                    # Planning statuses.
+                    return result
+                else:
+                    is_adu_checked = proj.field('adu', Planning.NAME)
+                    is_legalization_checked = \
+                        proj.field('legalization', Planning.NAME)
+                    # No need to log ADU projects, these will not show up
+                    # in Planning statuses
+                    if is_adu_checked.lower() != 'checked' and \
+                            is_legalization_checked.lower() != 'checked':
+                        self._log_non_consecutive_status(
+                            proj,
+                            "filed_for_permits",
+                            permits_date,
+                            permits_data,
+                            "entitled")
+
+            self._check_and_log_non_sqntl_date(proj,
+                                               "filed_for_permits",
+                                               permits_date,
+                                               permits_data,
+                                               "under_construction",
+                                               construction_date,
+                                               construction_data)
             result.append(
                 self.status_row(proj,
                                 'filed_for_permits',
                                 permits_date.isoformat(),
                                 construction_date.isoformat()
                                 if construction_date else '',
-                                permits_data))
+                                permits_data.OUTPUT_NAME))
         else:
             return result
 
         if construction_date:
             if not permits_date:
                 self._log_non_consecutive_status(
-                    proj.id,
+                    proj,
                     "under_construction",
                     construction_date,
+                    construction_data,
                     "filed_for_permits")
             self._check_and_log_non_sqntl_date(
-                proj.id,
+                proj,
                 "under_construction",
                 construction_date,
+                construction_data,
                 "completed_construction",
-                completed_date)
+                completed_date,
+                completed_data)
             result.append(
                 self.status_row(proj,
                                 'under_construction',
                                 construction_date.isoformat(),
                                 completed_date.isoformat()
                                 if completed_date else '',
-                                construction_data))
+                                construction_data.OUTPUT_NAME))
 
         if completed_date:
             if not permits_date:
                 self._log_non_consecutive_status(
-                    proj.id,
+                    proj,
                     "completed_construction",
                     completed_date,
+                    completed_data,
                     "filed_for_permits")
+            if not construction_date:
+                self._log_non_consecutive_status(
+                    proj,
+                    "completed_construction",
+                    completed_date,
+                    completed_data,
+                    "under_construction")
             result.append(
                 self.status_row(proj,
                                 'completed_construction',
                                 completed_date.isoformat(),
                                 '',
-                                completed_data))
+                                completed_data.OUTPUT_NAME))
         return result
 
     def log_bad_data(self):

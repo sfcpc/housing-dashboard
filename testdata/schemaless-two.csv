@@ -4016,6 +4016,7 @@ pts_129737787383,pts,2020-01-29,existing_construction_type,5
 pts_129737787383,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_129737787383,pts,2020-01-29,proposed_construction_type,5
 pts_129737787383,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_129737787383,pts,2020-01-29,site_permit,Y
 pts_129737787383,pts,2020-01-29,supervisor_district,2
 pts_129737787383,pts,2020-01-29,zipcode,94115
 pts_129737787383,pts,2020-01-29,location,"(37.78840836962428, -122.44421395195295)"
@@ -10757,6 +10758,7 @@ pts_133413887207,pts,2020-01-29,existing_construction_type,5
 pts_133413887207,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_133413887207,pts,2020-01-29,proposed_construction_type,5
 pts_133413887207,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_133413887207,pts,2020-01-29,site_permit,Y
 pts_133413887207,pts,2020-01-29,supervisor_district,2
 pts_133413887207,pts,2020-01-29,zipcode,94118
 pts_133413887207,pts,2020-01-29,location,"(37.78646341561909, -122.45831443215849)"
@@ -11818,6 +11820,7 @@ pts_1340311497257,pts,2020-01-29,proposed_use,apartments
 pts_1340311497257,pts,2020-01-29,proposed_units,403
 pts_1340311497257,pts,2020-01-29,proposed_construction_type,1
 pts_1340311497257,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1340311497257,pts,2020-01-29,site_permit,Y
 pts_1340311497257,pts,2020-01-29,supervisor_district,6
 pts_1340311497257,pts,2020-01-29,zipcode,94105
 pts_1340311497257,pts,2020-01-29,location,"(37.78726010664772, -122.3962642716701)"
@@ -12323,6 +12326,7 @@ pts_1363871501984,pts,2020-01-29,proposed_use,apartments
 pts_1363871501984,pts,2020-01-29,proposed_units,4
 pts_1363871501984,pts,2020-01-29,proposed_construction_type,5
 pts_1363871501984,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1363871501984,pts,2020-01-29,site_permit,Y
 pts_1363871501984,pts,2020-01-29,supervisor_district,2
 pts_1363871501984,pts,2020-01-29,zipcode,94115
 pts_1363871501984,pts,2020-01-29,location,"(37.79026895086345, -122.43276392413539)"
@@ -12346,6 +12350,7 @@ pts_1363872501983,pts,2020-01-29,proposed_use,apartments
 pts_1363872501983,pts,2020-01-29,proposed_units,4
 pts_1363872501983,pts,2020-01-29,proposed_construction_type,5
 pts_1363872501983,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1363872501983,pts,2020-01-29,site_permit,Y
 pts_1363872501983,pts,2020-01-29,supervisor_district,2
 pts_1363872501983,pts,2020-01-29,zipcode,94115
 pts_1363872501983,pts,2020-01-29,location,"(37.79026895086345, -122.43276392413539)"
@@ -12369,6 +12374,7 @@ pts_1363873501980,pts,2020-01-29,proposed_use,apartments
 pts_1363873501980,pts,2020-01-29,proposed_units,4
 pts_1363873501980,pts,2020-01-29,proposed_construction_type,5
 pts_1363873501980,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1363873501980,pts,2020-01-29,site_permit,Y
 pts_1363873501980,pts,2020-01-29,supervisor_district,2
 pts_1363873501980,pts,2020-01-29,zipcode,94115
 pts_1363873501980,pts,2020-01-29,location,"(37.79026895086345, -122.43276392413539)"
@@ -12392,6 +12398,7 @@ pts_1363874501979,pts,2020-01-29,proposed_use,apartments
 pts_1363874501979,pts,2020-01-29,proposed_units,4
 pts_1363874501979,pts,2020-01-29,proposed_construction_type,5
 pts_1363874501979,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1363874501979,pts,2020-01-29,site_permit,Y
 pts_1363874501979,pts,2020-01-29,supervisor_district,2
 pts_1363874501979,pts,2020-01-29,zipcode,94115
 pts_1363874501979,pts,2020-01-29,location,"(37.79026895086345, -122.43276392413539)"
@@ -12415,6 +12422,7 @@ pts_1363875501985,pts,2020-01-29,proposed_use,apartments
 pts_1363875501985,pts,2020-01-29,proposed_units,3
 pts_1363875501985,pts,2020-01-29,proposed_construction_type,5
 pts_1363875501985,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1363875501985,pts,2020-01-29,site_permit,Y
 pts_1363875501985,pts,2020-01-29,supervisor_district,2
 pts_1363875501985,pts,2020-01-29,zipcode,94115
 pts_1363875501985,pts,2020-01-29,location,"(37.79026895086345, -122.43276392413539)"
@@ -12438,6 +12446,7 @@ pts_1363876501986,pts,2020-01-29,proposed_use,apartments
 pts_1363876501986,pts,2020-01-29,proposed_units,3
 pts_1363876501986,pts,2020-01-29,proposed_construction_type,5
 pts_1363876501986,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1363876501986,pts,2020-01-29,site_permit,Y
 pts_1363876501986,pts,2020-01-29,supervisor_district,2
 pts_1363876501986,pts,2020-01-29,zipcode,94115
 pts_1363876501986,pts,2020-01-29,location,"(37.79026895086345, -122.43276392413539)"
@@ -12461,6 +12470,7 @@ pts_1363877501987,pts,2020-01-29,proposed_use,apartments
 pts_1363877501987,pts,2020-01-29,proposed_units,3
 pts_1363877501987,pts,2020-01-29,proposed_construction_type,5
 pts_1363877501987,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1363877501987,pts,2020-01-29,site_permit,Y
 pts_1363877501987,pts,2020-01-29,supervisor_district,2
 pts_1363877501987,pts,2020-01-29,zipcode,94115
 pts_1363877501987,pts,2020-01-29,location,"(37.79026895086345, -122.43276392413539)"
@@ -12805,6 +12815,7 @@ pts_134658676706,pts,2020-01-29,existing_construction_type,5
 pts_134658676706,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_134658676706,pts,2020-01-29,proposed_construction_type,5
 pts_134658676706,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_134658676706,pts,2020-01-29,site_permit,Y
 pts_134658676706,pts,2020-01-29,supervisor_district,2
 pts_134658676706,pts,2020-01-29,zipcode,94115
 pts_134658676706,pts,2020-01-29,location,"(37.790577406934915, -122.43032287135561)"
@@ -19635,6 +19646,7 @@ pts_138611377383,pts,2020-01-29,existing_construction_type,5
 pts_138611377383,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_138611377383,pts,2020-01-29,proposed_construction_type,5
 pts_138611377383,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_138611377383,pts,2020-01-29,site_permit,Y
 pts_138611377383,pts,2020-01-29,supervisor_district,2
 pts_138611377383,pts,2020-01-29,zipcode,94109
 pts_138611377383,pts,2020-01-29,location,"(37.79068284214438, -122.42517918428756)"
@@ -21299,6 +21311,7 @@ pts_1394290495475,pts,2020-01-29,existing_construction_type,1
 pts_1394290495475,pts,2020-01-29,existing_construction_type_description,constr type 1
 pts_1394290495475,pts,2020-01-29,proposed_construction_type,1
 pts_1394290495475,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1394290495475,pts,2020-01-29,site_permit,Y
 pts_1394290495475,pts,2020-01-29,supervisor_district,2
 pts_1394290495475,pts,2020-01-29,zipcode,94115
 pts_1394290495475,pts,2020-01-29,location,"(37.78966078022135, -122.43319509133869)"
@@ -23860,6 +23873,7 @@ pts_141189586966,pts,2020-01-29,existing_construction_type,5
 pts_141189586966,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_141189586966,pts,2020-01-29,proposed_construction_type,5
 pts_141189586966,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_141189586966,pts,2020-01-29,site_permit,Y
 pts_141189586966,pts,2020-01-29,supervisor_district,2
 pts_141189586966,pts,2020-01-29,zipcode,94118
 pts_141189586966,pts,2020-01-29,location,"(37.78813542984363, -122.44841227644264)"
@@ -25288,6 +25302,7 @@ pts_141979586768,pts,2020-01-29,existing_construction_type,5
 pts_141979586768,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_141979586768,pts,2020-01-29,proposed_construction_type,5
 pts_141979586768,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_141979586768,pts,2020-01-29,site_permit,Y
 pts_141979586768,pts,2020-01-29,supervisor_district,2
 pts_141979586768,pts,2020-01-29,zipcode,94115
 pts_141979586768,pts,2020-01-29,location,"(37.78911885292288, -122.44180967992264)"
@@ -27193,6 +27208,7 @@ pts_143082563441,pts,2020-01-29,existing_construction_type,3
 pts_143082563441,pts,2020-01-29,existing_construction_type_description,constr type 3
 pts_143082563441,pts,2020-01-29,proposed_construction_type,3
 pts_143082563441,pts,2020-01-29,proposed_construction_type_description,constr type 3
+pts_143082563441,pts,2020-01-29,site_permit,Y
 pts_143082563441,pts,2020-01-29,supervisor_district,3
 pts_143082563441,pts,2020-01-29,zipcode,94108
 pts_143082563441,pts,2020-01-29,location,"(37.79318318296603, -122.40634389519647)"
@@ -27620,6 +27636,7 @@ pts_143261186725,pts,2020-01-29,existing_construction_type,5
 pts_143261186725,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_143261186725,pts,2020-01-29,proposed_construction_type,5
 pts_143261186725,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_143261186725,pts,2020-01-29,site_permit,Y
 pts_143261186725,pts,2020-01-29,supervisor_district,2
 pts_143261186725,pts,2020-01-29,zipcode,94115
 pts_143261186725,pts,2020-01-29,location,"(37.78941925861583, -122.4394493875683)"
@@ -27647,6 +27664,7 @@ pts_1432612362250,pts,2020-01-29,existing_construction_type,5
 pts_1432612362250,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1432612362250,pts,2020-01-29,proposed_construction_type,5
 pts_1432612362250,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1432612362250,pts,2020-01-29,site_permit,Y
 pts_1432612362250,pts,2020-01-29,supervisor_district,2
 pts_1432612362250,pts,2020-01-29,zipcode,94115
 pts_1432612362250,pts,2020-01-29,location,"(37.78941925861583, -122.4394493875683)"
@@ -28018,6 +28036,7 @@ pts_1434335491629,pts,2020-01-29,existing_construction_type,5
 pts_1434335491629,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1434335491629,pts,2020-01-29,proposed_construction_type,5
 pts_1434335491629,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1434335491629,pts,2020-01-29,site_permit,Y
 pts_1434335491629,pts,2020-01-29,supervisor_district,2
 pts_1434335491629,pts,2020-01-29,zipcode,94118
 pts_1434335491629,pts,2020-01-29,location,"(37.787001691787815, -122.45843475590638)"
@@ -28865,6 +28884,7 @@ pts_1438278158065,pts,2020-01-29,proposed_use,apartments
 pts_1438278158065,pts,2020-01-29,proposed_units,157
 pts_1438278158065,pts,2020-01-29,proposed_construction_type,1
 pts_1438278158065,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1438278158065,pts,2020-01-29,site_permit,Y
 pts_1438278158065,pts,2020-01-29,supervisor_district,9
 pts_1438278158065,pts,2020-01-29,zipcode,94103
 pts_1438278158065,pts,2020-01-29,location,"(37.76584624555139, -122.42020777419202)"
@@ -32122,6 +32142,7 @@ pts_1454934420983,pts,2020-01-29,existing_construction_type,5
 pts_1454934420983,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1454934420983,pts,2020-01-29,proposed_construction_type,5
 pts_1454934420983,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1454934420983,pts,2020-01-29,site_permit,Y
 pts_1454934420983,pts,2020-01-29,supervisor_district,2
 pts_1454934420983,pts,2020-01-29,zipcode,94115
 pts_1454934420983,pts,2020-01-29,location,"(37.78919629605709, -122.44038173871637)"
@@ -33784,6 +33805,7 @@ pts_146240487213,pts,2020-01-29,existing_construction_type,5
 pts_146240487213,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_146240487213,pts,2020-01-29,proposed_construction_type,5
 pts_146240487213,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_146240487213,pts,2020-01-29,site_permit,Y
 pts_146240487213,pts,2020-01-29,supervisor_district,2
 pts_146240487213,pts,2020-01-29,zipcode,94118
 pts_146240487213,pts,2020-01-29,location,"(37.786531519061725, -122.45777980418953)"
@@ -33827,6 +33849,7 @@ pts_1518881512191,pts,2020-01-29,existing_construction_type,5
 pts_1518881512191,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1518881512191,pts,2020-01-29,proposed_construction_type,5
 pts_1518881512191,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1518881512191,pts,2020-01-29,site_permit,Y
 pts_1518881512191,pts,2020-01-29,supervisor_district,2
 pts_1518881512191,pts,2020-01-29,zipcode,94118
 pts_1518881512191,pts,2020-01-29,location,"(37.786531519061725, -122.45777980418953)"
@@ -34395,6 +34418,7 @@ pts_1465081108606,pts,2020-01-29,existing_construction_type,5
 pts_1465081108606,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1465081108606,pts,2020-01-29,proposed_construction_type,5
 pts_1465081108606,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1465081108606,pts,2020-01-29,site_permit,Y
 pts_1465081108606,pts,2020-01-29,supervisor_district,1
 pts_1465081108606,pts,2020-01-29,zipcode,94118
 pts_1465081108606,pts,2020-01-29,location,"(37.77441419689401, -122.46777334148037)"
@@ -34422,6 +34446,7 @@ pts_1465082390978,pts,2020-01-29,existing_construction_type,5
 pts_1465082390978,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1465082390978,pts,2020-01-29,proposed_construction_type,5
 pts_1465082390978,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1465082390978,pts,2020-01-29,site_permit,Y
 pts_1465082390978,pts,2020-01-29,supervisor_district,1
 pts_1465082390978,pts,2020-01-29,zipcode,94118
 pts_1465082390978,pts,2020-01-29,location,"(37.77441419689401, -122.46777334148037)"
@@ -35474,6 +35499,7 @@ pts_1470193233169,pts,2020-01-29,existing_construction_type,5
 pts_1470193233169,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1470193233169,pts,2020-01-29,proposed_construction_type,5
 pts_1470193233169,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1470193233169,pts,2020-01-29,site_permit,Y
 pts_1470193233169,pts,2020-01-29,supervisor_district,3
 pts_1470193233169,pts,2020-01-29,zipcode,94109
 pts_1470193233169,pts,2020-01-29,location,"(37.792006464866006, -122.41542936460583)"
@@ -39610,6 +39636,7 @@ pts_1489855510068,pts,2020-01-29,proposed_use,2 family dwelling
 pts_1489855510068,pts,2020-01-29,proposed_units,2
 pts_1489855510068,pts,2020-01-29,proposed_construction_type,5
 pts_1489855510068,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489855510068,pts,2020-01-29,site_permit,Y
 pts_1489855510068,pts,2020-01-29,supervisor_district,8
 pts_1489855510068,pts,2020-01-29,zipcode,94114
 pts_1489855510068,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
@@ -39629,6 +39656,7 @@ pts_1489856510067,pts,2020-01-29,proposed_use,2 family dwelling
 pts_1489856510067,pts,2020-01-29,proposed_units,2
 pts_1489856510067,pts,2020-01-29,proposed_construction_type,5
 pts_1489856510067,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489856510067,pts,2020-01-29,site_permit,Y
 pts_1489856510067,pts,2020-01-29,supervisor_district,8
 pts_1489856510067,pts,2020-01-29,zipcode,94114
 pts_1489856510067,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
@@ -39648,6 +39676,7 @@ pts_1489866510069,pts,2020-01-29,proposed_use,2 family dwelling
 pts_1489866510069,pts,2020-01-29,proposed_units,2
 pts_1489866510069,pts,2020-01-29,proposed_construction_type,5
 pts_1489866510069,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489866510069,pts,2020-01-29,site_permit,Y
 pts_1489866510069,pts,2020-01-29,supervisor_district,8
 pts_1489866510069,pts,2020-01-29,zipcode,94114
 pts_1489866510069,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
@@ -39667,6 +39696,7 @@ pts_1489867205291,pts,2020-01-29,proposed_use,2 family dwelling
 pts_1489867205291,pts,2020-01-29,proposed_units,2
 pts_1489867205291,pts,2020-01-29,proposed_construction_type,5
 pts_1489867205291,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1489867205291,pts,2020-01-29,site_permit,Y
 pts_1489867205291,pts,2020-01-29,supervisor_district,8
 pts_1489867205291,pts,2020-01-29,zipcode,94114
 pts_1489867205291,pts,2020-01-29,location,"(37.75036896531804, -122.44195130973374)"
@@ -39709,6 +39739,7 @@ pts_1490485396541,pts,2020-01-29,existing_construction_type,5
 pts_1490485396541,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1490485396541,pts,2020-01-29,proposed_construction_type,5
 pts_1490485396541,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1490485396541,pts,2020-01-29,site_permit,Y
 pts_1490485396541,pts,2020-01-29,supervisor_district,2
 pts_1490485396541,pts,2020-01-29,zipcode,94109
 pts_1490485396541,pts,2020-01-29,location,"(37.790533687762796, -122.42624870415976)"
@@ -39909,6 +39940,7 @@ pts_1491509510445,pts,2020-01-29,proposed_use,office
 pts_1491509510445,pts,2020-01-29,proposed_units,8
 pts_1491509510445,pts,2020-01-29,proposed_construction_type,5
 pts_1491509510445,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1491509510445,pts,2020-01-29,site_permit,Y
 pts_1491509510445,pts,2020-01-29,supervisor_district,2
 pts_1491509510445,pts,2020-01-29,zipcode,94115
 pts_1491509510445,pts,2020-01-29,location,"(37.78968006751416, -122.4336034873689)"
@@ -40684,6 +40716,7 @@ pts_1495028296493,pts,2020-01-29,existing_construction_type,5
 pts_1495028296493,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1495028296493,pts,2020-01-29,proposed_construction_type,5
 pts_1495028296493,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1495028296493,pts,2020-01-29,site_permit,Y
 pts_1495028296493,pts,2020-01-29,supervisor_district,3
 pts_1495028296493,pts,2020-01-29,zipcode,94108
 pts_1495028296493,pts,2020-01-29,location,"(37.79266307685725, -122.41365322397505)"
@@ -40708,6 +40741,7 @@ pts_1495035296493,pts,2020-01-29,existing_construction_type,5
 pts_1495035296493,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1495035296493,pts,2020-01-29,proposed_construction_type,5
 pts_1495035296493,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1495035296493,pts,2020-01-29,site_permit,Y
 pts_1495035296493,pts,2020-01-29,supervisor_district,3
 pts_1495035296493,pts,2020-01-29,zipcode,94108
 pts_1495035296493,pts,2020-01-29,location,"(37.79266307685725, -122.41365322397505)"
@@ -47275,6 +47309,7 @@ pts_153229486983,pts,2020-01-29,existing_construction_type,5
 pts_153229486983,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_153229486983,pts,2020-01-29,proposed_construction_type,5
 pts_153229486983,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_153229486983,pts,2020-01-29,site_permit,Y
 pts_153229486983,pts,2020-01-29,supervisor_district,2
 pts_153229486983,pts,2020-01-29,zipcode,94118
 pts_153229486983,pts,2020-01-29,location,"(37.78811519063625, -122.44958547103316)"
@@ -47298,6 +47333,7 @@ pts_1532295492502,pts,2020-01-29,existing_construction_type,5
 pts_1532295492502,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1532295492502,pts,2020-01-29,proposed_construction_type,5
 pts_1532295492502,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1532295492502,pts,2020-01-29,site_permit,Y
 pts_1532295492502,pts,2020-01-29,supervisor_district,2
 pts_1532295492502,pts,2020-01-29,zipcode,94118
 pts_1532295492502,pts,2020-01-29,location,"(37.78811519063625, -122.44958547103316)"
@@ -47321,6 +47357,7 @@ pts_1532316513484,pts,2020-01-29,existing_construction_type,5
 pts_1532316513484,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1532316513484,pts,2020-01-29,proposed_construction_type,5
 pts_1532316513484,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1532316513484,pts,2020-01-29,site_permit,Y
 pts_1532316513484,pts,2020-01-29,supervisor_district,2
 pts_1532316513484,pts,2020-01-29,zipcode,94118
 pts_1532316513484,pts,2020-01-29,location,"(37.78811519063625, -122.44958547103316)"
@@ -47816,6 +47853,7 @@ pts_153602286765,pts,2020-01-29,existing_construction_type,5
 pts_153602286765,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_153602286765,pts,2020-01-29,proposed_construction_type,5
 pts_153602286765,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_153602286765,pts,2020-01-29,site_permit,Y
 pts_153602286765,pts,2020-01-29,supervisor_district,2
 pts_153602286765,pts,2020-01-29,zipcode,94115
 pts_153602286765,pts,2020-01-29,location,"(37.78917854562329, -122.44134070511424)"
@@ -50999,6 +51037,7 @@ pts_1557173392310,pts,2020-01-29,existing_construction_type,5
 pts_1557173392310,pts,2020-01-29,existing_construction_type_description,wood frame (5)
 pts_1557173392310,pts,2020-01-29,proposed_construction_type,5
 pts_1557173392310,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1557173392310,pts,2020-01-29,site_permit,Y
 pts_1557173392310,pts,2020-01-29,supervisor_district,3
 pts_1557173392310,pts,2020-01-29,zipcode,94108
 pts_1557173392310,pts,2020-01-29,location,"(37.792541971942526, -122.41393326276783)"
@@ -52311,6 +52350,7 @@ pts_156589987278,pts,2020-01-29,proposed_use,apartments
 pts_156589987278,pts,2020-01-29,proposed_units,18
 pts_156589987278,pts,2020-01-29,proposed_construction_type,5
 pts_156589987278,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_156589987278,pts,2020-01-29,site_permit,Y
 pts_156589987278,pts,2020-01-29,supervisor_district,2
 pts_156589987278,pts,2020-01-29,zipcode,94118
 pts_156589987278,pts,2020-01-29,location,"(37.787193590828934, -122.4525813108542)"
@@ -53225,6 +53265,7 @@ pts_1572972516074,pts,2020-01-29,proposed_use,apartments
 pts_1572972516074,pts,2020-01-29,proposed_units,4
 pts_1572972516074,pts,2020-01-29,proposed_construction_type,5
 pts_1572972516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1572972516074,pts,2020-01-29,site_permit,Y
 pts_1572972516074,pts,2020-01-29,supervisor_district,10
 pts_1572972516074,pts,2020-01-29,zipcode,94124
 pts_1572972516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
@@ -53244,6 +53285,7 @@ pts_1572988516074,pts,2020-01-29,proposed_use,apartments
 pts_1572988516074,pts,2020-01-29,proposed_units,4
 pts_1572988516074,pts,2020-01-29,proposed_construction_type,5
 pts_1572988516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1572988516074,pts,2020-01-29,site_permit,Y
 pts_1572988516074,pts,2020-01-29,supervisor_district,10
 pts_1572988516074,pts,2020-01-29,zipcode,94124
 pts_1572988516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
@@ -53263,6 +53305,7 @@ pts_1572991516074,pts,2020-01-29,proposed_use,apartments
 pts_1572991516074,pts,2020-01-29,proposed_units,4
 pts_1572991516074,pts,2020-01-29,proposed_construction_type,5
 pts_1572991516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1572991516074,pts,2020-01-29,site_permit,Y
 pts_1572991516074,pts,2020-01-29,supervisor_district,10
 pts_1572991516074,pts,2020-01-29,zipcode,94124
 pts_1572991516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
@@ -53282,6 +53325,7 @@ pts_1572992516074,pts,2020-01-29,proposed_use,apartments
 pts_1572992516074,pts,2020-01-29,proposed_units,6
 pts_1572992516074,pts,2020-01-29,proposed_construction_type,5
 pts_1572992516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1572992516074,pts,2020-01-29,site_permit,Y
 pts_1572992516074,pts,2020-01-29,supervisor_district,10
 pts_1572992516074,pts,2020-01-29,zipcode,94124
 pts_1572992516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
@@ -53301,6 +53345,7 @@ pts_1572996516074,pts,2020-01-29,proposed_use,apartments
 pts_1572996516074,pts,2020-01-29,proposed_units,4
 pts_1572996516074,pts,2020-01-29,proposed_construction_type,5
 pts_1572996516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1572996516074,pts,2020-01-29,site_permit,Y
 pts_1572996516074,pts,2020-01-29,supervisor_district,10
 pts_1572996516074,pts,2020-01-29,zipcode,94124
 pts_1572996516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
@@ -53320,6 +53365,7 @@ pts_1573002516074,pts,2020-01-29,proposed_use,apartments
 pts_1573002516074,pts,2020-01-29,proposed_units,4
 pts_1573002516074,pts,2020-01-29,proposed_construction_type,5
 pts_1573002516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1573002516074,pts,2020-01-29,site_permit,Y
 pts_1573002516074,pts,2020-01-29,supervisor_district,10
 pts_1573002516074,pts,2020-01-29,zipcode,94124
 pts_1573002516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
@@ -53339,6 +53385,7 @@ pts_1573004516074,pts,2020-01-29,proposed_use,apartments
 pts_1573004516074,pts,2020-01-29,proposed_units,8
 pts_1573004516074,pts,2020-01-29,proposed_construction_type,5
 pts_1573004516074,pts,2020-01-29,proposed_construction_type_description,wood frame (5)
+pts_1573004516074,pts,2020-01-29,site_permit,Y
 pts_1573004516074,pts,2020-01-29,supervisor_district,10
 pts_1573004516074,pts,2020-01-29,zipcode,94124
 pts_1573004516074,pts,2020-01-29,location,"(37.73699793623787, -122.3807482451996)"
@@ -54582,6 +54629,7 @@ pts_1579272508820,pts,2020-01-29,proposed_use,apartments
 pts_1579272508820,pts,2020-01-29,proposed_units,175
 pts_1579272508820,pts,2020-01-29,proposed_construction_type,1
 pts_1579272508820,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1579272508820,pts,2020-01-29,site_permit,Y
 pts_1579272508820,pts,2020-01-29,supervisor_district,6
 pts_1579272508820,pts,2020-01-29,zipcode,94130
 pts_1579272508820,pts,2020-01-29,location,"(37.81706254917497, -122.37107778708355)"
@@ -54602,6 +54650,7 @@ pts_1579279508820,pts,2020-01-29,proposed_use,apartments
 pts_1579279508820,pts,2020-01-29,proposed_units,248
 pts_1579279508820,pts,2020-01-29,proposed_construction_type,1
 pts_1579279508820,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_1579279508820,pts,2020-01-29,site_permit,Y
 pts_1579279508820,pts,2020-01-29,supervisor_district,6
 pts_1579279508820,pts,2020-01-29,zipcode,94130
 pts_1579279508820,pts,2020-01-29,location,"(37.81706254917497, -122.37107778708355)"
@@ -54881,6 +54930,7 @@ pts_158046587231,pts,2020-01-29,proposed_use,1 family dwelling
 pts_158046587231,pts,2020-01-29,proposed_units,1
 pts_158046587231,pts,2020-01-29,proposed_construction_type,1
 pts_158046587231,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158046587231,pts,2020-01-29,site_permit,Y
 pts_158046587231,pts,2020-01-29,supervisor_district,2
 pts_158046587231,pts,2020-01-29,zipcode,94118
 pts_158046587231,pts,2020-01-29,location,"(37.786777307293704, -122.45639710729756)"
@@ -54900,6 +54950,7 @@ pts_158046087217,pts,2020-01-29,proposed_use,1 family dwelling
 pts_158046087217,pts,2020-01-29,proposed_units,1
 pts_158046087217,pts,2020-01-29,proposed_construction_type,1
 pts_158046087217,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158046087217,pts,2020-01-29,site_permit,Y
 pts_158046087217,pts,2020-01-29,supervisor_district,2
 pts_158046087217,pts,2020-01-29,zipcode,94118
 pts_158046087217,pts,2020-01-29,location,"(37.786603278390196, -122.45716570625288)"
@@ -54919,6 +54970,7 @@ pts_158046387217,pts,2020-01-29,proposed_use,1 family dwelling
 pts_158046387217,pts,2020-01-29,proposed_units,1
 pts_158046387217,pts,2020-01-29,proposed_construction_type,1
 pts_158046387217,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158046387217,pts,2020-01-29,site_permit,Y
 pts_158046387217,pts,2020-01-29,supervisor_district,2
 pts_158046387217,pts,2020-01-29,zipcode,94118
 pts_158046387217,pts,2020-01-29,location,"(37.786603278390196, -122.45716570625288)"
@@ -54938,6 +54990,7 @@ pts_158046487217,pts,2020-01-29,proposed_use,1 family dwelling
 pts_158046487217,pts,2020-01-29,proposed_units,1
 pts_158046487217,pts,2020-01-29,proposed_construction_type,1
 pts_158046487217,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158046487217,pts,2020-01-29,site_permit,Y
 pts_158046487217,pts,2020-01-29,supervisor_district,2
 pts_158046487217,pts,2020-01-29,zipcode,94118
 pts_158046487217,pts,2020-01-29,location,"(37.786603278390196, -122.45716570625288)"
@@ -54957,6 +55010,7 @@ pts_158047587217,pts,2020-01-29,proposed_use,1 family dwelling
 pts_158047587217,pts,2020-01-29,proposed_units,1
 pts_158047587217,pts,2020-01-29,proposed_construction_type,1
 pts_158047587217,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158047587217,pts,2020-01-29,site_permit,Y
 pts_158047587217,pts,2020-01-29,supervisor_district,2
 pts_158047587217,pts,2020-01-29,zipcode,94118
 pts_158047587217,pts,2020-01-29,location,"(37.786603278390196, -122.45716570625288)"
@@ -54976,6 +55030,7 @@ pts_158047787217,pts,2020-01-29,proposed_use,1 family dwelling
 pts_158047787217,pts,2020-01-29,proposed_units,1
 pts_158047787217,pts,2020-01-29,proposed_construction_type,1
 pts_158047787217,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158047787217,pts,2020-01-29,site_permit,Y
 pts_158047787217,pts,2020-01-29,supervisor_district,2
 pts_158047787217,pts,2020-01-29,zipcode,94118
 pts_158047787217,pts,2020-01-29,location,"(37.786603278390196, -122.45716570625288)"
@@ -54995,6 +55050,7 @@ pts_158048087248,pts,2020-01-29,proposed_use,1 family dwelling
 pts_158048087248,pts,2020-01-29,proposed_units,1
 pts_158048087248,pts,2020-01-29,proposed_construction_type,1
 pts_158048087248,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158048087248,pts,2020-01-29,site_permit,Y
 pts_158048087248,pts,2020-01-29,supervisor_district,2
 pts_158048087248,pts,2020-01-29,zipcode,94118
 pts_158048087248,pts,2020-01-29,location,"(37.786744944738636, -122.4546837101921)"
@@ -55014,6 +55070,7 @@ pts_158048187248,pts,2020-01-29,proposed_use,1 family dwelling
 pts_158048187248,pts,2020-01-29,proposed_units,1
 pts_158048187248,pts,2020-01-29,proposed_construction_type,1
 pts_158048187248,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158048187248,pts,2020-01-29,site_permit,Y
 pts_158048187248,pts,2020-01-29,supervisor_district,2
 pts_158048187248,pts,2020-01-29,zipcode,94118
 pts_158048187248,pts,2020-01-29,location,"(37.786744944738636, -122.4546837101921)"
@@ -55033,6 +55090,7 @@ pts_158048687248,pts,2020-01-29,proposed_use,1 family dwelling
 pts_158048687248,pts,2020-01-29,proposed_units,1
 pts_158048687248,pts,2020-01-29,proposed_construction_type,1
 pts_158048687248,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158048687248,pts,2020-01-29,site_permit,Y
 pts_158048687248,pts,2020-01-29,supervisor_district,2
 pts_158048687248,pts,2020-01-29,zipcode,94118
 pts_158048687248,pts,2020-01-29,location,"(37.786744944738636, -122.4546837101921)"
@@ -55052,6 +55110,7 @@ pts_158048787248,pts,2020-01-29,proposed_use,apartments
 pts_158048787248,pts,2020-01-29,proposed_units,22
 pts_158048787248,pts,2020-01-29,proposed_construction_type,1
 pts_158048787248,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158048787248,pts,2020-01-29,site_permit,Y
 pts_158048787248,pts,2020-01-29,supervisor_district,2
 pts_158048787248,pts,2020-01-29,zipcode,94118
 pts_158048787248,pts,2020-01-29,location,"(37.786744944738636, -122.4546837101921)"
@@ -55071,6 +55130,7 @@ pts_158048887248,pts,2020-01-29,proposed_use,apartments
 pts_158048887248,pts,2020-01-29,proposed_units,28
 pts_158048887248,pts,2020-01-29,proposed_construction_type,1
 pts_158048887248,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158048887248,pts,2020-01-29,site_permit,Y
 pts_158048887248,pts,2020-01-29,supervisor_district,2
 pts_158048887248,pts,2020-01-29,zipcode,94118
 pts_158048887248,pts,2020-01-29,location,"(37.786744944738636, -122.4546837101921)"
@@ -55090,6 +55150,7 @@ pts_158048987248,pts,2020-01-29,proposed_use,apartments
 pts_158048987248,pts,2020-01-29,proposed_units,4
 pts_158048987248,pts,2020-01-29,proposed_construction_type,1
 pts_158048987248,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158048987248,pts,2020-01-29,site_permit,Y
 pts_158048987248,pts,2020-01-29,supervisor_district,2
 pts_158048987248,pts,2020-01-29,zipcode,94118
 pts_158048987248,pts,2020-01-29,location,"(37.786744944738636, -122.4546837101921)"
@@ -55109,6 +55170,7 @@ pts_158051187224,pts,2020-01-29,proposed_use,apartments
 pts_158051187224,pts,2020-01-29,proposed_units,10
 pts_158051187224,pts,2020-01-29,proposed_construction_type,1
 pts_158051187224,pts,2020-01-29,proposed_construction_type_description,constr type 1
+pts_158051187224,pts,2020-01-29,site_permit,Y
 pts_158051187224,pts,2020-01-29,supervisor_district,2
 pts_158051187224,pts,2020-01-29,zipcode,94118
 pts_158051187224,pts,2020-01-29,location,"(37.786828513457834, -122.4554481066711)"
