@@ -13,6 +13,7 @@ import csv
 from csv import DictReader
 from datetime import date
 from datetime import datetime
+import logging
 import os
 import requests
 import shutil
@@ -31,6 +32,9 @@ from schemaless.sources import PTS
 from schemaless.sources import TCO
 
 csv.field_size_limit(sys.maxsize)
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 def just_dump(sources, outfile, the_date=None):
@@ -75,7 +79,7 @@ def latest_values(schemaless_file):
 
 def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
     records = latest_values(schemaless_file)
-    print("Loaded %d records" % len(records))
+    logger.info("Loaded %d records" % len(records))
 
     shutil.copyfile(schemaless_file, outfile)
     with open(outfile, 'a', newline='\n', encoding='utf-8') as outf:
@@ -106,14 +110,14 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
 
 def get(destdir, src):
     dest = os.path.join(destdir, "%s.csv" % src.NAME)
-    print("Fetching %s to %s" % (src.DATA_SF_DOWNLOAD, dest))
+    logger.info("Fetching %s to %s" % (src.DATA_SF_DOWNLOAD, dest))
     with requests.get(src.DATA_SF_DOWNLOAD, stream=True) as req:
         req.raise_for_status()
         with open(dest, 'wb') as outf:
             for chunk in req.iter_content(chunk_size=8192):
                 if chunk:
                     outf.write(chunk)
-    print("done with %s" % dest)
+    logger.info("done with %s" % dest)
     return dest
 
 
@@ -188,20 +192,19 @@ if __name__ == "__main__":
             elif source.DATA_SF_DOWNLOAD and not args.no_download:
                 dl_sources[executor.submit(get, destdir, source)] = source
             else:
-                print("Skipping %s" % source.NAME)
+                logger.warning("Skipping %s" % source.NAME)
 
         for future in futures.as_completed(dl_sources):
             try:
                 src = dl_sources[future]
                 sources.append(src(future.result()))
-            except Exception as e:
-                print("Error downloading data for %s: %s" % (
-                      src.NAME, e))
+            except Exception:
+                logger.exception("Error downloading data for %s", src.NAME)
                 raise
 
     if len(sources) == 0:
         parser.print_help()
-        print('\nERROR: at least one source must be specified.')
+        logger.error('ERROR: at least one source must be specified.')
         sys.exit(1)
 
     if not args.diff:
