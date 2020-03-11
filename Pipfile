@@ -12,6 +12,7 @@ pytest = "*"
 [packages]
 usaddress-scourgify = "*"
 pandas = "*"
+requests = "*"
 
 [requires]
 python_version = "3.7"
