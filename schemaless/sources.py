@@ -382,6 +382,7 @@ class Planning(DirectSource):
         'blocklot': Concat('block', 'lot'),
     }
     DATA_SF = "https://data.sfgov.org/dataset/PPTS-Records_data/kgai-svwy"
+    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/kgai-svwy/rows.csv?accessType=DOWNLOAD"  # NOQA
 
 
 class PTS(DirectSource):
@@ -438,6 +439,7 @@ class PTS(DirectSource):
         'mapblklot': Mapblklot('block', 'lot'),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9"  # NOQA
+    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/i98e-djp9/rows.csv?accessType=DOWNLOAD"  # NOQA
 
 
 class TCO(DirectSource):
@@ -456,6 +458,7 @@ class TCO(DirectSource):
         'address_norm': Address('address'),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Dwelling-Unit-Completion-Counts-by-Building-Permit/j67f-aayr"  # NOQA
+    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/j67f-aayr/rows.csv?accessType=DOWNLOAD"  # NOQA
 
 
 class MOHCDInclusionary(DirectSource):
@@ -511,6 +514,7 @@ class MOHCDInclusionary(DirectSource):
         ),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Residential-Projects-With-Inclusionary-Requirement/nj3x-rw36"  # NOQA
+    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/nj3x-rw36/rows.csv?accessType=DOWNLOAD"  # NOQA
 
 
 class MOHCDPipeline(DirectSource):
@@ -602,6 +606,7 @@ class MOHCDPipeline(DirectSource):
         ),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Affordable-Housing-Pipeline/aaxw-2cb8"  # NOQA
+    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/aaxw-2cb8/rows.csv?accessType=DOWNLOAD"  # NOQA
 
 
 class AffordableRentalPortfolio(DirectSource):
@@ -657,6 +662,7 @@ class AffordableRentalPortfolio(DirectSource):
         ),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Mayor-s-Office-of-Housing-and-Community-Developmen/9rdx-httc"  # NOQA
+    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/9rdx-httc/rows.csv?accessType=DOWNLOAD"  # NOQA
 
 
 class OEWDPermits(DirectSource):
@@ -678,6 +684,7 @@ class OEWDPermits(DirectSource):
         'Target Permit Issuance Date': 'target_permit_issuance_date',
     }
     DATA_SF = "https://data.sfgov.org/dataset/Priority-Permits/336t-bzzm"
+    DATA_SF_DOWNLOAD = ""  # TODO: Not public
 
 
 class PermitAddendaSummary(Source):
@@ -698,6 +705,8 @@ class PermitAddendaSummary(Source):
         'permit_number',
         'earliest_addenda_arrival'
     ]
+    DATA_SF = ""  # TODO: Not public
+    DATA_SF_DOWNLOAD = ""  # TODO: Not public
 
     @classmethod
     def field_names(cls):
