@@ -129,6 +129,6 @@ dmypy.json
 .pyre/
 
 # Airflow
-airflow/airflow-webserver.*
-airflow/airflow.db
-airflow/logs
+.airflow/airflow-webserver.*
+.airflow/airflow.db
+.airflow/logs

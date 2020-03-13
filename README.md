@@ -35,7 +35,7 @@ pytest
 # airflow needs a home, ~/airflow is the default,
 # but you can lay foundation somewhere else if you prefer
 # (optional)
-export AIRFLOW_HOME=./airflow
+export AIRFLOW_HOME=./.airflow
 
 # initialize the database
 airflow initdb
