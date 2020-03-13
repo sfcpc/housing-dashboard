@@ -8,6 +8,7 @@ from airflow.utils.dates import days_ago
 
 from schemaless import create_schemaless
 from schemaless import create_uuid_map
+from relational import process_schemaless
 
 
 default_args = {
@@ -35,8 +36,8 @@ task_create_schemaless = PythonOperator(
     python_callable=create_schemaless.run,
     op_kwargs={
         'out_file': '{{ var.value.WORKDIR }}/schemaless.csv',
-        'no_download': 'True',
-        'planning_file': '{{ var.value.WORKDIR }}/../testdata/planning-two.csv',  # NOQA
+        # 'no_download': 'True',
+        'planning_file': '{{ var.value.WORKDIR }}/../data/planning/planning-2020-03-11.csv.xz',  # NOQA
         'parcel_data_file': '{{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz',  # NOQA
     },
     dag=dag,
@@ -53,4 +54,16 @@ task_create_uuid_map = PythonOperator(
     dag=dag,
 )
 
-task_create_schemaless >> task_create_uuid_map
+task_create_relational = PythonOperator(
+    task_id='create_relational',
+    python_callable=process_schemaless.run,
+    op_kwargs={
+        'uuid_map_file': '{{ var.value.WORKDIR }}/uuid.csv',
+        'schemaless_file': '{{ var.value.WORKDIR }}/schemaless.csv',
+        'parcel_data_file': '{{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz',  # NOQA
+        'out_prefix': '{{ var.value.WORKDIR }}/relational',
+    },
+    dag=dag,
+)
+
+task_create_schemaless >> task_create_uuid_map >> task_create_relational
