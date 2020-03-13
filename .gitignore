@@ -132,3 +132,4 @@ dmypy.json
 .airflow/airflow-webserver.*
 .airflow/airflow.db
 .airflow/logs
+airflow/
