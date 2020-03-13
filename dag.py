@@ -6,7 +6,8 @@ from airflow import DAG
 from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
 
-from schemaless.create_schemaless import run
+from schemaless import create_schemaless
+from schemaless import create_uuid_map
 
 
 default_args = {
@@ -31,7 +32,7 @@ dag = DAG(
 
 task_create_schemaless = PythonOperator(
     task_id='create_schemaless',
-    python_callable=run,
+    python_callable=create_schemaless.run,
     op_kwargs={
         'out_file': '{{ var.value.WORKDIR }}/schemaless.csv',
         'no_download': 'True',
@@ -40,3 +41,16 @@ task_create_schemaless = PythonOperator(
     },
     dag=dag,
 )
+
+task_create_uuid_map = PythonOperator(
+    task_id='create_uuid_map',
+    python_callable=create_uuid_map.run,
+    op_kwargs={
+        'out_file': '{{ var.value.WORKDIR }}/uuid.csv',
+        'schemaless_file': '{{ var.value.WORKDIR }}/schemaless.csv',
+        'parcel_data_file': '{{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz',  # NOQA
+    },
+    dag=dag,
+)
+
+task_create_schemaless >> task_create_uuid_map
