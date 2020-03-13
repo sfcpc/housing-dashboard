@@ -3,9 +3,10 @@
 from datetime import timedelta
 
 from airflow import DAG
-# from airflow.models import Variable
-from airflow.operators.bash_operator import BashOperator
+from airflow.operators.python_operator import PythonOperator
 from airflow.utils.dates import days_ago
+
+from schemaless.create_schemaless import run
 
 
 default_args = {
@@ -28,12 +29,14 @@ dag = DAG(
     schedule_interval=timedelta(days=1),
 )
 
-task = BashOperator(
+task_create_schemaless = PythonOperator(
     task_id='create_schemaless',
-    bash_command=('python -m create_schemaless '
-                  '--parcel_data_file={{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz '  # NOQA
-                  '--planning_file {{ var.value.WORKDIR }}/../testdata/planning-two.csv '  # NOQA
-                  '--no_download True '
-                  '{{ var.value.WORKDIR }}/schemaless.csv'),
+    python_callable=run,
+    op_kwargs={
+        'out_file': '{{ var.value.WORKDIR }}/schemaless.csv',
+        'no_download': 'True',
+        'planning_file': '{{ var.value.WORKDIR }}/../testdata/planning-two.csv',  # NOQA
+        'parcel_data_file': '{{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz',  # NOQA
+    },
     dag=dag,
 )
