@@ -44,6 +44,7 @@ airflow initdb
 
 # Set variables for our dag
 airflow variables --set WORKDIR "$(pwd)/airflow"
+airflow variables --set UPLOAD False  # Disable uploading to DataSF
 mkdir -p $(pwd)/airflow
 ```
 
@@ -70,6 +71,13 @@ airflow scheduler
 
 Then visit http://localhost:8080 and enable the housing-dashboard DAG.
 
+#### Testing DataSF Uploads
+
+```sh
+airflow variables --set DATASF_USER foo
+airflow variables --set DATASF_PASS bar
+airflow variables --set UPLOAD True
+```
 
 ### Downloading data
 
