@@ -50,57 +50,93 @@ the various data sources below:
 
 ### Running schemaless scripts
 
-Once CSV's from all of the data sources above have been downloaded, you must produce
-a `schemalesss` and `uuid_map` file. Below is an example of running these commands once on
-`02-27-2020` and then running it again to grab diffs on `03-04-2020`
+If you want to use the latest available data to create a schemaless file and
+have an internet connection, just run
 
 ```sh
 pipenv shell
 
 python3 -m schemaless.create_schemaless \
---planning_file inputdata/2020-02-27-planning.csv \
---pts_file inputdata/2020-02-27-pts-after-2013.csv \
---tco_file inputdata/2020-02-27-tco.csv \
---mohcd_pipeline_file inputdata/2020-02-27-mohcd-pipeline.csv \
---mohcd_inclusionary_file inputdata/2020-02-27-mohcd-inclusionary.csv \
---permit_addenda inputdata/2020-02-27-permit-addenda.csv \
---affordable_file inputdata/2020-02-27-affordable-rental-portfolio.csv \
---oewd_permits_file inputdata/2020-02-27-oewd-permits.csv \
---the-date=2020-02-27 \
---parcel_data_file=inputdata/2020-02-27-parcels.csv \
-outputdata/schemaless-one.csv
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
+  schemaless-one.csv
 
 python3 -m schemaless.create_uuid_map \
-outputdata/schemaless-one.csv \
-outputdata/uuid-map-one.csv \
---likely_match_file=outputdata/likelies-one.csv \
---parcel_data_file=inputdata/2020-02-27-parcels.csv
+  --likely_match_file=outputdata/likelies-one.csv \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
+  schemaless-one.csv \
+  uuid-map-one.csv
 ```
 
-The above was a run of the schemaless scripts for `02-27-2020`, now if we've downloaded
-updated CSV's for `03-04-2020`, we can run the scripts again to get any new data
+The source datasets will be downloaded to your machine automatically.
+
+### Diffing
+
+Core to the schemaless generation is diffing against past runs. This allows
+us to track changes over time, even if the source data only provides a current
+snapshot of information. Except for the first run of `create_schemaless`, you
+will always diff against a prior version.
 
 ```sh
+pipenv shell
+
 python3 -m schemaless.create_schemaless \
---planning_file inputdata/2020-03-04-planning.csv \
---pts_file inputdata/2020-03-04-pts-after-2013.csv \
---tco_file inputdata/2020-03-04-tco.csv \
---mohcd_pipeline_file inputdata/2020-03-04-mohcd-pipeline.csv \
---mohcd_inclusionary_file inputdata/2020-03-04-mohcd-inclusionary.csv \
---permit_addenda inputdata/2020-03-04-permit-addenda.csv \
---affordable_file inputdata/2020-03-04-affordable-rental-portfolio.csv \
---oewd_permits_file inputdata/2020-03-04-oewd-permits.csv \
---the-date=2020-03-04 \
---parcel_data_file=inputdata/2020-03-04-parcels.csv \
---diff outputdata/schemaless-one.csv \
-outputdata/schemaless-two.csv
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
+  --diff schemaless-one.csv \
+  schemaless-two.csv
 
 python3 -m schemaless.create_uuid_map \
-outputdata/schemaless-two.csv \
-outputdata/uuid-map-two.csv \
---likely_match_file=outputdata/likelies-two.csv \
---uuid_map_file=testdata/uuid-map-one.csv \
---parcel_data_file=inputdata/2020-03-04-parcels.csv
+  --likely_match_file=likelies-one.csv \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
+  --uuid_map_file=uuid-map-one.csv \  # Use IDs generated last time
+  schemaless-two.csv \
+  uuid-map-two.csv
+```
+
+Running this immediately after creating the schemaless file for the first time
+should not produce a diff. We've included sample data files in the repo to
+illustrate diffing.
+
+```sh
+pipenv shell
+
+# Note --the-date=2020-02-27, to simulate running this on that date
+python3 -m schemaless.create_schemaless \
+  --no_download True \
+  --planning_file data/planning/planning-2020-03-02.csv.xz \
+  --pts_file data/pts/2019-10-31-pts-after-2013.csv.xz \
+  --tco_file data/data/tco-2020-01-30.csv \
+  --mohcd_pipeline_file data/mohcd/mohcd-pipeline-2020-01-30.csv \
+  --mohcd_inclusionary_file data/mohcd/mohcd-inclusionary-2020-02-05.csv \
+  --permit_addenda data/pts/2019-12-18-permit-addenda.csv.xz \
+  --affordable_file data/mohcd/affordable-rental-portfolio-2019-09-06.csv \
+  --oewd_permits_file data/oewd-permits-2020-03-03.csv \
+  --the-date=2020-02-27 \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
+  schemaless-one.csv
+
+python3 -m schemaless.create_uuid_map \
+  --likely_match_file=likelies-one.csv \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
+  schemaless-one.csv \
+  uuid-map-one.csv
+
+# Note --the-date=2020-03-04, and that we don't need to specify every data
+# source file
+python3 -m schemaless.create_schemaless \
+  --no_download True \  # Don't download anything not passed in
+  --planning_file data/planning/planning-2020-03-11.csv.xz \
+  --pts_file data/pts/2020-01-24-pts-after-2013.csv.xz \
+  --the-date=2020-03-04 \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
+  --diff schemaless-one.csv \
+  schemaless-two.csv
+
+python3 -m schemaless.create_uuid_map \
+  --likely_match_file=likelies-two.csv \
+  --uuid_map_file=uuid-map-one.csv \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
+  schemaless-two.csv \
+  uuid-map-two.csv
 ```
 
 **Note** This also produces the file `likelies-two.csv` which can be used to determine
@@ -114,7 +150,7 @@ been produced:
 
 ```sh
 python3 -m relational.process_schemaless \
-outputdata/schemaless-two.csv \
-outputdata/uuid-map-two.csv \
---parcel_data_file=inputdata/2020-03-04-parcels.csv
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
+  schemaless-two.csv \
+  uuid-map-two.csv
 ```
