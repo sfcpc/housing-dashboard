@@ -31,8 +31,12 @@ pytest
 
 ### Downloading data
 
-We use data that is downloaded from DataSF. The different data sources that need
-be used for the schemaless are below:
+NOTE: You do not need to manually download this data. By default (unless you
+pass `--no_download True` to `create_schemaless.py`) the script will download
+the latest version of every file.
+
+If you would prefer to download the files to speed up testing, you can find
+the various data sources below:
 
 1. [SF Planning Permitting Data from Planning](https://data.sfgov.org/Housing-and-Buildings/SF-Planning-Permitting-Data/kncr-c6jw)
 1. [Building Permits from DBI](https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9)
