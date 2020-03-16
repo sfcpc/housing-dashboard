@@ -572,6 +572,61 @@ def test_table_project_facts_units_mohcd(basic_graph, d):
                                       name) == wantvalue, test.name
 
 
+def test_table_project_facts_invalid_prj(basic_graph, d):
+    table = ProjectFacts()
+
+    tests = [
+        EntriesTestRow(
+            name='invalid PRJ',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('record_id', 'abc', d),
+                       NameValue('number_of_units', '10', d),
+                       NameValue('record_type', 'PRJ', d),
+                       NameValue('status', 'withdrawn', d)]),
+            ],
+            want=True,
+        ),
+        EntriesTestRow(
+            name='valid PRJ',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('record_id', 'abc', d),
+                       NameValue('number_of_units', '10', d),
+                       NameValue('record_type', 'PRJ', d),
+                       NameValue('status', 'open', d)]),
+            ],
+            want=False,
+        ),
+        EntriesTestRow(
+            name='valid PRJ and invalid PRJ',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('record_id', 'abc', d),
+                       NameValue('number_of_units', '10', d),
+                       NameValue('record_type', 'PRJ', d),
+                       NameValue('status', 'withdrawn', d)]),
+                Entry('3',
+                      Planning.NAME,
+                      [NameValue('record_id', 'abc', d),
+                       NameValue('number_of_units', '10', d),
+                       NameValue('record_type', 'PRJ', d),
+                       NameValue('status', 'open', d)]),
+            ],
+            want=False,
+        ),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields_empty = len(table.rows(proj)) == 0
+
+        assert fields_empty == test.want
+
+
 def test_table_project_facts_pim_link(basic_graph, d):
     table = ProjectFacts()
 

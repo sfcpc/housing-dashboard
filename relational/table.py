@@ -478,8 +478,9 @@ class ProjectFacts(Table):
     def _pim_link_info(self, row, proj):
         prj_id = proj.field('record_id',
                             Planning.NAME,
-                            entry_predicate=[('record_type',
-                                              lambda x: x == 'PRJ')])
+                            entry_predicate=\
+                                [('record_type',
+                                  lambda x: x in _valid_planning_root_type)])
         pim_link_template = "https://sfplanninggis.org/pim?search=%s"
         if prj_id:
             row[self.index(self.PIM_LINK)] = pim_link_template % prj_id
@@ -522,6 +523,28 @@ class ProjectFacts(Table):
                  row[self.index(self.NET_NUM_UNITS_BMR)] != '0') or
                 (row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '' and
                  row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '0'))
+    
+    def _invalid_prj_root(self, proj):
+        invalid_prj_count = 0
+        try:
+            record_type = [('record_type',
+                            lambda x: x in _valid_planning_root_type)]
+            fk_entries = proj.fields('status',
+                                     Planning.NAME,
+                                     entry_predicate=record_type)
+            for (_, entries) in fk_entries.items():
+                for entry in entries:
+                    entry_latest = entry.get_latest('status')
+                    if entry_latest:
+                        status = entry_latest[0].lower()
+                        if all(x not in status for x in _invalid_status_keywords):
+                            return False
+                        else:
+                            invalid_prj_count += 1
+        except ValueError:
+            return True
+
+        return True if invalid_prj_count > 0 else False
 
     def _nonzero_or_nonempty_address(self, row):
         """Returns true if this row had a non-empty address, or had an
@@ -536,6 +559,9 @@ class ProjectFacts(Table):
 
     def rows(self, proj):
         row = [''] * len(self.header())
+
+        if self._invalid_prj_root(proj):
+            return []
 
         self.gen_id(row, proj)
         self._gen_facts(row, proj)
