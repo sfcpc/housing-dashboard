@@ -77,7 +77,7 @@ Then visit http://localhost:8080 and enable the housing-dashboard DAG.
 airflow variables --set DATASF_USER foo
 airflow variables --set DATASF_PASS bar
 airflow variables --set UPLOAD True
-airflow variables --set VIEW_ID_SCHEMALESS 4uda-gnuh
+airflow variables --set VIEW_ID_SCHEMALESS 8cxy-fa9z
 airflow variables --set VIEW_ID_UUID 5udx-x8qv
 airflow variables --set VIEW_ID_RELATIONAL None
 ```
