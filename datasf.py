@@ -1,8 +1,10 @@
 # Lint as: python3
 """Tools to upload files to DataSF."""
 import logging
+import os
 from pathlib import Path
 
+from airflow.models.variable import Variable
 from socrata.authorization import Authorization
 from socrata import Socrata
 
@@ -10,8 +12,16 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
-def get_client(user, password):
+def get_client(user='', password=''):
     """Get a Socrata client for the given username and password."""
+    if not user:
+        user = os.getenv('DATASF_USER', Variable.get('DATASF_USER'))
+        if not user:
+            raise ValueError("No user for DataSF client")
+    if not password:
+        password = os.getenv('DATASF_PASS', Variable.get('DATASF_PASS'))
+        if not password:
+            raise ValueError("No password for DataSF client")
     auth = Authorization("data.sfgov.org", user, password)
     return Socrata(auth)
 
