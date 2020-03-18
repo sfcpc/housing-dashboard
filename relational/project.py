@@ -11,6 +11,7 @@ from collections import namedtuple
 from datetime import datetime
 
 from schemaless.sources import Planning
+from schemaless.sources import OEWDPermits
 
 
 NameValue = namedtuple('NameValue',
@@ -82,6 +83,24 @@ class Entry:
         return oldest
 
 
+def _is_valid_project(proj):
+    if len(proj.roots) == 0:
+        return False
+
+    # Allow any project that starts at Planning
+    if len(proj.roots.get(Planning.NAME, [])) > 0:
+        return True
+
+    # Allow OCII projects that have valid associated PTS permits
+    for child in proj.children.get(OEWDPermits.NAME, []):
+        hda_entry = child.get_latest("delivery_agency")
+        valid_pts_permit = child.get_latest("permit_number")
+        if (hda_entry and hda_entry[0] == 'OCII' and valid_pts_permit):
+            return True
+
+    return False
+
+
 class Project:
     """A way to abstract some of the details of handling multiple records for a
     project, from multiple sources."""
@@ -136,10 +155,9 @@ class Project:
                 self.children[oldest_child.source].remove(oldest_child)
 
         # REMOVE THIS IF WE ARE EVER DETERMINED TO GET DATA FROM PRJ-LESS
-        # RECORDS
-        if (len(self.roots) == 0 or
-                len(self.roots.get(Planning.NAME, [])) == 0):
-            msg = 'No root PRJ record for project'
+        # RECORDS (OR NON-OCII PROJECTS)
+        if _is_valid_project(self) is False:
+            msg = 'No root PRJ record for project OR not an OCII project'
             if len(self.roots) > 0:
                 # get an arbitrary root to extract a FK, so just get
                 # the first entry for the first root we find

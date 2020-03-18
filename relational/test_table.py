@@ -9,6 +9,7 @@ from relational.project import NameValue
 from relational.project import Project
 from relational.table import ProjectDetails
 from relational.table import ProjectFacts
+from relational.table import ProjectGeo
 from relational.table import ProjectStatusHistory
 from relational.table import ProjectCompletedUnitCounts
 from relational.table import ProjectUnitCountsFull
@@ -59,6 +60,7 @@ def basic_graph():
     rg.add(Node(record_id='3', parents=['1']))
     rg.add(Node(record_id='4', parents=['1']))
     rg.add(Node(record_id='5', parents=['1']))
+    rg.add(Node(record_id='6', parents=['1']))
     return rg
 
 
@@ -432,6 +434,67 @@ def test_table_project_facts_units_planning_bmr(basic_graph, d):
                                       name) == wantvalue, test.name
 
 
+def test_table_project_facts_units_ocii(basic_graph, d):
+    table = ProjectFacts()
+
+    tests = [
+        EntriesTestRow(
+            name='get from OEWD because higher priority over pts',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('number_of_units', '10', d)]),
+                Entry('2',
+                      OEWDPermits.NAME,
+                      [NameValue('total_units', '7', d),
+                       NameValue('affordable_units', '1', d),
+                       NameValue('delivery_agency', 'OCII', d)]),
+                Entry('3',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('proposed_units', '6', d)]),
+            ],
+            want={
+                'net_num_units': '7',
+                'net_num_units_bmr': '1',
+                'net_num_units_data': OEWDPermits.NAME,
+                'net_num_units_bmr_data': OEWDPermits.NAME,
+            },
+        ),
+        EntriesTestRow(
+            name='get from OEWD if total units of OEWD fields is filled',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('number_of_units', '10', d)]),
+                Entry('2',
+                      OEWDPermits.NAME,
+                      [NameValue('total_units', '2', d),
+                       NameValue('delivery_agency', 'OCII', d)]),
+                Entry('3',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('proposed_units', '6', d)]),
+            ],
+            want={
+                'net_num_units': '2',
+                'net_num_units_bmr': '0',
+                'net_num_units_data': OEWDPermits.NAME,
+                'net_num_units_bmr_data': OEWDPermits.NAME,
+            },
+        ),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
+
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_row(table,
+                                      fields,
+                                      name) == wantvalue, test.name
+
+
 def test_table_project_facts_units_mohcd(basic_graph, d):
     table = ProjectFacts()
 
@@ -536,11 +599,28 @@ def test_table_project_facts_pim_link(basic_graph, d):
             ],
             want={'pim_link': 'https://sfplanninggis.org/pim?search=2000'},
         ),
+        EntriesTestRow(
+            name='no planning info, only pts info',
+            entries=[
+                Entry('1',
+                      PTS.NAME,
+                      [NameValue('block', '123', d),
+                       NameValue('lot', 'ABC', d),
+                       NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '2', d)]),
+                Entry('2',
+                      OEWDPermits.NAME,
+                      [NameValue('permit_number', '123', d),
+                       NameValue('delivery_agency', 'OCII', d)]),
+            ],
+            want={'pim_link': 'https://sfplanninggis.org/pim?search=123ABC'},
+        ),
     ]
 
     for test in tests:
         proj = Project('uuid1', test.entries, basic_graph)
         fields = table.rows(proj)
+        print(fields)
 
         for (name, wantvalue) in test.want.items():
             assert _get_value_for_row(table,
@@ -575,6 +655,28 @@ def test_table_project_facts_permit_authority(basic_graph, d):
                                       name) == wantvalue, test.name
 
 
+def test_table_project_geo_dbi_location(basic_graph, d):
+    table = ProjectGeo()
+
+    lat_lng_str = '(37.7838191971246°, -122.41900657563552°)'
+    entries1 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('record_id', 'abc', d),
+               NameValue('number_of_units', '10', d),
+               NameValue('record_type', 'PRJ', d)]),
+        Entry('2',
+              PTS.NAME,
+              [NameValue('location', lat_lng_str, d)]),
+    ]
+    proj_normal = Project('uuid1', entries1, basic_graph)
+    nvs = table.rows(proj_normal)
+    assert _get_value_for_name(table, nvs, 'lat') == \
+        '37.7838191971246'
+    assert _get_value_for_name(table, nvs, 'lng') == \
+        '-122.41900657563552'
+
+
 def test_table_project_units_full_count(basic_graph, d):
     table = ProjectUnitCountsFull()
 
@@ -603,22 +705,30 @@ def test_table_project_units_full_count(basic_graph, d):
               [NameValue('permit_type', '1', d),
                NameValue('existing_units', '6', d),
                NameValue('proposed_units', '5', d)]),
+        Entry('6',
+              OEWDPermits.NAME,
+              [NameValue('total_units', '8', d),
+               NameValue('affordable_units', '3', d),
+               NameValue('delivery_agency', 'OCII', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
     nvs = table.rows(proj_normal)
+
     net_num_units = _get_value_for_name(
         table, nvs, 'net_num_units', return_multiple=True)
-    assert len(net_num_units) == 4
+    assert len(net_num_units) == 5
     assert net_num_units[0] == '-3'
     assert net_num_units[1] == '0'
     assert net_num_units[2] == '7'
-    assert net_num_units[3] == '10'
+    assert net_num_units[3] == '8'
+    assert net_num_units[4] == '10'
 
     net_num_bmr = _get_value_for_name(
         table, nvs, 'net_num_units_bmr', return_multiple=True)
-    assert len(net_num_bmr) == 2  # only inferrable data is in MOHCD
+    assert len(net_num_bmr) == 3  # only inferrable data is in MOHCD or OEWD
     assert net_num_bmr[0] == '0'
-    assert net_num_bmr[1] == '5'
+    assert net_num_bmr[1] == '3'
+    assert net_num_bmr[2] == '5'
 
     # No estimated units go into the table
     net_est_num_bmr = _get_value_for_name(
@@ -918,7 +1028,8 @@ def test_project_details_is_da(basic_graph, d):
                NameValue('status', 'Closed - CEQA', d)]),
         Entry('3',
               OEWDPermits.NAME,
-              [NameValue('row_number', '1', d)]),
+              [NameValue('row_number', '1', d),
+               NameValue('delivery_agency', 'OCII', d)]),
     ]
     # Existence of OEWD permits node means it's a DA
     proj = Project('uuid1', entries3, basic_graph)
@@ -1117,6 +1228,20 @@ def test_project_details_is_100pct_affordable_mohcd(basic_graph, d):
                       MOHCDPipeline.NAME,
                       [NameValue('total_project_units', '10', d),
                        NameValue('total_affordable_units', '9', d)]),
+            ],
+            want='TRUE'),
+        EntriesTestRow(
+            name='pull from oewd and is close enough',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('residential_units_1br_exist', '0', d),
+                       NameValue('residential_units_1br_prop', '2', d)]),
+                Entry('2',
+                      OEWDPermits.NAME,
+                      [NameValue('total_units', '10', d),
+                       NameValue('affordable_units', '9', d),
+                       NameValue('delivery_agency', 'OCII', d)]),
             ],
             want='TRUE'),
     ]

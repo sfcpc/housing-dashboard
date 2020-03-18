@@ -192,7 +192,7 @@ if __name__ == "__main__":
             supplied, that file will be used and the corresponding file will
             not be downloaded.
 
-            To turn off automatic downloads, pass --no_download.
+            To turn off automatic downloads, pass `--no_download True`.
         """))
     parser.add_argument('--no_download', type=bool, default=False,
                         help="Don't download source data.")

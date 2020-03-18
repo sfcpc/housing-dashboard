@@ -120,6 +120,45 @@ def _get_mohcd_units(proj, source_override=None):
     return (net, bmr, source) if atleast_one else None
 
 
+_is_valid_ocii_project = [('delivery_agency', lambda x: x == 'OCII')]
+
+
+def _get_ocii_units(proj):
+    """
+    Gets net new units and bmr counts from the OEWD dataset for housing from
+    OCII.
+
+    Returns:
+      A tuple of (number units, number of BMR units) from OEWD, or
+      None if nothing found.
+    """
+    net = bmr = None
+    atleast_one = False
+
+    # TODO: Once dataset has been changed to not have duplicate count numbers,
+    # we should sum up the unit counts of all OEWD children
+    try:
+        net = int(proj.field('total_units',
+                             OEWDPermits.NAME,
+                             entry_predicate=_is_valid_ocii_project))
+        bmr = 0
+        atleast_one = True
+    except ValueError:
+        pass
+
+    try:
+        bmr = int(proj.field('affordable_units',
+                             OEWDPermits.NAME,
+                             entry_predicate=_is_valid_ocii_project))
+        if not net:
+            net = 0
+        atleast_one = True
+    except ValueError:
+        pass
+
+    return (net, bmr) if atleast_one else None
+
+
 _valid_dbi_permit_types = set('123')
 
 _invalid_dbi_statuses = set(['cancelled', 'withdrawn', 'expired'])
@@ -380,12 +419,21 @@ class ProjectFacts(Table):
 
     def _gen_units(self, row, proj):
         mohcd = _get_mohcd_units(proj)
+        ocii = _get_ocii_units(proj)
         if mohcd is not None:
             net, bmr, source = mohcd
             row[self.index(self.NET_NUM_UNITS)] = str(net)
             row[self.index(self.NET_NUM_UNITS_DATA)] = source
             row[self.index(self.NET_NUM_UNITS_BMR)] = str(bmr)
             row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = source
+        elif ocii is not None:
+            net, bmr = ocii
+            row[self.index(self.NET_NUM_UNITS)] = str(net)
+            row[self.index(self.NET_NUM_UNITS_DATA)] = \
+                OEWDPermits.OUTPUT_NAME
+            row[self.index(self.NET_NUM_UNITS_BMR)] = str(bmr)
+            row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = \
+                OEWDPermits.OUTPUT_NAME
         else:
             dbi_net = _get_dbi_units(proj)
             planning_net = proj.field('number_of_units', Planning.NAME)
@@ -440,16 +488,29 @@ class ProjectFacts(Table):
             if blocklot:
                 row[self.index(self.PIM_LINK)] = pim_link_template % blocklot
             else:
-                row[self.index(self.PIM_LINK)] = ''
+                block = proj.field('block', PTS.NAME)
+                lot = proj.field('lot', PTS.NAME)
+                if block and lot:
+                    blocklot = block + lot
+                    row[self.index(self.PIM_LINK)] = \
+                        pim_link_template % blocklot
+                else:
+                    row[self.index(self.PIM_LINK)] = ''
 
     def _permit_authority_info(self, row, proj):
-        roots = proj.roots[Planning.NAME]
-        if roots is not None and len(roots) > 0:
+        prj_roots = proj.roots[Planning.NAME]
+        ocii_proj_name = proj.field('project_name',
+                                    OEWDPermits.NAME,
+                                    entry_predicate=_is_valid_ocii_project)
+        if prj_roots is not None and len(prj_roots) > 0:
             row[self.index(self.PERMIT_AUTHORITY)] = Planning.OUTPUT_NAME
 
-            root_entry = roots[0].get_latest('record_id')
+            root_entry = prj_roots[0].get_latest('record_id')
             if root_entry:
                 row[self.index(self.PERMIT_AUTHORITY_ID)] = root_entry[0]
+        elif ocii_proj_name:
+            row[self.index(self.PERMIT_AUTHORITY)] = "ocii"
+            row[self.index(self.PERMIT_AUTHORITY_ID)] = ocii_proj_name
         else:
             row[self.index(self.PERMIT_AUTHORITY)] = ''
             row[self.index(self.PERMIT_AUTHORITY_ID)] = ''
@@ -518,6 +579,22 @@ class ProjectGeo(NameValueTable):
                                         name='lat',
                                         value=lnglat[1],
                                         data=Planning.OUTPUT_NAME))
+        else:
+            location = proj.field('location', PTS.NAME)
+            if not location:
+                return
+
+            lnglat = re.search(r"([0-9.-]+).+?([0-9.-]+)", location)
+            if len(lnglat.groups()) != 2:
+                return
+            rows.append(self.nv_row(proj,
+                                    name='lat',
+                                    value=lnglat.group(1),
+                                    data=PTS.OUTPUT_NAME))
+            rows.append(self.nv_row(proj,
+                                    name='lng',
+                                    value=lnglat.group(2),
+                                    data=PTS.OUTPUT_NAME))
 
     def rows(self, proj):
         result = []
@@ -557,6 +634,18 @@ class ProjectUnitCountsFull(NameValueTable):
                                     name='net_num_units',
                                     value=str(tco_net),
                                     data=TCO.OUTPUT_NAME))
+
+        ocii = _get_ocii_units(proj)
+        if ocii is not None:
+            net, bmr = ocii
+            rows.append(self.nv_row(proj,
+                                    name='net_num_units',
+                                    value=str(net),
+                                    data=OEWDPermits.OUTPUT_NAME))
+            rows.append(self.nv_row(proj,
+                                    name='net_num_units_bmr',
+                                    value=str(bmr),
+                                    data=OEWDPermits.OUTPUT_NAME))
 
         for source_override in [MOHCDPipeline.NAME, MOHCDInclusionary.NAME]:
             mohcd = _get_mohcd_units(proj, source_override=source_override)
@@ -834,7 +923,7 @@ class ProjectDetails(NameValueTable):
 
     def _is_100_affordable(self, rows, proj):
         """Populates whether a project is 100% affordable, at least insofar
-        as we can tell from MOHCD data.
+        as we can tell from MOHCD data or OEWD data.
         """
         units = _get_mohcd_units(proj, MOHCDPipeline.NAME)
         if units and units[0] > 0:
@@ -853,6 +942,16 @@ class ProjectDetails(NameValueTable):
                         name='is_100pct_affordable',
                         value='TRUE',
                         data=AffordableRentalPortfolio.OUTPUT_NAME))
+            else:
+                units = _get_ocii_units(proj)
+                if units and units[0] > 0:
+                    threshold_affordable = \
+                        units[0] * self._AFFORDABILITY_THRESHOLD <= units[1]
+                    rows.append(self.nv_row(
+                        proj,
+                        name='is_100pct_affordable',
+                        value='TRUE' if threshold_affordable else 'FALSE',
+                        data=OEWDPermits.OUTPUT_NAME))
 
     def _square_feet(self, rows, proj):
         # TODO: This field is gone
@@ -918,7 +1017,8 @@ class ProjectDetails(NameValueTable):
                                    entry_predicate=[('record_type',
                                                      lambda x: x == 'PHA')])
         oewd_record_id = proj.field('row_number',
-                                    OEWDPermits.NAME)
+                                    OEWDPermits.NAME,
+                                    entry_predicate=_is_valid_ocii_project)
 
         is_da = pha_record_id or oewd_record_id
         is_da_data = OEWDPermits.OUTPUT_NAME \
@@ -1014,8 +1114,7 @@ class ProjectStatusHistory(Table):
 
         # Look for the earliest date_opened on an ENT child of a PRJ.
         root = proj.roots[Planning.NAME]
-        if root is None:
-            print("Error: Project with non-Planning root id %s" % proj.id)
+        if root is None or len(root) == 0:
             return (None, None)
         root_entry = root[0].get_latest('record_type')[0]
         if root_entry in _valid_planning_root_type:
@@ -1078,8 +1177,7 @@ class ProjectStatusHistory(Table):
         # Look for the ENT child of a PRJ with the latest date_closed
         # (assuming all are closed). Fall back to the PRJ date.
         root = proj.roots[Planning.NAME]
-        if root is None:
-            print("Error: Project with non-Planning root id %s" % proj.id)
+        if root is None or len(root) == 0:
             return (None, None)
         root_entry = root[0].get_latest('record_type')[0]
         if root_entry in _valid_planning_root_type:
