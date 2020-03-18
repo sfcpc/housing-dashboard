@@ -38,7 +38,7 @@ def _do_upload(revision, fp):
         output_schema.wait_for_finish(sleeptime=5)
     job = revision.apply(output_schema)
     job.wait_for_finish(
-        progress=lambda job: print(job.attributes['log']),
+        progress=lambda job: print(job.attributes['log'][0]),
         sleeptime=5,
     )
 
