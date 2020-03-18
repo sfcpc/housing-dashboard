@@ -21,7 +21,6 @@ import sys
 import tempfile
 from textwrap import dedent
 
-import datasf
 import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
@@ -31,6 +30,7 @@ from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import TCO
+from schemaless.upload import upload_schemaless
 
 csv.field_size_limit(sys.maxsize)
 
@@ -135,13 +135,7 @@ def run(out_file,
         parcel_data_file='',
         diff='',
         the_date=None,
-        upload=False,
-        view_id=''):
-
-    if upload:
-        if not view_id:
-            raise ValueError("Missing view ID for upload to DataSF")
-        client = datasf.get_client()
+        upload=False):
 
     if parcel_data_file:
         mapblklot_gen.init(parcel_data_file)
@@ -187,8 +181,7 @@ def run(out_file,
         dump_and_diff(sources, out_file, args.diff, the_date)
 
     if upload:
-        logger.info("Uploading...")
-        datasf.replace(client, view_id, out_file)
+        upload_schemaless(out_file)
 
 
 if __name__ == "__main__":
@@ -234,7 +227,6 @@ if __name__ == "__main__":
         default='')
     parser.add_argument('--parcel_data_file')
     parser.add_argument('--upload', type=bool, default=False)
-    parser.add_argument('--view_id', help="View ID of dataset on DataSF")
     args = parser.parse_args()
 
     the_date = None
@@ -254,5 +246,4 @@ if __name__ == "__main__":
         parcel_data_file=args.parcel_data_file,
         diff=args.diff,
         the_date=args.the_date,
-        upload=args.upload,
-        view_id=args.view_id)
+        upload=args.upload)

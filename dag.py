@@ -42,7 +42,6 @@ task_create_schemaless = PythonOperator(
         'parcel_data_file': '{{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz',  # NOQA
         'oewd_permits_file': '{{ var.value.WORKDIR }}/../data/oewd/oewd-permits-2020-03-03.csv',  # NOQA
         'upload': '{{ var.value.UPLOAD }}',
-        'view_id': '{{ var.value.VIEW_ID_SCHEMALESS }}',
     },
     dag=dag,
 )
@@ -52,10 +51,10 @@ task_create_uuid_map = PythonOperator(
     python_callable=create_uuid_map.run,
     op_kwargs={
         'out_file': '{{ var.value.WORKDIR }}/uuid.csv',
+        'likely_match_file': '{{ var.value.WORKDIR }}/likely-matches.csv',
         'schemaless_file': '{{ var.value.WORKDIR }}/schemaless.csv',
         'parcel_data_file': '{{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz',  # NOQA
         'upload': '{{ var.value.UPLOAD }}',
-        'view_id': '{{ var.value.VIEW_ID_UUID }}',
     },
     dag=dag,
 )
@@ -69,7 +68,6 @@ task_create_relational = PythonOperator(
         'parcel_data_file': '{{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz',  # NOQA
         'out_prefix': '{{ var.value.WORKDIR }}/relational',
         'upload': '{{ var.value.UPLOAD }}',
-        'view_id': '{{ var.value.VIEW_ID_RELATIONAL }}',
     },
     dag=dag,
 )
