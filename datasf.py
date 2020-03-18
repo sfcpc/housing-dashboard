@@ -47,9 +47,16 @@ def upsert(client, view_id, fp, public=False):
     upload = rev.create_upload(pp.name)
     logger.info("Uploading %s", pp.name)
     with open(fp, 'rb') as inf:
-        upload.csv(inf)
+        source = upload.csv(inf)
+        output_schema = (
+            source.get_latest_input_schema().get_latest_output_schema())
+        print("Waiting on output schema transform...")
+        output_schema.wait_for_finish(sleeptime=5)
     job = rev.apply()
-    job.wait_for_finish(progress=lambda job: print(job.attributes['log']))
+    job.wait_for_finish(
+        progress=lambda job: print(job.attributes['log']),
+        sleeptime=5,
+    )
 
 
 def replace(client, view_id, fp, public=False):
@@ -69,6 +76,13 @@ def replace(client, view_id, fp, public=False):
     upload = rev.create_upload(pp.name)
     logger.info("Uploading %s", pp.name)
     with open(fp, 'rb') as inf:
-        upload.csv(inf)
-    job = rev.apply()
-    job.wait_for_finish(progress=lambda job: print(job.attributes['log']))
+        source = upload.csv(inf)
+        output_schema = (
+            source.get_latest_input_schema().get_latest_output_schema())
+        print("Waiting on output schema transform...")
+        output_schema.wait_for_finish(sleeptime=5)
+    job = rev.apply(output_schema)
+    job.wait_for_finish(
+        progress=lambda job: print(job.attributes['log'][0]),
+        sleeptime=15,
+    )
