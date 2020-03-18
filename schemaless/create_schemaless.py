@@ -121,6 +121,64 @@ def get(destdir, src):
     return dest
 
 
+def run(out_file,
+        no_download=False,
+        planning_file='',
+        pts_file='',
+        tco_file='',
+        mohcd_pipeline_file='',
+        mohcd_inclusionary_file='',
+        affordable_file='',
+        permit_addenda_file='',
+        oewd_permits_file='',
+        parcel_data_file='',
+        diff='',
+        the_date=None):
+
+    if parcel_data_file:
+        mapblklot_gen.init(parcel_data_file)
+
+    sources = []
+    dl_sources = {}
+    destdir = tempfile.mkdtemp()
+
+    with futures.ThreadPoolExecutor(
+            thread_name_prefix="schemaless-download") as executor:
+        for (source, arg) in [
+                (Planning, planning_file),
+                (PTS, pts_file),
+                (TCO, tco_file),
+                (MOHCDPipeline, mohcd_pipeline_file),
+                (MOHCDInclusionary, mohcd_inclusionary_file),
+                (PermitAddendaSummary, permit_addenda_file),
+                (AffordableRentalPortfolio, affordable_file),
+                (OEWDPermits, oewd_permits_file)]:
+            if arg:
+                sources.append(source(arg))
+            elif source.DATA_SF_DOWNLOAD and not no_download:
+                dl_sources[executor.submit(get, destdir, source)] = source
+            else:
+                logger.warning("Skipping %s" % source.NAME)
+
+        for future in futures.as_completed(dl_sources):
+            try:
+                src = dl_sources[future]
+                sources.append(src(future.result()))
+            except Exception:
+                logger.exception("Error downloading data for %s", src.NAME)
+                raise
+
+    if len(sources) == 0:
+        parser.print_help()
+        logger.error('ERROR: at least one source must be specified.')
+        sys.exit(1)
+
+    if not diff:
+        just_dump(sources, out_file, the_date)
+    else:
+        dump_and_diff(sources, out_file, args.diff, the_date)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description=dedent(
@@ -169,45 +227,16 @@ if __name__ == "__main__":
     if args.the_date:
         the_date = datetime.strptime(args.the_date, "%Y-%m-%d").date()
 
-    if args.parcel_data_file:
-        mapblklot_gen.init(args.parcel_data_file)
-
-    sources = []
-    dl_sources = {}
-    destdir = tempfile.mkdtemp()
-
-    with futures.ThreadPoolExecutor(
-            thread_name_prefix="schemaless-download") as executor:
-        for (source, arg) in [
-                (Planning, args.planning_file),
-                (PTS, args.pts_file),
-                (TCO, args.tco_file),
-                (MOHCDPipeline, args.mohcd_pipeline_file),
-                (MOHCDInclusionary, args.mohcd_inclusionary_file),
-                (PermitAddendaSummary, args.permit_addenda_file),
-                (AffordableRentalPortfolio, args.affordable_file),
-                (OEWDPermits, args.oewd_permits_file)]:
-            if arg:
-                sources.append(source(arg))
-            elif source.DATA_SF_DOWNLOAD and not args.no_download:
-                dl_sources[executor.submit(get, destdir, source)] = source
-            else:
-                logger.warning("Skipping %s" % source.NAME)
-
-        for future in futures.as_completed(dl_sources):
-            try:
-                src = dl_sources[future]
-                sources.append(src(future.result()))
-            except Exception:
-                logger.exception("Error downloading data for %s", src.NAME)
-                raise
-
-    if len(sources) == 0:
-        parser.print_help()
-        logger.error('ERROR: at least one source must be specified.')
-        sys.exit(1)
-
-    if not args.diff:
-        just_dump(sources, args.out_file, the_date)
-    else:
-        dump_and_diff(sources, args.out_file, args.diff, the_date)
+    run(args.out_file,
+        no_download=args.no_download,
+        planning_file=args.planning_file,
+        pts_file=args.pts_file,
+        tco_file=args.tco_file,
+        mohcd_pipeline_file=args.mohcd_pipeline_file,
+        mohcd_inclusionary_file=args.mohcd_inclusionary_file,
+        affordable_file=args.affordable_file,
+        permit_addenda_file=args.permit_addenda_file,
+        oewd_permits_file=args.oewd_permits_file,
+        parcel_data_file=args.parcel_data_file,
+        diff=args.diff,
+        the_date=args.the_date)

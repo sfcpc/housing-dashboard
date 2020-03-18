@@ -730,6 +730,27 @@ class Node:
         self.parents.add(parent_record_id)
 
 
+def run(schemaless_file,
+        out_file,
+        uuid_map_file='',
+        likely_match_file='',
+        parcel_data_file=''):
+
+    if parcel_data_file:
+        mapblklot_gen.init(parcel_data_file)
+
+    builder = RecordGraphBuilder(
+        RecordGraph,
+        schemaless_file,
+        uuid_map_file,
+        likely_match_file != "")
+    rg = builder.build()
+
+    rg.to_file(out_file)
+    if likely_match_file:
+        builder.write_likely_matches(likely_match_file)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('schemaless_file', help='Schemaless csv file')
@@ -741,21 +762,13 @@ if __name__ == "__main__":
         '--likely_match_file',
         help='File to write likely parent/child matches to.',
         default='')
-    parser.add_argument('outfile', help='Output path of uuid mapping')
+    parser.add_argument('out_file', help='Output path of uuid mapping')
     parser.add_argument('--parcel_data_file')
 
     args = parser.parse_args()
 
-    if args.parcel_data_file:
-        mapblklot_gen.init(args.parcel_data_file)
-
-    builder = RecordGraphBuilder(
-        RecordGraph,
-        args.schemaless_file,
-        args.uuid_map_file,
-        args.likely_match_file != "")
-    rg = builder.build()
-
-    rg.to_file(args.outfile)
-    if args.likely_match_file:
-        builder.write_likely_matches(args.likely_match_file)
+    run(schemaless_file=args.schemaless_file,
+        out_file=args.out_file,
+        uuid_map_file=args.uuid_map_file,
+        likely_match_file=args.likely_match_file,
+        parcel_data_file=args.parcel_data_file)

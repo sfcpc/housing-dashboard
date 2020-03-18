@@ -29,6 +29,48 @@ pytest
 
 ## Running locally
 
+### Using Airflow
+
+To set up airflow, run:
+
+```sh
+# airflow needs a home, ~/airflow is the default,
+# but you can lay foundation somewhere else if you prefer
+# (optional)
+export AIRFLOW_HOME=./.airflow
+
+# initialize the database
+airflow initdb
+
+# Set variables for our dag
+airflow variables --set WORKDIR "$(pwd)/airflow"
+mkdir -p $(pwd)/airflow
+```
+
+To run the tasks, you can either start the webserver and scheduler and
+let it go, or you can run manually via the CLI. For local development,
+running manually is likely what you want:
+
+```sh
+# Running manually
+airflow test housing-dashboard-data create_schemaless $(date "+%Y-%m-%d")
+airflow test housing-dashboard-data create_uuid_map $(date "+%Y-%m-%d")
+airflow test housing-dashboard-data create_relational $(date "+%Y-%m-%d")
+```
+
+You can trigger runs in the web interface, too:
+
+```sh
+# start the web server, default port is 8080
+airflow webserver -p 8080
+
+# In a new terminal, start the scheduler
+airflow scheduler
+```
+
+Then visit http://localhost:8080 and enable the housing-dashboard DAG.
+
+
 ### Downloading data
 
 NOTE: You do not need to manually download this data. By default (unless you

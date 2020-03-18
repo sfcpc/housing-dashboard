@@ -224,9 +224,9 @@ def process_files(schemaless_file, uuid_mapping):
         return ProcessResult(entries_map=projects, freshness=freshness)
 
 
-def output_freshness(freshness):
+def output_freshness(out_prefix, freshness):
     """Generates the table for indicating data freshness of sources."""
-    finalfile = args.out_prefix + 'data_freshness.csv'
+    finalfile = out_prefix + 'data_freshness.csv'
     with open(finalfile, 'w') as outf:
         print('Handling %s' % finalfile)
         writer = csv.writer(outf)
@@ -273,7 +273,7 @@ def build_projects(entries_map, recordgraph):
     return projects
 
 
-def output_projects(projects, config):
+def output_projects(out_prefix, projects, config):
     """Generates the relational tables from the project info"""
 
     lines_out = 0
@@ -282,7 +282,7 @@ def output_projects(projects, config):
             print('\t%s total entries' % lines_out)
             lines_out = 0
 
-        finalfile = args.out_prefix + table.name + '.csv'
+        finalfile = out_prefix + table.name + '.csv'
         with open(finalfile, 'w') as outf:
             print('Handling %s' % finalfile)
             headers_printed = False
@@ -321,24 +321,14 @@ def build_uuid_mapping(uuid_map_file):
     return mapping
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument('schemaless_file', help='Schema-less CSV to use')
-    parser.add_argument('uuid_map_file',
-                        help='CSV that maps uuids to all seen fks')
-    parser.add_argument(
-            '--out_prefix',
-            help='Prefix for output files',
-            default='')
-    parser.add_argument('--parcel_data_file')
-    args = parser.parse_args()
-    if not args.parcel_data_file:
-        print('Please specify --parcel_data_file')
-        sys.exit()
-    mapblklot_gen.init(args.parcel_data_file)
+def run(schemaless_file,
+        uuid_map_file,
+        parcel_data_file,
+        out_prefix=''):
+    mapblklot_gen.init(parcel_data_file)
 
-    uuid_mapping = build_uuid_mapping(args.uuid_map_file)
-    process_result = process_files(args.schemaless_file, uuid_mapping)
+    uuid_mapping = build_uuid_mapping(uuid_map_file)
+    process_result = process_files(schemaless_file, uuid_mapping)
 
     print('Some stats:')
     print('\tnumber of projects: %s' % len(process_result.entries_map))
@@ -354,6 +344,28 @@ if __name__ == '__main__':
     print('\ttotal fields: %s' % nv_count)
 
     print('Building record graph...')
-    rg = RecordGraph.from_files(args.schemaless_file, args.uuid_map_file)
-    output_projects(build_projects(process_result.entries_map, rg), config)
-    output_freshness(process_result.freshness)
+    rg = RecordGraph.from_files(schemaless_file, uuid_map_file)
+    output_projects(
+        out_prefix, build_projects(process_result.entries_map, rg), config)
+    output_freshness(out_prefix, process_result.freshness)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('schemaless_file', help='Schema-less CSV to use')
+    parser.add_argument('uuid_map_file',
+                        help='CSV that maps uuids to all seen fks')
+    parser.add_argument(
+            '--out_prefix',
+            help='Prefix for output files',
+            default='')
+    parser.add_argument('--parcel_data_file')
+    args = parser.parse_args()
+    if not args.parcel_data_file:
+        print('Please specify --parcel_data_file')
+        sys.exit()
+
+    run(schemaless_file=args.schemaless_file,
+        uuid_map_file=args.uuid_map_file,
+        parcel_data_file=args.parcel_data_file,
+        out_prefix=args.out_prefix)

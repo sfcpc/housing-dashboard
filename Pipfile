@@ -13,6 +13,8 @@ pytest = "*"
 usaddress-scourgify = "*"
 pandas = "*"
 requests = "*"
+apache-airflow = "*"
+cryptography = "*"
 
 [requires]
 python_version = "3.7"
