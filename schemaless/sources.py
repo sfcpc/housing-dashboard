@@ -705,8 +705,8 @@ class PermitAddendaSummary(Source):
         'permit_number',
         'earliest_addenda_arrival'
     ]
-    DATA_SF = ""  # TODO: Not public
-    DATA_SF_DOWNLOAD = ""  # TODO: Not public
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Department-of-Building-Inspection-Permit-Addenda-w/87xy-gk8d"  # NOQA
+    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/87xy-gk8d/rows.csv?accessType=DOWNLOAD"  # NOQA
 
     @classmethod
     def field_names(cls):
