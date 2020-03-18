@@ -36,7 +36,7 @@ def _do_upload(revision, fp):
             source.get_latest_input_schema().get_latest_output_schema())
         print("Waiting on output schema transform...")
         output_schema.wait_for_finish(sleeptime=5)
-    job = revision.apply()
+    job = revision.apply(output_schema)
     job.wait_for_finish(
         progress=lambda job: print(job.attributes['log']),
         sleeptime=5,
