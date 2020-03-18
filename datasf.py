@@ -26,6 +26,23 @@ def get_client(user='', password=''):
     return Socrata(auth)
 
 
+def _do_upload(revision, fp):
+    pp = Path(fp)
+    upload = revision.create_upload(pp.name)
+    logger.info("Uploading %s", pp.name)
+    with open(fp, 'rb') as inf:
+        source = upload.csv(inf)
+        output_schema = (
+            source.get_latest_input_schema().get_latest_output_schema())
+        print("Waiting on output schema transform...")
+        output_schema.wait_for_finish(sleeptime=5)
+    job = revision.apply()
+    job.wait_for_finish(
+        progress=lambda job: print(job.attributes['log']),
+        sleeptime=5,
+    )
+
+
 def upsert(client, view_id, fp, public=False):
     """Upsert a file to a DataSF dataset.
 
@@ -43,20 +60,7 @@ def upsert(client, view_id, fp, public=False):
     view = client.views.lookup(view_id)
     permission = 'public' if public else 'private'
     rev = view.revisions.create_update_revision(permission=permission)
-    pp = Path(fp)
-    upload = rev.create_upload(pp.name)
-    logger.info("Uploading %s", pp.name)
-    with open(fp, 'rb') as inf:
-        source = upload.csv(inf)
-        output_schema = (
-            source.get_latest_input_schema().get_latest_output_schema())
-        print("Waiting on output schema transform...")
-        output_schema.wait_for_finish(sleeptime=5)
-    job = rev.apply()
-    job.wait_for_finish(
-        progress=lambda job: print(job.attributes['log']),
-        sleeptime=5,
-    )
+    _do_upload(rev, fp)
 
 
 def replace(client, view_id, fp, public=False):
@@ -72,17 +76,4 @@ def replace(client, view_id, fp, public=False):
     view = client.views.lookup(view_id)
     permission = 'public' if public else 'private'
     rev = view.revisions.create_replace_revision(permission=permission)
-    pp = Path(fp)
-    upload = rev.create_upload(pp.name)
-    logger.info("Uploading %s", pp.name)
-    with open(fp, 'rb') as inf:
-        source = upload.csv(inf)
-        output_schema = (
-            source.get_latest_input_schema().get_latest_output_schema())
-        print("Waiting on output schema transform...")
-        output_schema.wait_for_finish(sleeptime=5)
-    job = rev.apply(output_schema)
-    job.wait_for_finish(
-        progress=lambda job: print(job.attributes['log'][0]),
-        sleeptime=15,
-    )
+    _do_upload(rev, fp)
