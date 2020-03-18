@@ -4,11 +4,13 @@ from collections import OrderedDict
 import csv
 from csv import DictReader
 from csv import DictWriter
-import pandas as pd
-
+from datetime import date
+import logging
 import uuid
 
-from datetime import date
+import pandas as pd
+
+import datasf
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import AffordableRentalPortfolio
@@ -21,6 +23,10 @@ from schemaless.sources import PTS
 from schemaless.sources import source_map
 from schemaless.sources import TCO
 import schemaless.mapblklot_generator as mapblklot_gen
+
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 class RecordGraphBuilderHelper:
@@ -734,7 +740,13 @@ def run(schemaless_file,
         out_file,
         uuid_map_file='',
         likely_match_file='',
-        parcel_data_file=''):
+        parcel_data_file='',
+        upload=False,
+        view_id=''):
+    if upload:
+        if not view_id:
+            raise ValueError("Missing view ID for upload to DataSF")
+        client = datasf.get_client()
 
     if parcel_data_file:
         mapblklot_gen.init(parcel_data_file)
@@ -750,6 +762,10 @@ def run(schemaless_file,
     if likely_match_file:
         builder.write_likely_matches(likely_match_file)
 
+    if upload:
+        logger.info("Uploading...")
+        datasf.replace(client, view_id, out_file)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -764,11 +780,14 @@ if __name__ == "__main__":
         default='')
     parser.add_argument('out_file', help='Output path of uuid mapping')
     parser.add_argument('--parcel_data_file')
-
+    parser.add_argument('--upload', type=bool, default=False)
+    parser.add_argument('--view_id', help="View ID of dataset on DataSF")
     args = parser.parse_args()
 
     run(schemaless_file=args.schemaless_file,
         out_file=args.out_file,
         uuid_map_file=args.uuid_map_file,
         likely_match_file=args.likely_match_file,
-        parcel_data_file=args.parcel_data_file)
+        parcel_data_file=args.parcel_data_file,
+        upload=args.upload,
+        view_id=args.view_id)
