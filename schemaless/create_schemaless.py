@@ -8,12 +8,18 @@ schemaless csv.
 """
 
 import argparse
+from concurrent import futures
 import csv
 from csv import DictReader
 from datetime import date
 from datetime import datetime
+import logging
+import os
+import requests
 import shutil
 import sys
+import tempfile
+from textwrap import dedent
 
 import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
@@ -26,6 +32,9 @@ from schemaless.sources import PTS
 from schemaless.sources import TCO
 
 csv.field_size_limit(sys.maxsize)
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 def just_dump(sources, outfile, the_date=None):
@@ -70,7 +79,7 @@ def latest_values(schemaless_file):
 
 def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
     records = latest_values(schemaless_file)
-    print("Loaded %d records" % len(records))
+    logger.info("Loaded %d records" % len(records))
 
     shutil.copyfile(schemaless_file, outfile)
     with open(outfile, 'a', newline='\n', encoding='utf-8') as outf:
@@ -99,8 +108,36 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
                         ])
 
 
+def get(destdir, src):
+    dest = os.path.join(destdir, "%s.csv" % src.NAME)
+    logger.info("Fetching %s to %s" % (src.DATA_SF_DOWNLOAD, dest))
+    with requests.get(src.DATA_SF_DOWNLOAD, stream=True) as req:
+        req.raise_for_status()
+        with open(dest, 'wb') as outf:
+            for chunk in req.iter_content(chunk_size=8192):
+                if chunk:
+                    outf.write(chunk)
+    logger.info("done with %s" % dest)
+    return dest
+
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(
+        description=dedent(
+            """\
+            Create the schemaless file from a collection of source data.
+
+            Usage: python -m schemaless.create_schemaless [flags]
+
+            With no flags, all datasources defined in schemeless.sources will
+            be downloaded to a tempdir. If any source file is manually
+            supplied, that file will be used and the corresponding file will
+            not be downloaded.
+
+            To turn off automatic downloads, pass `--no_download True`.
+        """))
+    parser.add_argument('--no_download', type=bool, default=False,
+                        help="Don't download source data.")
     parser.add_argument('--planning_file', help='Planning file', default='')
     parser.add_argument('--pts_file', help='PTS file', default='')
     parser.add_argument('--tco_file', help='TCO file', default='')
@@ -136,26 +173,38 @@ if __name__ == "__main__":
         mapblklot_gen.init(args.parcel_data_file)
 
     sources = []
-    if args.planning_file:
-        sources.append(Planning(args.planning_file))
-    if args.pts_file:
-        sources.append(PTS(args.pts_file))
-    if args.tco_file:
-        sources.append(TCO(args.tco_file))
-    if args.mohcd_pipeline_file:
-        sources.append(MOHCDPipeline(args.mohcd_pipeline_file))
-    if args.mohcd_inclusionary_file:
-        sources.append(MOHCDInclusionary(args.mohcd_inclusionary_file))
-    if args.permit_addenda_file:
-        sources.append(PermitAddendaSummary(args.permit_addenda_file))
-    if args.affordable_file:
-        sources.append(AffordableRentalPortfolio(args.affordable_file))
-    if args.oewd_permits_file:
-        sources.append(OEWDPermits(args.oewd_permits_file))
+    dl_sources = {}
+    destdir = tempfile.mkdtemp()
+
+    with futures.ThreadPoolExecutor(
+            thread_name_prefix="schemaless-download") as executor:
+        for (source, arg) in [
+                (Planning, args.planning_file),
+                (PTS, args.pts_file),
+                (TCO, args.tco_file),
+                (MOHCDPipeline, args.mohcd_pipeline_file),
+                (MOHCDInclusionary, args.mohcd_inclusionary_file),
+                (PermitAddendaSummary, args.permit_addenda_file),
+                (AffordableRentalPortfolio, args.affordable_file),
+                (OEWDPermits, args.oewd_permits_file)]:
+            if arg:
+                sources.append(source(arg))
+            elif source.DATA_SF_DOWNLOAD and not args.no_download:
+                dl_sources[executor.submit(get, destdir, source)] = source
+            else:
+                logger.warning("Skipping %s" % source.NAME)
+
+        for future in futures.as_completed(dl_sources):
+            try:
+                src = dl_sources[future]
+                sources.append(src(future.result()))
+            except Exception:
+                logger.exception("Error downloading data for %s", src.NAME)
+                raise
 
     if len(sources) == 0:
         parser.print_help()
-        print('\nERROR: at least one source must be specified.')
+        logger.error('ERROR: at least one source must be specified.')
         sys.exit(1)
 
     if not args.diff:

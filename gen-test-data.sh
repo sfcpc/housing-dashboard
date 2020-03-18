@@ -20,6 +20,7 @@ python gen_test_data.py data/pts/2020-02-11-permit-addenda.csv.xz testdata/permi
 python gen_test_data.py data/oewd/oewd-permits-2020-03-03.csv testdata/oewd-permits.csv "(201905170923)|(201905170926)|(201910154483)|(201910154490)|(201910154498)|(201912169614)|(201912169619)"
 
 python3 -m schemaless.create_schemaless \
+  --no_download True \
   --planning_file testdata/planning-one.csv \
   --pts_file testdata/pts.csv \
   --tco_file testdata/tco.csv \
@@ -39,6 +40,7 @@ python3 -m schemaless.create_uuid_map \
   --uuid_map_file=testdata/uuid-map-one.csv \
   --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz
 python3 -m schemaless.create_schemaless \
+  --no_download True \
   --planning_file testdata/planning-two.csv \
   --diff testdata/schemaless-one.csv \
   --the-date=2020-01-29 \
