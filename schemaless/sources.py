@@ -381,8 +381,11 @@ class Planning(DirectSource):
         'address_norm': Address('address'),
         'blocklot': Concat('block', 'lot'),
     }
-    DATA_SF = "https://data.sfgov.org/dataset/PPTS-Records_data/kgai-svwy"
-    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/kgai-svwy/rows.csv?accessType=DOWNLOAD"  # NOQA
+    # This dataset is not public yet.
+    # DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/SF-Planning-Permitting-Data/kncr-c6jw"  # NOQA
+    # DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/kncr-c6jw/rows.csv?accessType=DOWNLOAD"  # NOQA
+    DATA_SF = ""
+    DATA_SF_DOWNLOAD = ""
 
 
 class PTS(DirectSource):
