@@ -35,7 +35,7 @@ def _replace(path, view_id):
 
 
 def upload_table(table, path):
-    logger.info("Uploading %s...", table.name)
+    logger.info("Uploading %s...", table.__name__)
     _replace(path, TABLE_TO_VIEW_ID[table])
 
 

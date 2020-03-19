@@ -363,14 +363,15 @@ def run(schemaless_file,
                 thread_name_prefix="relational-upload") as executor:
             for table in config:
                 path = out_prefix + table.name + '.csv'
-                jobs[executor.submit(upload_table, table, path)] = table.name
+                jobs[executor.submit(
+                    upload_table, type(table), path)] = table.name
             jobs[executor.submit(
                 upload_data_freshness, freshness_path)] = "freshness"
 
             for future in futures.as_completed(jobs):
                 try:
                     output = jobs[future]
-                    logger.info(output.result())
+                    logger.info(future.result())
                     logger.info("Done uploading %s", output)
                 except Exception:
                     logger.exception("Error uploading data for %s", output)
