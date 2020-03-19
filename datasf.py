@@ -34,11 +34,12 @@ def _do_upload(revision, fp):
         source = upload.csv(inf)
         output_schema = (
             source.get_latest_input_schema().get_latest_output_schema())
-        print("Waiting on output schema transform...")
+        print("[%s] Waiting on output schema transform..." % pp.name)
         output_schema.wait_for_finish()
     job = revision.apply(output_schema)
     job.wait_for_finish(
-        progress=lambda job: print(job.attributes['log'][0]),
+        progress=lambda job: print(
+            '[%s] %s' % (pp.name, job.attributes['log'][0])),
         sleeptime=5,
     )
 
