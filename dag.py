@@ -31,6 +31,7 @@ dag = DAG(
     schedule_interval=timedelta(days=1),
 )
 
+
 task_create_schemaless = PythonOperator(
     task_id='create_schemaless',
     python_callable=create_schemaless.run,
@@ -40,6 +41,7 @@ task_create_schemaless = PythonOperator(
         'planning_file': '{{ var.value.WORKDIR }}/../data/planning/planning-2020-03-11.csv.xz',  # NOQA
         'parcel_data_file': '{{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz',  # NOQA
         'oewd_permits_file': '{{ var.value.WORKDIR }}/../data/oewd/oewd-permits-2020-03-03.csv',  # NOQA
+        'upload': '{{ var.value.UPLOAD }}',
     },
     dag=dag,
 )
@@ -49,8 +51,10 @@ task_create_uuid_map = PythonOperator(
     python_callable=create_uuid_map.run,
     op_kwargs={
         'out_file': '{{ var.value.WORKDIR }}/uuid.csv',
+        'likely_match_file': '{{ var.value.WORKDIR }}/likely-matches.csv',
         'schemaless_file': '{{ var.value.WORKDIR }}/schemaless.csv',
         'parcel_data_file': '{{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz',  # NOQA
+        'upload': '{{ var.value.UPLOAD }}',
     },
     dag=dag,
 )
@@ -62,7 +66,8 @@ task_create_relational = PythonOperator(
         'uuid_map_file': '{{ var.value.WORKDIR }}/uuid.csv',
         'schemaless_file': '{{ var.value.WORKDIR }}/schemaless.csv',
         'parcel_data_file': '{{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz',  # NOQA
-        'out_prefix': '{{ var.value.WORKDIR }}/relational',
+        'out_prefix': '{{ var.value.WORKDIR }}/',
+        'upload': '{{ var.value.UPLOAD }}',
     },
     dag=dag,
 )

@@ -1,10 +1,12 @@
 # Lint as: python3
 """Convert a schemaless csv into relational tables (a set of csvs)."""
 import argparse
+from concurrent import futures
 from datetime import datetime
 from collections import defaultdict
 from collections import namedtuple
 import csv
+import logging
 import lzma
 import queue
 import sys
@@ -15,6 +17,8 @@ import relational.table as tabledef
 from relational.project import Entry
 from relational.project import NameValue
 from relational.project import Project
+from relational.upload import upload_data_freshness
+from relational.upload import upload_table
 import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import AffordableRentalPortfolio
@@ -28,6 +32,9 @@ from schemaless.sources import TCO
 from schemaless.sources import source_map
 
 csv.field_size_limit(sys.maxsize)
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 
 # TODO: ugly global state
@@ -224,11 +231,10 @@ def process_files(schemaless_file, uuid_mapping):
         return ProcessResult(entries_map=projects, freshness=freshness)
 
 
-def output_freshness(out_prefix, freshness):
+def output_freshness(path, freshness):
     """Generates the table for indicating data freshness of sources."""
-    finalfile = out_prefix + 'data_freshness.csv'
-    with open(finalfile, 'w') as outf:
-        print('Handling %s' % finalfile)
+    with open(path, 'w') as outf:
+        print('Handling %s' % path)
         writer = csv.writer(outf)
         writer.writerow(['source', 'freshness'])
 
@@ -275,7 +281,6 @@ def build_projects(entries_map, recordgraph):
 
 def output_projects(out_prefix, projects, config):
     """Generates the relational tables from the project info"""
-
     lines_out = 0
     for table in config:
         if lines_out > 0:
@@ -324,7 +329,8 @@ def build_uuid_mapping(uuid_map_file):
 def run(schemaless_file,
         uuid_map_file,
         parcel_data_file,
-        out_prefix=''):
+        out_prefix='',
+        upload=False):
     mapblklot_gen.init(parcel_data_file)
 
     uuid_mapping = build_uuid_mapping(uuid_map_file)
@@ -347,7 +353,29 @@ def run(schemaless_file,
     rg = RecordGraph.from_files(schemaless_file, uuid_map_file)
     output_projects(
         out_prefix, build_projects(process_result.entries_map, rg), config)
-    output_freshness(out_prefix, process_result.freshness)
+
+    freshness_path = out_prefix + 'data_freshness.csv'
+    output_freshness(freshness_path, process_result.freshness)
+
+    if upload:
+        jobs = {}
+        with futures.ThreadPoolExecutor(
+                thread_name_prefix="relational-upload") as executor:
+            for table in config:
+                path = out_prefix + table.name + '.csv'
+                jobs[executor.submit(
+                    upload_table, type(table), path)] = table.name
+            jobs[executor.submit(
+                upload_data_freshness, freshness_path)] = "freshness"
+
+            for future in futures.as_completed(jobs):
+                try:
+                    output = jobs[future]
+                    logger.info(future.result())
+                    logger.info("Done uploading %s", output)
+                except Exception:
+                    logger.exception("Error uploading data for %s", output)
+                    raise
 
 
 if __name__ == '__main__':
@@ -360,6 +388,7 @@ if __name__ == '__main__':
             help='Prefix for output files',
             default='')
     parser.add_argument('--parcel_data_file')
+    parser.add_argument('--upload', type=bool, default=False)
     args = parser.parse_args()
     if not args.parcel_data_file:
         print('Please specify --parcel_data_file')
@@ -368,4 +397,5 @@ if __name__ == '__main__':
     run(schemaless_file=args.schemaless_file,
         uuid_map_file=args.uuid_map_file,
         parcel_data_file=args.parcel_data_file,
-        out_prefix=args.out_prefix)
+        out_prefix=args.out_prefix,
+        upload=args.upload)

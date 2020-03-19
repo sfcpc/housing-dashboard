@@ -30,6 +30,7 @@ from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import TCO
+from schemaless.upload import upload_schemaless
 
 csv.field_size_limit(sys.maxsize)
 
@@ -133,7 +134,8 @@ def run(out_file,
         oewd_permits_file='',
         parcel_data_file='',
         diff='',
-        the_date=None):
+        the_date=None,
+        upload=False):
 
     if parcel_data_file:
         mapblklot_gen.init(parcel_data_file)
@@ -178,6 +180,9 @@ def run(out_file,
     else:
         dump_and_diff(sources, out_file, args.diff, the_date)
 
+    if upload:
+        upload_schemaless(out_file)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -221,6 +226,7 @@ if __name__ == "__main__":
               'YYYY-MM-DD'),
         default='')
     parser.add_argument('--parcel_data_file')
+    parser.add_argument('--upload', type=bool, default=False)
     args = parser.parse_args()
 
     the_date = None
@@ -239,4 +245,5 @@ if __name__ == "__main__":
         oewd_permits_file=args.oewd_permits_file,
         parcel_data_file=args.parcel_data_file,
         diff=args.diff,
-        the_date=args.the_date)
+        the_date=args.the_date,
+        upload=args.upload)

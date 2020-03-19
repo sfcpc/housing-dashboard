@@ -15,6 +15,7 @@ pandas = "*"
 requests = "*"
 apache-airflow = "*"
 cryptography = "*"
+socrata-py = "*"
 
 [requires]
 python_version = "3.7"
