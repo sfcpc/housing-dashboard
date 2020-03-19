@@ -1092,6 +1092,91 @@ def test_project_details_is_da(basic_graph, d):
     assert _get_value_for_name(table, nvs, 'is_da') == 'TRUE'
 
 
+def test_project_details_is_rehab(basic_graph, d):
+    table = ProjectDetails()
+
+    tests = [
+        EntriesTestRow(
+            name='rehab project',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('project_id', 'mohcd1', d),
+                       NameValue('project_type', 'Rehabilitation', d)]),
+            ],
+            want={
+                'is_rehab': 'TRUE',
+            }),
+        EntriesTestRow(
+            name='non-rehab project',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('residential_units_1br_net', '2', d)]),
+                Entry('2',
+                      MOHCDPipeline.NAME,
+                      [NameValue('project_id', 'mohcd1', d),
+                       NameValue('project_type', 'New Construction', d)]),
+            ],
+            want={
+                'is_rehab': 'FALSE',
+            }),
+    ]
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
+
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_name(table,
+                                       fields,
+                                       name) == wantvalue, test.name
+
+                                       
+def test_project_details_incentives(basic_graph, d):
+    table = ProjectDetails()
+
+    tests = [
+        EntriesTestRow(
+            name='sb330 and ab2162',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('sb330', 'CHECKED', d),
+                       NameValue('ab2162', 'CHECKED', d),
+                       NameValue('sb35', '', d)]),
+            ],
+            want={
+                'sb330': 'TRUE',
+                'ab2162': 'TRUE',
+            }),
+        EntriesTestRow(
+            name='housing_sustainability_district and state density bonus',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('sb330', '', d),
+                       NameValue('housing_sustainability_dist', 'CHECKED', d),
+                       NameValue('state_density_bonus_individual',
+                                 'CHECKED', d)]),
+            ],
+            want={
+                'housing_sustainability_dist': 'TRUE',
+                'state_density_bonus': 'TRUE',
+            }),
+    ]
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
+
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_name(table,
+                                       fields,
+                                       name) == wantvalue, test.name
+
+
 def test_project_details_bedroom_info_mohcd(basic_graph, d):
     table = ProjectDetails()
 

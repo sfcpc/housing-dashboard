@@ -1056,6 +1056,43 @@ class ProjectDetails(NameValueTable):
                                 value='TRUE' if is_da else 'FALSE',
                                 data=is_da_data))
 
+    def _rehab_info(self, rows, proj):
+        project_type = proj.field('project_type', MOHCDPipeline.NAME)
+        if project_type:
+            rows.append(self.nv_row(
+                proj,
+                name='is_rehab',
+                value='TRUE'
+                      if project_type.lower() == 'rehabilitation'
+                      else 'FALSE',
+                data=MOHCDPipeline.OUTPUT_NAME))
+
+    def _incentives_info(self, rows, proj):
+        incentives = {'sb35', 'sb330', 'ab2162', 'homesf',
+                      'housing_sustainability_dist'}
+
+        for incentive in incentives:
+            incentive_field = proj.field(incentive, Planning.NAME)
+            if incentive_field:
+                rows.append(self.nv_row(
+                    proj,
+                    name=incentive,
+                    value='TRUE'
+                        if incentive_field.lower() == 'checked'
+                        else 'FALSE',
+                    data=Planning.OUTPUT_NAME))
+
+        state_density_bonus = \
+            proj.field('state_density_bonus_individual', Planning.NAME)
+        if state_density_bonus:
+            rows.append(self.nv_row(
+                proj,
+                name='state_density_bonus',
+                value='TRUE'
+                    if state_density_bonus.lower() == 'checked'
+                    else 'FALSE',
+                data=Planning.OUTPUT_NAME))
+
     def _unique(self, rows):
         """Prunes duplicate name-value entries, preferring entries that were
         added later in the process.
@@ -1090,6 +1127,8 @@ class ProjectDetails(NameValueTable):
         self._earliest_addenda_arrival(result, proj)
         self._env_review_type(result, proj)
         self._is_da_type(result, proj)
+        self._rehab_info(result, proj)
+        self._incentives_info(result, proj)
 
         self._unique(result)
 
