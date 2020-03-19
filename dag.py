@@ -66,7 +66,7 @@ task_create_relational = PythonOperator(
         'uuid_map_file': '{{ var.value.WORKDIR }}/uuid.csv',
         'schemaless_file': '{{ var.value.WORKDIR }}/schemaless.csv',
         'parcel_data_file': '{{ var.value.WORKDIR }}/../data/assessor/2020-02-18-parcels.csv.xz',  # NOQA
-        'out_prefix': '{{ var.value.WORKDIR }}/relational',
+        'out_prefix': '{{ var.value.WORKDIR }}/',
         'upload': '{{ var.value.UPLOAD }}',
     },
     dag=dag,
