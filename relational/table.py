@@ -476,11 +476,11 @@ class ProjectFacts(Table):
                     Planning.OUTPUT_NAME
 
     def _pim_link_info(self, row, proj):
+        root_type = [('record_type',
+                      lambda x: x in _valid_planning_root_type)]
         prj_id = proj.field('record_id',
                             Planning.NAME,
-                            entry_predicate=\
-                                [('record_type',
-                                  lambda x: x in _valid_planning_root_type)])
+                            entry_predicate=root_type)
         pim_link_template = "https://sfplanninggis.org/pim?search=%s"
         if prj_id:
             row[self.index(self.PIM_LINK)] = pim_link_template % prj_id
@@ -523,7 +523,7 @@ class ProjectFacts(Table):
                  row[self.index(self.NET_NUM_UNITS_BMR)] != '0') or
                 (row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '' and
                  row[self.index(self.NET_EST_NUM_UNITS_BMR)] != '0'))
-    
+
     def _invalid_prj_root(self, proj):
         invalid_prj_count = 0
         try:
@@ -537,7 +537,9 @@ class ProjectFacts(Table):
                     entry_latest = entry.get_latest('status')
                     if entry_latest:
                         status = entry_latest[0].lower()
-                        if all(x not in status for x in _invalid_status_keywords):
+                        if all(
+                                x not in status
+                                for x in _invalid_status_keywords):
                             return False
                         else:
                             invalid_prj_count += 1

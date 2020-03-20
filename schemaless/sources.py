@@ -109,9 +109,10 @@ class Mapblklot(Field):
                     record[self.block] + record[self.lot])
         else:
             raise MapblklotException(
-                "MapblklotGeneratorSingleton is not instantiated. Please instantiate "
-                "by calling schemaless.mapblklot_generator.init(filepath) in "
-                "top-level script environment")
+                "MapblklotGeneratorSingleton is not instantiated. Please "
+                "instantiate by calling "
+                "schemaless.mapblklot_generator.init(filepath) in top-level "
+                "script environment")
         return None
 
 
