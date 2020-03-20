@@ -107,12 +107,10 @@ have an internet connection, just run
 pipenv shell
 
 python3 -m schemaless.create_schemaless \
-  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   schemaless-one.csv
 
 python3 -m schemaless.create_uuid_map \
   --likely_match_file=outputdata/likelies-one.csv \
-  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   schemaless-one.csv \
   uuid-map-one.csv
 ```
@@ -130,13 +128,11 @@ will always diff against a prior version.
 pipenv shell
 
 python3 -m schemaless.create_schemaless \
-  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   --diff schemaless-one.csv \
   schemaless-two.csv
 
 python3 -m schemaless.create_uuid_map \
   --likely_match_file=likelies-one.csv \
-  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   --uuid_map_file=uuid-map-one.csv \  # Use IDs generated last time
   schemaless-two.csv \
   uuid-map-two.csv
@@ -161,12 +157,10 @@ python3 -m schemaless.create_schemaless \
   --affordable_file data/mohcd/affordable-rental-portfolio-2019-09-06.csv \
   --oewd_permits_file data/oewd-permits-2020-03-03.csv \
   --the-date=2020-02-27 \
-  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   schemaless-one.csv
 
 python3 -m schemaless.create_uuid_map \
   --likely_match_file=likelies-one.csv \
-  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   schemaless-one.csv \
   uuid-map-one.csv
 
@@ -177,14 +171,12 @@ python3 -m schemaless.create_schemaless \
   --planning_file data/planning/planning-2020-03-11.csv.xz \
   --pts_file data/pts/2020-01-24-pts-after-2013.csv.xz \
   --the-date=2020-03-04 \
-  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   --diff schemaless-one.csv \
   schemaless-two.csv
 
 python3 -m schemaless.create_uuid_map \
   --likely_match_file=likelies-two.csv \
   --uuid_map_file=uuid-map-one.csv \
-  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   schemaless-two.csv \
   uuid-map-two.csv
 ```
@@ -200,7 +192,6 @@ been produced:
 
 ```sh
 python3 -m relational.process_schemaless \
-  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   schemaless-two.csv \
   uuid-map-two.csv
 ```
