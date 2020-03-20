@@ -15,6 +15,7 @@ from datetime import date
 from datetime import datetime
 import logging
 import os
+import pathlib
 import shutil
 import sys
 import tempfile
@@ -183,6 +184,9 @@ def run(out_file,
         sys.exit(1)
 
     mapblklot_gen.init(parcel_data_file)
+
+    # Make sure our output dir exists
+    pathlib.Path(out_file).parent.mkdir(parents=True, exist_ok=True)
 
     if diff_file:
         dump_and_diff(sources, out_file, diff_file, the_date)
