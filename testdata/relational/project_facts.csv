@@ -1,0 +1,13 @@
+id,name,address,applicant,supervisor_district,permit_authority,permit_authority_id,net_num_units,net_num_units_data,net_num_units_bmr,net_num_units_bmr_data,net_estimated_num_units_bmr,net_estimated_num_units_bmr_data,pim_link
+320ca612-a4ab-4d02-9875-9cd347a9830e,340-370 VALENCIA ST,"340 - 370 VALENCIA ST, SAN FRANCISCO, CA",,,planning,2002.0809,247,planning,247,planning,,,https://sfplanninggis.org/pim?search=2002.0809
+f997f8fd-f293-46c2-bb0d-df25653ead5c,429 Beale Street and 430 Main Street,429 BEALE ST 94105,,,planning,2014-002033PRJ,144,planning,19,planning,,,https://sfplanninggis.org/pim?search=2014-002033PRJ
+d4577b50-6185-4b90-a75a-42d8db11a277,2451 SACRAMENTO ST,2451 SACRAMENTO ST 94115,,,planning,2015-010665PRJ,0,dbi,98,planning,,,https://sfplanninggis.org/pim?search=2015-010665PRJ
+03f740fd-b79b-4cf8-8881-db628ef40306,Clementina Towers,"Clementina St, 94103",Tenderloin Neighborhood Development Corporation,6,planning,2015-011205PRJ,276,mohcd_pipeline,274,mohcd_pipeline,,,https://sfplanninggis.org/pim?search=2015-011205PRJ
+0c6bfa4b-5d9c-446b-82e4-9d8a188c9716,2465 Van Ness,"Van Ness Ave, 94123",DM Development,2,planning,2015-014058PRJ,41,mohcd_pipeline,0,mohcd_pipeline,,,https://sfplanninggis.org/pim?search=2015-014058PRJ
+17083f61-9ce4-4972-96f2-5ecf9133286d,1950 Mission,"Mission St, 94103",BRIDGE Housing Corporation,9,planning,2016-001514PRJ,157,mohcd_pipeline,155,mohcd_pipeline,,,https://sfplanninggis.org/pim?search=2016-001514PRJ
+8129302d-5241-49dd-8ac8-e03f374fc89a,1658 10TH AVE,1658 10TH AVE 94122,,,planning,2016-008581PRJ,3,planning,,,0,planning,https://sfplanninggis.org/pim?search=2016-008581PRJ
+19a0dc80-bd50-4cc4-b321-288f926aa608,101 URBANO DR,101 URBANO DR 94127,,,planning,2017-006823PRJ,2,dbi,,,0,planning,https://sfplanninggis.org/pim?search=2017-006823PRJ
+b8b57c70-ef56-4a17-aef6-1f58e8ac537a,24 FOUNTAIN ST,24 FOUNTAIN ST 94114,,,planning,2017-016045PRJ,2,planning,,,0,planning,https://sfplanninggis.org/pim?search=2017-016045PRJ
+bcd4afc2-7ca5-4f5d-ab88-0a1464bce077,20 FOUNTAIN ST,20 FOUNTAIN ST 94114,,,planning,2017-016047PRJ,8,dbi,,,0,planning,https://sfplanninggis.org/pim?search=2017-016047PRJ
+a3baaf65-09b0-42cf-b5b8-60cbabf1c518,8 10TH ST,8 10TH ST 94103,,,planning,2018-000948PRJ,754,planning,,,226,planning,https://sfplanninggis.org/pim?search=2018-000948PRJ
+79056468-a3fb-4318-a345-7d918172f9b9,218 10TH AVE,218 10TH AVE 94118,,,planning,2018-013088PRJ,1,planning,,,0,planning,https://sfplanninggis.org/pim?search=2018-013088PRJ

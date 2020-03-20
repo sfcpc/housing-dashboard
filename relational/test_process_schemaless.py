@@ -1,9 +1,11 @@
 # Lint as: python3
 from datetime import datetime
 from collections import namedtuple
+import filecmp
 
 from relational.process_schemaless import Freshness
 from relational.process_schemaless import is_seen_id
+from relational.process_schemaless import run
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import OEWDPermits
@@ -149,3 +151,34 @@ def test_is_seen_id():
     ]
     for test in tests:
         assert is_seen_id(test.input, FakeTable(), seen_set) == test.want
+
+
+def test_run(tmpdir):
+    run(schemaless_file='testdata/schemaless-two.csv',
+        uuid_map_file='testdata/uuid-map-two.csv',
+        parcel_data_file='data/assessor/2020-02-18-parcels.csv.xz',
+        out_prefix=(str(tmpdir) + "/"))
+
+    freshness = tmpdir.join("data_freshness.csv")
+    assert filecmp.cmp('testdata/relational/data_freshness.csv', freshness)
+
+    facts = tmpdir.join("project_facts.csv")
+    assert filecmp.cmp('testdata/relational/project_facts.csv', facts)
+
+    details = tmpdir.join("project_details.csv")
+    assert filecmp.cmp('testdata/relational/project_details.csv', details)
+
+    geo = tmpdir.join("project_geo.csv")
+    assert filecmp.cmp('testdata/relational/project_geo.csv', geo)
+
+    status_history = tmpdir.join("project_status_history.csv")
+    assert filecmp.cmp('testdata/relational/project_status_history.csv',
+                       status_history)
+
+    unit_counts = tmpdir.join("project_unit_counts_full.csv")
+    assert filecmp.cmp('testdata/relational/project_unit_counts_full.csv',
+                       unit_counts)
+
+    completed = tmpdir.join("project_completed_unit_counts.csv")
+    assert filecmp.cmp('testdata/relational/project_completed_unit_counts.csv',
+                       completed)

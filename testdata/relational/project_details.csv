@@ -1,0 +1,75 @@
+id,name,value,data_source
+320ca612-a4ab-4d02-9875-9cd347a9830e,is_da,FALSE,planning
+320ca612-a4ab-4d02-9875-9cd347a9830e,environmental_review_type_bucketed,Negative Declaration,planning
+320ca612-a4ab-4d02-9875-9cd347a9830e,environmental_review_type,Initial Study-Negative Declaration,planning
+f997f8fd-f293-46c2-bb0d-df25653ead5c,is_da,FALSE,planning
+f997f8fd-f293-46c2-bb0d-df25653ead5c,environmental_review_type_bucketed,Community Plan,planning
+f997f8fd-f293-46c2-bb0d-df25653ead5c,environmental_review_type,Community Plan-Exemption/Exclusion,planning
+f997f8fd-f293-46c2-bb0d-df25653ead5c,is_adu,FALSE,planning
+f997f8fd-f293-46c2-bb0d-df25653ead5c,residential_units_2br,59,planning
+f997f8fd-f293-46c2-bb0d-df25653ead5c,residential_units_1br,25,planning
+f997f8fd-f293-46c2-bb0d-df25653ead5c,residential_units_studio,60,planning
+d4577b50-6185-4b90-a75a-42d8db11a277,is_da,FALSE,planning
+d4577b50-6185-4b90-a75a-42d8db11a277,is_adu,FALSE,planning
+d4577b50-6185-4b90-a75a-42d8db11a277,residential_units_2br,0,planning
+d4577b50-6185-4b90-a75a-42d8db11a277,residential_units_1br,0,planning
+d4577b50-6185-4b90-a75a-42d8db11a277,residential_units_studio,0,planning
+03f740fd-b79b-4cf8-8881-db628ef40306,is_rehab,TRUE,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,is_da,FALSE,planning
+03f740fd-b79b-4cf8-8881-db628ef40306,environmental_review_type_bucketed,Categorical Exemption,planning
+03f740fd-b79b-4cf8-8881-db628ef40306,environmental_review_type,Categorical Exemption-Stamp,planning
+03f740fd-b79b-4cf8-8881-db628ef40306,is_100pct_affordable,TRUE,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_ami_undeclared_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_150_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_130_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_120_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_110_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_105_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_100_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_90_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_80_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_60_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_55_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_50_percent_ami_units,274,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_40_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_30_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,num_20_percent_ami_units,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,residential_units_4br,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,residential_units_3br,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,residential_units_2br,0,mohcd_pipeline
+03f740fd-b79b-4cf8-8881-db628ef40306,residential_units_1br,48,mohcd_pipeline
+0c6bfa4b-5d9c-446b-82e4-9d8a188c9716,is_rehab,FALSE,mohcd_pipeline
+0c6bfa4b-5d9c-446b-82e4-9d8a188c9716,is_da,FALSE,planning
+0c6bfa4b-5d9c-446b-82e4-9d8a188c9716,inclusionary_housing_program_status,Off-site BMR Project (Small Sites)/Fee Payment,mohcd_pipeline
+0c6bfa4b-5d9c-446b-82e4-9d8a188c9716,is_100pct_affordable,FALSE,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,is_rehab,FALSE,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,is_da,FALSE,planning
+17083f61-9ce4-4972-96f2-5ecf9133286d,earliest_addenda_arrival,2016-09-21,permit_addenda_summary
+17083f61-9ce4-4972-96f2-5ecf9133286d,is_100pct_affordable,TRUE,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_ami_undeclared_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_150_percent_ami_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_130_percent_ami_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_120_percent_ami_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_110_percent_ami_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_105_percent_ami_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_100_percent_ami_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_90_percent_ami_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_80_percent_ami_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_60_percent_ami_units,74,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_55_percent_ami_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_50_percent_ami_units,41,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_40_percent_ami_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_30_percent_ami_units,40,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,num_20_percent_ami_units,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,residential_units_4br,0,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,residential_units_3br,14,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,residential_units_2br,73,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,residential_units_1br,36,mohcd_pipeline
+8129302d-5241-49dd-8ac8-e03f374fc89a,is_da,FALSE,planning
+19a0dc80-bd50-4cc4-b321-288f926aa608,is_da,FALSE,planning
+b8b57c70-ef56-4a17-aef6-1f58e8ac537a,is_da,FALSE,planning
+bcd4afc2-7ca5-4f5d-ab88-0a1464bce077,is_da,FALSE,planning
+a3baaf65-09b0-42cf-b5b8-60cbabf1c518,is_da,FALSE,planning
+79056468-a3fb-4318-a345-7d918172f9b9,is_da,FALSE,planning
+79056468-a3fb-4318-a345-7d918172f9b9,is_adu,FALSE,planning
+79056468-a3fb-4318-a345-7d918172f9b9,residential_units_3br,0,planning

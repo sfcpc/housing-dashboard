@@ -1134,7 +1134,7 @@ def test_project_details_is_rehab(basic_graph, d):
                                        fields,
                                        name) == wantvalue, test.name
 
-                                       
+
 def test_project_details_incentives(basic_graph, d):
     table = ProjectDetails()
 
