@@ -4,6 +4,9 @@ import logging
 import os
 from pathlib import Path
 
+import requests
+from requests.auth import HTTPBasicAuth
+
 from airflow.models.variable import Variable
 from socrata.authorization import Authorization
 from socrata import Socrata
@@ -78,3 +81,18 @@ def replace(client, view_id, fp, public=False):
     permission = 'public' if public else 'private'
     rev = view.revisions.create_replace_revision(permission=permission)
     _do_upload(rev, fp)
+
+
+def download(client, view_id, dest):
+    """Download a dataset to `dest`."""
+    logger.info("Fetching %s to %s" % (view_id, dest))
+    auth = HTTPBasicAuth(client.auth.username, client.auth.password)
+    uri = 'https://data.sfgov.org/api/views/%s/rows.csv?accessType=DOWNLOAD'
+    with requests.get(uri % view_id, auth=auth, stream=True) as req:
+        req.raise_for_status()
+        with open(dest, 'wb') as outf:
+            for chunk in req.iter_content(chunk_size=8192):
+                if chunk:
+                    outf.write(chunk)
+    logger.info("done with %s" % dest)
+    return dest

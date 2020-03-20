@@ -21,11 +21,14 @@ import sys
 import tempfile
 from textwrap import dedent
 
+from datasf import download
+from datasf import get_client
 import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import OEWDPermits
+from schemaless.sources import PARCELS_DATA_SF_VIEW_ID
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
@@ -137,9 +140,6 @@ def run(out_file,
         the_date=None,
         upload=False):
 
-    if parcel_data_file:
-        mapblklot_gen.init(parcel_data_file)
-
     sources = []
     dl_sources = {}
     destdir = tempfile.mkdtemp()
@@ -162,6 +162,13 @@ def run(out_file,
             else:
                 logger.warning("Skipping %s" % source.NAME)
 
+        if not parcel_data_file:
+            parcel_data_file_future = executor.submit(
+                download,
+                client,
+                PARCELS_DATA_SF_VIEW_ID,
+                os.path.join(destdir, 'parcels.csv'))
+
         for future in futures.as_completed(dl_sources):
             try:
                 src = dl_sources[future]
@@ -169,11 +176,14 @@ def run(out_file,
             except Exception:
                 logger.exception("Error downloading data for %s", src.NAME)
                 raise
+        parcel_data_file = parcel_data_file_future.result()
 
     if len(sources) == 0:
         parser.print_help()
         logger.error('ERROR: at least one source must be specified.')
         sys.exit(1)
+
+    mapblklot_gen.init(parcel_data_file)
 
     if not diff:
         just_dump(sources, out_file, the_date)

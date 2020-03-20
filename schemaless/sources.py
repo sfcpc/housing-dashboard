@@ -756,3 +756,5 @@ source_map = {
     AffordableRentalPortfolio.NAME: AffordableRentalPortfolio,
     OEWDPermits.NAME: OEWDPermits
 }
+
+PARCELS_DATA_SF_VIEW_ID = 'acdm-wktn'
