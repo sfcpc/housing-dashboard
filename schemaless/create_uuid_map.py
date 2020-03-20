@@ -6,16 +6,21 @@ from csv import DictReader
 from csv import DictWriter
 from datetime import date
 import logging
+import os
+import tempfile
 import uuid
 
 import pandas as pd
 
+from datasf import download
+from datasf import get_client
 from fileutils import open_file
 from schemaless.create_schemaless import latest_values
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import OEWDPermits
+from schemaless.sources import PARCELS_DATA_SF_VIEW_ID
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
@@ -743,8 +748,16 @@ def run(schemaless_file,
         likely_match_file='',
         parcel_data_file='',
         upload=False):
-    if parcel_data_file:
-        mapblklot_gen.init(parcel_data_file)
+
+    if not parcel_data_file:
+        destdir = tempfile.mkdtemp()
+        client = get_client()
+        parcel_data_file = download(
+            client,
+            PARCELS_DATA_SF_VIEW_ID,
+            os.path.join(destdir, 'parcels.csv'))
+
+    mapblklot_gen.init(parcel_data_file)
 
     builder = RecordGraphBuilder(
         RecordGraph,
