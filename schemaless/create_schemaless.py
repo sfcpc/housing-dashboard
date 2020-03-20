@@ -15,17 +15,19 @@ from datetime import date
 from datetime import datetime
 import logging
 import os
-import requests
 import shutil
 import sys
 import tempfile
 from textwrap import dedent
 
+from datasf import download
+from datasf import get_client
 import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import OEWDPermits
+from schemaless.sources import PARCELS_DATA_SF_VIEW_ID
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
@@ -109,19 +111,6 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
                         ])
 
 
-def get(destdir, src):
-    dest = os.path.join(destdir, "%s.csv" % src.NAME)
-    logger.info("Fetching %s to %s" % (src.DATA_SF_DOWNLOAD, dest))
-    with requests.get(src.DATA_SF_DOWNLOAD, stream=True) as req:
-        req.raise_for_status()
-        with open(dest, 'wb') as outf:
-            for chunk in req.iter_content(chunk_size=8192):
-                if chunk:
-                    outf.write(chunk)
-    logger.info("done with %s" % dest)
-    return dest
-
-
 def run(out_file,
         no_download=False,
         planning_file='',
@@ -137,13 +126,10 @@ def run(out_file,
         the_date=None,
         upload=False):
 
-    if parcel_data_file:
-        mapblklot_gen.init(parcel_data_file)
-
     sources = []
     dl_sources = {}
     destdir = tempfile.mkdtemp()
-
+    client = get_client()
     with futures.ThreadPoolExecutor(
             thread_name_prefix="schemaless-download") as executor:
         for (source, arg) in [
@@ -157,10 +143,19 @@ def run(out_file,
                 (OEWDPermits, oewd_permits_file)]:
             if arg:
                 sources.append(source(arg))
-            elif source.DATA_SF_DOWNLOAD and not no_download:
-                dl_sources[executor.submit(get, destdir, source)] = source
+            elif source.DATA_SF_VIEW_ID and not no_download:
+                dest = os.path.join(destdir, "%s.csv" % source.NAME)
+                dl_sources[executor.submit(
+                    download, client, source.DATA_SF_VIEW_ID, dest)] = source
             else:
                 logger.warning("Skipping %s" % source.NAME)
+
+        if not parcel_data_file:
+            parcel_data_file_future = executor.submit(
+                download,
+                client,
+                PARCELS_DATA_SF_VIEW_ID,
+                os.path.join(destdir, 'parcels.csv'))
 
         for future in futures.as_completed(dl_sources):
             try:
@@ -169,11 +164,15 @@ def run(out_file,
             except Exception:
                 logger.exception("Error downloading data for %s", src.NAME)
                 raise
+        if not parcel_data_file:
+            parcel_data_file = parcel_data_file_future.result()
 
     if len(sources) == 0:
         parser.print_help()
         logger.error('ERROR: at least one source must be specified.')
         sys.exit(1)
+
+    mapblklot_gen.init(parcel_data_file)
 
     if not diff:
         just_dump(sources, out_file, the_date)

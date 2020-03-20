@@ -8,11 +8,14 @@ from collections import namedtuple
 import csv
 import logging
 import lzma
+import os
 import queue
 import sys
+import tempfile
 
 from fileutils import open_file
-
+from datasf import download
+from datasf import get_client
 import relational.table as tabledef
 from relational.project import Entry
 from relational.project import NameValue
@@ -25,6 +28,7 @@ from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
 from schemaless.sources import MOHCDPipeline
 from schemaless.sources import OEWDPermits
+from schemaless.sources import PARCELS_DATA_SF_VIEW_ID
 from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
@@ -331,6 +335,14 @@ def run(schemaless_file,
         parcel_data_file,
         out_prefix='',
         upload=False):
+    if not parcel_data_file:
+        destdir = tempfile.mkdtemp()
+        client = get_client()
+        parcel_data_file = download(
+            client,
+            PARCELS_DATA_SF_VIEW_ID,
+            os.path.join(destdir, 'parcels.csv'))
+
     mapblklot_gen.init(parcel_data_file)
 
     uuid_mapping = build_uuid_mapping(uuid_map_file)
