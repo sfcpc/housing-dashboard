@@ -240,7 +240,7 @@ if __name__ == "__main__":
         help=('Date this script was run, optional, defaults to today. '
               'YYYY-MM-DD'),
         default='')
-    parser.add_argument('--parcel_data_file')
+    parser.add_argument('--parcel_data_file', help='Parcel data', default='')
     parser.add_argument('--upload', type=bool, default=False)
     args = parser.parse_args()
 

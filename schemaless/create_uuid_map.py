@@ -816,7 +816,7 @@ if __name__ == "__main__":
         '--likely_match_file',
         help='File to write likely parent/child matches to.',
         default='')
-    parser.add_argument('--parcel_data_file')
+    parser.add_argument('--parcel_data_file', help='Parcel data', default='')
     parser.add_argument('--upload', type=bool, default=False)
     parser.add_argument('--no_download', type=bool, default=False,
                         help="Don't download schemaless or uuid data.")
