@@ -8,6 +8,7 @@ from csv import DictWriter
 from datetime import date
 import logging
 import os
+import pathlib
 import tempfile
 import uuid
 
@@ -785,6 +786,9 @@ def run(out_file,
 
     mapblklot_gen.init(parcel_data_file)
 
+    # Make sure our output dir exists
+    pathlib.Path(out_file).parent.mkdir(parents=True, exist_ok=True)
+
     builder = RecordGraphBuilder(
         RecordGraph,
         schemaless_file,
@@ -794,6 +798,8 @@ def run(out_file,
 
     rg.to_file(out_file)
     if likely_match_file:
+        pathlib.Path(likely_match_file).parent.mkdir(
+            parents=True, exist_ok=True)
         builder.write_likely_matches(likely_match_file)
 
     if upload:
