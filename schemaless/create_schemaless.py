@@ -164,7 +164,8 @@ def run(out_file,
             except Exception:
                 logger.exception("Error downloading data for %s", src.NAME)
                 raise
-        parcel_data_file = parcel_data_file_future.result()
+        if not parcel_data_file:
+            parcel_data_file = parcel_data_file_future.result()
 
     if len(sources) == 0:
         parser.print_help()
