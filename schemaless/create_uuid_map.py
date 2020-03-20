@@ -1,6 +1,7 @@
 import argparse
 from collections import defaultdict
 from collections import OrderedDict
+from concurrent import futures
 import csv
 from csv import DictReader
 from csv import DictWriter
@@ -27,8 +28,10 @@ from schemaless.sources import PTS
 from schemaless.sources import source_map
 from schemaless.sources import TCO
 import schemaless.mapblklot_generator as mapblklot_gen
+from schemaless.upload import SCHEMALESS_VIEW_ID
 from schemaless.upload import upload_uuid
 from schemaless.upload import upload_likely_matches
+from schemaless.upload import UUID_VIEW_ID
 
 
 logger = logging.getLogger(__name__)
@@ -742,20 +745,43 @@ class Node:
         self.parents.add(parent_record_id)
 
 
-def run(schemaless_file,
-        out_file,
+def run(out_file,
+        schemaless_file='',
         uuid_map_file='',
         likely_match_file='',
         parcel_data_file='',
+        no_download=False,
         upload=False):
 
-    if not parcel_data_file:
-        destdir = tempfile.mkdtemp()
-        client = get_client()
-        parcel_data_file = download(
-            client,
-            PARCELS_DATA_SF_VIEW_ID,
-            os.path.join(destdir, 'parcels.csv'))
+    if not no_download:
+        with futures.ThreadPoolExecutor(
+                thread_name_prefix="uuid-download") as executor:
+            destdir = tempfile.mkdtemp()
+            client = get_client()
+            if not parcel_data_file:
+                parcel_data_file_future = executor.submit(
+                    download,
+                    client,
+                    PARCELS_DATA_SF_VIEW_ID,
+                    os.path.join(destdir, 'parcels.csv'))
+            if not schemaless_file:
+                schemaless_file_future = executor.submit(
+                    download,
+                    client,
+                    SCHEMALESS_VIEW_ID,
+                    os.path.join(destdir, 'schemaless.csv'))
+            if not uuid_map_file:
+                uuid_map_file_future = executor.submit(
+                    download,
+                    client,
+                    UUID_VIEW_ID,
+                    os.path.join(destdir, 'uuid.csv'))
+            if not parcel_data_file:
+                parcel_data_file = parcel_data_file_future.result()
+            if not schemaless_file:
+                schemaless_file = schemaless_file_future.result()
+            if not uuid_map_file:
+                uuid_map_file = uuid_map_file_future.result()
 
     mapblklot_gen.init(parcel_data_file)
 
@@ -778,7 +804,10 @@ def run(schemaless_file,
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('schemaless_file', help='Schemaless csv file')
+    parser.add_argument(
+        '--schemaless_file',
+        help='Schemaless csv file. If empty, will be downloaded.',
+        default='')
     parser.add_argument(
         '--uuid_map_file',
         help='UUID mapping file',
@@ -787,14 +816,17 @@ if __name__ == "__main__":
         '--likely_match_file',
         help='File to write likely parent/child matches to.',
         default='')
-    parser.add_argument('out_file', help='Output path of uuid mapping')
     parser.add_argument('--parcel_data_file')
     parser.add_argument('--upload', type=bool, default=False)
+    parser.add_argument('--no_download', type=bool, default=False,
+                        help="Don't download schemaless or uuid data.")
+    parser.add_argument('out_file', help='Output path of uuid mapping')
     args = parser.parse_args()
 
-    run(schemaless_file=args.schemaless_file,
-        out_file=args.out_file,
+    run(out_file=args.out_file,
+        schemaless_file=args.schemaless_file,
         uuid_map_file=args.uuid_map_file,
         likely_match_file=args.likely_match_file,
         parcel_data_file=args.parcel_data_file,
+        no_download=args.no_download,
         upload=args.upload)

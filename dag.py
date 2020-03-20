@@ -49,7 +49,6 @@ task_create_uuid_map = PythonOperator(
     op_kwargs={
         'out_file': '{{ var.value.WORKDIR }}/uuid.csv',
         'likely_match_file': '{{ var.value.WORKDIR }}/likely-matches.csv',
-        'schemaless_file': '{{ var.value.WORKDIR }}/schemaless.csv',
         'upload': '{{ var.value.UPLOAD }}',
     },
     dag=dag,
