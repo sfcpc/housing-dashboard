@@ -382,10 +382,8 @@ class Planning(DirectSource):
         'blocklot': Concat('block', 'lot'),
     }
     # This dataset is not public yet.
-    # DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/SF-Planning-Permitting-Data/kncr-c6jw"  # NOQA
-    # DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/kncr-c6jw/rows.csv?accessType=DOWNLOAD"  # NOQA
-    DATA_SF = ""
-    DATA_SF_DOWNLOAD = ""
+    DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/SF-Planning-Permitting-Data/kncr-c6jw"  # NOQA
+    DATA_SF_VIEW_ID = "kncr-c6jw"
 
 
 class PTS(DirectSource):
@@ -442,7 +440,7 @@ class PTS(DirectSource):
         'mapblklot': Mapblklot('block', 'lot'),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Building-Permits/i98e-djp9"  # NOQA
-    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/i98e-djp9/rows.csv?accessType=DOWNLOAD"  # NOQA
+    DATA_SF_VIEW_ID = "i98e-djp9"
 
 
 class TCO(DirectSource):
@@ -461,7 +459,7 @@ class TCO(DirectSource):
         'address_norm': Address('address'),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Dwelling-Unit-Completion-Counts-by-Building-Permit/j67f-aayr"  # NOQA
-    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/j67f-aayr/rows.csv?accessType=DOWNLOAD"  # NOQA
+    DATA_SF_VIEW_ID = "j67f-aayr"
 
 
 class MOHCDInclusionary(DirectSource):
@@ -517,7 +515,7 @@ class MOHCDInclusionary(DirectSource):
         ),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Residential-Projects-With-Inclusionary-Requirement/nj3x-rw36"  # NOQA
-    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/nj3x-rw36/rows.csv?accessType=DOWNLOAD"  # NOQA
+    DATA_SF_VIEW_ID = "nj3x-rw36"
 
 
 class MOHCDPipeline(DirectSource):
@@ -609,7 +607,7 @@ class MOHCDPipeline(DirectSource):
         ),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Affordable-Housing-Pipeline/aaxw-2cb8"  # NOQA
-    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/aaxw-2cb8/rows.csv?accessType=DOWNLOAD"  # NOQA
+    DATA_SF_VIEW_ID = "aaxw-2cb8"
 
 
 class AffordableRentalPortfolio(DirectSource):
@@ -665,7 +663,7 @@ class AffordableRentalPortfolio(DirectSource):
         ),
     }
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Mayor-s-Office-of-Housing-and-Community-Developmen/9rdx-httc"  # NOQA
-    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/9rdx-httc/rows.csv?accessType=DOWNLOAD"  # NOQA
+    DATA_SF_VIEW_ID = "9rdx-httc"
 
 
 class OEWDPermits(DirectSource):
@@ -687,7 +685,7 @@ class OEWDPermits(DirectSource):
         'Target Permit Issuance Date': 'target_permit_issuance_date',
     }
     DATA_SF = "https://data.sfgov.org/dataset/Priority-Permits/336t-bzzm"
-    DATA_SF_DOWNLOAD = ""  # TODO: Not public
+    DATA_SF_VIEW_ID = "336t-bzzm"
 
 
 class PermitAddendaSummary(Source):
@@ -709,7 +707,7 @@ class PermitAddendaSummary(Source):
         'earliest_addenda_arrival'
     ]
     DATA_SF = "https://data.sfgov.org/Housing-and-Buildings/Department-of-Building-Inspection-Permit-Addenda-w/87xy-gk8d"  # NOQA
-    DATA_SF_DOWNLOAD = "https://data.sfgov.org/api/views/87xy-gk8d/rows.csv?accessType=DOWNLOAD"  # NOQA
+    DATA_SF_VIEW_ID = "87xy-gk8d"
 
     @classmethod
     def field_names(cls):

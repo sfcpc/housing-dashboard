@@ -38,8 +38,6 @@ task_create_schemaless = PythonOperator(
     op_kwargs={
         'out_file': '{{ var.value.WORKDIR }}/schemaless.csv',
         # 'no_download': 'True',
-        'planning_file': '{{ var.value.WORKDIR }}/../data/planning/planning-2020-03-11.csv.xz',  # NOQA
-        'oewd_permits_file': '{{ var.value.WORKDIR }}/../data/oewd/oewd-permits-2020-03-03.csv',  # NOQA
         'upload': '{{ var.value.UPLOAD }}',
     },
     dag=dag,

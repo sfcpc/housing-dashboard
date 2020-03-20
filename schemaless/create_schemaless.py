@@ -15,7 +15,6 @@ from datetime import date
 from datetime import datetime
 import logging
 import os
-import requests
 import shutil
 import sys
 import tempfile
@@ -112,19 +111,6 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
                         ])
 
 
-def get(destdir, src):
-    dest = os.path.join(destdir, "%s.csv" % src.NAME)
-    logger.info("Fetching %s to %s" % (src.DATA_SF_DOWNLOAD, dest))
-    with requests.get(src.DATA_SF_DOWNLOAD, stream=True) as req:
-        req.raise_for_status()
-        with open(dest, 'wb') as outf:
-            for chunk in req.iter_content(chunk_size=8192):
-                if chunk:
-                    outf.write(chunk)
-    logger.info("done with %s" % dest)
-    return dest
-
-
 def run(out_file,
         no_download=False,
         planning_file='',
@@ -143,7 +129,7 @@ def run(out_file,
     sources = []
     dl_sources = {}
     destdir = tempfile.mkdtemp()
-
+    client = get_client()
     with futures.ThreadPoolExecutor(
             thread_name_prefix="schemaless-download") as executor:
         for (source, arg) in [
@@ -157,8 +143,10 @@ def run(out_file,
                 (OEWDPermits, oewd_permits_file)]:
             if arg:
                 sources.append(source(arg))
-            elif source.DATA_SF_DOWNLOAD and not no_download:
-                dl_sources[executor.submit(get, destdir, source)] = source
+            elif source.DATA_SF_VIEW_ID and not no_download:
+                dest = os.path.join(destdir, "%s.csv" % source.NAME)
+                dl_sources[executor.submit(
+                    download, client, source.DATA_SF_VIEW_ID, dest)] = source
             else:
                 logger.warning("Skipping %s" % source.NAME)
 
