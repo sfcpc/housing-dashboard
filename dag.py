@@ -58,8 +58,6 @@ task_create_relational = PythonOperator(
     task_id='create_relational',
     python_callable=process_schemaless.run,
     op_kwargs={
-        'uuid_map_file': '{{ var.value.WORKDIR }}/uuid.csv',
-        'schemaless_file': '{{ var.value.WORKDIR }}/schemaless.csv',
         'out_prefix': '{{ var.value.WORKDIR }}/',
         'upload': '{{ var.value.UPLOAD }}',
     },
