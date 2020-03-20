@@ -14,6 +14,7 @@ d4577b50-6185-4b90-a75a-42d8db11a277,is_adu,FALSE,planning
 d4577b50-6185-4b90-a75a-42d8db11a277,residential_units_2br,0,planning
 d4577b50-6185-4b90-a75a-42d8db11a277,residential_units_1br,0,planning
 d4577b50-6185-4b90-a75a-42d8db11a277,residential_units_studio,0,planning
+03f740fd-b79b-4cf8-8881-db628ef40306,is_rehab,TRUE,mohcd_pipeline
 03f740fd-b79b-4cf8-8881-db628ef40306,is_da,FALSE,planning
 03f740fd-b79b-4cf8-8881-db628ef40306,environmental_review_type_bucketed,Categorical Exemption,planning
 03f740fd-b79b-4cf8-8881-db628ef40306,environmental_review_type,Categorical Exemption-Stamp,planning
@@ -37,9 +38,11 @@ d4577b50-6185-4b90-a75a-42d8db11a277,residential_units_studio,0,planning
 03f740fd-b79b-4cf8-8881-db628ef40306,residential_units_3br,0,mohcd_pipeline
 03f740fd-b79b-4cf8-8881-db628ef40306,residential_units_2br,0,mohcd_pipeline
 03f740fd-b79b-4cf8-8881-db628ef40306,residential_units_1br,48,mohcd_pipeline
+0c6bfa4b-5d9c-446b-82e4-9d8a188c9716,is_rehab,FALSE,mohcd_pipeline
 0c6bfa4b-5d9c-446b-82e4-9d8a188c9716,is_da,FALSE,planning
 0c6bfa4b-5d9c-446b-82e4-9d8a188c9716,inclusionary_housing_program_status,Off-site BMR Project (Small Sites)/Fee Payment,mohcd_pipeline
 0c6bfa4b-5d9c-446b-82e4-9d8a188c9716,is_100pct_affordable,FALSE,mohcd_pipeline
+17083f61-9ce4-4972-96f2-5ecf9133286d,is_rehab,FALSE,mohcd_pipeline
 17083f61-9ce4-4972-96f2-5ecf9133286d,is_da,FALSE,planning
 17083f61-9ce4-4972-96f2-5ecf9133286d,earliest_addenda_arrival,2016-09-21,permit_addenda_summary
 17083f61-9ce4-4972-96f2-5ecf9133286d,is_100pct_affordable,TRUE,mohcd_pipeline

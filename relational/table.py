@@ -1078,8 +1078,7 @@ class ProjectDetails(NameValueTable):
                     proj,
                     name=incentive,
                     value='TRUE'
-                        if incentive_field.lower() == 'checked'
-                        else 'FALSE',
+                          if incentive_field.lower() == 'checked' else 'FALSE',
                     data=Planning.OUTPUT_NAME))
 
         state_density_bonus = \
@@ -1089,8 +1088,7 @@ class ProjectDetails(NameValueTable):
                 proj,
                 name='state_density_bonus',
                 value='TRUE'
-                    if state_density_bonus.lower() == 'checked'
-                    else 'FALSE',
+                      if state_density_bonus.lower() == 'checked' else 'FALSE',
                 data=Planning.OUTPUT_NAME))
 
     def _unique(self, rows):
