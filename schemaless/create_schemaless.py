@@ -84,7 +84,8 @@ def latest_values(schemaless_file):
 
 def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
     records = latest_values(schemaless_file)
-    logger.info("Loaded %d records" % len(records))
+    logger.info("Loaded %d records" %
+                sum(len(recs) for recs in records.values()))
 
     shutil.copyfile(schemaless_file, outfile)
     with open(outfile, 'a', newline='\n', encoding='utf-8') as outf:
