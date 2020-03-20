@@ -755,4 +755,7 @@ source_map = {
     OEWDPermits.NAME: OEWDPermits
 }
 
+# This is separate because, while we depend on the parcels data to tie blocklots
+# to mapblocklots, it's not actually a proper Source because its data doesn't
+# make it into the schemaless output file.
 PARCELS_DATA_SF_VIEW_ID = 'acdm-wktn'
