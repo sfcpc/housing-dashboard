@@ -42,14 +42,21 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
 
+SOCRATA_DATE_FORMAT = "%m/%d/%Y %I:%M:%S %p"
+
+
+def socrata_date(d):
+    """Socrata transforms whatever date we give it into this format."""
+    return d.strftime(SOCRATA_DATE_FORMAT)
+
+
 def just_dump(sources, outfile, the_date=None):
     with open(outfile, 'w', newline='\n', encoding='utf-8') as outf:
         writer = csv.writer(outf)
         writer.writerow(['fk', 'source', 'last_updated', 'name', 'value'])
-        last_updated = date.today().isoformat()
-        if the_date:
-            last_updated = the_date.isoformat()
-
+        if not the_date:
+            the_date = date.today()
+        last_updated = socrata_date(the_date)
         for source in sources:
             valid_keys = source.field_names()
             for line in source.yield_records():
@@ -86,13 +93,13 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
     records = latest_values(schemaless_file)
     logger.info("Loaded %d records" %
                 sum(len(recs) for recs in records.values()))
+    if not the_date:
+        the_date = date.today()
+    last_updated = socrata_date(the_date)
 
     shutil.copyfile(schemaless_file, outfile)
     with open(outfile, 'a', newline='\n', encoding='utf-8') as outf:
         writer = csv.writer(outf)
-        last_updated = date.today().isoformat()
-        if the_date:
-            last_updated = the_date.isoformat()
 
         for source in sources:
             valid_keys = source.field_names()
@@ -261,5 +268,5 @@ if __name__ == "__main__":
         parcel_data_file=args.parcel_data_file,
         diff=args.diff,
         diff_file=args.diff_file,
-        the_date=args.the_date,
+        the_date=the_date,
         upload=args.upload)

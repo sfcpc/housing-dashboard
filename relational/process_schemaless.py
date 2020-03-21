@@ -24,6 +24,7 @@ from relational.project import Project
 from relational.upload import upload_data_freshness
 from relational.upload import upload_table
 import schemaless.mapblklot_generator as mapblklot_gen
+from schemaless.create_schemaless import SOCRATA_DATE_FORMAT
 from schemaless.create_uuid_map import RecordGraph
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
@@ -137,7 +138,8 @@ class Freshness:
 
     def _extract_last_updated(self, line, source):
         if line['source'] == source:
-            nvdate = datetime.fromisoformat(line['last_updated'])
+            nvdate = datetime.strptime(
+                line['last_updated'], SOCRATA_DATE_FORMAT)
             if not self._check_and_log_good_date(nvdate, source, line):
                 return
 
@@ -221,7 +223,7 @@ def process_files(schemaless_file, uuid_mapping):
             return found_entry
 
         for line in reader:
-            date = datetime.fromisoformat(line['last_updated'])
+            date = datetime.strptime(line['last_updated'], SOCRATA_DATE_FORMAT)
             src, fk, name, value = (
                 line['source'], line['fk'], line['name'], line['value'])
             id = uuid_mapping[fk]
