@@ -9,6 +9,7 @@ import csv
 import logging
 import lzma
 import os
+import pathlib
 import queue
 import sys
 import tempfile
@@ -35,6 +36,8 @@ from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import TCO
 from schemaless.sources import source_map
+from schemaless.upload import SCHEMALESS_VIEW_ID
+from schemaless.upload import UUID_VIEW_ID
 
 csv.field_size_limit(sys.maxsize)
 
@@ -332,18 +335,43 @@ def build_uuid_mapping(uuid_map_file):
     return mapping
 
 
-def run(schemaless_file,
-        uuid_map_file,
-        parcel_data_file,
+def run(schemaless_file='',
+        uuid_map_file='',
+        parcel_data_file='',
         out_prefix='',
         upload=False):
-    if not parcel_data_file:
-        destdir = tempfile.mkdtemp()
-        client = get_client()
-        parcel_data_file = download(
-            client,
-            PARCELS_DATA_SF_VIEW_ID,
-            os.path.join(destdir, 'parcels.csv'))
+    if not parcel_data_file or not schemaless_file or not uuid_map_file:
+        with futures.ThreadPoolExecutor(
+                thread_name_prefix="uuid-download") as executor:
+            destdir = tempfile.mkdtemp()
+            client = get_client()
+            if not parcel_data_file:
+                parcel_data_file_future = executor.submit(
+                    download,
+                    client,
+                    PARCELS_DATA_SF_VIEW_ID,
+                    os.path.join(destdir, 'parcels.csv'))
+            if not schemaless_file:
+                schemaless_file_future = executor.submit(
+                    download,
+                    client,
+                    SCHEMALESS_VIEW_ID,
+                    os.path.join(destdir, 'schemaless.csv'))
+            if not uuid_map_file:
+                uuid_map_file_future = executor.submit(
+                    download,
+                    client,
+                    UUID_VIEW_ID,
+                    os.path.join(destdir, 'uuid.csv'))
+            if not parcel_data_file:
+                parcel_data_file = parcel_data_file_future.result()
+            if not schemaless_file:
+                schemaless_file = schemaless_file_future.result()
+            if not uuid_map_file:
+                uuid_map_file = uuid_map_file_future.result()
+
+    # Make sure our output dir exists
+    pathlib.Path(out_prefix).parent.mkdir(parents=True, exist_ok=True)
 
     mapblklot_gen.init(parcel_data_file)
 
@@ -394,19 +422,21 @@ def run(schemaless_file,
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('schemaless_file', help='Schema-less CSV to use')
-    parser.add_argument('uuid_map_file',
-                        help='CSV that maps uuids to all seen fks')
     parser.add_argument(
-            '--out_prefix',
-            help='Prefix for output files',
-            default='')
-    parser.add_argument('--parcel_data_file')
+        '--schemaless_file',
+        help='Schema-less CSV to use',
+        default='')
+    parser.add_argument(
+        '--uuid_map_file',
+        help='CSV that maps uuids to all seen fks',
+        default='')
+    parser.add_argument(
+        '--out_prefix',
+        help='Prefix for output files',
+        default='')
+    parser.add_argument('--parcel_data_file', help='Parcel data', default='')
     parser.add_argument('--upload', type=bool, default=False)
     args = parser.parse_args()
-    if not args.parcel_data_file:
-        print('Please specify --parcel_data_file')
-        sys.exit()
 
     run(schemaless_file=args.schemaless_file,
         uuid_map_file=args.uuid_map_file,

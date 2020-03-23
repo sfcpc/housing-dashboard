@@ -128,7 +128,7 @@ will always diff against a prior version.
 pipenv shell
 
 python3 -m schemaless.create_schemaless \
-  --diff schemaless-one.csv \
+  --diff True \  # The prior schemaless file will be automatically downloaded
   schemaless-two.csv
 
 python3 -m schemaless.create_uuid_map \
@@ -171,7 +171,7 @@ python3 -m schemaless.create_schemaless \
   --planning_file data/planning/planning-2020-03-11.csv.xz \
   --pts_file data/pts/2020-01-24-pts-after-2013.csv.xz \
   --the-date=2020-03-04 \
-  --diff schemaless-one.csv \
+  --diff_file schemaless-one.csv \
   schemaless-two.csv
 
 python3 -m schemaless.create_uuid_map \
