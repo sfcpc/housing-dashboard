@@ -340,34 +340,35 @@ def run(schemaless_file='',
         parcel_data_file='',
         out_prefix='',
         upload=False):
-    with futures.ThreadPoolExecutor(
-            thread_name_prefix="uuid-download") as executor:
-        destdir = tempfile.mkdtemp()
-        client = get_client()
-        if not parcel_data_file:
-            parcel_data_file_future = executor.submit(
-                download,
-                client,
-                PARCELS_DATA_SF_VIEW_ID,
-                os.path.join(destdir, 'parcels.csv'))
-        if not schemaless_file:
-            schemaless_file_future = executor.submit(
-                download,
-                client,
-                SCHEMALESS_VIEW_ID,
-                os.path.join(destdir, 'schemaless.csv'))
-        if not uuid_map_file:
-            uuid_map_file_future = executor.submit(
-                download,
-                client,
-                UUID_VIEW_ID,
-                os.path.join(destdir, 'uuid.csv'))
-        if not parcel_data_file:
-            parcel_data_file = parcel_data_file_future.result()
-        if not schemaless_file:
-            schemaless_file = schemaless_file_future.result()
-        if not uuid_map_file:
-            uuid_map_file = uuid_map_file_future.result()
+    if not parcel_data_file or not schemaless_file or not uuid_map_file:
+        with futures.ThreadPoolExecutor(
+                thread_name_prefix="uuid-download") as executor:
+            destdir = tempfile.mkdtemp()
+            client = get_client()
+            if not parcel_data_file:
+                parcel_data_file_future = executor.submit(
+                    download,
+                    client,
+                    PARCELS_DATA_SF_VIEW_ID,
+                    os.path.join(destdir, 'parcels.csv'))
+            if not schemaless_file:
+                schemaless_file_future = executor.submit(
+                    download,
+                    client,
+                    SCHEMALESS_VIEW_ID,
+                    os.path.join(destdir, 'schemaless.csv'))
+            if not uuid_map_file:
+                uuid_map_file_future = executor.submit(
+                    download,
+                    client,
+                    UUID_VIEW_ID,
+                    os.path.join(destdir, 'uuid.csv'))
+            if not parcel_data_file:
+                parcel_data_file = parcel_data_file_future.result()
+            if not schemaless_file:
+                schemaless_file = schemaless_file_future.result()
+            if not uuid_map_file:
+                uuid_map_file = uuid_map_file_future.result()
 
     # Make sure our output dir exists
     pathlib.Path(out_prefix).parent.mkdir(parents=True, exist_ok=True)
