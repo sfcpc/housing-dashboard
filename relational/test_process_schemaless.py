@@ -88,7 +88,7 @@ def test_freshness():
 
     # mohcd extracts from last_updated
     lines.append({
-        'last_updated': '2019-01-01',  # isoformat for last_updated
+        'last_updated': '01/01/2019 12:00:00 AM',
         'source': MOHCDPipeline.NAME,
         'name': 'date_opened',
         'value': '01/01/2020',
@@ -96,7 +96,7 @@ def test_freshness():
 
     # oewd extracts from last_updated
     lines.append({
-        'last_updated': '2019-10-10',  # isoformat for last_updated
+        'last_updated': '10/10/2019 12:00:00 AM',
         'source': OEWDPermits.NAME,
         'name': 'dbi_arrival_date',
         'value': '01/01/2020',
@@ -104,7 +104,7 @@ def test_freshness():
 
     # permit addenda summary extracts from last_updated
     lines.append({
-        'last_updated': '2019-05-05',  # isoformat for last_updated
+        'last_updated': '05/05/2019 12:00:00 AM',
         'source': PermitAddendaSummary.NAME,
         'name': 'earliest_addenda_arrival',
         'value': '04/01/2015',
@@ -112,7 +112,7 @@ def test_freshness():
 
     # affordable rental porrtfolio extracts from last_updated
     lines.append({
-        'last_updated': '2019-01-01',  # isoformat for last_updated
+        'last_updated': '01/01/2019 12:00:00 AM',
         'source': AffordableRentalPortfolio.NAME,
         'name': 'project_name',
         'value': 'the foo building',
