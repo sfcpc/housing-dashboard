@@ -1,7 +1,7 @@
-# SF Planning Housing Dashboard
+# SF Planning Housing Production Dashboard
 
 This repo contains scripts to transform assorted datasets from DataSF into a
-single set of data for the new San Francisco Housing Dashboard.
+single set of data for the new San Francisco Housing Production Dashboard.
 
 ## Overview
 
