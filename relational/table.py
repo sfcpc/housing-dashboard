@@ -285,6 +285,7 @@ class ProjectFacts(Table):
     NAME = 'name'
     ADDRESS = 'address'
     APPLICANT = 'applicant'
+    PLANNER = 'planner'
     SUPERVISOR_DISTRICT = 'supervisor_district'
     PERMIT_AUTHORITY = 'permit_authority'
     PERMIT_AUTHORITY_ID = 'permit_authority_id'
@@ -305,6 +306,7 @@ class ProjectFacts(Table):
             self.NAME,
             self.ADDRESS,
             self.APPLICANT,
+            self.PLANNER,
             self.SUPERVISOR_DISTRICT,
             self.PERMIT_AUTHORITY,
             self.PERMIT_AUTHORITY_ID,
@@ -370,8 +372,14 @@ class ProjectFacts(Table):
 
             row[self.index(self.NAME)] = name
             row[self.index(self.ADDRESS)] = addr
-            row[self.index(self.APPLICANT)] = ''  # TODO
-            row[self.index(self.SUPERVISOR_DISTRICT)] = ''  # TODO
+
+            developer = proj.field('developer_org', Planning.NAME)
+            if not developer:
+                developer = proj.field('developer_name', Planning.NAME)
+            row[self.index(self.APPLICANT)] = developer
+
+            row[self.index(self.SUPERVISOR_DISTRICT)] = \
+                proj.field('supervisor_district', Planning.NAME)
         elif proj.field('permit_number',
                         PTS.NAME,
                         entry_predicate=_is_valid_dbi_entry) != '':
@@ -541,6 +549,11 @@ class ProjectFacts(Table):
         except ValueError:
             return
 
+    def _planner_info(self, row, proj):
+        planner_name = proj.field('assigned_to_planner',
+                                  Planning.NAME)
+        row[self.index(self.PLANNER)] = planner_name
+
     def _atleast_one_measure(self, row):
         return ((row[self.index(self.NET_NUM_UNITS)] != '' and
                  row[self.index(self.NET_NUM_UNITS)] != '0') or
@@ -596,6 +609,7 @@ class ProjectFacts(Table):
         self._pim_link_info(row, proj)
         self._permit_authority_info(row, proj)
         self._bldg_permit_authority_info(row, proj)
+        self._planner_info(row, proj)
 
         if (self._atleast_one_measure(row) and
                 self._nonzero_or_nonempty_address(row)):
