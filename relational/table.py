@@ -534,9 +534,9 @@ class ProjectFacts(Table):
 
             joined_permits = ','.join(permits)
             if len(joined_permits) > 0:
-                row[self.index(self.BUILDING_PERMIT_AUTHORITY)] = \
-                    joined_permits
                 row[self.index(self.BUILDING_PERMIT_AUTHORITY_ID)] = \
+                    joined_permits
+                row[self.index(self.BUILDING_PERMIT_AUTHORITY)] = \
                     PTS.OUTPUT_NAME
         except ValueError:
             return

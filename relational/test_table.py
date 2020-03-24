@@ -731,8 +731,8 @@ def test_table_project_facts_bldg_authority(basic_graph, d):
                       [NameValue('permit_number', '456', d),
                        NameValue('permit_type', '1', d)]),
             ],
-            want={'building_permit_authority': '123,456',
-                  'building_permit_authority_id': 'dbi'},
+            want={'building_permit_authority_id': '123,456',
+                  'building_permit_authority': 'dbi'},
         ),
     ]
 
