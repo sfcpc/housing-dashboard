@@ -70,7 +70,7 @@ Planning, DBI, or other departments. For example, consider 1950 Mission St. In
 the snippet below it has a record ID of `planning_2016-001514PRJ`, and we
 assigned it the UUID `17083f61-9ce4-4972-96f2-5ecf9133286d`. This same UUID is
 used for the records `pts_1438278158065` (from the Department of Building
-Inspection) and `mohcd_pipeline_2013-046` (from the Mayor's Offics of Housing
+Inspection) and `mohcd_pipeline_2013-046` (from the Mayor's Office of Housing
 and Community Development).
 
 ```csv
