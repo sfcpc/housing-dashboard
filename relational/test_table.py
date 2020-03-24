@@ -710,6 +710,41 @@ def test_table_project_facts_permit_authority(basic_graph, d):
                                       name) == wantvalue, test.name
 
 
+def test_table_project_facts_bldg_authority(basic_graph, d):
+    table = ProjectFacts()
+
+    tests = [
+        EntriesTestRow(
+            name='prj root',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('record_id', 'abc', d),
+                       NameValue('number_of_units', '10', d),
+                       NameValue('record_type', 'PRJ', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('permit_number', '123', d),
+                       NameValue('permit_type', '1', d)]),
+                Entry('3',
+                      PTS.NAME,
+                      [NameValue('permit_number', '456', d),
+                       NameValue('permit_type', '1', d)]),
+            ],
+            want={'building_permit_authority': '123,456',
+                  'building_permit_authority_id': 'dbi'},
+        ),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_row(table,
+                                      fields,
+                                      name) == wantvalue, test.name
+
+
 def test_table_project_geo_dbi_location(basic_graph, d):
     table = ProjectGeo()
 

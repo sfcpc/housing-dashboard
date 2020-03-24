@@ -288,6 +288,8 @@ class ProjectFacts(Table):
     SUPERVISOR_DISTRICT = 'supervisor_district'
     PERMIT_AUTHORITY = 'permit_authority'
     PERMIT_AUTHORITY_ID = 'permit_authority_id'
+    BUILDING_PERMIT_AUTHORITY = 'building_permit_authority'
+    BUILDING_PERMIT_AUTHORITY_ID = 'building_permit_authority_id'
     NET_NUM_UNITS = 'net_num_units'
     NET_NUM_UNITS_DATA = 'net_num_units_data'
     NET_NUM_UNITS_BMR = 'net_num_units_bmr'
@@ -306,6 +308,8 @@ class ProjectFacts(Table):
             self.SUPERVISOR_DISTRICT,
             self.PERMIT_AUTHORITY,
             self.PERMIT_AUTHORITY_ID,
+            self.BUILDING_PERMIT_AUTHORITY,
+            self.BUILDING_PERMIT_AUTHORITY_ID,
             self.NET_NUM_UNITS,
             self.NET_NUM_UNITS_DATA,
             self.NET_NUM_UNITS_BMR,
@@ -516,6 +520,27 @@ class ProjectFacts(Table):
             row[self.index(self.PERMIT_AUTHORITY)] = ''
             row[self.index(self.PERMIT_AUTHORITY_ID)] = ''
 
+    def _bldg_permit_authority_info(self, row, proj):
+        permits = []
+        try:
+            fk_entries = proj.fields('permit_number',
+                                     PTS.NAME)
+            for (_, entries) in fk_entries.items():
+                for entry in entries:
+                    entry_latest = entry.get_latest('permit_number')
+                    if entry_latest:
+                        permit_number = entry_latest[0]
+                        permits.append(permit_number)
+
+            joined_permits = ','.join(permits)
+            if len(joined_permits) > 0:
+                row[self.index(self.BUILDING_PERMIT_AUTHORITY)] = \
+                    joined_permits
+                row[self.index(self.BUILDING_PERMIT_AUTHORITY_ID)] = \
+                    PTS.OUTPUT_NAME
+        except ValueError:
+            return
+
     def _atleast_one_measure(self, row):
         return ((row[self.index(self.NET_NUM_UNITS)] != '' and
                  row[self.index(self.NET_NUM_UNITS)] != '0') or
@@ -570,6 +595,7 @@ class ProjectFacts(Table):
         self._gen_units(row, proj)
         self._pim_link_info(row, proj)
         self._permit_authority_info(row, proj)
+        self._bldg_permit_authority_info(row, proj)
 
         if (self._atleast_one_measure(row) and
                 self._nonzero_or_nonempty_address(row)):
