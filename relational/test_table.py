@@ -102,6 +102,33 @@ def test_table_project_facts(basic_graph, d):
                 'address': '',
             }),
         EntriesTestRow(
+            name='supervisor district and developer org',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
+                       NameValue('number_of_units', '10', d),
+                       NameValue('supervisor_district', '1', d),
+                       NameValue('developer_org', 'abc', d)]),
+            ],
+            want={
+                'supervisor_district': '1',
+                'applicant': 'abc',
+            }),
+        EntriesTestRow(
+            name='developer name',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('name', 'BALBOA RESERVOIR DEVELOPMENT', d),
+                       NameValue('number_of_units', '10', d),
+                       NameValue('supervisor_district', '1', d),
+                       NameValue('developer_name', 'xyz', d)]),
+            ],
+            want={
+                'applicant': 'xyz',
+            }),
+        EntriesTestRow(
             name='exclude no-address planning entries if no net units',
             entries=[
                 Entry('1',
@@ -698,6 +725,39 @@ def test_table_project_facts_permit_authority(basic_graph, d):
             ],
             want={'permit_authority': 'planning',
                   'permit_authority_id': 'abc'},
+        ),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_row(table,
+                                      fields,
+                                      name) == wantvalue, test.name
+
+
+def test_table_project_facts_planner(basic_graph, d):
+    table = ProjectFacts()
+
+    tests = [
+        EntriesTestRow(
+            name='planner',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('record_id', 'abc', d),
+                       NameValue('number_of_units', '10', d),
+                       NameValue('record_type', 'PRJ', d),
+                       NameValue('assigned_to_planner', 'abc', d)]),
+                Entry('2',
+                      PTS.NAME,
+                      [NameValue('block', '123', d),
+                       NameValue('lot', 'ABC', d),
+                       NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '2', d)]),
+            ],
+            want={'planner': 'abc'},
         ),
     ]
 
