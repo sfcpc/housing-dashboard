@@ -12,6 +12,8 @@ python gen_test_data.py data/mohcd/affordable-rental-portfolio-2019-09-06.csv te
 # Unfortunately, to include every possible match for 2451 Sacramento, we just
 # need to search for "Sacramento". That's a lot of non-matches.
 python gen_test_data.py data/pts/2020-01-24-pts-after-2013.csv.xz testdata/pts.csv "(201705318009)|(201706058373)|(201711284964)|(201801118389)|(201404304554)|(201705237369)|(201301027105)|(Sacramento)|(201609218371)|(201910225142)|(201910225150)|(201910225151)|(201910225152)|(201910225153)|(201910225154)|(201910225155)|(201712085881)|(201712085886)|(201905170923)|(201905170926)|(201910154483)|(201910154490)|(201910154498)|(201912169614)|(201912169619)"
+xzcat data/pts/2020-01-24-pts-after-2013.csv.xz | egrep "(1764,031)" >> testdata/pts.csv
+
 
 python gen_test_data.py data/mohcd/mohcd-inclusionary-2020-02-05.csv testdata/mohcd-inclusionary.csv "(2011-005)|(2016-023)|(2015-014058PRJ)"
 
