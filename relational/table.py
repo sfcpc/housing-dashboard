@@ -281,6 +281,26 @@ def _get_earliest_addenda_arrival_date(proj):
                               "%Y-%m-%d")
 
 
+def _is_da(proj):
+    """Returns tuple of whether a project is a DA or not and data used to
+    determine this. Relies on the existence of PHA permits (if it is a
+    Planning project) or it existing in the OEWD permits data set.
+    """
+    pha_record_id = proj.field('record_id',
+                               Planning.NAME,
+                               entry_predicate=[('record_type',
+                                                 lambda x: x == 'PHA')])
+    oewd_record_id = proj.field('row_number',
+                                OEWDPermits.NAME,
+                                entry_predicate=_is_valid_ocii_project)
+
+    is_da = pha_record_id or oewd_record_id
+    is_da_data = OEWDPermits.OUTPUT_NAME \
+        if oewd_record_id else Planning.OUTPUT_NAME
+
+    return (True, is_da_data) if is_da else (False, is_da_data)
+
+
 class ProjectFacts(Table):
     NAME = 'name'
     ADDRESS = 'address'
@@ -429,6 +449,14 @@ class ProjectFacts(Table):
             else:
                 return str(math.floor(.3 * net))
 
+    # For DA projects where there is only data from Planning and
+    # DBI, there can be many different phases. If we prefer DBI
+    # numbers we can severely undercount (if only one of the many
+    # phases has reached DBI for example). In this particular
+    # case prefer to use Planning data.
+    _MIN_DA_UNITS_TO_USE_PLANNING = 100
+    _MIN_DA_UNIT_DIFF_PERCENT = 0.5
+
     def _gen_units(self, row, proj):
         mohcd = _get_mohcd_units(proj)
         ocii = _get_ocii_units(proj)
@@ -450,6 +478,7 @@ class ProjectFacts(Table):
             dbi_net = _get_dbi_units(proj)
             planning_net = proj.field('number_of_units', Planning.NAME)
             net = dbi_net
+            is_da = _is_da(proj)[0]
             # PTS may have an explicitly set 0 unit count for projects
             # that have no business dealing with housing (possible with
             # permit type 3 in particular), so we only emit a 0-count
@@ -459,8 +488,26 @@ class ProjectFacts(Table):
             if (dbi_net is not None
                     and (dbi_net != 0 or
                          (planning_net and planning_net != '0'))):
-                row[self.index(self.NET_NUM_UNITS)] = str(dbi_net)
-                row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
+
+                # Check if we need to prefer the planning data over DBI
+                # data in case it's a DA and falls within some parameters.
+                planning_int = 0
+                try:
+                    planning_int = int(planning_net)
+                except ValueError:
+                    pass
+
+                if (is_da and
+                        planning_int > self._MIN_DA_UNITS_TO_USE_PLANNING and
+                        ((dbi_net / planning_int)
+                            < self._MIN_DA_UNIT_DIFF_PERCENT)):
+                    net = planning_int
+                    row[self.index(self.NET_NUM_UNITS)] = str(planning_int)
+                    row[self.index(self.NET_NUM_UNITS_DATA)] = \
+                        Planning.OUTPUT_NAME
+                else:
+                    row[self.index(self.NET_NUM_UNITS)] = str(dbi_net)
+                    row[self.index(self.NET_NUM_UNITS_DATA)] = PTS.OUTPUT_NAME
             else:
                 try:
                     # Only fallback to using planning if we have a non-zero
@@ -1080,17 +1127,10 @@ class ProjectDetails(NameValueTable):
         of PHA permits (if it is a Planning project) or it existing in the
         OEWD permits data set.
         """
-        pha_record_id = proj.field('record_id',
-                                   Planning.NAME,
-                                   entry_predicate=[('record_type',
-                                                     lambda x: x == 'PHA')])
-        oewd_record_id = proj.field('row_number',
-                                    OEWDPermits.NAME,
-                                    entry_predicate=_is_valid_ocii_project)
+        is_da_tuple = _is_da(proj)
+        is_da = is_da_tuple[0]
+        is_da_data = is_da_tuple[1]
 
-        is_da = pha_record_id or oewd_record_id
-        is_da_data = OEWDPermits.OUTPUT_NAME \
-            if oewd_record_id else Planning.OUTPUT_NAME
         rows.append(self.nv_row(proj,
                                 name='is_da',
                                 value='TRUE' if is_da else 'FALSE',
