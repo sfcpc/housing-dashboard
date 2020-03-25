@@ -9,6 +9,20 @@ def setup_module(module):
         mapblklot_gen.init('data/assessor/2020-02-18-parcels.csv.xz')
 
 
+def test_mapblocklot():
+    # Tests matching based on mapblklot = '1764031'
+    parent = "planning_1986.146"
+    likely_child = "pts_1380808113163"
+    rgb = RecordGraphBuilder(
+        RecordGraph,
+        'testdata/schemaless-one.csv',
+        'testdata/uuid-map-one.csv',
+        True,
+    )
+    rgb.build()
+    assert parent in rgb.likelies[likely_child]['parents']
+
+
 def test_address_match():
     kennedy_towers = "bmr_2013-037"
     # TODO(#76): This parent is actually wrong. The record starts after the
