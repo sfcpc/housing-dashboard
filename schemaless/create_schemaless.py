@@ -140,7 +140,9 @@ def run(out_file,
     sources = []
     dl_sources = {}
     destdir = tempfile.mkdtemp()
-    client = get_client()
+    client = None
+    if not no_download:
+        client = get_client()
     with futures.ThreadPoolExecutor(
             thread_name_prefix="schemaless-download") as executor:
         for (source, arg) in [
@@ -161,30 +163,31 @@ def run(out_file,
             else:
                 logger.warning("Skipping %s" % source.NAME)
 
-        if not parcel_data_file:
-            parcel_data_file_future = executor.submit(
-                download,
-                client,
-                PARCELS_DATA_SF_VIEW_ID,
-                os.path.join(destdir, 'parcels.csv'))
-        if diff and not diff_file:
-            diff_file_future = executor.submit(
-                download,
-                client,
-                SCHEMALESS_VIEW_ID,
-                os.path.join(destdir, 'schemaless-existing.csv'))
+        if not no_download:
+            if not parcel_data_file:
+                parcel_data_file_future = executor.submit(
+                    download,
+                    client,
+                    PARCELS_DATA_SF_VIEW_ID,
+                    os.path.join(destdir, 'parcels.csv'))
+            if diff and not diff_file:
+                diff_file_future = executor.submit(
+                    download,
+                    client,
+                    SCHEMALESS_VIEW_ID,
+                    os.path.join(destdir, 'schemaless-existing.csv'))
 
-        for future in futures.as_completed(dl_sources):
-            try:
-                src = dl_sources[future]
-                sources.append(src(future.result()))
-            except Exception:
-                logger.exception("Error downloading data for %s", src.NAME)
-                raise
-        if not parcel_data_file:
-            parcel_data_file = parcel_data_file_future.result()
-        if diff and not diff_file:
-            diff_file = diff_file_future.result()
+            for future in futures.as_completed(dl_sources):
+                try:
+                    src = dl_sources[future]
+                    sources.append(src(future.result()))
+                except Exception:
+                    logger.exception("Error downloading data for %s", src.NAME)
+                    raise
+            if not parcel_data_file:
+                parcel_data_file = parcel_data_file_future.result()
+            if diff and not diff_file:
+                diff_file = diff_file_future.result()
 
     if len(sources) == 0:
         parser.print_help()
