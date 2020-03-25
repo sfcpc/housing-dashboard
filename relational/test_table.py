@@ -393,6 +393,62 @@ def test_table_project_facts_units(basic_graph, d):
             'Failed "%s"' % test.name
 
 
+def test_table_project_facts_da_prefer_planning(basic_graph, d):
+    table = ProjectFacts()
+
+    tests = [
+        EntriesTestRow(
+            name='get from planning instead of dbi because da',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('number_of_units', '200', d),
+                       NameValue('record_type', 'PRJ', d)]),
+                Entry('2',
+                      Planning.NAME,
+                      [NameValue('record_type', 'PHA', d),
+                       NameValue('record_id', '123', d)]),
+                Entry('3',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('proposed_units', '10', d)]),
+            ],
+            want={
+                'net_num_units': '200',
+            },
+        ),
+        EntriesTestRow(
+            name='get from dbi since da but unit counts close to planning',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('number_of_units', '200', d),
+                       NameValue('record_type', 'PRJ', d)]),
+                Entry('2',
+                      Planning.NAME,
+                      [NameValue('record_type', 'PHA', d),
+                       NameValue('record_id', '123', d)]),
+                Entry('3',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('proposed_units', '190', d)]),
+            ],
+            want={
+                'net_num_units': '190',
+            },
+        ),
+    ]
+
+    for test in tests:
+        proj = Project('uuid1', test.entries, basic_graph)
+        fields = table.rows(proj)
+
+        for (name, wantvalue) in test.want.items():
+            assert _get_value_for_row(table,
+                                      fields,
+                                      name) == wantvalue, test.name
+
+
 def test_table_project_facts_units_planning_bmr(basic_graph, d):
     table = ProjectFacts()
 
