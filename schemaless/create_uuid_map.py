@@ -106,6 +106,30 @@ class PlanningAddressLookupMixin:
         parents.extend(planning_helper.find_by_address(record['address_norm']))
 
 
+class PlanningMapBlkLotLookupMixin:
+    """Mixin to look up Planning records by Map Block Lot."""
+    def planning_by_mapblklot(self, fk, record, parents, children):
+        """Find Planning parents for `record` that match its map block lot.
+
+        This will not add fks to parents or children if they already
+        share a UUID.
+
+        Args:
+            fk: The PrimaryKey for this record.
+            record: The record dict (from `latest_values`). Expects
+                    `mapblklot` to exist in the dict.
+            parents: A list of fks. List is modified in place.
+            children: A list of fks. List is modified in place.
+        """
+        # TODO: There will be many matches, so we need to filter
+        # on time range and record type. EG maybe only add parents
+        # that are PRJs, or themselves have parents?
+        if 'mapblklot' not in record:
+            return
+        planning_helper = self.graph_builder.helpers[Planning.NAME]
+        parents.extend(planning_helper.find_by_mapblklot(record['mapblklot']))
+
+
 class PTSAddressLookupMixin:
     """Mixin to look up PTS records by normalized address."""
     def pts_by_address(self, fk, record, parents, children):
@@ -142,6 +166,7 @@ class PlanningHelper(RecordGraphBuilderHelper, CalculatedFieldsMixin):
         self._planning_id_to_fk = {}
         self._address_to_planning_fk = defaultdict(list)
         self._permit_number_to_planning_fk = defaultdict(list)
+        self._mapblklot_to_planning_fk = defaultdict(list)
 
     def find_by_id(self, record_id):
         """Find a fk by Planning record_id."""
@@ -155,6 +180,10 @@ class PlanningHelper(RecordGraphBuilderHelper, CalculatedFieldsMixin):
         """Find a fk by PTS building permit number."""
         return self._permit_number_to_planning_fk[permit_number]
 
+    def find_by_mapblklot(self, mapblklot):
+        """Find a fk by Map Block Lot."""
+        return self._mapblklot_to_planning_fk[mapblklot]
+
     def preprocess(self, latest_records):
         for fk, record in latest_records.get(Planning.NAME, {}).items():
             self._planning_id_to_fk[record['record_id']] = fk
@@ -166,6 +195,9 @@ class PlanningHelper(RecordGraphBuilderHelper, CalculatedFieldsMixin):
             record = self.add_calculated_fields(record)
             if 'address_norm' in record:
                 self._address_to_planning_fk[record['address_norm']].append(fk)
+            if 'mapblocklot' in record:
+                self._mapblklot_to_planning_fk[
+                    record['mapblocklot']].append(fk)
 
     def process(self, fk, record, parents, children):
         if 'parent' in record:
@@ -182,6 +214,7 @@ class PlanningHelper(RecordGraphBuilderHelper, CalculatedFieldsMixin):
 
 class PTSHelper(RecordGraphBuilderHelper,
                 PlanningAddressLookupMixin,
+                PlanningMapBlkLotLookupMixin,
                 CalculatedFieldsMixin):
     SOURCE = PTS
 
@@ -265,6 +298,7 @@ class PTSHelper(RecordGraphBuilderHelper,
     def process_likely(self, fk, record, parents, children):
         record = self.add_calculated_fields(record)
         self.planning_by_address(fk, record, parents, children)
+        self.planning_by_mapblklot(fk, record, parents, children)
 
     def _compute_pts_groups(self, groupable_records):
         """Groups pts records by grouping attrs and sets up lookup tables."""
