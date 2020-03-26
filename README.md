@@ -314,13 +314,13 @@ find the various data sources below:
 
 ## Troubleshooting
 
-1. I added a column to a csv, but it isn't showing up in the DataSF dataset
+### I added a column to a csv, but it isn't showing up in the DataSF dataset
 
 If you add or remove columns, DataSF will silently drop those changes. You will
 need to upload the new file and configure the dataset metadata manually through
 the socrata web UI.
 
-1. I can't download from or upload data to DataSF
+### I can't download from or upload data to DataSF
 
 Ensure that you've set `DATASF_USER` and `DATASF_PASS` to the correct values.
 These can be configure either as environment variables or in your airflow
