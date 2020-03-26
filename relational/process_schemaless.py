@@ -39,7 +39,7 @@ from schemaless.sources import source_map
 from schemaless.upload import SCHEMALESS_VIEW_ID
 from schemaless.upload import UUID_VIEW_ID
 
-csv.field_size_limit(sys.maxsize)
+csv.field_size_limit(min(2**31-1, sys.maxsize))
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

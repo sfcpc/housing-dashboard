@@ -36,7 +36,7 @@ from schemaless.sources import TCO
 from schemaless.upload import SCHEMALESS_VIEW_ID
 from schemaless.upload import upload_schemaless
 
-csv.field_size_limit(sys.maxsize)
+csv.field_size_limit(min(2**31-1, sys.maxsize))
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
