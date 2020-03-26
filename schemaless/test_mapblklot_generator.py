@@ -4,7 +4,7 @@ import sys
 
 import schemaless.mapblklot_generator as mapblklot_gen
 
-csv.field_size_limit(sys.maxsize)
+csv.field_size_limit(min(2**31-1, sys.maxsize))
 
 
 def setup_module(module):

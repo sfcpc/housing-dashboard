@@ -8,7 +8,7 @@ import sys
 
 from fileutils import open_file
 
-csv.field_size_limit(sys.maxsize)
+csv.field_size_limit(min(2**31-1, sys.maxsize))
 
 
 def filter_file(infile, outfile, pattern):
