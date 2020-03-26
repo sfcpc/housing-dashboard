@@ -97,7 +97,7 @@ class PlanningAddressLookupMixin:
             parents: A list of fks. List is modified in place.
             children: A list of fks. List is modified in place.
         """
-        # TODO: There will be many matches, so we need to filter
+        # TODO(#187): There will be many matches, so we need to filter
         # on time range and record type. EG maybe only add parents
         # that are PRJs, or themselves have parents?
         if 'address_norm' not in record:
@@ -121,7 +121,7 @@ class PlanningMapBlkLotLookupMixin:
             parents: A list of fks. List is modified in place.
             children: A list of fks. List is modified in place.
         """
-        # TODO: There will be many matches, so we need to filter
+        # TODO(#187): There will be many matches, so we need to filter
         # on time range and record type. EG maybe only add parents
         # that are PRJs, or themselves have parents?
         if 'mapblklot' not in record:
