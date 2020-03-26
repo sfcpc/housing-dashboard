@@ -312,3 +312,19 @@ find the various data sources below:
 1. [Parcels - Active and Retired from CCSF](https://data.sfgov.org/Geographic-Locations-and-Boundaries/Parcels-Active-and-Retired/acdm-wktn)
 1. [Priority Permits from OEWD](https://data.sfgov.org/dataset/Priority-Permits/336t-bzzm)
 
+## Troubleshooting
+
+### I added a column to a csv, but it isn't showing up in the DataSF dataset
+
+If you add or remove columns, DataSF will silently drop those changes. You will
+need to upload the new file and configure the dataset metadata manually through
+the socrata web UI.
+
+### I can't download from or upload data to DataSF
+
+Ensure that you've set `DATASF_USER` and `DATASF_PASS` to the correct values.
+These can be configure either as environment variables or in your airflow
+config.
+
+Also, be sure to set `airflow variables --set UPLOAD True` or pass
+`--upload=True` when running manually.
