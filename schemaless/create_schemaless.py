@@ -121,7 +121,7 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
                         ])
 
 
-def run(out_file,
+def run(out_file='',
         no_download=False,
         planning_file='',
         pts_file='',
@@ -140,6 +140,12 @@ def run(out_file,
     sources = []
     dl_sources = {}
     destdir = tempfile.mkdtemp()
+    if not out_file:
+        out_file = pathlib.Path(destdir) / 'schemaless.csv'
+        logger.info("Will write output to %s", out_file)
+        # Make sure our output dir exists
+        out_file.parent.mkdir(parents=True, exist_ok=True)
+
     client = None
     if not no_download:
         client = get_client()
@@ -196,9 +202,6 @@ def run(out_file,
 
     mapblklot_gen.init(parcel_data_file)
 
-    # Make sure our output dir exists
-    pathlib.Path(out_file).parent.mkdir(parents=True, exist_ok=True)
-
     if diff_file:
         dump_and_diff(sources, out_file, diff_file, the_date)
     else:
@@ -238,7 +241,8 @@ if __name__ == "__main__":
                         help='Permit Addenda file', default='')
     parser.add_argument('--oewd_permits_file', help='OEWD permits file',
                         default='')
-    parser.add_argument('out_file', help='output file for schemaless csv')
+    parser.add_argument('--out_file', default='',
+                        help='Output file for schemaless csv.')
 
     parser.add_argument('--diff', type=bool, default=False)
     parser.add_argument(
@@ -258,7 +262,7 @@ if __name__ == "__main__":
     if args.the_date:
         the_date = datetime.strptime(args.the_date, "%Y-%m-%d").date()
 
-    run(args.out_file,
+    run(out_file=args.out_file,
         no_download=args.no_download,
         planning_file=args.planning_file,
         pts_file=args.pts_file,

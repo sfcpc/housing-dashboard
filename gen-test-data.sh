@@ -34,7 +34,7 @@ python3 -m schemaless.create_schemaless \
   --the-date=2020-01-29 \
   --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
   --diff False \
-  testdata/schemaless-one.csv
+  --out_file testdata/schemaless-one.csv
 # We read in the uuid-map file generated previously so our uuids are stable
 python3 -m schemaless.create_uuid_map \
   --no_download True \
@@ -49,7 +49,7 @@ python3 -m schemaless.create_schemaless \
   --diff_file testdata/schemaless-one.csv \
   --the-date=2020-01-29 \
   --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
-  testdata/schemaless-two.csv
+  --out_file testdata/schemaless-two.csv
 # We read in the uuid-map file generated previously so our uuids are stable
 python3 -m schemaless.create_uuid_map \
   --schemaless_file=testdata/schemaless-one.csv \

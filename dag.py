@@ -36,7 +36,6 @@ task_create_schemaless = PythonOperator(
     task_id='create_schemaless',
     python_callable=create_schemaless.run,
     op_kwargs={
-        'out_file': '{{ var.value.WORKDIR }}/schemaless.csv',
         'upload': '{{ var.value.UPLOAD }}',
         'diff': True,
     },
