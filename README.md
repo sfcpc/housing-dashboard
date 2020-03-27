@@ -1,7 +1,7 @@
 # SF Planning Housing Production Dashboard
 
-![](https://github.com/sfcpc/housing-dashboard/workflows/lint.yml/badge.svg)
-![](https://github.com/sfcpc/housing-dashboard/workflows/test.yml/badge.svg)
+![](https://github.com/sfcpc/housing-dashboard/workflows/Lint/badge.svg)
+![](https://github.com/sfcpc/housing-dashboard/workflows/Test/badge.svg)
 
 This repo contains scripts to transform assorted datasets from DataSF into a
 single set of data for the new San Francisco Housing Production Dashboard.
