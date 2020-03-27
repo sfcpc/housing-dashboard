@@ -780,18 +780,25 @@ class Node:
         self.parents.add(parent_record_id)
 
 
-def run(out_file,
+def run(out_file='',
         schemaless_file='',
         uuid_map_file='',
+        compute_likelies=False,
         likely_match_file='',
         parcel_data_file='',
         no_download=False,
         upload=False):
 
+    destdir = tempfile.mkdtemp()
+    if not out_file:
+        out_file = pathlib.Path(destdir) / 'uuid.csv'
+        logger.info("Will write output to %s", out_file)
+        # Make sure our output dir exists
+        out_file.parent.mkdir(parents=True, exist_ok=True)
+
     if not no_download:
         with futures.ThreadPoolExecutor(
                 thread_name_prefix="uuid-download") as executor:
-            destdir = tempfile.mkdtemp()
             client = get_client()
             if not parcel_data_file:
                 parcel_data_file_future = executor.submit(
@@ -820,17 +827,17 @@ def run(out_file,
 
     mapblklot_gen.init(parcel_data_file)
 
-    # Make sure our output dir exists
-    pathlib.Path(out_file).parent.mkdir(parents=True, exist_ok=True)
-
     builder = RecordGraphBuilder(
         RecordGraph,
         schemaless_file,
         uuid_map_file,
         likely_match_file != "")
     rg = builder.build()
-
     rg.to_file(out_file)
+
+    if compute_likelies and not likely_match_file:
+        likely_match_file = pathlib.Path(destdir) / 'likely-matches.csv'
+        logger.info("Will write likely match output to %s", likely_match_file)
     if likely_match_file:
         pathlib.Path(likely_match_file).parent.mkdir(
             parents=True, exist_ok=True)
@@ -853,6 +860,11 @@ if __name__ == "__main__":
         help='UUID mapping file',
         default='')
     parser.add_argument(
+        '--compute_likelies',
+        typpe=bool,
+        default=True,
+        help='Whether or not to calculate likely matches')
+    parser.add_argument(
         '--likely_match_file',
         help='File to write likely parent/child matches to.',
         default='')
@@ -860,12 +872,14 @@ if __name__ == "__main__":
     parser.add_argument('--upload', type=bool, default=False)
     parser.add_argument('--no_download', type=bool, default=False,
                         help="Don't download schemaless or uuid data.")
-    parser.add_argument('out_file', help='Output path of uuid mapping')
+    parser.add_argument('--out_file', default='',
+                        help='Output path of uuid mapping')
     args = parser.parse_args()
 
     run(out_file=args.out_file,
         schemaless_file=args.schemaless_file,
         uuid_map_file=args.uuid_map_file,
+        compute_likelies=args.compute_likelies or args.likely_match_file,
         likely_match_file=args.likely_match_file,
         parcel_data_file=args.parcel_data_file,
         no_download=args.no_download,

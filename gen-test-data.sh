@@ -42,7 +42,7 @@ python3 -m schemaless.create_uuid_map \
   --likely_match_file=testdata/likelies-one.csv \
   --uuid_map_file=testdata/uuid-map-one.csv \
   --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
-  testdata/uuid-map-one.csv
+  --out_file testdata/uuid-map-one.csv
 python3 -m schemaless.create_schemaless \
   --no_download True \
   --planning_file testdata/planning-two.csv \
@@ -57,6 +57,6 @@ python3 -m schemaless.create_uuid_map \
   --likely_match_file=testdata/likelies-two.csv \
   --uuid_map_file=testdata/uuid-map-two.csv \
   --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz \
-  testdata/uuid-map-two.csv
+  --out_file testdata/uuid-map-two.csv
   # Note: When adding new records, use uuid-map-one so new UUIDs are persisted
   # --uuid_map_file=testdata/uuid-map-one.csv
