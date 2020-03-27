@@ -152,7 +152,6 @@ export AIRFLOW_HOME=./.airflow
 airflow initdb
 
 # Set variables for our dag
-airflow variables --set WORKDIR "$(pwd)/airflow"
 airflow variables --set UPLOAD False  # Disable uploading to DataSF
 mkdir -p $(pwd)/airflow
 ```
@@ -209,12 +208,12 @@ have an internet connection, just run
 pipenv shell
 
 python3 -m schemaless.create_schemaless \
-  schemaless-one.csv
+  --out_file=schemaless-one.csv
 
 python3 -m schemaless.create_uuid_map \
   --likely_match_file=outputdata/likelies-one.csv \
-  schemaless-one.csv \
-  uuid-map-one.csv
+  --schemaless_file=schemaless-one.csv \
+  --out_file=uuid-map-one.csv
 ```
 
 The source datasets will be downloaded to your machine automatically.
@@ -231,13 +230,13 @@ pipenv shell
 
 python3 -m schemaless.create_schemaless \
   --diff True \  # The prior schemaless file will be automatically downloaded
-  schemaless-two.csv
+  --out_file=schemaless-two.csv
 
 python3 -m schemaless.create_uuid_map \
   --likely_match_file=likelies-one.csv \
   --uuid_map_file=uuid-map-one.csv \  # Use IDs generated last time
-  schemaless-two.csv \
-  uuid-map-two.csv
+  --schemaless_file=schemaless-two.csv \
+  --out_file=uuid-map-two.csv
 ```
 
 Running this immediately after creating the schemaless file for the first time
@@ -259,12 +258,12 @@ python3 -m schemaless.create_schemaless \
   --affordable_file data/mohcd/affordable-rental-portfolio-2019-09-06.csv \
   --oewd_permits_file data/oewd-permits-2020-03-03.csv \
   --the-date=2020-02-27 \
-  schemaless-one.csv
+  --out_file=schemaless-one.csv
 
 python3 -m schemaless.create_uuid_map \
   --likely_match_file=likelies-one.csv \
-  schemaless-one.csv \
-  uuid-map-one.csv
+  --schemaless_file=schemaless-one.csv \
+  --out_file=uuid-map-one.csv
 
 # Note --the-date=2020-03-04, and that we don't need to specify every data
 # source file
@@ -274,13 +273,13 @@ python3 -m schemaless.create_schemaless \
   --pts_file data/pts/2020-01-24-pts-after-2013.csv.xz \
   --the-date=2020-03-04 \
   --diff_file schemaless-one.csv \
-  schemaless-two.csv
+  --out_file=schemaless-two.csv
 
 python3 -m schemaless.create_uuid_map \
   --likely_match_file=likelies-two.csv \
   --uuid_map_file=uuid-map-one.csv \
-  schemaless-two.csv \
-  uuid-map-two.csv
+  --schemaless_file=schemaless-two.csv \
+  --out_file=uuid-map-two.csv
 ```
 
 **NOTE** This also produces the file `likelies-two.csv` which can be used to determine
@@ -293,8 +292,8 @@ visualization and analysis easier. You can produce these files by running:
 
 ```sh
 python3 -m relational.process_schemaless \
-  schemaless-two.csv \
-  uuid-map-two.csv
+  --schemaless_file=schemaless-two.csv \
+  --uuid_map_file=uuid-map-two.csv
 ```
 
 ### Downloading data
