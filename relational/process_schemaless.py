@@ -296,7 +296,7 @@ def output_projects(out_prefix, projects, config):
             print('\t%s total entries' % lines_out)
             lines_out = 0
 
-        finalfile = out_prefix + table.name + '.csv'
+        finalfile = pathlib.Path(out_prefix) / ("%s.csv" % table.name)
         with open(finalfile, 'w') as outf:
             print('Handling %s' % finalfile)
             headers_printed = False
@@ -340,10 +340,13 @@ def run(schemaless_file='',
         parcel_data_file='',
         out_prefix='',
         upload=False):
+    destdir = tempfile.mkdtemp()
+    if not out_prefix:
+        out_prefix = destdir
+    out_prefix = pathlib.Path(out_prefix)
     if not parcel_data_file or not schemaless_file or not uuid_map_file:
         with futures.ThreadPoolExecutor(
                 thread_name_prefix="uuid-download") as executor:
-            destdir = tempfile.mkdtemp()
             client = get_client()
             if not parcel_data_file:
                 parcel_data_file_future = executor.submit(
@@ -370,8 +373,9 @@ def run(schemaless_file='',
             if not uuid_map_file:
                 uuid_map_file = uuid_map_file_future.result()
 
+    logger.info("Writing output to %s", out_prefix)
     # Make sure our output dir exists
-    pathlib.Path(out_prefix).parent.mkdir(parents=True, exist_ok=True)
+    out_prefix.parent.mkdir(parents=True, exist_ok=True)
 
     mapblklot_gen.init(parcel_data_file)
 
@@ -396,7 +400,7 @@ def run(schemaless_file='',
     output_projects(
         out_prefix, build_projects(process_result.entries_map, rg), config)
 
-    freshness_path = out_prefix + 'data_freshness.csv'
+    freshness_path = out_prefix / 'data_freshness.csv'
     output_freshness(freshness_path, process_result.freshness)
 
     if upload:
@@ -404,7 +408,7 @@ def run(schemaless_file='',
         with futures.ThreadPoolExecutor(
                 thread_name_prefix="relational-upload") as executor:
             for table in config:
-                path = out_prefix + table.name + '.csv'
+                path = out_prefix / ("%s.csv" % table.name)
                 jobs[executor.submit(
                     upload_table, type(table), path)] = table.name
             jobs[executor.submit(

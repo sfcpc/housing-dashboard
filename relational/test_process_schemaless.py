@@ -157,7 +157,7 @@ def test_run(tmpdir):
     run(schemaless_file='testdata/schemaless-two.csv',
         uuid_map_file='testdata/uuid-map-two.csv',
         parcel_data_file='data/assessor/2020-02-18-parcels.csv.xz',
-        out_prefix=(str(tmpdir) + "/"))
+        out_prefix=tmpdir)
 
     freshness = tmpdir.join("data_freshness.csv")
     assert filecmp.cmp('testdata/relational/data_freshness.csv', freshness)

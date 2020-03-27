@@ -55,7 +55,6 @@ task_create_relational = PythonOperator(
     task_id='create_relational',
     python_callable=process_schemaless.run,
     op_kwargs={
-        'out_prefix': '{{ var.value.WORKDIR }}/',
         'upload': '{{ var.value.UPLOAD }}',
     },
     dag=dag,
