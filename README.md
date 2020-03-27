@@ -3,6 +3,32 @@
 This repo contains scripts to transform assorted datasets from DataSF into a
 single set of data for the new San Francisco Housing Production Dashboard.
 
+<!-- vim-markdown-toc GFM -->
+
+* [Overview](#overview)
+  * [Schemaless](#schemaless)
+  * [UUIDs](#uuids)
+  * [Relational tables](#relational-tables)
+* [Development](#development)
+  * [Set up your development environment](#set-up-your-development-environment)
+  * [Formatting](#formatting)
+  * [Run tests](#run-tests)
+* [Running locally](#running-locally)
+  * [Using Airflow](#using-airflow)
+    * [Set Up Airflow](#set-up-airflow)
+    * [Running Tasks](#running-tasks)
+    * [Testing DataSF Uploads](#testing-datasf-uploads)
+  * [Running manually](#running-manually)
+    * [Generating schemaless files](#generating-schemaless-files)
+    * [Diffing](#diffing)
+    * [Generating relational tables](#generating-relational-tables)
+  * [Downloading data](#downloading-data)
+* [Troubleshooting](#troubleshooting)
+  * [I added a column to a csv, but it isn't showing up in the DataSF dataset](#i-added-a-column-to-a-csv-but-it-isnt-showing-up-in-the-datasf-dataset)
+  * [I can't download from or upload data to DataSF](#i-cant-download-from-or-upload-data-to-datasf)
+
+<!-- vim-markdown-toc -->
+
 ## Overview
 
 There are three primary scripts:
