@@ -36,7 +36,6 @@ task_create_schemaless = PythonOperator(
     task_id='create_schemaless',
     python_callable=create_schemaless.run,
     op_kwargs={
-        'out_file': '{{ var.value.WORKDIR }}/schemaless.csv',
         'upload': '{{ var.value.UPLOAD }}',
         'diff': True,
     },
@@ -47,8 +46,6 @@ task_create_uuid_map = PythonOperator(
     task_id='create_uuid_map',
     python_callable=create_uuid_map.run,
     op_kwargs={
-        'out_file': '{{ var.value.WORKDIR }}/uuid.csv',
-        'likely_match_file': '{{ var.value.WORKDIR }}/likely-matches.csv',
         'upload': '{{ var.value.UPLOAD }}',
     },
     dag=dag,
@@ -58,7 +55,6 @@ task_create_relational = PythonOperator(
     task_id='create_relational',
     python_callable=process_schemaless.run,
     op_kwargs={
-        'out_prefix': '{{ var.value.WORKDIR }}/',
         'upload': '{{ var.value.UPLOAD }}',
     },
     dag=dag,
