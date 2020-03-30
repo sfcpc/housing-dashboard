@@ -61,3 +61,9 @@ python3 -m schemaless.create_uuid_map \
   --out_file testdata/uuid-map-two.csv
   # Note: When adding new records, use uuid-map-one so new UUIDs are persisted
   # --uuid_map_file=testdata/uuid-map-one.csv
+
+python3 -m relational.process_schemaless \
+  --schemaless_file=testdata/schemaless-two.csv \
+  --uuid_map_file=testdata/uuid-map-two.csv \
+  --out_prefix=testdata/relational/ \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz
