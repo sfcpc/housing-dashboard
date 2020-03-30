@@ -53,7 +53,7 @@ python3 -m schemaless.create_schemaless \
   --out_file testdata/schemaless-two.csv
 # We read in the uuid-map file generated previously so our uuids are stable
 python3 -m schemaless.create_uuid_map \
-  --schemaless_file=testdata/schemaless-one.csv \
+  --schemaless_file=testdata/schemaless-two.csv \
   --no_download True \
   --likely_match_file=testdata/likelies-two.csv \
   --uuid_map_file=testdata/uuid-map-two.csv \
