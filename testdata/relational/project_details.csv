@@ -1,7 +1,7 @@
 id,name,value,data_source
-320ca612-a4ab-4d02-9875-9cd347a9830e,is_da,FALSE,planning
-320ca612-a4ab-4d02-9875-9cd347a9830e,environmental_review_type_bucketed,Negative Declaration,planning
-320ca612-a4ab-4d02-9875-9cd347a9830e,environmental_review_type,Initial Study-Negative Declaration,planning
+8fd12a12-244f-434d-83a1-526d453f3957,is_da,FALSE,planning
+8fd12a12-244f-434d-83a1-526d453f3957,environmental_review_type_bucketed,Negative Declaration,planning
+8fd12a12-244f-434d-83a1-526d453f3957,environmental_review_type,Initial Study-Negative Declaration,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,is_da,FALSE,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,environmental_review_type_bucketed,Community Plan,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,environmental_review_type,Community Plan-Exemption/Exclusion,planning
@@ -67,8 +67,8 @@ d4577b50-6185-4b90-a75a-42d8db11a277,residential_units_studio,0,planning
 17083f61-9ce4-4972-96f2-5ecf9133286d,residential_units_1br,36,mohcd_pipeline
 8129302d-5241-49dd-8ac8-e03f374fc89a,is_da,FALSE,planning
 19a0dc80-bd50-4cc4-b321-288f926aa608,is_da,FALSE,planning
-b8b57c70-ef56-4a17-aef6-1f58e8ac537a,is_da,FALSE,planning
-bcd4afc2-7ca5-4f5d-ab88-0a1464bce077,is_da,FALSE,planning
+529e1abf-b98e-4b3b-93d0-e7b5e1dc0290,is_da,FALSE,planning
+010be24c-d2ab-4f03-b2a5-01025cb90b86,is_da,FALSE,planning
 a3baaf65-09b0-42cf-b5b8-60cbabf1c518,is_da,FALSE,planning
 79056468-a3fb-4318-a345-7d918172f9b9,is_da,FALSE,planning
 79056468-a3fb-4318-a345-7d918172f9b9,is_adu,FALSE,planning
