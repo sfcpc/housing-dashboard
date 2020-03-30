@@ -4,7 +4,7 @@ set -xe
 planning_match="(1950 mission)|(8 10th)|(429 beale)|(430 main)|(2015-011205)|(201404304554)|(201705237369)|(2015-014058PRJ)|((340 Valencia)|(2002.0809))|(2451 Sacramento)|(2017-016047PRJ)|(2017-016045PRJ)"
 python gen_test_data.py data/planning/planning-2020-02-27.csv.xz testdata/planning-one.csv "$planning_match"
 
-python gen_test_data.py data/planning/planning-2020-03-02.csv.xz testdata/planning-two.csv "$planning_match"
+python gen_test_data.py data/planning/planning-2020-03-30.csv.xz testdata/planning-two.csv "$planning_match"
 
 python gen_test_data.py data/mohcd/mohcd-pipeline-2020-01-30.csv testdata/mohcd-pipeline.csv "(1950 mission)|(2015-011205)|(transbay)|(2011-005)|(2016-023)|(2015-014058PRJ)"
 
