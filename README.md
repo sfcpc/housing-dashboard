@@ -158,6 +158,12 @@ run:
 pytest
 ```
 
+To get coverage output, include two extra flags:
+
+```sh
+pytest --cov=. --cov-config=.coveragerc
+```
+
 ## Running locally
 
 ### Using Airflow

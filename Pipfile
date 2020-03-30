@@ -8,6 +8,7 @@ ipython = "*"
 ipdb = "*"
 flake8 = "*"
 pytest = "*"
+pytest-cov = "*"
 
 [packages]
 usaddress-scourgify = "*"
@@ -15,7 +16,7 @@ pandas = "*"
 requests = "*"
 apache-airflow = "*"
 cryptography = "*"
-socrata-py = { git = "https://github.com/sbuss/socrata-py.git" }
+socrata-py = {git = "https://github.com/sbuss/socrata-py.git"}
 
 [requires]
 python_version = "3.7"
