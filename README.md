@@ -2,6 +2,7 @@
 
 ![](https://github.com/sfcpc/housing-dashboard/workflows/Lint/badge.svg)
 ![](https://github.com/sfcpc/housing-dashboard/workflows/Test/badge.svg)
+[![codecov](https://codecov.io/gh/sfcpc/housing-dashboard/branch/master/graph/badge.svg)](https://codecov.io/gh/sfcpc/housing-dashboard)
 
 This repo contains scripts to transform assorted datasets from DataSF into a
 single set of data for the new San Francisco Housing Production Dashboard.
