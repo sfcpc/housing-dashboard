@@ -258,8 +258,9 @@ class Planning(DirectSource):
         'BLOCK': 'block',
         'LOT': 'lot',
         'MAPBLOCKLOT': 'mapblocklot',
+        'WKT_MULTIPOLYGON': 'wkt_multipolygon',
+        'point': 'point',
         'SUPERVISOR_DISTRICT': 'supervisor_district',
-        # TODO: the_geom
 
         # Related records
         'PARENT_ID': 'parent',
