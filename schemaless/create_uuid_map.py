@@ -861,7 +861,7 @@ if __name__ == "__main__":
         default='')
     parser.add_argument(
         '--compute_likelies',
-        typpe=bool,
+        type=bool,
         default=True,
         help='Whether or not to calculate likely matches')
     parser.add_argument(
