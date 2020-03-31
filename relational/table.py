@@ -1054,6 +1054,9 @@ class ProjectDetails(NameValueTable):
         'total_affordable_units': 'total_affordable_units',
     }
 
+    # Assume that if a project has more than a percentage of units as BMR
+    # then it is 100% affordable. This is because some properties have manager
+    # units that are often not 100% affordable.
     _AFFORDABILITY_THRESHOLD = .9
 
     def _is_100_affordable(self, rows, proj):

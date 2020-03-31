@@ -1,14 +1,8 @@
 id,name,value,data_source
-<<<<<<< HEAD
 8fd12a12-244f-434d-83a1-526d453f3957,is_da,FALSE,planning
 8fd12a12-244f-434d-83a1-526d453f3957,environmental_review_type_bucketed,Negative Declaration,planning
 8fd12a12-244f-434d-83a1-526d453f3957,environmental_review_type,Initial Study-Negative Declaration,planning
-=======
-320ca612-a4ab-4d02-9875-9cd347a9830e,is_da,FALSE,planning
-320ca612-a4ab-4d02-9875-9cd347a9830e,environmental_review_type_bucketed,Negative Declaration,planning
-320ca612-a4ab-4d02-9875-9cd347a9830e,environmental_review_type,Initial Study-Negative Declaration,planning
-320ca612-a4ab-4d02-9875-9cd347a9830e,is_100pct_affordable,TRUE,planning
->>>>>>> Check Planning fields for is_adu and is_100pct_affordable details
+8fd12a12-244f-434d-83a1-526d453f3957,is_100pct_affordable,TRUE,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,is_da,FALSE,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,environmental_review_type_bucketed,Community Plan,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,environmental_review_type,Community Plan-Exemption/Exclusion,planning
