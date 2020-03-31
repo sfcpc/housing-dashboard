@@ -3,10 +3,9 @@
 
 from abc import ABC
 from abc import abstractmethod
+from collections import OrderedDict
 from datetime import date
 from datetime import datetime
-from collections import OrderedDict
-
 import math
 import queue
 import re
