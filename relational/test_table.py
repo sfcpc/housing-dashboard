@@ -1181,11 +1181,21 @@ def test_project_details_bedroom_info(unit_graph, d):
     ]
     proj_adu = Project('uuid2', entries2, unit_graph)
 
+    entries3 = [
+        Entry('1',
+              Planning.NAME,
+              [NameValue('adu', 'CHECKED', d)]),
+    ]
+    proj_adu_checked = Project('uuid2', entries3, unit_graph)
+
     nvs = table.rows(proj_normal)
     assert _get_value_for_name(table, nvs, 'residential_units_1br') == '10'
 
     nvs = table.rows(proj_adu)
     assert _get_value_for_name(table, nvs, 'residential_units_adu_1br') == '1'
+    assert _get_value_for_name(table, nvs, 'is_adu') == 'TRUE'
+
+    nvs = table.rows(proj_adu_checked)
     assert _get_value_for_name(table, nvs, 'is_adu') == 'TRUE'
 
 
@@ -1502,7 +1512,7 @@ def test_project_details_ami_info_mohcd(basic_graph, d):
                                        name) == wantvalue, test.name
 
 
-def test_project_details_is_100pct_affordable_mohcd(basic_graph, d):
+def test_project_details_is_100pct_affordable(basic_graph, d):
     table = ProjectDetails()
 
     tests = [
@@ -1584,6 +1594,15 @@ def test_project_details_is_100pct_affordable_mohcd(basic_graph, d):
                        NameValue('affordable_units', '9', d),
                        NameValue('project_type', 'DA', d),
                        NameValue('delivery_agency', 'OCII', d)]),
+            ],
+            want='TRUE'),
+        EntriesTestRow(
+            name='pull from planning as a last resort',
+            entries=[
+                Entry('1',
+                      Planning.NAME,
+                      [NameValue('number_of_units', '10', d),
+                       NameValue('number_of_affordable_units', '9', d)]),
             ],
             want='TRUE'),
     ]

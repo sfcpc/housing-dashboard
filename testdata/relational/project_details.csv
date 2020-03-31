@@ -2,14 +2,17 @@ id,name,value,data_source
 8fd12a12-244f-434d-83a1-526d453f3957,is_da,FALSE,planning
 8fd12a12-244f-434d-83a1-526d453f3957,environmental_review_type_bucketed,Negative Declaration,planning
 8fd12a12-244f-434d-83a1-526d453f3957,environmental_review_type,Initial Study-Negative Declaration,planning
+8fd12a12-244f-434d-83a1-526d453f3957,is_100pct_affordable,TRUE,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,is_da,FALSE,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,environmental_review_type_bucketed,Community Plan,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,environmental_review_type,Community Plan-Exemption/Exclusion,planning
+f997f8fd-f293-46c2-bb0d-df25653ead5c,is_100pct_affordable,FALSE,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,is_adu,FALSE,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,residential_units_2br,59,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,residential_units_1br,25,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,residential_units_studio,60,planning
 d4577b50-6185-4b90-a75a-42d8db11a277,is_da,FALSE,planning
+d4577b50-6185-4b90-a75a-42d8db11a277,is_100pct_affordable,TRUE,planning
 d4577b50-6185-4b90-a75a-42d8db11a277,is_adu,FALSE,planning
 d4577b50-6185-4b90-a75a-42d8db11a277,residential_units_2br,0,planning
 d4577b50-6185-4b90-a75a-42d8db11a277,residential_units_1br,0,planning
