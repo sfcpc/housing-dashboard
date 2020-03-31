@@ -706,24 +706,24 @@ class ProjectGeo(NameValueTable):
             lat = pnt.y
             lng = pnt.x
             rows.append(self.nv_row(proj,
-                                    name='lng',
-                                    value=lng,
-                                    data=Planning.OUTPUT_NAME))
-            rows.append(self.nv_row(proj,
                                     name='lat',
                                     value=lat,
+                                    data=Planning.OUTPUT_NAME))
+            rows.append(self.nv_row(proj,
+                                    name='lng',
+                                    value=lng,
                                     data=Planning.OUTPUT_NAME))
         elif blocklot:
             blkloter = mapblklot_gen.MapblklotGeneratorSingleton.get_instance()
             lnglat = blkloter.find_lnglat_for_blklot(blocklot)
             if lnglat:
                 rows.append(self.nv_row(proj,
-                                        name='lng',
-                                        value=lnglat[0],
-                                        data=Planning.OUTPUT_NAME))
-                rows.append(self.nv_row(proj,
                                         name='lat',
                                         value=lnglat[1],
+                                        data=Planning.OUTPUT_NAME))
+                rows.append(self.nv_row(proj,
+                                        name='lng',
+                                        value=lnglat[0],
                                         data=Planning.OUTPUT_NAME))
         else:
             location = proj.field('location', PTS.NAME)
