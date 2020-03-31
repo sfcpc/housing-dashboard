@@ -700,8 +700,21 @@ class ProjectGeo(NameValueTable):
 
     def _lnglat(self, rows, proj):
         '''Extract an arbitrary longitude and latitude.'''
+        point = proj.field('point', Planning.NAME)
         blocklot = proj.field('mapblocklot', Planning.NAME)
-        if blocklot:
+        if point:
+            pnt = wkt.loads(point)
+            lat = pnt.y
+            lng = pnt.x
+            rows.append(self.nv_row(proj,
+                                    name='lng',
+                                    value=lng,
+                                    data=Planning.OUTPUT_NAME))
+            rows.append(self.nv_row(proj,
+                                    name='lat',
+                                    value=lat,
+                                    data=Planning.OUTPUT_NAME))
+        elif blocklot:
             blkloter = mapblklot_gen.MapblklotGeneratorSingleton.get_instance()
             lnglat = blkloter.find_lnglat_for_blklot(blocklot)
             if lnglat:
