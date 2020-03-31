@@ -24,6 +24,17 @@ def upload_schemaless(path):
     _replace(path, SCHEMALESS_VIEW_ID)
 
 
+def append_schemaless_diff(path):
+    """Appends contents of `path` to the schemaless dataset.
+
+    NOTE: `path` is not the path to the full schemaless file; it is the path
+    to the `diff_out_file` as created in `schemaless/create_schemaless.py`.
+    All rows in `path` will be appended to the dataset on DataSF, even if
+    those rows already exist."""
+    client = datasf.get_client()
+    datasf.upsert(client, SCHEMALESS_VIEW_ID, path)
+
+
 def upload_uuid(path):
     logger.info("Uploading UUID map...")
     _replace(path, UUID_VIEW_ID)
