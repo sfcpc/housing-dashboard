@@ -1,9 +1,9 @@
 #!/bin/bash
 set -xe
 
-python gen_test_data.py data/planning/planning-2020-02-27.csv.xz testdata/planning-one.csv "(1950 mission)|(8 10th)|(429 beale)|(430 main)|(2015-011205)|(201404304554)|(201705237369)|(2015-014058PRJ)|((340 Valencia)|(2002.0809))|(2451 Sacramento)|(2017-016047PRJ)|(2017-016045PRJ)"
-
-python gen_test_data.py data/planning/planning-2020-03-02.csv.xz testdata/planning-two.csv "(1950 mission)|(8 10th)|(429 beale)|(430 main)|(2015-011205)|(201404304554)|(201705237369)|(2015-014058PRJ)|((340 Valencia)|(2002.0809))|(2451 Sacramento)|(2017-016047PRJ)|(2017-016045PRJ)"
+planning_match="(1950 mission)|(8 10th)|(429 beale)|(430 main)|(2015-011205)|(201404304554)|(201705237369)|(2015-014058PRJ)|((340 Valencia)|(2002.0809))|(2451 Sacramento)|(2017-016047PRJ)|(2017-016045PRJ)"
+python gen_test_data.py data/planning/planning-2020-02-27.csv.xz testdata/planning-one.csv "$planning_match"
+python gen_test_data.py data/planning/planning-2020-03-30.csv.xz testdata/planning-two.csv "$planning_match"
 
 python gen_test_data.py data/mohcd/mohcd-pipeline-2020-01-30.csv testdata/mohcd-pipeline.csv "(1950 mission)|(2015-011205)|(transbay)|(2011-005)|(2016-023)|(2015-014058PRJ)"
 
@@ -52,7 +52,7 @@ python3 -m schemaless.create_schemaless \
   --out_file testdata/schemaless-two.csv
 # We read in the uuid-map file generated previously so our uuids are stable
 python3 -m schemaless.create_uuid_map \
-  --schemaless_file=testdata/schemaless-one.csv \
+  --schemaless_file=testdata/schemaless-two.csv \
   --no_download True \
   --likely_match_file=testdata/likelies-two.csv \
   --uuid_map_file=testdata/uuid-map-two.csv \
@@ -60,3 +60,9 @@ python3 -m schemaless.create_uuid_map \
   --out_file testdata/uuid-map-two.csv
   # Note: When adding new records, use uuid-map-one so new UUIDs are persisted
   # --uuid_map_file=testdata/uuid-map-one.csv
+
+python3 -m relational.process_schemaless \
+  --schemaless_file=testdata/schemaless-two.csv \
+  --uuid_map_file=testdata/uuid-map-two.csv \
+  --out_prefix=testdata/relational/ \
+  --parcel_data_file=data/assessor/2020-02-18-parcels.csv.xz

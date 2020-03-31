@@ -1,6 +1,6 @@
 id,top_level_status,start_date,end_date,data_source
-320ca612-a4ab-4d02-9875-9cd347a9830e,under_entitlement_review,2002-07-17,2003-06-26,planning
-320ca612-a4ab-4d02-9875-9cd347a9830e,entitled,2003-06-26,,planning
+8fd12a12-244f-434d-83a1-526d453f3957,under_entitlement_review,2002-07-17,2003-06-26,planning
+8fd12a12-244f-434d-83a1-526d453f3957,entitled,2003-06-26,,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,under_entitlement_review,2014-11-10,2018-06-12,planning
 f997f8fd-f293-46c2-bb0d-df25653ead5c,entitled,2018-06-12,,planning
 d4577b50-6185-4b90-a75a-42d8db11a277,under_entitlement_review,2015-08-19,2015-12-09,planning
@@ -19,6 +19,6 @@ d4577b50-6185-4b90-a75a-42d8db11a277,completed_construction,2018-12-12,,dbi
 19a0dc80-bd50-4cc4-b321-288f926aa608,filed_for_permits,2017-05-23,2018-01-02,dbi
 19a0dc80-bd50-4cc4-b321-288f926aa608,under_construction,2018-01-02,2018-05-01,dbi
 19a0dc80-bd50-4cc4-b321-288f926aa608,completed_construction,2018-05-01,,tco
-bcd4afc2-7ca5-4f5d-ab88-0a1464bce077,filed_for_permits,2017-12-08,,dbi
+010be24c-d2ab-4f03-b2a5-01025cb90b86,filed_for_permits,2017-12-08,,dbi
 a3baaf65-09b0-42cf-b5b8-60cbabf1c518,under_entitlement_review,2018-01-16,2018-09-21,planning
 a3baaf65-09b0-42cf-b5b8-60cbabf1c518,entitled,2018-09-21,,planning
