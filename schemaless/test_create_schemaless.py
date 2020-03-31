@@ -101,9 +101,12 @@ def test_just_dump(tmpdir):
 def test_dump_and_diff(tmpdir):
     """Ensure dumping produces the expected result."""
     outfile = tmpdir.join("schemaless.csv")
+    diff_outfile = tmpdir.join("schemaless-diff.csv")
     dump_and_diff(
         [Planning('testdata/planning-two.csv')],
         outfile,
+        diff_outfile,
         'testdata/schemaless-one.csv',
         the_date=TESTDATA_GEN_DATE)
     assert filecmp.cmp('testdata/schemaless-two.csv', outfile)
+    assert filecmp.cmp('testdata/schemaless-two-diff.csv', diff_outfile)

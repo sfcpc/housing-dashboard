@@ -33,6 +33,7 @@ from schemaless.sources import PermitAddendaSummary
 from schemaless.sources import Planning
 from schemaless.sources import PTS
 from schemaless.sources import TCO
+from schemaless.upload import append_schemaless_diff
 from schemaless.upload import SCHEMALESS_VIEW_ID
 from schemaless.upload import upload_schemaless
 
@@ -50,10 +51,13 @@ def socrata_date(d):
     return d.strftime(SOCRATA_DATE_FORMAT)
 
 
-def just_dump(sources, outfile, the_date=None):
-    with open(outfile, 'w', newline='\n', encoding='utf-8') as outf:
+_HEADER = ['fk', 'source', 'last_updated', 'name', 'value']
+
+
+def just_dump(sources, out_file, the_date=None):
+    with open(out_file, 'w', newline='\n', encoding='utf-8') as outf:
         writer = csv.writer(outf)
-        writer.writerow(['fk', 'source', 'last_updated', 'name', 'value'])
+        writer.writerow(_HEADER)
         if not the_date:
             the_date = date.today()
         last_updated = socrata_date(the_date)
@@ -89,7 +93,8 @@ def latest_values(schemaless_file):
     return records
 
 
-def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
+def dump_and_diff(
+        sources, out_file, diff_out_file, schemaless_file, the_date=None):
     records = latest_values(schemaless_file)
     logger.info("Loaded %d records" %
                 sum(len(recs) for recs in records.values()))
@@ -97,9 +102,14 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
         the_date = date.today()
     last_updated = socrata_date(the_date)
 
-    shutil.copyfile(schemaless_file, outfile)
-    with open(outfile, 'a', newline='\n', encoding='utf-8') as outf:
-        writer = csv.writer(outf)
+    # We will write the diff to both the main schemaless file and a separate
+    # diff-only file to speed up uploads.
+    shutil.copyfile(schemaless_file, out_file)
+    with open(out_file, 'a', newline='\n', encoding='utf-8') as outf, \
+            open(diff_out_file, 'w', newline='\n', encoding='utf-8') as outdf:
+        main_writer = csv.writer(outf)
+        diff_writer = csv.writer(outdf)
+        diff_writer.writerow(_HEADER)
 
         for source in sources:
             valid_keys = source.field_names()
@@ -112,13 +122,15 @@ def dump_and_diff(sources, outfile, schemaless_file, the_date=None):
                         continue
                     if val != records[source.NAME][fk].get(key, None):
                         records[source.NAME][fk][key] = val
-                        writer.writerow([
+                        row = [
                             fk,
                             source.NAME,
                             last_updated,
                             key,
                             val.strip().replace('\n', ' ')
-                        ])
+                        ]
+                        main_writer.writerow(row)
+                        diff_writer.writerow(row)
 
 
 def run(out_file='',
@@ -203,12 +215,17 @@ def run(out_file='',
     mapblklot_gen.init(parcel_data_file)
 
     if diff_file:
-        dump_and_diff(sources, out_file, diff_file, the_date)
+        out_file = pathlib.Path(out_file)
+        diff_out_file = "%s/%s-diff.csv" % (
+            out_file.parent,
+            out_file.name[:out_file.name.rfind(out_file.suffix)])
+        dump_and_diff(sources, out_file, diff_out_file, diff_file, the_date)
+        if upload:
+            append_schemaless_diff(diff_out_file)
     else:
         just_dump(sources, out_file, the_date)
-
-    if upload:
-        upload_schemaless(out_file)
+        if upload:
+            upload_schemaless(out_file)
 
 
 if __name__ == "__main__":
