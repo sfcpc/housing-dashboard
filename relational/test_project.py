@@ -73,14 +73,15 @@ def test_project_fields(basic_entries, basic_graph):
     assert '2' in entries
 
 
-def test_ocii_projects(basic_graph):
+def test_oewd_projects(basic_graph):
     date = datetime.fromisoformat('2019-01-01')
     e = []
     e.append(Entry('1', 'pts', [NameValue('permit_number', 'abc', date)]))
     e.append(Entry('2',
                    'oewd_permits',
-                   [NameValue('delivery_agency', 'OCII', date),
-                    NameValue('permit_number', 'abc', date)]))
+                   [NameValue('delivery_agency', 'abc', date),
+                    NameValue('permit_number', 'abc', date),
+                    NameValue('project_type', 'DA', date)]))
 
     proj = Project('uuid-0001', e, basic_graph)
     assert proj

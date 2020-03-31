@@ -120,13 +120,15 @@ def _get_mohcd_units(proj, source_override=None):
     return (net, bmr, source) if atleast_one else None
 
 
-_is_valid_ocii_project = [('delivery_agency', lambda x: x == 'OCII')]
+_is_da_project = [('project_type', lambda x: x == 'DA')]
+
+_is_valid_ocii_project = [('delivery_agency', lambda x: x == 'OCII'),
+                          (_is_da_project[0])]
 
 
-def _get_ocii_units(proj):
+def _get_oewd_units(proj):
     """
-    Gets net new units and bmr counts from the OEWD dataset for housing from
-    OCII.
+    Gets net new units and bmr counts from the OEWD dataset.
 
     Returns:
       A tuple of (number units, number of BMR units) from OEWD, or
@@ -135,26 +137,37 @@ def _get_ocii_units(proj):
     net = bmr = None
     atleast_one = False
 
-    # TODO: Once dataset has been changed to not have duplicate count numbers,
-    # we should sum up the unit counts of all OEWD children
-    try:
-        net = int(proj.field('total_units',
+    fk_entries = proj.fields('total_units',
                              OEWDPermits.NAME,
-                             entry_predicate=_is_valid_ocii_project))
-        bmr = 0
-        atleast_one = True
-    except ValueError:
-        pass
+                             entry_predicate=_is_da_project)
+    for (_, entries) in fk_entries.items():
+        for entry in entries:
+            entry_latest = entry.get_latest('total_units')
+            if entry_latest[0]:
+                if net is None:
+                    net = bmr = 0
+                try:
+                    net += int(entry_latest[0])
+                except ValueError:
+                    pass
+                atleast_one = True
 
-    try:
-        bmr = int(proj.field('affordable_units',
+    fk_entries = proj.fields('affordable_units',
                              OEWDPermits.NAME,
-                             entry_predicate=_is_valid_ocii_project))
-        if not net:
-            net = 0
-        atleast_one = True
-    except ValueError:
-        pass
+                             entry_predicate=_is_da_project)
+    for (_, entries) in fk_entries.items():
+        for entry in entries:
+            entry_latest = entry.get_latest('affordable_units')
+            if entry_latest[0]:
+                if bmr is None:
+                    bmr = 0
+                    if net is None:
+                        net = 0
+                try:
+                    bmr += int(entry_latest[0])
+                except ValueError:
+                    pass
+                atleast_one = True
 
     return (net, bmr) if atleast_one else None
 
@@ -284,7 +297,7 @@ def _get_earliest_addenda_arrival_date(proj):
 def _is_da(proj):
     """Returns tuple of whether a project is a DA or not and data used to
     determine this. Relies on the existence of PHA permits (if it is a
-    Planning project) or it existing in the OEWD permits data set.
+    Planning project) or it being a DA in the OEWD permits data set.
     """
     pha_record_id = proj.field('record_id',
                                Planning.NAME,
@@ -292,7 +305,7 @@ def _is_da(proj):
                                                  lambda x: x == 'PHA')])
     oewd_record_id = proj.field('row_number',
                                 OEWDPermits.NAME,
-                                entry_predicate=_is_valid_ocii_project)
+                                entry_predicate=_is_da_project)
 
     is_da = pha_record_id or oewd_record_id
     is_da_data = OEWDPermits.OUTPUT_NAME \
@@ -416,13 +429,18 @@ class ProjectFacts(Table):
                            PTS.NAME,
                            entry_predicate=_is_valid_dbi_entry))
 
-            row[self.index(self.NAME)] = street
             row[self.index(self.ADDRESS)] = addr
             row[self.index(self.APPLICANT)] = ''  # TODO
             row[self.index(self.SUPERVISOR_DISTRICT)] = \
                 proj.field('supervisor_district',
                            PTS.NAME,
                            entry_predicate=_is_valid_dbi_entry)
+
+            name = proj.field('project_name', OEWDPermits.NAME)
+            if name:
+                row[self.index(self.NAME)] = name
+            else:
+                row[self.index(self.NAME)] = street
 
     def _estimate_bmr(self, net):
         """Estimates the BMR we project a project to have.
@@ -459,15 +477,15 @@ class ProjectFacts(Table):
 
     def _gen_units(self, row, proj):
         mohcd = _get_mohcd_units(proj)
-        ocii = _get_ocii_units(proj)
+        oewd = _get_oewd_units(proj)
         if mohcd is not None:
             net, bmr, source = mohcd
             row[self.index(self.NET_NUM_UNITS)] = str(net)
             row[self.index(self.NET_NUM_UNITS_DATA)] = source
             row[self.index(self.NET_NUM_UNITS_BMR)] = str(bmr)
             row[self.index(self.NET_NUM_UNITS_BMR_DATA)] = source
-        elif ocii is not None:
-            net, bmr = ocii
+        elif oewd is not None:
+            net, bmr = oewd
             row[self.index(self.NET_NUM_UNITS)] = str(net)
             row[self.index(self.NET_NUM_UNITS_DATA)] = \
                 OEWDPermits.OUTPUT_NAME
@@ -750,9 +768,9 @@ class ProjectUnitCountsFull(NameValueTable):
                                     value=str(tco_net),
                                     data=TCO.OUTPUT_NAME))
 
-        ocii = _get_ocii_units(proj)
-        if ocii is not None:
-            net, bmr = ocii
+        oewd = _get_oewd_units(proj)
+        if oewd is not None:
+            net, bmr = oewd
             rows.append(self.nv_row(proj,
                                     name='net_num_units',
                                     value=str(net),
@@ -1058,7 +1076,7 @@ class ProjectDetails(NameValueTable):
                         value='TRUE',
                         data=AffordableRentalPortfolio.OUTPUT_NAME))
             else:
-                units = _get_ocii_units(proj)
+                units = _get_oewd_units(proj)
                 if units and units[0] > 0:
                     threshold_affordable = \
                         units[0] * self._AFFORDABILITY_THRESHOLD <= units[1]

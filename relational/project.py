@@ -11,6 +11,7 @@ from collections import namedtuple
 from datetime import datetime
 
 from schemaless.sources import Planning
+from schemaless.sources import PTS
 from schemaless.sources import OEWDPermits
 
 
@@ -91,14 +92,24 @@ def _is_valid_project(proj):
     if len(proj.roots.get(Planning.NAME, [])) > 0:
         return True
 
-    # Allow OCII projects that have valid associated PTS permits
+    # Allow DA projects that have valid associated PTS permits
+    is_da_project = False
     for child in proj.children.get(OEWDPermits.NAME, []):
-        hda_entry = child.get_latest("delivery_agency")
-        valid_pts_permit = child.get_latest("permit_number")
-        if (hda_entry and hda_entry[0] == 'OCII' and valid_pts_permit):
-            return True
+        da_type = child.get_latest("project_type")
+        pts_permit = child.get_latest("permit_number")
+        if (da_type and
+                da_type[0] == 'DA' and
+                pts_permit and
+                pts_permit[0]):
+            is_da_project = True
+            break
 
-    return False
+    valid_permit = False
+    if len(proj.roots.get(PTS.NAME, [])) > 0 or \
+            len(proj.children.get(PTS.NAME, [])) > 0:
+        valid_permit = True
+
+    return True if is_da_project and valid_permit else False
 
 
 class Project:
@@ -155,9 +166,9 @@ class Project:
                 self.children[oldest_child.source].remove(oldest_child)
 
         # REMOVE THIS IF WE ARE EVER DETERMINED TO GET DATA FROM PRJ-LESS
-        # RECORDS (OR NON-OCII PROJECTS)
+        # RECORDS OR PERMIT-LESS OEWD PROJECTS
         if _is_valid_project(self) is False:
-            msg = 'No root PRJ record for project OR not an OCII project'
+            msg = 'No root PRJ record for project OR not a valid OEWD project'
             if len(self.roots) > 0:
                 # get an arbitrary root to extract a FK, so just get
                 # the first entry for the first root we find

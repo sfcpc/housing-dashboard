@@ -222,6 +222,27 @@ def test_table_project_facts(basic_graph, d):
                 'name': 'chris place',
                 'address': '123 chris st, 94123',
             }),
+        EntriesTestRow(
+            name='get name from OEWD instead of PTS',
+            entries=[
+                Entry('1',
+                      PTS.NAME,
+                      [NameValue('permit_type', '2', d),
+                       NameValue('permit_number', 'def', d),
+                       NameValue('street_number', '123', d),
+                       NameValue('street_name', 'xyz', d),
+                       NameValue('proposed_units', '6', d)]),
+                Entry('2',
+                      OEWDPermits.NAME,
+                      [NameValue('total_units', '7', d),
+                       NameValue('permit_number', 'def', d),
+                       NameValue('project_name', 'abc', d),
+                       NameValue('affordable_units', '1', d),
+                       NameValue('project_type', 'DA', d)]),
+            ],
+            want={
+                'name': 'abc',
+            }),
     ]
 
     for test in tests:
@@ -517,7 +538,7 @@ def test_table_project_facts_units_planning_bmr(basic_graph, d):
                                       name) == wantvalue, test.name
 
 
-def test_table_project_facts_units_ocii(basic_graph, d):
+def test_table_project_facts_units_oewd(basic_graph, d):
     table = ProjectFacts()
 
     tests = [
@@ -531,15 +552,24 @@ def test_table_project_facts_units_ocii(basic_graph, d):
                       OEWDPermits.NAME,
                       [NameValue('total_units', '7', d),
                        NameValue('affordable_units', '1', d),
-                       NameValue('delivery_agency', 'OCII', d)]),
-                Entry('3',
+                       NameValue('project_type', 'DA', d)]),
+                 Entry('3',
+                       OEWDPermits.NAME,
+                       [NameValue('total_units', '2', d),
+                        NameValue('affordable_units', '-', d),
+                        NameValue('project_type', 'DA', d)]),
+                 Entry('4',
+                       OEWDPermits.NAME,
+                       [NameValue('affordable_units', '3', d),
+                        NameValue('project_type', 'DA', d)]),
+                Entry('5',
                       PTS.NAME,
                       [NameValue('permit_type', '2', d),
                        NameValue('proposed_units', '6', d)]),
             ],
             want={
-                'net_num_units': '7',
-                'net_num_units_bmr': '1',
+                'net_num_units': '9',
+                'net_num_units_bmr': '4',
                 'net_num_units_data': OEWDPermits.NAME,
                 'net_num_units_bmr_data': OEWDPermits.NAME,
             },
@@ -553,7 +583,7 @@ def test_table_project_facts_units_ocii(basic_graph, d):
                 Entry('2',
                       OEWDPermits.NAME,
                       [NameValue('total_units', '2', d),
-                       NameValue('delivery_agency', 'OCII', d)]),
+                       NameValue('project_type', 'DA', d)]),
                 Entry('3',
                       PTS.NAME,
                       [NameValue('permit_type', '2', d),
@@ -749,6 +779,7 @@ def test_table_project_facts_pim_link(basic_graph, d):
                 Entry('2',
                       OEWDPermits.NAME,
                       [NameValue('permit_number', '123', d),
+                       NameValue('project_type', 'DA', d),
                        NameValue('delivery_agency', 'OCII', d)]),
             ],
             want={'pim_link': 'https://sfplanninggis.org/pim?search=123ABC'},
@@ -780,6 +811,25 @@ def test_table_project_facts_permit_authority(basic_graph, d):
                        NameValue('record_type', 'PRJ', d)]),
             ],
             want={'permit_authority': 'planning',
+                  'permit_authority_id': 'abc'},
+        ),
+        EntriesTestRow(
+            name='ocii entitlements',
+            entries=[
+                Entry('1',
+                      PTS.NAME,
+                      [NameValue('permit_type', '1', d),
+                       NameValue('proposed_units', '2', d)]),
+                Entry('2',
+                      OEWDPermits.NAME,
+                      [NameValue('total_units', '10', d),
+                       NameValue('project_name', 'abc', d),
+                       NameValue('permit_number', '123', d),
+                       NameValue('affordable_units', '9', d),
+                       NameValue('project_type', 'DA', d),
+                       NameValue('delivery_agency', 'OCII', d)]),
+            ],
+            want={'permit_authority': 'ocii',
                   'permit_authority_id': 'abc'},
         ),
     ]
@@ -915,7 +965,7 @@ def test_table_project_units_full_count(basic_graph, d):
               OEWDPermits.NAME,
               [NameValue('total_units', '8', d),
                NameValue('affordable_units', '3', d),
-               NameValue('delivery_agency', 'OCII', d)]),
+               NameValue('project_type', 'DA', d)]),
     ]
     proj_normal = Project('uuid1', entries1, basic_graph)
     nvs = table.rows(proj_normal)
@@ -1235,7 +1285,7 @@ def test_project_details_is_da(basic_graph, d):
         Entry('3',
               OEWDPermits.NAME,
               [NameValue('row_number', '1', d),
-               NameValue('delivery_agency', 'OCII', d)]),
+               NameValue('project_type', 'DA', d)]),
     ]
     # Existence of OEWD permits node means it's a DA
     proj = Project('uuid1', entries3, basic_graph)
@@ -1532,6 +1582,7 @@ def test_project_details_is_100pct_affordable_mohcd(basic_graph, d):
                       OEWDPermits.NAME,
                       [NameValue('total_units', '10', d),
                        NameValue('affordable_units', '9', d),
+                       NameValue('project_type', 'DA', d),
                        NameValue('delivery_agency', 'OCII', d)]),
             ],
             want='TRUE'),
