@@ -11,6 +11,8 @@ import math
 import queue
 import re
 
+from shapely import wkt
+
 import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
 from schemaless.sources import MOHCDInclusionary
@@ -689,8 +691,7 @@ class ProjectGeo(NameValueTable):
         super().__init__('project_geo')
 
     def _geom(self, rows, proj):
-        # TODO(sbuss): We need this field to be added back
-        geom = proj.field('the_geom', Planning.NAME)
+        geom = proj.field('wkt_multipolygon', Planning.NAME)
         if geom != '':
             rows.append(self.nv_row(proj,
                                     name='geom',
