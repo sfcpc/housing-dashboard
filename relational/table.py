@@ -947,7 +947,9 @@ class ProjectDetails(NameValueTable):
                                         value=net,
                                         data=Planning.OUTPUT_NAME))
 
-        if len(rows) > 0:
+        is_adu_checked = proj.field('adu', Planning.NAME)
+        is_adu = is_adu or is_adu_checked.lower() == 'checked'
+        if len(rows) > 0 or is_adu:
             rows.append(self.nv_row(proj,
                                     name='is_adu',
                                     value='TRUE' if is_adu else 'FALSE',
@@ -1085,6 +1087,24 @@ class ProjectDetails(NameValueTable):
                         name='is_100pct_affordable',
                         value='TRUE' if threshold_affordable else 'FALSE',
                         data=OEWDPermits.OUTPUT_NAME))
+                else:
+                    units = bmr = None
+                    try:
+                        units = int(proj.field('number_of_units',
+                                               Planning.NAME))
+                        bmr = int(proj.field('number_of_affordable_units',
+                                             Planning.NAME))
+                    except ValueError:
+                        return
+
+                    if units and bmr:
+                        threshold_affordable = \
+                            units * self._AFFORDABILITY_THRESHOLD <= bmr
+                        rows.append(self.nv_row(
+                            proj,
+                            name='is_100pct_affordable',
+                            value='TRUE' if threshold_affordable else 'FALSE',
+                            data=Planning.OUTPUT_NAME))
 
     def _square_feet(self, rows, proj):
         # TODO: This field is gone
