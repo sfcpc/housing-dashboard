@@ -684,6 +684,7 @@ class OEWDPermits(DirectSource):
         'Permit Type': 'permit_type',
         'DBI Arrival/ Intake Date': 'dbi_arrival_date',
         'Target Permit Issuance Date': 'target_permit_issuance_date',
+        'Project Type': 'project_type',
     }
     DATA_SF = "https://data.sfgov.org/dataset/Priority-Permits/336t-bzzm"
     DATA_SF_VIEW_ID = "336t-bzzm"
