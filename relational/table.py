@@ -3,13 +3,14 @@
 
 from abc import ABC
 from abc import abstractmethod
+from collections import OrderedDict
 from datetime import date
 from datetime import datetime
-from collections import OrderedDict
-
 import math
 import queue
 import re
+
+from shapely import wkt
 
 import schemaless.mapblklot_generator as mapblklot_gen
 from schemaless.sources import AffordableRentalPortfolio
@@ -689,8 +690,7 @@ class ProjectGeo(NameValueTable):
         super().__init__('project_geo')
 
     def _geom(self, rows, proj):
-        # TODO(sbuss): We need this field to be added back
-        geom = proj.field('the_geom', Planning.NAME)
+        geom = proj.field('wkt_multipolygon', Planning.NAME)
         if geom != '':
             rows.append(self.nv_row(proj,
                                     name='geom',
@@ -699,18 +699,31 @@ class ProjectGeo(NameValueTable):
 
     def _lnglat(self, rows, proj):
         '''Extract an arbitrary longitude and latitude.'''
+        point = proj.field('point', Planning.NAME)
         blocklot = proj.field('mapblocklot', Planning.NAME)
-        if blocklot:
+        if point:
+            pnt = wkt.loads(point)
+            lat = pnt.y
+            lng = pnt.x
+            rows.append(self.nv_row(proj,
+                                    name='lat',
+                                    value=lat,
+                                    data=Planning.OUTPUT_NAME))
+            rows.append(self.nv_row(proj,
+                                    name='lng',
+                                    value=lng,
+                                    data=Planning.OUTPUT_NAME))
+        elif blocklot:
             blkloter = mapblklot_gen.MapblklotGeneratorSingleton.get_instance()
             lnglat = blkloter.find_lnglat_for_blklot(blocklot)
             if lnglat:
                 rows.append(self.nv_row(proj,
-                                        name='lng',
-                                        value=lnglat[0],
-                                        data=Planning.OUTPUT_NAME))
-                rows.append(self.nv_row(proj,
                                         name='lat',
                                         value=lnglat[1],
+                                        data=Planning.OUTPUT_NAME))
+                rows.append(self.nv_row(proj,
+                                        name='lng',
+                                        value=lnglat[0],
                                         data=Planning.OUTPUT_NAME))
         else:
             location = proj.field('location', PTS.NAME)

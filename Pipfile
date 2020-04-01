@@ -17,6 +17,7 @@ requests = "*"
 apache-airflow = "*"
 cryptography = "*"
 socrata-py = {git = "https://github.com/sbuss/socrata-py.git"}
+shapely = "*"
 
 [requires]
 python_version = "3.7"
