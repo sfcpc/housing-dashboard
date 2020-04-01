@@ -1,10 +1,11 @@
 # Lint as: python3
 """Utils for working with files."""
 import lzma
+import pathlib
 
 
 def open_file(fname, *args, **kwargs):
-    if fname.endswith('.xz'):
+    if pathlib.Path(fname).suffix.endswith('.xz'):
         o = lzma.open
     else:
         o = open
