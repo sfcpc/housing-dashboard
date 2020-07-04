@@ -474,7 +474,7 @@ class ProjectFacts(Table):
     # phases has reached DBI for example). In this particular
     # case prefer to use Planning data.
     _MIN_DA_UNITS_TO_USE_PLANNING = 100
-    _MIN_DA_UNIT_DIFF_PERCENT = 0.5
+    _MIN_UNIT_DIFF_PERCENT = 0.15
 
     def _gen_units(self, row, proj):
         mohcd = _get_mohcd_units(proj)
@@ -497,7 +497,6 @@ class ProjectFacts(Table):
             dbi_net = _get_dbi_units(proj)
             planning_net = proj.field('number_of_units', Planning.NAME)
             net = dbi_net
-            is_da = _is_da(proj)[0]
             # PTS may have an explicitly set 0 unit count for projects
             # that have no business dealing with housing (possible with
             # permit type 3 in particular), so we only emit a 0-count
@@ -509,17 +508,15 @@ class ProjectFacts(Table):
                          (planning_net and planning_net != '0'))):
 
                 # Check if we need to prefer the planning data over DBI
-                # data in case it's a DA and falls within some parameters.
+                # data in case it falls within some parameters.
                 planning_int = 0
                 try:
                     planning_int = int(planning_net)
                 except ValueError:
                     pass
 
-                if (is_da and
-                        planning_int > self._MIN_DA_UNITS_TO_USE_PLANNING and
-                        ((dbi_net / planning_int)
-                            < self._MIN_DA_UNIT_DIFF_PERCENT)):
+                if ((dbi_net / planning_int)
+                            < self._MIN_UNIT_DIFF_PERCENT):
                     net = planning_int
                     row[self.index(self.NET_NUM_UNITS)] = str(planning_int)
                     row[self.index(self.NET_NUM_UNITS_DATA)] = \
