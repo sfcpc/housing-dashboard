@@ -474,7 +474,7 @@ class ProjectFacts(Table):
     # phases has reached DBI for example). In this particular
     # case prefer to use Planning data.
     _MIN_DA_UNITS_TO_USE_PLANNING = 100
-    _MIN_UNIT_DIFF_PERCENT = 0.85
+    _MIN_DA_UNIT_DIFF_PERCENT = 0.85
 
     def _gen_units(self, row, proj):
         mohcd = _get_mohcd_units(proj)
@@ -517,7 +517,7 @@ class ProjectFacts(Table):
 
                 if (planning_int > self._MIN_DA_UNITS_TO_USE_PLANNING and
                     (dbi_net / planning_int)
-                        < self._MIN_UNIT_DIFF_PERCENT):
+                        < self._MIN_DA_UNIT_DIFF_PERCENT):
                     net = planning_int
                     row[self.index(self.NET_NUM_UNITS)] = str(planning_int)
                     row[self.index(self.NET_NUM_UNITS_DATA)] = \
